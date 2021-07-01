@@ -92,5 +92,5 @@ volumes:
         driver: local
     sailredis:
         driver: local
-    sailmeilisearch:
-        driver: local
+    #sailmeilisearch:
+        #driver: local
