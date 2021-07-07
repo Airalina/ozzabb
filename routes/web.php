@@ -23,10 +23,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 
-Route::get('/admin', function () {
-    return view('adminlte');
-})->middleware(['auth'])->name('adminlte');
 
+
+Route::get('/admin', function () {
+    return view('adminlterol');
+})->middleware(['auth'])->name('adminlterol');
 
 Route::get('/usuarios', function () {
     return view('adminlte');
