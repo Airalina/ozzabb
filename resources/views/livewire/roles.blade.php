@@ -1,21 +1,15 @@
-<div id="create">
-  @include("user.listado")
+<div>
+  @include("rol.listado")
   @switch($funcion)
       @case("crear")
-          @include("user.registro")
+          @include("rol.registro")
           <button wire:click="store()">Guardar Cambios</button>
           @break
 
       @case("adaptar")
-          @include("user.registro")
+          @include("rol.registro")
           <button wire:click="editar()">Guardar Cambios</button>
           @break
 
-  @endswitch
-
-  @switch($funcionru)
-      @case("asigna")
-          @include("user.usuariorol")
-          @break
   @endswitch
 </div>

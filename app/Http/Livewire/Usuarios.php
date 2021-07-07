@@ -2,14 +2,17 @@
 
 namespace App\Http\Livewire;
 use App\Models\User;
+use App\Models\Rol;
 use Livewire\Component;
 
 class Usuarios extends Component
 {
-    public  $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup, $search;
-    public $funcion="algo";
+    public  $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles, $search;
+    public $funcion, $funcionru;
     public function render()
     {
+        $this->roles = Rol::where('nombre','LIKE','%' . $this->search . '%')
+        ->get();
         $this->users = User::where('name','LIKE','%' . $this->search . '%')
         ->orWhere('dni','LIKE','%'.$this->search.'%')
         ->orWhere('nombre_y_apellido','LIKE','%'.$this->search.'%')
@@ -67,4 +70,12 @@ class Usuarios extends Component
         $userup->email=$this->email;
         $userup->save();
     }
+
+    public function rolusuario(User $user)
+    {
+        $this->nombre_y_apellido=$user->nombre_y_apellido;
+        $this->funcionru="asigna";
+    }
+
+
 }

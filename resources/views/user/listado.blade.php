@@ -29,7 +29,7 @@
             </thead>
             <tbody>
               @forelse($users as $user)
-                  <tr class="registros" onclick="">
+                  <tr class="registros" wire:click="rolusuario({{ $user->id }})">
                       <td>{{ $user->id }}</td>
                       <td>{{ $user->name }}</td>
                       <td>{{ $user->nombre_y_apellido }}</td>
