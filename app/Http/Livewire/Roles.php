@@ -43,7 +43,7 @@ class Roles extends Component
 
     public function editar()
     {
-        $rolup =rol::find($this->idrol);
+        $rolup =Rol::find($this->idrol);
         $rolup->nombre=$this->nombre;
         $rolup->save();
     }

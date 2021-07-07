@@ -19,14 +19,10 @@
             </thead>
             <tbody>
                 @forelse($roles as $rol)
-                    <tr class="registros" onclick="">
+                    <tr>
                       <td>{{ $rol->nombre }}</td>
                       <td>
-                            <div class="icheck-success d-inline">
-                                    <input type="checkbox" id="checkboxSuccess2">
-                                    <label for="checkboxSuccess2">
-                                    </label>
-                            </div>
+                        <button wire:click="asignarols({{$rol->id }})">Asignar Rol</button> 
                       </td>     
                     </tr>
                 @empty
@@ -37,5 +33,5 @@
             </tbody>
         </table>
     </div>
-                    
+                   
 </div>

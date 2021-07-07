@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class Usuarios extends Component
 {
-    public  $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles, $search;
+    public $idus, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles, $search;
     public $funcion, $funcionru;
     public function render()
     {
@@ -35,6 +35,7 @@ class Usuarios extends Component
             'telefono'=>$this->telefono,
             'dni'=>$this->dni,
         ]);
+        $this->funcion="";
     }
 
     public function destruir(User $user)
@@ -69,13 +70,18 @@ class Usuarios extends Component
         $userup->telefono=$this->telefono;
         $userup->email=$this->email;
         $userup->save();
+        $this->funcion="";
     }
 
     public function rolusuario(User $user)
-    {
+    {   $this->idus=$user->id;
         $this->nombre_y_apellido=$user->nombre_y_apellido;
         $this->funcionru="asigna";
     }
 
+    public function asignarols(Rol $rol)
+    {
+        $rol->users()->attach($this->idus);
+    }
 
 }
