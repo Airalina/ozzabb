@@ -1,9 +1,9 @@
 # Librería LaRecipe
 
-La recipe nos permite tener una secciòn en nuestra aplicación con la documentación
-basada en archivos markdown y html.
+LaRecipe nos permite tener una sección en nuestra aplicación con la documentación
+basada en archivos markdown y HTML.
 
-Esta herramienta se utiliza mayormente para componer el manual de la aplicaciòn o para detallar el uso y funcionamiento de APIs. En el proyecto lo vamos a utilizar para mantener la documentaciòn funcional durante el desarrollo.
+Esta herramienta se utiliza mayormente para componer el manual de la aplicación o para detallar el uso y funcionamiento de APIs. En el proyecto lo vamos a utilizar para mantener la documentación funcional durante el desarrollo.
 
 ## Cómo instalar la librería
 
@@ -15,7 +15,7 @@ Esta herramienta se utiliza mayormente para componer el manual de la aplicaciòn
      composer require binarytorch/larecipe
    ~~~
 
-  - Debería utilizarse compser v2 para la instalación.
+  - Debería utilizarse composer v2 para la instalación.
 
    4. Luego ejecutar el siguiente comando para completar la instalación.
 
@@ -23,7 +23,7 @@ Esta herramienta se utiliza mayormente para componer el manual de la aplicaciòn
    php artisan larecipe:install
    ~~~
 
-   Después de la instalaciòn el directorio de nuestra aplicación debería incluir los siguientes archivos y directorios.
+   Después de la instalación el directorio de nuestra aplicación debería incluir los siguientes archivos y directorios.
 
    ~~~
    app dir 

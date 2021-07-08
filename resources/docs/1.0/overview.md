@@ -5,7 +5,7 @@
 <p style='text-align: justify;'>
  SETECEL es una empresa industrial sanjuanina que produce juegos de cableado para la industria automotriz, especialmente para motos y conexiones de equipos de GNC.
 
- El objetivo del proyectou es desarrollar un sistema de administración de la producción que le permita a la empresa respaldar y utilizar de manera eficiente la información de materiales en stock, compras de insumos y administración de pedidos de los clientes.
+ El objetivo del proyecto es desarrollar un sistema de administración de la producción que le permita a la empresa respaldar y utilizar de manera eficiente la información de materiales en stock, compras de insumos y administración de pedidos de los clientes.
 
  La empresa cuenta en la actualidad con un sistema sencillo que tiene algunos defectos que hacen que el cliente quiera reemplazarlo, pero que a su implementa algunas ideas que son requeridas por la empresa en el nuevo sistema.
  </p>
