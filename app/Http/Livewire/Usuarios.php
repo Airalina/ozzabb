@@ -8,7 +8,7 @@ use Livewire\Component;
 class Usuarios extends Component
 {
     public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
-    public $funcion, $funcionru;
+    public $funcion="", $funcionru;
     public function render()
     {
         $this->roles = Rol::where('nombre','LIKE','%' . $this->search . '%')
@@ -47,6 +47,18 @@ class Usuarios extends Component
     {
         $this->funcion="crear";
         $this->funcionru="";
+        $this->idu=null;
+        $this->name=null;
+        $this->nombre_y_apellido=null;
+        $this->domicilio=null;
+        $this->telefono=null;
+        $this->email=null;
+        $this->dni=null;
+    }
+    
+    public function endfunctions()
+    {
+        $this->funcion="";
     }
 
     public function update(User $user)

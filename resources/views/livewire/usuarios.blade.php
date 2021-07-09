@@ -1,15 +1,29 @@
 <div id="create">
-  @include("user.listado")
+  
   @switch($funcion)
-      @case("crear")
-          @include("user.registro")
-          <button wire:click="store()" type="button" class="btn btn-info">Guardar Cambios</button>
-          @break
+    @case("")
+        @include("user.listado")
+        @break
+    @case("crear")
+        @include("user.registro")
+        <div class="card-footer">
+            <th>
+                <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar Usuario</button></td>
+                <td><button wire:click="endfunctions()" type="button" class="btn btn-primary">Cancelar</button></td>
+            </th>   
+        </div>
+         
+        @break
 
-      @case("adaptar")
-          @include("user.registro")
-          <button wire:click="editar()" type="button" class="btn btn-info">Guardar Cambios</button>
-          @break
+    @case("adaptar")
+        @include("user.registro")
+        <div class="card-footer">
+            <th>
+                <td><button wire:click="editar()" type="button" class="btn btn-primary">Guardar Cambios</button></td>
+                <td><button wire:click="endfunctions()" type="button" class="btn btn-primary">Cancelar</button></td>
+            </th>
+        </div>  
+        @break
 
   @endswitch
 

@@ -49,4 +49,9 @@ class Roles extends Component
         $rolup->save();
         $this->funcion="";
     }
+
+    public function endfunctions()
+    {
+        $this->funcion="";
+    }
 }

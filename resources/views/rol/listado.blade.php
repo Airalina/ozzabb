@@ -1,7 +1,4 @@
-<div class="grilla">
-
 <div class="card-header">
-          
           <h3 class="card-title">Roles Registrados</h3>
           <div class="card-tools">
             <div>
@@ -31,18 +28,14 @@
                       <td>
                           <button wire:click="destruir({{ $rol->id }})" type="button" class="btn btn-danger">Borrar</button>
                           <button wire:click="update({{ $rol->id }})" type="button" class="btn btn-primary">Actualizar</button>
-                      
-                      </td>
-                      
-              </tr>
-      @empty
-          <tr class="text-center">
-              <td colspan="4" class="py-3 italic">No hay información</td>
-          </tr>
-  @endforelse 
+                      </td>      
+                  </tr>
+              @empty
+                  <tr class="text-center">
+                    <td colspan="4" class="py-3 italic">No hay información</td>
+                  </tr>
+              @endforelse 
             </tbody>
           </table>
         </div>
-        <!-- /.card-body -->
-      
 </div>
