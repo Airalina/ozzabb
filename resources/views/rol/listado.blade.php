@@ -5,7 +5,7 @@
           <h3 class="card-title">Roles Registrados</h3>
           <div class="card-tools">
             <div>
-    	        <button wire:click="funcion()">Agregar Rol</button> 
+    	        <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Rol</button> 
             </div>
             <div class="input-group input-group-sm" style="width: 150px;">
               <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Rol...">
@@ -29,8 +29,8 @@
                       <td>{{ $rol->id }}</td>
                       <td>{{ $rol->nombre }}</td>
                       <td>
-                          <button wire:click="destruir({{ $rol->id }})">Borrar</button>
-                          <button wire:click="update({{ $rol->id }})">Actualizar</button>
+                          <button wire:click="destruir({{ $rol->id }})" type="button" class="btn btn-danger">Borrar</button>
+                          <button wire:click="update({{ $rol->id }})" type="button" class="btn btn-primary">Actualizar</button>
                       
                       </td>
                       

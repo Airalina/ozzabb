@@ -21,10 +21,9 @@
                 @forelse($roles as $rol)
                     <tr>
                       <td>{{ $rol->nombre }}</td>
-                      <td>
-                        <button wire:click="asignarols({{$rol->id }})">Asignar Rol</button> 
-                      </td>     
+                        <td> <button wire:click="asignarols({{$rol->id }})" type="button" class="btn btn-success">Asignar Rol</button> </td>    
                     </tr>
+                     
                 @empty
                      <tr class="text-center">
                         <td colspan="4" class="py-3 italic">No hay información</td>

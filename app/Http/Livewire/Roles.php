@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\User;
 use App\Models\Rol;
 use Livewire\Component;
 
@@ -35,7 +36,7 @@ class Roles extends Component
     }
 
     public function update(Rol $rol)
-    { 
+    {   
         $this->idrol=$rol->id;
         $this->nombre=$rol->nombre;
         $this->funcion="adaptar";
@@ -46,5 +47,6 @@ class Roles extends Component
         $rolup =Rol::find($this->idrol);
         $rolup->nombre=$this->nombre;
         $rolup->save();
+        $this->funcion="";
     }
 }

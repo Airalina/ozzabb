@@ -7,8 +7,8 @@ use Livewire\Component;
 
 class Usuarios extends Component
 {
-    public $idus, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles, $search;
-    public $funcion, $funcionru;
+    public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles, $search;
+    public $funcion, $funcionru,$roless;
     public function render()
     {
         $this->roles = Rol::where('nombre','LIKE','%' . $this->search . '%')
@@ -46,6 +46,7 @@ class Usuarios extends Component
     public function funcion()
     {
         $this->funcion="crear";
+        $this->funcionru="";
     }
 
     public function update(User $user)
@@ -58,12 +59,12 @@ class Usuarios extends Component
         $this->email=$user->email;
         $this->dni=$user->dni;
         $this->funcion="adaptar";
+        $this->funcionru="";
     }
 
     public function editar()
     {
         $userup =User::find($this->idu);
-        
         $userup->nombre_y_apellido=$this->nombre_y_apellido;
         $userup->dni=$this->dni;
         $userup->domicilio=$this->domicilio;
@@ -77,11 +78,37 @@ class Usuarios extends Component
     {   $this->idus=$user->id;
         $this->nombre_y_apellido=$user->nombre_y_apellido;
         $this->funcionru="asigna";
+        $this->funcion="";   
     }
 
-    public function asignarols(Rol $rol)
-    {
-        $rol->users()->attach($this->idus);
+    public function asignarols(Rol $rol)        
+    {      
+        $this->roless= User::find($this->idus)->rols()->orderBy('id')->get(); 
+        if(sizeof($this->roless)==0)
+        {
+            $rol->users()->attach($this->idus);
+
+        }else
+        {   
+            foreach($this->roless as $rolitos)
+            {
+                
+                
+                if($rolitos->pivot->rol_id!=$rol->id || $rolitos->pivot->user_id!=$this->idus)
+                {
+                    $rol->users()->attach($this->idus);
+                }
+               
+                
+            }
+            
+                
+        }                 
     }
 
+    public function desasignarols(Rol $rol)
+    {   
+        
+        $rol->users()->detach($this->idus);                      
+    }
 }
