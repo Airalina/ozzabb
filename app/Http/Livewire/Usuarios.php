@@ -7,8 +7,8 @@ use Livewire\Component;
 
 class Usuarios extends Component
 {
-    public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles, $search;
-    public $funcion, $funcionru,$roless;
+    public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
+    public $funcion, $funcionru;
     public function render()
     {
         $this->roles = Rol::where('nombre','LIKE','%' . $this->search . '%')
@@ -75,7 +75,8 @@ class Usuarios extends Component
     }
 
     public function rolusuario(User $user)
-    {   $this->idus=$user->id;
+    {   
+        $this->idus=$user->id;
         $this->nombre_y_apellido=$user->nombre_y_apellido;
         $this->funcionru="asigna";
         $this->funcion="";   
@@ -83,30 +84,14 @@ class Usuarios extends Component
 
     public function asignarols(Rol $rol)        
     {      
-        $this->roless= User::find($this->idus)->rols()->orderBy('id')->get(); 
+        $this->roless= User::find($this->idus)->rols()->where('rol_id',$rol->id)->get(); 
         if(sizeof($this->roless)==0)
         {
             $rol->users()->attach($this->idus);
-
-        }else
-        {   
-            foreach($this->roless as $rolitos)
-            {
-                
-                
-                if($rolitos->pivot->rol_id!=$rol->id || $rolitos->pivot->user_id!=$this->idus)
-                {
-                    $rol->users()->attach($this->idus);
-                }
-               
-                
-            }
-            
-                
-        }                 
+        }            
     }
 
-    public function desasignarols(Rol $rol)
+    public function quitarol(Rol $rol)
     {   
         
         $rol->users()->detach($this->idus);                      

@@ -20,8 +20,12 @@
             <tbody>
                 @forelse($roles as $rol)
                     <tr>
-                      <td>{{ $rol->nombre }}</td>
+                        <td>{{ $rol->nombre }}</td>
+                        @if(sizeof($rol->users()->where('user_id',$idus)->get())==0)
                         <td> <button wire:click="asignarols({{$rol->id }})" type="button" class="btn btn-success">Asignar Rol</button> </td>    
+                        @else
+                        <td> <button wire:click="quitarol({{$rol->id }})" type="button" class="btn btn-danger">Quitar Rol</button> </td>
+                        @endif
                     </tr>
                      
                 @empty
