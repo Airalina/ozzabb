@@ -1,3 +1,5 @@
 - ## Empecemos
-    - [Descripción General](/{{route}}/{{version}}/overview)
-    
+  - [Descripción General](/{{route}}/{{version}}/overview)
+- ## Documentación Funcional
+  - [ABM de Materiales](/{{route}}/{{version}}/ABM_de_Materiales)
+  - [ABM de Proveedores](/{{route}}/{{version}}/ABM_de_Proveedores)
