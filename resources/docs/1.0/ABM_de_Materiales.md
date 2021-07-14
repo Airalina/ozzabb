@@ -26,12 +26,12 @@ Como usuario supervisor quiero llevar registro de los materiales que utilizamos 
   
 | Dato              | Tipo              | Descripción                                                                                           |
 | :---------------- | :---------------- | :---------------------------------------------------------------------------------------------------- |
-| Código            | Texto con enlace  | Permite entrar al Formulario de Alta y Modificación de Materiales                                     |
+| Código            | Texto con enlace  | Permite entrar al Formulario de Alta y Modificación de Materiales.                                    |
 | Familia           | Texto             | Nombre de la familia de materiales a la que pertenece.                                                |
-| Nombre            | Texto             | Nombre por el que se conoce el material coloquialmente                                                |
+| Detalle           | Texto             | Descripción coloquial del material.                                                                   |
 | Color             | Caja de color     | Color que tiene el producto                                                                           |
-| Línea             | Selector múltiple | Líneas de producto donde se utiliza el producto                                                       |
-| Stock en planta   | Numérico          | Cuántas unidades del producto tenemos en el depósito de la planta                                     |
+| Línea             | Selector múltiple | Líneas de producto donde se utiliza el producto.                                                      |
+| Stock en planta   | Numérico          | Cuántas unidades del producto tenemos en el depósito de la planta.                                    |
 | Stock en tránsito | Numérico          | Es la cantidad de unidades de este material que están referidas en las Órdenes de Compra no cerradas. |
 | Stock             | Numérico          | Es la suma de los campos Stock en Planta y Stock en Tránsito.                                         |
 
