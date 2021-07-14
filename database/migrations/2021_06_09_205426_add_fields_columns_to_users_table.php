@@ -14,12 +14,12 @@ class AddFieldsColumnsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-           $table->string('nombre_y_apellido')->after("name")->unique();
-           $table->string('domicilio')->after("email");
-           $table->string('dni')->after("domicilio");
-           $table->string('telefono')->after("nombre_y_apellido");
-           $table->boolean('activo')->after('dni');
-           $table->softDeletes($column = 'deleted_at', $precision = 0);
+           $table->string('nombre_y_apellido')->after("name")->nullable();
+           $table->string('domicilio')->after("email")->nullable();
+           $table->string('dni')->after("domicilio")->nullable();
+           $table->string('telefono')->after("nombre_y_apellido")->nullable();
+           $table->boolean('activo')->after('dni')->nullable();
+           $table->softDeletes();
         });
     }
 
