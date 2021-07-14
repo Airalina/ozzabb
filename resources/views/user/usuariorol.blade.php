@@ -14,21 +14,25 @@
             <thead>
               <tr>
                 <th>Nombre</th>
-                <th>Acciones</th>
+                @if (auth()->user()->can('store', auth()->user()))
+                    <th>Acciones</th>
+                @endif
               </tr>
             </thead>
             <tbody>
                 @forelse($roles as $rol)
-                    <tr class="registros" onclick="">
-                      <td>{{ $rol->nombre }}</td>
-                      <td>
-                            <div class="icheck-success d-inline">
-                                    <input type="checkbox" id="checkboxSuccess2">
-                                    <label for="checkboxSuccess2">
-                                    </label>
-                            </div>
-                      </td>     
+                    <tr>
+                        <td>{{ $rol->nombre }}</td>
+                        @if (auth()->user()->can('store', auth()->user()))
+                            @if(sizeof($rol->users()->where('user_id',$idus)->get())==0)
+                            <td> <button wire:click="asignarols({{$rol->id }})" type="button" class="btn btn-success">Asignar Rol</button> </td>    
+                            @else
+                            <td> <button wire:click="quitarol({{$rol->id }})" type="button" class="btn btn-danger">Quitar Rol</button> </td>
+                            @endif
+                        @endif
+                        
                     </tr>
+                     
                 @empty
                      <tr class="text-center">
                         <td colspan="4" class="py-3 italic">No hay información</td>
@@ -37,5 +41,5 @@
             </tbody>
         </table>
     </div>
-                    
+                   
 </div>

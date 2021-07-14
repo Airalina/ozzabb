@@ -1,28 +1,38 @@
-<div id="formulario_create">
-		<div id="cont-name">
-			<label>Nombre Usuario</label>  
-			<input id="nombre" wire:model="name" type="text" placeholder="Nombre Usuario..." />		
-		</div>  
-        <div id="cont-name">
-			<label>Nombre Y Apellido</label>  
-			<input id="nombre_y_apellido" wire:model="nombre_y_apellido" type="text" placeholder="Nombre y Apellido..." />		
-		</div>
-        <div id="cont-name">
-			<label>Email</label>  
-			<input id="email" wire:model="email" type="text" placeholder="Email..." />		
-		</div>
-        <div id="cont-name">
-			<label>Telefono</label>  
-			<input id="telefono" wire:model="telefono" type="text" placeholder="Telefono..." />		
-		</div>
-        <div id="cont-name">
-			<label>Domicilio</label>  
-			<input id="domicilio" wire:model="domicilio" type="text" placeholder="Domicilio..." />		
-		</div>
-        <div id="cont-name">
-			<label>D-N.I.</label>  
-			<input id="dni" wire:model="dni" type="text" placeholder="Nombre Usuario..." />		
-		</div>
 
-</div>
-    
+<div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                @if($funcion=="crear")<h3 class="card-title">Agregar Usuario</h3>@else<h3 class="card-title">Informacion sobre el usuario: {{$name}}</h3>@endif
+              </div>
+              <form>
+				<div class="card-body">
+					@if($funcion=="crear")
+					<div class="form-group">
+						<label for="exampleInputEmail1">Nombre Usuario</label>
+						<input type="text" class="form-control" id="name" wire:model="name" placeholder="Nombre de Usuario">
+					</div>
+					@endif
+					<div class="form-group">
+						<label for="exampleInputEmail1">Nombre y Apellido</label>
+						<input type="text" class="form-control" id="nombre_y_apellido" wire:model="nombre_y_apellido" placeholder="Nombre y Apellido">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Email</label>
+						<input type="text" class="form-control" id="email" wire:model="email" placeholder="Email">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Telefono</label>
+						<input type="text" class="form-control" id="telefono" wire:model="telefono" placeholder="Telefono">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Domicilio</label>
+						<input type="text" class="form-control" id="domicilio" wire:model="domicilio" placeholder="Domicilio">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">D.N.I.</label>
+						<input type="text" class="form-control" id="dni" wire:model="dni" placeholder="D.N.I.">
+					</div>
+				</div>
+             </form>
+            </div>

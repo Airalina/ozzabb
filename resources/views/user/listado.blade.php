@@ -5,7 +5,10 @@
           <h3 class="card-title">Usuarios Registrados</h3>
           <div class="card-tools">
             <div>
-    	        <button wire:click="funcion()">Agregar Usuario</button> 
+              @if (auth()->user()->can('store', auth()->user()))
+                <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Usuario</button>
+              @endif
+    	         
             </div>
             <div class="input-group input-group-sm" style="width: 150px;">
               <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Usuario...">
@@ -29,17 +32,21 @@
             </thead>
             <tbody>
               @forelse($users as $user)
-                  <tr class="registros" wire:click="rolusuario({{ $user->id }})">
-                      <td>{{ $user->id }}</td>
-                      <td>{{ $user->name }}</td>
-                      <td>{{ $user->nombre_y_apellido }}</td>
-                      <td>{{ $user->domicilio }}</td>
-                      <td>{{ $user->telefono }}</td>
-                      <td>{{ $user->email }}</td>
+                  <tr class="registros">
+                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->id }}</td>
+                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->name }}</td>
+                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->nombre_y_apellido }}</td>
+                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->domicilio }}</td>
+                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->telefono }}</td>
+                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->email }}</td>
                       <td>
-                          <button wire:click="destruir({{ $user->id }})">Borrar</button>
-                          <button wire:click="update({{ $user->id }})">Actualizar</button>
-                      
+                          @if (auth()->user()->can('delete', auth()->user()))
+                            <button wire:click="destruir({{ $user->id }})" type="button" class="btn btn-danger">Borrar</button>
+                          @endif
+                          @if (auth()->user()->can('update', auth()->user()))
+                            <button wire:click="update({{ $user->id }})" type="button" class="btn btn-primary">Actualizar</button>
+                          @endif
+                            
                       </td>
                       
               </tr>

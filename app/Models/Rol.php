@@ -10,6 +10,7 @@ class Rol extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'nombre',
         'activo',
     ];
@@ -17,5 +18,10 @@ class Rol extends Model
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+    
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
     }
 }
