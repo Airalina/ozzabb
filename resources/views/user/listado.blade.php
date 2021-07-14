@@ -5,7 +5,10 @@
           <h3 class="card-title">Usuarios Registrados</h3>
           <div class="card-tools">
             <div>
-    	        <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Usuario</button> 
+              @if (auth()->user()->can('store', auth()->user()))
+                <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Usuario</button>
+              @endif
+    	         
             </div>
             <div class="input-group input-group-sm" style="width: 150px;">
               <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Usuario...">
@@ -37,8 +40,13 @@
                       <td wire:click="rolusuario({{ $user->id }})">{{ $user->telefono }}</td>
                       <td wire:click="rolusuario({{ $user->id }})">{{ $user->email }}</td>
                       <td>
-                          <button wire:click="destruir({{ $user->id }})" type="button" class="btn btn-danger">Borrar</button>
-                          <button wire:click="update({{ $user->id }})" type="button" class="btn btn-primary">Actualizar</button>
+                          @if (auth()->user()->can('delete', auth()->user()))
+                            <button wire:click="destruir({{ $user->id }})" type="button" class="btn btn-danger">Borrar</button>
+                          @endif
+                          @if (auth()->user()->can('update', auth()->user()))
+                            <button wire:click="update({{ $user->id }})" type="button" class="btn btn-primary">Actualizar</button>
+                          @endif
+                            
                       </td>
                       
               </tr>

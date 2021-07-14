@@ -2,8 +2,11 @@
   
   @switch($funcion)
     @case("")
-        @include("user.listado")
+        @if (auth()->user()->can('see', auth()->user()))
+            @include("user.listado")
+        @endif 
         @break
+
     @case("crear")
         @include("user.registro")
         <div class="card-footer">
@@ -12,7 +15,6 @@
                 <td><button wire:click="endfunctions()" type="button" class="btn btn-primary">Cancelar</button></td>
             </th>   
         </div>
-         
         @break
 
     @case("adaptar")

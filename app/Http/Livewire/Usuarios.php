@@ -4,11 +4,14 @@ namespace App\Http\Livewire;
 use App\Models\User;
 use App\Models\Rol;
 use Livewire\Component;
+use Illuminate\Http\Request;
 
 class Usuarios extends Component
 {
+    
     public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
-    public $funcion="", $funcionru;
+    public $funcion="", $funcionru, $userlog;
+    
     public function render()
     {
         $this->roles = Rol::where('nombre','LIKE','%' . $this->search . '%')
@@ -27,20 +30,31 @@ class Usuarios extends Component
    
     public function store()
     {
-        User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'nombre_y_apellido'=>$this->nombre_y_apellido,
-            'domicilio'=>$this->domicilio,
-            'telefono'=>$this->telefono,
-            'dni'=>$this->dni,
-        ]);
-        $this->funcion="";
+        
+        if (auth()->user()->cannot('store', auth()->user())) {
+            abort(403);
+        }else
+        {
+            User::create([
+                'name' => $this->name,
+                'email' => $this->email,
+                'nombre_y_apellido'=>$this->nombre_y_apellido,
+                'domicilio'=>$this->domicilio,
+                'telefono'=>$this->telefono,
+                'dni'=>$this->dni,
+            ]);
+            $this->funcion="";
+        }
     }
 
     public function destruir(User $user)
     {
-        $user->delete();
+        if (auth()->user()->cannot('destruir', auth()->user())) {
+            abort(403);
+        }else
+        {
+            $user->delete();
+        }
     }
 
     public function funcion()

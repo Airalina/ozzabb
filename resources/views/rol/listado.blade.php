@@ -1,8 +1,12 @@
+<div class="grilla">
+  
 <div class="card-header">
           <h3 class="card-title">Roles Registrados</h3>
           <div class="card-tools">
             <div>
+              @if (auth()->user()->can('store', auth()->user()))
     	        <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Rol</button> 
+              @endif
             </div>
             <div class="input-group input-group-sm" style="width: 150px;">
               <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Rol...">
@@ -22,12 +26,16 @@
             </thead>
             <tbody>
               @forelse($roles as $rol)
-                  <tr class="registros" onclick="">
-                      <td>{{ $rol->id }}</td>
-                      <td>{{ $rol->nombre }}</td>
+                  <tr class="registros" >
+                      <td wire:click="verpermisos({{ $rol->id }})">{{ $rol->id }}</td>
+                      <td wire:click="verpermisos({{ $rol->id }})">{{ $rol->nombre }}</td>
                       <td>
-                          <button wire:click="destruir({{ $rol->id }})" type="button" class="btn btn-danger">Borrar</button>
-                          <button wire:click="update({{ $rol->id }})" type="button" class="btn btn-primary">Actualizar</button>
+                          @if (auth()->user()->can('delete', auth()->user()))
+                            <button wire:click="destruir({{ $rol->id }})" type="button" class="btn btn-danger">Borrar</button>
+                          @endif
+                          @if (auth()->user()->can('update', auth()->user()))
+                            <button wire:click="update({{ $rol->id }})" type="button" class="btn btn-primary">Actualizar</button>
+                          @endif
                       </td>      
                   </tr>
               @empty
