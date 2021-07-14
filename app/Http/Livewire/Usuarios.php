@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\User;
-use App\Models\Rol;
+use App\Models\Role;
 use Livewire\Component;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class Usuarios extends Component
     
     public function render()
     {
-        $this->roles = Rol::where('nombre','LIKE','%' . $this->search . '%')
+        $this->roles = Role::where('nombre','LIKE','%' . $this->search . '%')
         ->get();
         $this->users = User::where('name','LIKE','%' . $this->search . '%')
         ->orWhere('dni','LIKE','%'.$this->search.'%')
@@ -30,11 +30,10 @@ class Usuarios extends Component
    
     public function store()
     {
-        
-        if (auth()->user()->cannot('store', auth()->user())) {
-            abort(403);
-        }else
+        if (auth()->user()->cannot('store', auth()->user()))
         {
+            abort(403);
+        }else{
             User::create([
                 'name' => $this->name,
                 'email' => $this->email,
@@ -108,16 +107,16 @@ class Usuarios extends Component
         $this->funcion="";   
     }
 
-    public function asignarols(Rol $rol)        
+    public function asignarols(Role $rol)
     {      
-        $this->roless= User::find($this->idus)->rols()->where('rol_id',$rol->id)->get(); 
+        $this->roless= User::find($this->idus)->rols()->where('role_id',$rol->id)->get();
         if(sizeof($this->roless)==0)
         {
             $rol->users()->attach($this->idus);
         }            
     }
 
-    public function quitarol(Rol $rol)
+    public function quitarol(Role $rol)
     {   
         
         $rol->users()->detach($this->idus);                      

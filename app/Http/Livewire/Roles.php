@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\User;
-use App\Models\Rol;
+use App\Models\Role;
 use App\Models\Permission;
 use Livewire\Component;
 
@@ -12,7 +12,7 @@ class Roles extends Component
     public function render()
     {
         
-        $this->roles = Rol::where('nombre','LIKE','%' . $this->search . '%')
+        $this->roles = Role::where('nombre','LIKE','%' . $this->search . '%')
         ->get();
 
         return view('livewire.roles', [
@@ -22,13 +22,13 @@ class Roles extends Component
 
     public function store()
     {
-        Rol::create([
+        Role::create([
             'nombre' => $this->nombre,
         ]);
         $this->funcion="";
     }
 
-    public function destruir(Rol $rol)
+    public function destruir(Role $rol)
     {
         $rol->delete();
     }
@@ -41,7 +41,7 @@ class Roles extends Component
         $this->funcionpr="";
     }
 
-    public function update(Rol $rol)
+    public function update(Role $rol)
     {   
         $this->idrol=$rol->id;
         $this->nombre=$rol->nombre;
@@ -51,16 +51,16 @@ class Roles extends Component
 
     public function editar()
     {
-        $rolup =Rol::find($this->idrol);
+        $rolup =Role::find($this->idrol);
         $rolup->nombre=$this->nombre;
         $rolup->save();
         $this->funcion="";
     }
 
 
-    public function verpermisos(Rol $rol)
+    public function verpermisos(Role $rol)
     {
-        $this->permisos=Permission::where('rol_id', $rol->id)->get();
+        $this->permisos=Permission::where('role_id', $rol->id)->get();
         $this->nombre=$rol->name;
         $this->funcionpr="asigna";
         $this->funcion="";
