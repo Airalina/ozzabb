@@ -30,7 +30,7 @@ Como usuario supervisor quiero llevar registro de los materiales que utilizamos 
 | Familia           | Texto             | Nombre de la familia de materiales a la que pertenece.                                                |
 | Nombre            | Texto             | Nombre por el que se conoce el material coloquialmente                                                |
 | Color             | Caja de color     | Color que tiene el producto                                                                           |
-| Línea             | Selector multiple | Líneas de producto donde se utiliza el producto                                                       |
+| Línea             | Selector múltiple | Líneas de producto donde se utiliza el producto                                                       |
 | Stock en planta   | Numérico          | Cuántas unidades del producto tenemos en el depósito de la planta                                     |
 | Stock en tránsito | Numérico          | Es la cantidad de unidades de este material que están referidas en las Órdenes de Compra no cerradas. |
 | Stock             | Numérico          | Es la suma de los campos Stock en Planta y Stock en Tránsito.                                         |
@@ -52,7 +52,7 @@ Como usuario supervisor quiero llevar registro de los materiales que utilizamos 
 | Código                                                | Texto                                                                        | Es el código de material interno para la empresa.                                      |     Sí     |
 | Nombre                                                | Texto                                                                        | Es el nombre por el que se conoce al material coloquialmente.                          |     Sí     |
 | Familia                                               | Selector                                                                     | Conectores, Terminales, Cables, Sellos                                                 |     Sí     |
-| Color                                                 | Selector de Color                                                            | Muestra una paleta de colores, ej Amarillo, Rojo y Negro.                              |     Sí     |
+| Color                                                 | Selector de Color                                                            | Muestra una paleta de colores, ej. amarillo, Rojo y Negro.                              |     Sí     |
 | Descripción                                           | Texto multilínea                                                             | Permite escribir una pequeña descripción del material. tamaño máximo de 500 chars      |     No     |
 | Línea                                                 | Texto|Muestra la lista de Líneas de productos en la que se usa este material. | Sí                                                                                     |
 | Uso                                                   | Texto                                                                        | Muestra la lista de Áreas de Uso de los productos en los que se utiliza este material. |     Sí     |
@@ -79,7 +79,7 @@ Como usuario supervisor quiero llevar registro de los materiales que utilizamos 
 
 |Dato|Tipo|Descripción|Requerido|
 |:--|:---|:--------|:--:|
-|Tamaño|Numérico|Es el tamaño del cable para el que se usa esta terminal. Valores ej: 1,2;1,5;1,8;2;2,5;2,8;6,3. mm|Sí|
+|Tamaño|Numérico|Es el tamaño del cable para el que se usa esta terminal. Valores ej.: 1,2;1,5;1,8;2;2,5;2,8;6,3. mm|Sí|
 |Sección mínima|Numérico| | No|
 |Sección Máxima|Numérico| | No|
 
