@@ -1,11 +1,11 @@
 <a name='pedidos-de-clientes'></a>
 
-- [Pedidos de Clientes](#pedidos-de-clientes)
-  - [Requerimiento del Negocio](#requerimiento-del-negocio)
-  - [Datos de un Pedido de Cliente](#datos-de-un-pedido-de-cliente)
-  - [Lista de Productos](#lista-de-productos)
-  - [Domicilio de Entrega](#domicilio-de-entrega)
-  - [Listado de Pedidos](#listado-de-pedidos)
+ - [Pedidos de Clientes](#pedidos-de-clientes)
+ - [Requerimiento del Negocio](#requerimiento-del-negocio)
+ - [Datos de un Pedido de Cliente](#datos-de-un-pedido-de-cliente)
+ - [Lista de Productos](#lista-de-productos)
+ - [Domicilio de Entrega](#domicilio-de-entrega)
+ - [Listado de Pedidos](#listado-de-pedidos)
 
 <a name='pedidos-de-clientes'></a>
 
@@ -15,18 +15,23 @@
 
 ## Requerimiento del Negocio
 
-Como empleado de la empresa a cargo de pedidos debo poder registrar los pedidos de nuestros clientes.
+<p style='text-align: justify;'>
+ Como empleado de la empresa a cargo de pedidos debo poder registrar los pedidos de nuestros clientes.
 
-Los pedidos de clientes nos dicen qué es lo que estaremos construyendo en las líneas de producción y cuándo el cliente necesita los productos terminados que ha pedido.
+ Los pedidos de clientes nos dicen qué es lo que estaremos construyendo en las líneas de producción y cuándo el cliente necesita los productos terminados que ha pedido.
 
-Un pedido incluye una lista de productos y cantidades que el cliente nos ha pedido le enviemos.
+ </p>
+<p style='text-align: justify;'>
+ Un pedido incluye una lista de productos y cantidades que el cliente nos ha pedido le enviemos.
 
-Los pedidos se comprometen para una fecha de entrega.  
-
-Debo poder ver los pedidos que están empezados y cuáles tengo comprometidos para los meses siguientes.
-Cuales están terminados y cuáles y cuándo fueron enviados a los clientes.
-
-Los Clientes pueden realizarnos pedidos por varias vías, teléfono, correo electrónico o mensajes de WhatsApp. 
+ Los pedidos se comprometen para una fecha de entrega.  
+</p>
+<p style='text-align: justify;'>
+ Debo poder ver los pedidos que están empezados y cuáles tengo comprometidos para los meses siguientes, cuáles están terminados y cuáles y cuándo fueron enviados a los clientes.
+</p>
+<p style='text-align: justify;'>
+ Los Clientes pueden realizarnos pedidos por varias vías, teléfono, correo electrónico o mensajes de WhatsApp.
+</p> 
 
 <a name='datos-de-un-pedido-de-cliente'></a>
 

@@ -13,11 +13,13 @@
 
 ## Requerimiento del Negocio
 
+<p style='text-style : justify;'>
 Como usuario del sistema debo poder registrar los datos de los clientes que realizan pedidos a nuestra empresa.
 
 En general nuestros clientes son otras empresas que utilizan nuestros productos para integrarlos en los suyos propios.
 
 Las direcciones de los envíos pueden diferir de la dirección de las  oficinas de la empresa.
+</p>
 
 <a name='datos-de-clientes'></a>
 
