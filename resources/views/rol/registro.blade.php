@@ -2,7 +2,9 @@
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                @if($funcion=="crear")<h3 class="card-title">Agregar Rol</h3>@else<h3 class="card-title">Cambiar Nombre del Rol</h3>@endif
+                @if($funcion=="crear")
+					<h3 class="card-title">Agregar Rol</h3>@else<h3 class="card-title">Cambiar Nombre del Rol</h3>
+				@endif
               </div>
               <form>
 				<div class="card-body">

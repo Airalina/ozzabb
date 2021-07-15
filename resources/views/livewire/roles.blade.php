@@ -2,7 +2,7 @@
 
   @switch($funcion)
     @case("")
-        @if (auth()->user()->can('see', auth()->user()))
+        @if (auth()->user()->can('seerol', auth()->user()))
           @include("rol.listado")
         @endif
         @break

@@ -14,8 +14,7 @@ class Usuarios extends Component
     
     public function render()
     {
-        $this->roles = Role::where('nombre','LIKE','%' . $this->search . '%')
-        ->get();
+        $this->roles = Role::all();
         $this->users = User::where('name','LIKE','%' . $this->search . '%')
         ->orWhere('dni','LIKE','%'.$this->search.'%')
         ->orWhere('nombre_y_apellido','LIKE','%'.$this->search.'%')
@@ -109,7 +108,7 @@ class Usuarios extends Component
 
     public function asignarols(Role $rol)
     {      
-        $this->roless= User::find($this->idus)->rols()->where('role_id',$rol->id)->get();
+        $this->roless= User::find($this->idus)->roles()->where('role_id',$rol->id)->get();
         if(sizeof($this->roless)==0)
         {
             $rol->users()->attach($this->idus);

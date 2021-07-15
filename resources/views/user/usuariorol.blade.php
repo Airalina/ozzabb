@@ -14,7 +14,7 @@
             <thead>
               <tr>
                 <th>Nombre</th>
-                @if (auth()->user()->can('store', auth()->user()))
+                @if (auth()->user()->can('update', auth()->user()))
                     <th>Acciones</th>
                 @endif
               </tr>
@@ -23,7 +23,7 @@
                 @forelse($roles as $rol)
                     <tr>
                         <td>{{ $rol->nombre }}</td>
-                        @if (auth()->user()->can('store', auth()->user()))
+                        @if (auth()->user()->can('update', auth()->user()))
                             @if(sizeof($rol->users()->where('user_id',$idus)->get())==0)
                             <td> <button wire:click="asignarols({{$rol->id }})" type="button" class="btn btn-success">Asignar Rol</button> </td>    
                             @else
