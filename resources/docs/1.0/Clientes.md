@@ -1,9 +1,9 @@
 
-- [Clientes](#clientes)
-  - [Requerimiento del Negocio](#requerimiento-del-negocio)
-  - [Datos de Clientes](#datos-de-clientes)
-  - [Domicilios de Entrega](#domicilios-de-entrega)
-  - [Historial de Pedidos](#historial-de-pedidos)
+   - [Clientes](#clientes)
+   - [Requerimiento del Negocio](#requerimiento-del-negocio)
+   - [Datos de Clientes](#datos-de-clientes)
+   - [Domicilios de Entrega](#domicilios-de-entrega)
+   - [Historial de Pedidos](#historial-de-pedidos)
 
 <a name='clientes'></a>
 
@@ -19,7 +19,7 @@ En general nuestros clientes son otras empresas que utilizan nuestros productos 
 
 Las direcciones de los envíos pueden diferir de la dirección de las  oficinas de la empresa.
 
-<a name='datos_clientes'></a>
+<a name='datos-de-clientes'></a>
 
 ## Datos de Clientes
 
