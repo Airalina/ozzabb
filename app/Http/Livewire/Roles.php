@@ -38,7 +38,7 @@ class Roles extends Component
                 
             ]);
             Permission::Create([
-                'name' => "Administracion de Usuarios",
+                'name' => "Administracion de Roles",
                 'see' => 0,
                 'create' => 0,
                 'update' => 0,

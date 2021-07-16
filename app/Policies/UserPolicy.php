@@ -10,7 +10,7 @@ class UserPolicy
 
     public function store(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {
@@ -28,7 +28,7 @@ class UserPolicy
 
     public function update(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {
@@ -46,7 +46,7 @@ class UserPolicy
 
     public function delete(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {
@@ -64,7 +64,7 @@ class UserPolicy
 
     public function see(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {
@@ -82,7 +82,7 @@ class UserPolicy
 
     public function seerol(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {
@@ -100,7 +100,7 @@ class UserPolicy
 
     public function storerol(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {
@@ -118,7 +118,7 @@ class UserPolicy
 
     public function updaterol(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {
@@ -136,7 +136,7 @@ class UserPolicy
 
     public function deleterol(User $user)
     {
-        $roles=User::find($user->id)->roles()->where('role_id',$user->id)->get();
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
         
         foreach($roles as $rol)
         {

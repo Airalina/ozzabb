@@ -10,7 +10,7 @@ class Usuarios extends Component
 {
     
     public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
-    public $funcion="", $funcionru, $userlog;
+    public $funcion="", $order='id', $funcionru, $userlog;
     
     public function render()
     {
@@ -20,7 +20,7 @@ class Usuarios extends Component
         ->orWhere('nombre_y_apellido','LIKE','%'.$this->search.'%')
         ->orWhere('telefono','LIKE','%'.$this->search.'%')
         ->orWhere('domicilio','LIKE','%'.$this->search.'%')
-        ->orWhere('email','LIKE','%'.$this->search.'%')->get();
+        ->orWhere('email','LIKE','%'.$this->search.'%')->orderBy($this->order)->get();
 
         return view('livewire.usuarios', [
             'users' => $this->users,
