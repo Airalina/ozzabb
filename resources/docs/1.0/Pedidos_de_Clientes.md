@@ -16,7 +16,7 @@
 ## Requerimiento del Negocio
 
 <p style='text-align: justify;'>
- Como empleado de la empresa a cargo de pedidos debo poder registrar los pedidos de nuestros clientes.
+ Como empleado de la empresa, a cargo de pedidos, debo poder registrar los pedidos de nuestros clientes.
 
  Los pedidos de clientes nos dicen qué es lo que estaremos construyendo en las líneas de producción y cuándo el cliente necesita los productos terminados que ha pedido.
 
@@ -46,6 +46,7 @@ Los pedidos de clientes tienen los siguientes datos:
 | Nombre del Cliente  | Es el nombre del cliente según está en su registro.                    | Auto                |
 | Fecha de Entrega    | Fecha en la que se deberá entregar el pedido de ser producido.         | Sí                  |
 | Estado              | Nuevo, Confirmado, Rechazado, Demorado, En producción, En Depósito.    | Sí: Nuevo           |
+| Compras             | Nos dice si el pedido fue utilizado para generar ordenes de compra de materiales| No | 
 | Depósito            | Nombre del depósito en el que se encuentra el pedido.                  | No                  |
 | Fecha de Inicio     | Es la fecha en que entró en producción.                                | No                  |
 | Orden de trabajo    | Nro. de la orden de trabajo en la que se incluyó este pedido.          | No                  |
