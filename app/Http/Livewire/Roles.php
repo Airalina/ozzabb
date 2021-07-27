@@ -11,7 +11,7 @@ class Roles extends Component
     public $search, $rol, $idrol,$funcion="", $nombre, $permisos, $funcionpr;
     public function render()
     {
-        
+        $this->permisos=Permission::where('role_id',$this->idrol)->get();
         $this->roles = Role::where('nombre','LIKE','%' . $this->search . '%')
         ->get();
 
@@ -24,7 +24,30 @@ class Roles extends Component
     {
         Role::create([
             'nombre' => $this->nombre,
+            'activo' => 1,
         ]);
+        $rol=Role::where('nombre', $this->nombre)->get();
+        foreach($rol as $ro){
+            Permission::Create([
+                'name' => "Administracion de Usuarios",
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' => 0,
+                'role_id' => $ro->id,
+                
+            ]);
+            Permission::Create([
+                'name' => "Administracion de Roles",
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' => 0,
+                'role_id' => $ro->id,
+                
+            ]);
+        }
+        
         $this->funcion="";
     }
 
@@ -60,8 +83,9 @@ class Roles extends Component
 
     public function verpermisos(Role $rol)
     {
+        $this->idrol=$rol->id;
         $this->permisos=Permission::where('role_id', $rol->id)->get();
-        $this->nombre=$rol->name;
+        $this->nombre=$rol->nombre;
         $this->funcionpr="asigna";
         $this->funcion="";
     }

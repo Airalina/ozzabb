@@ -20,8 +20,8 @@ class CreatePermissionsTable extends Migration
             $table->boolean("create");
             $table->boolean("update");
             $table->boolean("delete");
-            $table->unsignedBigInteger('role_id');
-            //$table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->unsignedBigInteger("role_id");
+            //$table->foreign("role_id")->refereces("id")->on("roles")->onDelete("cascade");
             $table->timestamps();
         });
     }

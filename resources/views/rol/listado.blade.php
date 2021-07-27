@@ -4,7 +4,7 @@
           <h3 class="card-title">Roles Registrados</h3>
           <div class="card-tools">
             <div>
-              @if (auth()->user()->can('store', auth()->user()))
+              @if (auth()->user()->can('storerol', auth()->user()))
     	        <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Rol</button> 
               @endif
             </div>
@@ -30,10 +30,10 @@
                       <td wire:click="verpermisos({{ $rol->id }})">{{ $rol->id }}</td>
                       <td wire:click="verpermisos({{ $rol->id }})">{{ $rol->nombre }}</td>
                       <td>
-                          @if (auth()->user()->can('delete', auth()->user()))
+                          @if (auth()->user()->can('deleterol', auth()->user()))
                             <button wire:click="destruir({{ $rol->id }})" type="button" class="btn btn-danger">Borrar</button>
                           @endif
-                          @if (auth()->user()->can('update', auth()->user()))
+                          @if (auth()->user()->can('updaterol', auth()->user()))
                             <button wire:click="update({{ $rol->id }})" type="button" class="btn btn-primary">Actualizar</button>
                           @endif
                       </td>      

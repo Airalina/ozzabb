@@ -10,18 +10,17 @@ class Usuarios extends Component
 {
     
     public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
-    public $funcion="", $funcionru, $userlog;
+    public $funcion="", $order='id', $funcionru, $userlog;
     
     public function render()
     {
-        $this->roles = Role::where('nombre','LIKE','%' . $this->search . '%')
-        ->get();
+        $this->roles = Role::all();
         $this->users = User::where('name','LIKE','%' . $this->search . '%')
         ->orWhere('dni','LIKE','%'.$this->search.'%')
         ->orWhere('nombre_y_apellido','LIKE','%'.$this->search.'%')
         ->orWhere('telefono','LIKE','%'.$this->search.'%')
         ->orWhere('domicilio','LIKE','%'.$this->search.'%')
-        ->orWhere('email','LIKE','%'.$this->search.'%')->get();
+        ->orWhere('email','LIKE','%'.$this->search.'%')->orderBy($this->order)->get();
 
         return view('livewire.usuarios', [
             'users' => $this->users,
@@ -34,6 +33,7 @@ class Usuarios extends Component
         {
             abort(403);
         }else{
+          
             User::create([
                 'name' => $this->name,
                 'email' => $this->email,
@@ -48,7 +48,7 @@ class Usuarios extends Component
 
     public function destruir(User $user)
     {
-        if (auth()->user()->cannot('destruir', auth()->user())) {
+        if (auth()->user()->cannot('delete', auth()->user())) {
             abort(403);
         }else
         {
@@ -109,7 +109,7 @@ class Usuarios extends Component
 
     public function asignarols(Role $rol)
     {      
-        $this->roless= User::find($this->idus)->rols()->where('role_id',$rol->id)->get();
+        $this->roless= User::find($this->idus)->roles()->where('role_id',$rol->id)->get();
         if(sizeof($this->roless)==0)
         {
             $rol->users()->attach($this->idus);

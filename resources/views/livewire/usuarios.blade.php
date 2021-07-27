@@ -1,5 +1,4 @@
 <div id="create">
-  
   @switch($funcion)
     @case("")
         @if (auth()->user()->can('see', auth()->user()))

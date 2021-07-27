@@ -10,16 +10,29 @@
               @endif
     	         
             </div>
+            
             <div class="input-group input-group-sm" style="width: 150px;">
+              
               <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Usuario...">
             </div>
           </div>
         </div>
-         {{ $search }}
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0" style="height: 300px;">
           <table class="table table-head-fixed text-nowrap">
-            <thead>
+            <div class="form-group" data-select2-id="45">
+                  <label>Ordenar por...</label>
+                  <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;"  tabindex="-1" aria-hidden="true">
+                    <option data-select2-id="47" value="id">Id</option>
+                    <option data-select2-id="48" value="name">Nombre</option>
+                    <option data-select2-id="49" value="nombre_y_apellido">Nombre y Apellido</option>
+                    <option data-select2-id="50" value="dni">D.N.I.</option>
+                    <option data-select2-id="51" value="email">Email</option>
+                    <option data-select2-id="52" value="telefono">Telefono</option>
+                    <option data-select2-id="53" value="domicilio">Domicilio</option>
+                  </select>
+                </div>
+            <thead> 
               <tr>
                 <th>ID</th>
                 <th>Usuario</th>
