@@ -33,6 +33,7 @@ class Usuarios extends Component
         {
             abort(403);
         }else{
+          
             User::create([
                 'name' => $this->name,
                 'email' => $this->email,
@@ -47,7 +48,7 @@ class Usuarios extends Component
 
     public function destruir(User $user)
     {
-        if (auth()->user()->cannot('destruir', auth()->user())) {
+        if (auth()->user()->cannot('delete', auth()->user())) {
             abort(403);
         }else
         {
