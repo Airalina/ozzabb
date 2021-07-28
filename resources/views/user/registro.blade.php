@@ -33,6 +33,14 @@
 						<label for="exampleInputEmail1">D.N.I.</label>
 						<input type="text" class="form-control" id="dni" wire:model="dni" placeholder="D.N.I.">
 					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Contraseña</label>
+						<input id="password" class="form-control" wire:model="password" type="password" name="password" required autocomplete="new-password" placeholder="Contraseña" />
+					</div>	
+					<div class="mt-4">
+						<label for="exampleInputEmail1">Repetir contraseña</label>
+						<input id="password_confirmation" class="form-control" wire:model="password1" type="password" name="password_confirmation" required placeholder="Contraseña"/>
+            </div>
 				</div>
              </form>
             </div>

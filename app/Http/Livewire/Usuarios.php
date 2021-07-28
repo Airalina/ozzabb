@@ -5,11 +5,12 @@ use App\Models\User;
 use App\Models\Role;
 use Livewire\Component;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class Usuarios extends Component
 {
     
-    public $idus, $usuarios, $idu, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
+    public $idus, $usuarios, $idu,$password,$password1, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
     public $funcion="", $order='id', $funcionru, $userlog;
     
     public function render()
@@ -33,16 +34,19 @@ class Usuarios extends Component
         {
             abort(403);
         }else{
-          
-            User::create([
-                'name' => $this->name,
-                'email' => $this->email,
-                'nombre_y_apellido'=>$this->nombre_y_apellido,
-                'domicilio'=>$this->domicilio,
-                'telefono'=>$this->telefono,
-                'dni'=>$this->dni,
-            ]);
-            $this->funcion="";
+            if($this->password==$this->password1){
+                User::create([
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'nombre_y_apellido'=>$this->nombre_y_apellido,
+                    'domicilio'=>$this->domicilio,
+                    'telefono'=>$this->telefono,
+                    'dni'=>$this->dni,
+                    'password'=>Hash::make($this->password)
+                ]);
+                $this->funcion="";
+            }
+           
         }
     }
 
