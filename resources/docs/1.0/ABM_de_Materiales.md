@@ -87,6 +87,22 @@ Como usuario supervisor quiero llevar registro de los materiales que utilizamos 
 <a name=''></a>
 
 ## Lista de Precios
+Para cada material, debo poder registrar los siguientes datos:
+
+|Dato|Tipo|Descripción|Requerido
+|:--|:---|:--------|:--:|
+|Código Proveedor | Texto | Es el código con el que el material es conocido en el proveedor.| No
+|Presentación | Numérico | Es la cantidad de unidades en las que el proveedor vende el material. | Sí
+| Fecha | Fecha en formato "dd/MM/YYYY" | Es la fecha en la que se cargó el precio, pero puede editarse para cargar fechas diferentes. | Sí
+| Precio | Numérico, 2 decimales | Precio al que vende el proveedor el material en  esta presentación. | Sí
+
+Desde el mismo formulario de alta y edición de materiales debo poder agregar los precios por proveedor y verlos ordenados por fecha de forma descendente.
+
+La lista de precios debe poder ordenarse por todos sus campos de datos.
+
+
+
+
 
 
 
