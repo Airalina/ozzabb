@@ -47,7 +47,6 @@ Los pedidos de clientes tienen los siguientes datos:
 | Fecha de Entrega    | Fecha en la que se deberá entregar el pedido de ser producido.         | Sí                  |
 | Estado              | Nuevo, Confirmado, Rechazado, Demorado, En producción, En Depósito.    | Sí: Nuevo           |
 | Compras             | Nos dice si el pedido fue utilizado para generar ordenes de compra de materiales| No | 
-| Depósito            | Nombre del depósito en el que se encuentra el pedido.                  | No                  |
 | Fecha de Inicio     | Es la fecha en que entró en producción.                                | No                  |
 | Orden de trabajo    | Nro. de la orden de trabajo en la que se incluyó este pedido.          | No                  |
 | Precio Total U$D    | Calculado de la lista de productos incluidos en el pedido.             | Auto                |
@@ -56,7 +55,7 @@ Los pedidos de clientes tienen los siguientes datos:
 
 <a name='lista-de-productos'></a>
 
-## Lista de Productos
+## Lista de Productos (Instalaciones)
 
 Es la lista de los Productos que el cliente solicitó en su pedido. 
 
@@ -78,6 +77,8 @@ Para cada envío se debe especificar un domicilio de entrega de la lista de domi
 Se debe poder agregar uno nuevo al crear el pedido.
 
 Se puede registrar un domicilio diferente al realizar el envío del pedido.
+
+Los domicilios previamente utilizados para un cliente, deben estar disponibles para utilizarse en nuevos pedidos.
 
 <a name='listado-de-pedidos'></a>
 
