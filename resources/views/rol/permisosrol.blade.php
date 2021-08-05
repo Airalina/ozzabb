@@ -5,7 +5,7 @@
             <h4>Permisos del Rol: </h4>
         </th>
         <th>    
-            <input id="nombre" wire:model="nombre" type="text" maxlength="200" readonly/>
+            <h4>{{ $nombre }}</h4>
         </th>
     </tr>
     </table>

@@ -253,6 +253,11 @@ return [
             'label'       => 4,
             'label_color' => 'success',
         ],
+        [
+            'text' => 'Clientes',
+            'url'  => 'clientes',
+            'icon' => 'fas fa-fw fa-users',
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
