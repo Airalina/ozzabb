@@ -16,7 +16,7 @@
               <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Usuario...">
             </div>
           </div>
-        </div>
+</div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0" style="height: 300px;">
           <table class="table table-head-fixed text-nowrap">
@@ -46,13 +46,14 @@
             <tbody>
               @forelse($users as $user)
                   <tr class="registros">
-                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->id }}</td>
-                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->name }}</td>
-                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->nombre_y_apellido }}</td>
-                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->domicilio }}</td>
-                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->telefono }}</td>
-                      <td wire:click="rolusuario({{ $user->id }})">{{ $user->email }}</td>
+                      <td>{{ $user->id }}</td>
+                      <td>{{ $user->name }}</td>
+                      <td>{{ $user->nombre_y_apellido }}</td>
+                      <td>{{ $user->domicilio }}</td>
+                      <td>{{ $user->telefono }}</td>
+                      <td>{{ $user->email }}</td>
                       <td>
+                          <button type="button" wire:click="rolusuario({{ $user->id }})" class="btn btn-primary"><i class="fas fa-file-alt"></i>    Ver</button>
                           @if (auth()->user()->can('delete', auth()->user()))
                             <button wire:click="destruir({{ $user->id }})" type="button" class="btn btn-danger">Borrar</button>
                           @endif

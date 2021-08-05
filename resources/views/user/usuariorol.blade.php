@@ -5,7 +5,7 @@
             <h4>Roles del usuario: </h4>
         </th>
         <th>    
-            <input id="nombre_y_apellido" wire:model="nombre_y_apellido" type="text" maxlength="200" readonly/>
+            <h4>{{ $nombre_y_apellido }}</h4>
         </th>
     </tr>
     </table>
