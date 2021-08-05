@@ -8,7 +8,23 @@ use Livewire\Component;
 class Clientes extends Component
 {
     public $funcion="", $idcli, $clientes, $cliente, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
-    public $street, $location, $number, $province, $country, $postcode, $client_id, $explora='inactivo',$domicilios=[];
+    public $street, $location, $number, $province, $country, $postcode, $client_id, $explora='inactivo',$domicilios;
+    
+    protected $rules = [
+        'name' => 'required|string|min:5',
+        'email' => 'required|email',
+        'contact' => 'required|string|min:6',
+        'phone' => 'required|numeric|min:1000000000',
+        'post_contact' => 'required|string|min:3',
+        'domicile_admin' => 'required|string|min:5',
+        'street' =>'required|string|min:5',
+        'number' =>'required|numeric|min:1',
+        'location' =>'required|string|min:5',
+        'province' =>'required|string|min:5',
+        'country' =>'required|string|min:5',
+        'postcode' =>'required|numeric|min:1',
+    ];
+
     public function render()
     {
         $this->clientes=Customer::where('name','LIKE','%' . $this->search . '%')
@@ -57,6 +73,7 @@ class Clientes extends Component
     }
 
     public function store(){
+        $this->validate();
         Customer::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -75,7 +92,6 @@ class Clientes extends Component
     }
 
     public function storedir(Customer $cliente){
-        
         DomicileDelivery::create([
             'street' =>$this->street,
             'number' =>$this->number,

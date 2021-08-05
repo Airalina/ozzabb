@@ -13,6 +13,16 @@ class Usuarios extends Component
     public $idus, $usuarios, $idu,$password,$password1, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
     public $funcion="", $order='id', $funcionru, $userlog;
     
+    protected $rules = [
+        'name' => 'required|string|min:5',
+        'email' => 'required|email',
+        'nombre_y_apellido' => 'required|string|min:10',
+        'domicilio' => 'required|min:6',
+        'dni' => 'required|numeric|min:1000000',
+        'telefono' => 'required|numeric|min:1000000000',
+        'password' => 'required|min:8'
+    ];
+
     public function render()
     {
         $this->roles = Role::all();
@@ -30,6 +40,7 @@ class Usuarios extends Component
    
     public function store()
     {
+        $this->validate();
         if (auth()->user()->cannot('store', auth()->user()))
         {
             abort(403);
@@ -71,6 +82,8 @@ class Usuarios extends Component
         $this->telefono=null;
         $this->email=null;
         $this->dni=null;
+        $this->password=null;
+        $this->password1=null;
     }
     
     public function endfunctions()
@@ -103,12 +116,22 @@ class Usuarios extends Component
         $this->funcion="";
     }
 
+    public function volver(){
+        $this->funcion="";
+        $this->funcionru="";
+    }
+
     public function rolusuario(User $user)
     {   
         $this->idus=$user->id;
+        $this->name=$user->name;
         $this->nombre_y_apellido=$user->nombre_y_apellido;
+        $this->domicilio=$user->domicilio;
+        $this->telefono=$user->telefono;
+        $this->email=$user->email;
+        $this->dni=$user->dni;
         $this->funcionru="asigna";
-        $this->funcion="";   
+        $this->funcion="0";   
     }
 
     public function asignarols(Role $rol)

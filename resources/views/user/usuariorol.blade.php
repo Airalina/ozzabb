@@ -1,14 +1,37 @@
 <div>
-    <table>
-    <tr>
-        <th>
-            <h4>Roles del usuario: </h4>
-        </th>
-        <th>    
-            <h4>{{ $nombre_y_apellido }}</h4>
-        </th>
-    </tr>
+    <div>
+      <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+    <br>
+    <table class="table table-hover text-nowrap">
+                  <thead>
+                    
+                    <div class="card-tools">
+                    <h5>Usted a seleccionado al usuario: {{ $name }} </h5>
+                    </div>
+                    <br>
+                    <h6> Datos: </h6>
+                    <tr>
+                      <th>Nombre y Apellido</th>
+                      <th>Telefono</th>
+                      <th>Email</th>
+                      <th>Domicilio </th>
+                      <th>D.N.I</th> 
+                      <th><th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                    <td>{{ $nombre_y_apellido }}</td>
+                      <td>{{ $telefono }}</td>
+                      <td>{{ $email }}</td>
+                      <td>{{ $domicilio }}</td>
+                      <td>{{ $dni }}</td>
+                    </tr>
+                  </tbody>
     </table>
+    <br>
+    <h6> Roles: </h6>
     <div class="card-body table-responsive p-0" style="height: 300px;">
         <table class="table table-head-fixed text-nowrap">
             <thead>

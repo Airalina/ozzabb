@@ -246,12 +246,13 @@ return [
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
+        ['header' => 'PERSONAS',
+         'icon' => 'fas fa-fw fa-users',
+        ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
+            'text' => 'Usuario/Roles',
+            'url'  => 'admin',
+            'icon' => 'fas fa-fw fa-users',
         ],
         [
             'text' => 'Clientes',

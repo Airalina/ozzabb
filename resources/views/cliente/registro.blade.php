@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar Cambios</button></td>
+                        <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar </button></td>
                         <td><button wire:click="volver()" type="button" class="btn btn-primary">Cancelar</button></td>
                     </div>
               </form>

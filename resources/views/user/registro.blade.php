@@ -19,7 +19,7 @@
 					</div>
 					<div class="form-group">
 						<label for="exampleInputEmail1">Email</label>
-						<input type="text" class="form-control" id="email" wire:model="email" placeholder="Email">
+						<input type="email" class="form-control" id="email" wire:model="email" placeholder="Email">
 					</div>
 					<div class="form-group">
 						<label for="exampleInputEmail1">Telefono</label>
