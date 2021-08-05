@@ -27,12 +27,31 @@ class Clientes extends Component
     }
 
     public function funcion(){
+        $this->name=null;
+        $this->email=null;
+        $this->phone=null;
+        $this->domicile_admin=null;
+        $this->contact=null;
+        $this->post_contact=null;
+        $this->estado=null;
+        $this->street=null;
+        $this->number=null;
+        $this->location=null;
+        $this->province=null;
+        $this->country=null;
+        $this->postcode=null;
         $this->explora='inactivo';
         $this->funcion="crear";
         
     }
 
     public function agregadom(){
+        $this->street=null;
+        $this->number=null;
+        $this->location=null;
+        $this->province=null;
+        $this->country=null;
+        $this->postcode=null;
         $this->explora='inactivo';
         $this->funcion="creardom";    
     }
