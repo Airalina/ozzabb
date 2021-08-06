@@ -33,4 +33,9 @@ Route::get('/usuarios', function () {
     return view('adminlte');
 })->middleware(['auth'])->name('adminlte');
 
+
+Route::get('/materiales', function () {
+    return view('materiales');
+})->middleware(['auth'])->name('livewire-material');
+
 require __DIR__.'/auth.php';

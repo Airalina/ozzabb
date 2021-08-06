@@ -265,6 +265,16 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
+            'text'    => 'Configuracion',
+            'icon'    => 'fas fa-fw fa-gear',
+            'submenu' => [
+                [
+                    'text' => 'Materiales',
+                    'url'  => 'materiales',
+                ],
+            ],
+        ],
+        [
             'text'    => 'multilevel',
             'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
@@ -275,26 +285,6 @@ return [
                 [
                     'text'    => 'level_one',
                     'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
                 ],
                 [
                     'text' => 'level_one',
