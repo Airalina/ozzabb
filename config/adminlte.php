@@ -254,12 +254,12 @@ return [
         ['header' => 'Cuenta'],
         [
             'text' => 'profile',
-            'url'  => 'admin/settings',
+            'url'  => '#',//'admin/settings',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'change_password',
-            'url'  => 'admin/settings',
+            'url'  => '#',//'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
