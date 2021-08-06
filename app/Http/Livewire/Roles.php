@@ -83,8 +83,7 @@ class Roles extends Component
         $this->funcionpr="";
     }
 
-    public function update(Role $rol)
-    {   
+    public function update(Role $rol){   
         $this->idrol=$rol->id;
         $this->nombre=$rol->nombre;
         $this->funcion="adaptar";

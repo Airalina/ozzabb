@@ -13,16 +13,6 @@ class Usuarios extends Component
     public $idus, $usuarios, $idu,$password,$password1, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
     public $funcion="", $order='id', $funcionru, $userlog;
     
-    protected $rules = [
-        'name' => 'required|string|min:5',
-        'email' => 'required|email',
-        'nombre_y_apellido' => 'required|string|min:10',
-        'domicilio' => 'required|min:6',
-        'dni' => 'required|numeric|min:1000000',
-        'telefono' => 'required|numeric|min:1000000000',
-        'password' => 'required|min:8'
-    ];
-
     public function render()
     {
         $this->roles = Role::all();
@@ -40,7 +30,15 @@ class Usuarios extends Component
    
     public function store()
     {
-        $this->validate();
+        $this->validate([
+            'name' => 'required|string|min:5',
+            'email' => 'required|email',
+            'nombre_y_apellido' => 'required|string|min:10',
+            'domicilio' => 'required|min:6',
+            'dni' => 'required|numeric|min:1000000',
+            'telefono' => 'required|numeric|min:1000000000',
+            'password' => 'required|min:8'
+        ]);
         if (auth()->user()->cannot('store', auth()->user()))
         {
             abort(403);
@@ -104,8 +102,16 @@ class Usuarios extends Component
         $this->funcionru="";
     }
 
-    public function editar()
-    {
+    public function editar(){
+        $this->validate([
+            'name' => 'required|string|min:5',
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$this->idu.''],
+            'nombre_y_apellido' => 'required|string|min:10',
+            'domicilio' => 'required|min:6',
+            'dni' => 'required|numeric|min:1000000',
+            'telefono' => 'required|numeric|min:1000000000',
+        ]);
+        
         $userup =User::find($this->idu);
         $userup->nombre_y_apellido=$this->nombre_y_apellido;
         $userup->dni=$this->dni;
