@@ -30,4 +30,9 @@ Route::get('/clientes', function () {
     return view('clients');
 })->middleware(['auth'])->name('clients');
 
+
+Route::get('/materiales', function () {
+    return view('materiales');
+})->middleware(['auth'])->name('livewire-material');
+
 require __DIR__.'/auth.php';

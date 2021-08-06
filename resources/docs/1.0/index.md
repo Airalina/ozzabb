@@ -3,3 +3,5 @@
 - ## Documentación Funcional
   - [ABM de Materiales](/{{route}}/{{version}}/ABM_de_Materiales)
   - [ABM de Proveedores](/{{route}}/{{version}}/ABM_de_Proveedores)
+  - [Clientes](/{{route}}/{{version}}/Clientes)
+  - [Pedidos de Clientes](/{{route}}/{{version}}/Pedidos_de_Clientes)
