@@ -246,6 +246,14 @@ return [
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
+        ['header' => 'PERSONAS',
+         'icon' => 'fas fa-fw fa-users',
+        ],
+        [
+            'text' => 'Usuario/Roles',
+            'url'  => 'admin',
+            'icon' => 'fas fa-fw fa-users',
+        ],
         [
             'text' => 'Clientes',
             'url'  => 'clientes',

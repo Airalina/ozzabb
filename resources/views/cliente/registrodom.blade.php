@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <td><button wire:click="storedir( {{ $cliente }})" type="button" class="btn btn-primary">Guardar Cambios</button></td>
+                        <td><button wire:click="storedir( {{ $cliente }})" type="button" class="btn btn-primary">Guardar</button></td>
                         
                         <td><button wire:click="cancelarup()" type="button" class="btn btn-primary">Cancelar</button></td>
                     </div>
