@@ -247,18 +247,11 @@ return [
             'can'  => 'manage-blog',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        [
             'text' => 'Clientes',
             'url'  => 'clientes',
             'icon' => 'fas fa-fw fa-users',
         ],
-        ['header' => 'account_settings'],
+        ['header' => 'Cuenta'],
         [
             'text' => 'profile',
             'url'  => 'admin/settings',
@@ -271,47 +264,18 @@ return [
         ],
         [
             'text'    => 'Configuracion',
-            'icon'    => 'fas fa-fw fa-gear',
+            'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
+                [
+                    'text' => 'Usuarios y Roles',
+                    'url'  => 'admin',
+                ],
+
                 [
                     'text' => 'Materiales',
                     'url'  => 'materiales',
                 ],
             ],
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
         ],
     ],
 
