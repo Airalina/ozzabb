@@ -8,4 +8,4 @@
   - [Instalaciones](/{{route}}/{{version}}/Instalaciones)
   - [Depósitos](/{{route}}/{{version}}/Depositos)
   - [Ordenes de Compras](/{{route}}/{{version}}/Ordenes_de_Compras)
-  - 
+  - [DER](/{{route}}/{{version}}/der)
