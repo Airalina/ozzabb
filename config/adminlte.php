@@ -259,6 +259,7 @@ return [
             'url'  => 'clientes',
             'icon' => 'fas fa-fw fa-users',
         ],
+<<<<<<< HEAD
         ['header' => 'PRODUCTOS',
          'icon' => 'fas fa-fw fa-users',
         ],
@@ -268,69 +269,33 @@ return [
             'icon' => 'fas fa-fw fa-file-alt',
         ],
         ['header' => 'account_settings'],
+=======
+        ['header' => 'Cuenta'],
+>>>>>>> b3609109a0426c992acbff282d11a71f440c4d9e
         [
             'text' => 'profile',
-            'url'  => 'admin/settings',
+            'url'  => '#',//'admin/settings',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'change_password',
-            'url'  => 'admin/settings',
+            'url'  => '#',//'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text'    => 'multilevel',
+            'text'    => 'Configuracion',
             'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Usuarios y Roles',
+                    'url'  => 'admin',
                 ],
+
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Materiales',
+                    'url'  => 'materiales',
                 ],
             ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
         ],
     ],
 
