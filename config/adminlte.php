@@ -259,19 +259,7 @@ return [
             'url'  => 'clientes',
             'icon' => 'fas fa-fw fa-users',
         ],
-<<<<<<< HEAD
-        ['header' => 'PRODUCTOS',
-         'icon' => 'fas fa-fw fa-users',
-        ],
-        [
-            'text' => 'Pedidos',
-            'url'  => 'pedidos',
-            'icon' => 'fas fa-fw fa-file-alt',
-        ],
-        ['header' => 'account_settings'],
-=======
         ['header' => 'Cuenta'],
->>>>>>> b3609109a0426c992acbff282d11a71f440c4d9e
         [
             'text' => 'profile',
             'url'  => '#',//'admin/settings',

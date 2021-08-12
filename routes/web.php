@@ -30,15 +30,12 @@ Route::get('/clientes', function () {
     return view('clients');
 })->middleware(['auth'])->name('clients');
 
-<<<<<<< HEAD
 Route::get('/pedidos', function () {
     return view('pedidos');
 })->middleware(['auth'])->name('pedidos');
-=======
 
 Route::get('/materiales', function () {
     return view('materiales');
 })->middleware(['auth'])->name('livewire-material');
->>>>>>> b3609109a0426c992acbff282d11a71f440c4d9e
 
 require __DIR__.'/auth.php';
