@@ -259,6 +259,14 @@ return [
             'url'  => 'clientes',
             'icon' => 'fas fa-fw fa-users',
         ],
+        ['header' => 'PEDIDOS',
+         'icon' => 'fas fa-fw fa-users',
+        ],
+        [
+            'text' => 'Pedidos',
+            'url'  => 'pedidos',
+            'icon' => 'fas fa-fw fa-users',
+        ],
         ['header' => 'Cuenta'],
         [
             'text' => 'profile',
