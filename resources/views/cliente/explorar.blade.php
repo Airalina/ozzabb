@@ -1,15 +1,19 @@
-<div class="row">
-    
-    <table class="table table-hover text-nowrap">
-                  <thead>
-                    
-                    <div class="card-tools">
-                    <div>
-                      <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
-    	            </div>
-                    <br>
-                    <h6>    Usted a seleccionado el cliente con codigo: {{ $cliente->id }} </h6>
+<div class="card-tools">
+              <div>
+                    <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+    	        </div>
+              <br>
+              <div class="card-header">
+                <h6 class="card-title">Usted a seleccionado el cliente con codigo: {{ $cliente->id }} </h6>
+
+                <div class="card-tools">
+                  <button wire:click="goOrder({{ $cliente->id }})" type="button" class="btn btn-info">Nuevo Pedido</button>
                 </div>
+</div>
+<div class="row">
+    <table class="table table-hover text-nowrap">
+          <thead>        
+            
                     <tr>
                       <th>Nombre</th>
                       <th>Telefono</th>

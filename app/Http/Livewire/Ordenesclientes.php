@@ -1,0 +1,186 @@
+<?php
+
+namespace App\Http\Livewire;
+use App\Models\Orderdetail;
+use App\Models\Installation;
+use App\Models\Clientorder;
+use App\Models\DomicileDelivery;
+use App\Models\Customer;
+use Livewire\Component;
+use Carbon\Carbon;
+
+class Ordenesclientes extends Component
+{
+    public $orders, $order, $idp, $funcion="list", $namecust, $customer_id, $date, $deadline, $start_date, $buys, $order_state, $order_job, $usd_price, $arp_price, $search;
+    public $codinstall, $upusd, $cant, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
+    public  $customer, $customers, $usd=180, $count=0, $address, $countaddress, $selectcustomer=false, $addaddress=false, $newaddress;
+    Public $street, $number, $location, $province, $country, $postcode;
+    public $detail=array();
+    public $details=array();
+    protected $listeners =[
+        'newOrder'
+        ];
+    protected $dates = ['deadline'];
+
+    public function newOrder(Customer $client)
+    {
+        $this->customer=$client;
+        $this->funcion="ordernew";
+        $this->namecust=$client->name;
+        $this->customer_id=$client->id;
+    }
+
+    public function render()
+    {
+        $this->installations=Installation::where('id','LIKE','%' .$this->searchinstallation. '%')
+        ->orWhere('code','LIKE','%'.$this->searchinstallation.'%')
+        ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->get();
+        $this->customers=Customer::where('name','LIKE','%' . $this->searchclient.'%')
+        ->orWhere('domicile_admin','LIKE','%'.$this->searchclient.'%')
+        ->orWhere('id','LIKE','%'.$this->searchclient.'%')
+        ->orWhere('phone','LIKE','%'.$this->searchclient.'%')
+        ->orWhere('contact','LIKE','%'.$this->searchclient.'%')
+        ->orWhere('post_contact','LIKE','%'.$this->searchclient.'%')
+        ->orWhere('email','LIKE','%'.$this->searchclient.'%')->get();
+        $this->orders=Clientorder::where('id','LIKE','%' . $this->search . '%')
+        ->orWhere('customer_id','LIKE','%'.$this->search.'%')
+        ->orWhere('customer_name','LIKE','%'.$this->search.'%')
+        ->orWhere('date','LIKE','%'.$this->search.'%')
+        ->orWhere('deadline','LIKE','%'.$this->search.'%')
+        ->orWhere('start_date','LIKE','%'.$this->search.'%')
+        ->orWhere('buys','LIKE','%'.$this->search.'%')
+        ->orWhere('order_job','LIKE','%'.$this->search.'%')->orderBy('order_state')->get();
+        return view('livewire.ordenesclientes');
+    }
+
+    
+
+    public function storepedido()
+    {
+        $this->date=Carbon::now();
+        $this->order=new Clientorder;
+        $this->order->customer_id = $this->customer_id;
+        $this->order->customer_name = $this->namecust;
+        $this->order->date = $this->date;
+        $this->order->deadline = $this->deadline;
+        $this->order->order_state = 1;
+        $this->order->usd_price = $this->total;
+        $this->order->arp_price = $this->total*$this->usd;
+        $this->order->save();
+        foreach($this->details as $detail){
+            $this->newdetail=new Orderdetail;
+            $this->newdetail->clientorder_id=$this->order->id;
+            $this->newdetail->material_id=$detail[0];
+            $this->newdetail->unit_price_usd=$detail[1];
+            $this->newdetail->cantidad=$detail[2];
+            $this->newdetail->save();
+        }
+        if($this->addaddress==true){
+            $this->newaddress=new Domiciledelivery;
+            $this->newaddress->street=$this->street;
+            $this->newaddress->number=$this->number;
+            $this->newaddress->location=$this->location;
+            $this->newaddress->province=$this->province;
+            $this->newaddress->country=$this->country;
+            $this->newaddress->postcode=$this->postcode;
+            $this->newaddress->client_id=$this->customer_id;
+            $this->newaddress->save();
+        }
+           
+        return redirect()->to('pedidos');
+    }
+
+    public function addinstallation(Installation $install)
+    {
+        $this->detail[0]=$install->code;
+        $this->detail[1]=$install->usd_price;
+        $this->detail[2]=$this->cant;
+        $this->detail[3]=$this->count;
+        $this->details[]=$this->detail;
+        $this->total=$this->total+$this->detail[1]*$this->detail[2];
+        $this->count=$this->count+1;
+    }
+
+    public function downinstallation($algo,$detailpu,$detailcant)
+    {
+        $this->count=$this->count-1;
+        $this->total=$this->total-$detailcant*$detailpu;
+        unset($this->details[$algo]);
+        if(empty($this->details)){
+            $this->total=0;
+        } 
+    }
+
+    public function explora(Clientorder $clientorder)
+    {
+        $this->order=$clientorder;
+        $this->details=Orderdetail::where('clientorder_id', $clientorder->id)->get();
+        if($this->explora=='inactivo'){
+            $this->explora='activo';
+            $this->funcion="0";
+        }
+        $this->customer=Customer::find($clientorder->customer_id);
+        $this->selectaddress($this->customer);
+    }
+
+    public function volver()
+    {
+        $this->funcion="list";
+        $this->explora='inactivo';
+    }
+
+    public function funcion()
+    {
+        $this->funcion="orderfromorder";
+    }
+
+    public function selectcustomer(Customer $client)
+    {
+        if($this->selectcustomer==false){
+            $this->selectcustomer=true;
+            $this->customer=$client;
+            $this->namecust=$client->name;
+            $this->customer_id=$client->id;
+            $this->selectaddress($client);
+        }else{
+            $this->selectcustomer=false;
+            $this->customer=null;
+            $this->namecust=null;
+            $this->customer_id=null;
+        }
+    }
+
+    public function selectaddress(Customer $client)
+    {
+        $this->address=DomicileDelivery::where('client_id',$client->id)->orderby('created_at','DESC')->take(1)->get();
+        foreach($this->address as $add)
+        {
+            $this->address=$add;
+        }
+    }
+
+    public function addaddress()
+    {
+        $this->addaddress=true;
+    }
+
+    public function deleteorder(Clientorder $order)
+    {
+        $order->delete();
+        return redirect()->to('pedidos');
+    }
+
+    public function addinstallationtoorder(Clientorder $order)
+    {
+            unset($this->details[0]);
+            $this->count=0;
+            $this->order=$order;
+            $this->funcion="addinstallationtoorder";
+            $this->explora="inactivo";
+    }
+
+    public function volverorder()
+    {
+        $this->explora($this->order);
+    }
+}

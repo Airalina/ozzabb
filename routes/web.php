@@ -30,4 +30,8 @@ Route::get('/clientes', function () {
     return view('clients');
 })->middleware(['auth'])->name('clients');
 
+Route::get('/pedidos', function () {
+    return view('pedidos');
+})->middleware(['auth'])->name('pedidos');
+
 require __DIR__.'/auth.php';

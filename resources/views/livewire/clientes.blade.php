@@ -18,6 +18,10 @@
     @case("adaptar")
         @include("cliente.adaptar")
         @break
+
+    @case("neworder")
+        @livewire('ordenesclientes')
+        @break
   
   @endswitch
 

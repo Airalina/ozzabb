@@ -1,0 +1,21 @@
+<div>
+@switch($funcion)
+    @case("list")
+        @include("pedidos.listado")
+        @break
+    @case("ordernew")
+        @include("pedidos.order")
+        @break
+    @case("orderfromorder")
+        @include("pedidos.orderfromorder")
+        @break
+    @case("addinstallationtoorder")
+        @include("pedidos.addinstallation")
+        @break
+@endswitch
+@switch($explora)
+      @case("activo")
+        @include("pedidos.listadodetail")
+        @break         
+@endswitch
+</div>

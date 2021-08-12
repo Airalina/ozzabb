@@ -172,4 +172,11 @@ class Clientes extends Component
             $this->explorar($this->cliente);
     }
 
+    public function goOrder(Customer $client)
+    {
+        $this->emit('newOrder', $client->id);
+        $this->funcion="neworder";
+        $this->explora="inactivo";
+    }
+
 }

@@ -27,4 +27,9 @@ class Customer extends Model
     {
         return $this->hasMany(DomicileDelivery::class ,'cliente_id');
     }
+
+    public function clientorders()
+    {
+        return $this->hasMany(Clientorder::class, 'customer_id');
+    }
 }
