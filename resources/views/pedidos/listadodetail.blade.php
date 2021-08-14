@@ -8,10 +8,7 @@
               <div class="row">
                 <div class="col-12">
                   <h4>
-                    <i class="fas fa-globe"></i> SETECEL S.R.L
-                    @if($order->order_state==1)
-                    <small class="float-right"><button wire:click="deleteorder({{ $order->id }})" type="button" class="btn btn-danger btn-sm">Borrar</button></small>
-                    @endif 
+                    <i class="fas fa-globe"></i> SETECEL S.R.L 
                   </h4>
                 </div>
                 <!-- /.col -->
@@ -66,11 +63,6 @@
                       <th style="text-align: center">Codigo de producto #</th>
                       <th style="text-align: center">Precio Unitario U$D</th>
                       <th style="text-align: center">Subtotal</th>
-                      @if($order->order_state==1)
-                      <th style="text-aling: center"><button wire:click="addinstallationtoorder({{ $order->id }})" type="button" class="btn btn-success btn-sm">Agregar Producto</button></th>
-                      @else
-                      <th></th>
-                      @endif
                     </tr>
                     </thead>
                     <tbody>

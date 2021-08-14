@@ -179,4 +179,9 @@ class Clientes extends Component
         $this->explora="inactivo";
     }
 
+    public function volverexplora()
+    {
+        $this->explora='activo';
+        $this->funcion="0";
+    }
 }

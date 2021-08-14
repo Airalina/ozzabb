@@ -1,3 +1,7 @@
+<div>
+  <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
 <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Nuevo pedido</h3>

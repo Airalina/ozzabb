@@ -58,7 +58,12 @@
 
 
                       <td >
-                        <button type="button" wire:click="explora({{ $order->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i>    Ver</button>
+                      <button type="button" wire:click="explora({{ $order->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i>    Ver</button>
+                      @if($order->order_state==1)
+                        <button type="button" wire:click="update({{ $order->id }})" class="btn btn-primary btn-xs"> actualizar</button>
+                        
+                        <button wire:click="deleteorder({{ $order->id }})" type="button" class="btn btn-danger btn-xs">Borrar</button>
+                      @endif
                       </td>      
                 </tr>
               @empty
