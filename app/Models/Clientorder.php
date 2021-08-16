@@ -15,6 +15,7 @@ class Clientorder extends Model
     protected $fillable = [
         'customer_id',
         'customer_name',
+        'deliverydomicile_id',
         'deadline',
         'date',
         'order_state',   

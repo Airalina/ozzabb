@@ -5,10 +5,11 @@
               <br>
               <div class="card-header">
                 <h6 class="card-title">Usted a seleccionado el cliente con codigo: {{ $cliente->id }} </h6>
-
+                @if (auth()->user()->can('storepedidos', auth()->user()))
                 <div class="card-tools">
                   <button wire:click="goOrder({{ $cliente->id }})" type="button" class="btn btn-info">Nuevo Pedido</button>
                 </div>
+                @endif
 </div>
 <div class="row">
     <table class="table table-hover text-nowrap">

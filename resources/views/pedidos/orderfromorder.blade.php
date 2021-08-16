@@ -71,11 +71,24 @@
                         <th style="text-align: center">Provincia</th>
                         <th style="text-align: center">País</th>
                         <th style="text-align: center">Codigo Postal</th>
-                        <th style="text-align: center"></th>
+                        <th style="text-align: center"> @if($addaddress==false)<button type="button" wire:click="addaddress()" class="btn btn-primary btn-xs"> Otra Dirección</button>@endif</th>
                       </tr>
                     </thead>
                     <tbody>
                       @if($addaddress==false)
+                      @if($selectaddress==false)
+                      @foreach($address as $addres)
+                      <tr>
+                        <td style="text-align: center">{{ $addres->street }}</td>
+                        <td style="text-align: center">{{ $addres->number }}</td>
+                        <td style="text-align: center">{{ $addres->location }}</td>
+                        <td style="text-align: center">{{ $addres->province }}</td>
+                        <td style="text-align: center">{{ $addres->country }}</td>
+                        <td style="text-align: center">{{ $addres->postcode }}</td>
+                        <td style="text-align: center"><button type="button" wire:click="selectadd({{ $addres->id }})" class="btn btn-success btn-xs"> Seleccionar</button></td>
+                      </tr>
+                      @endforeach
+                      @else
                       <tr>
                         <td style="text-align: center">{{ $address->street }}</td>
                         <td style="text-align: center">{{ $address->number }}</td>
@@ -83,8 +96,10 @@
                         <td style="text-align: center">{{ $address->province }}</td>
                         <td style="text-align: center">{{ $address->country }}</td>
                         <td style="text-align: center">{{ $address->postcode }}</td>
-                        <td style="text-align: center"><button type="button" wire:click="addaddress()" class="btn btn-primary btn-xs"> Otra Dirección</button></td>
+                        <td style="text-align: center"><button type="button" wire:click="cancelaradd({{ $customer->id }})" class="btn btn-danger btn-xs">Cancelar Selección</button></td>
                       </tr>
+                      @endif
+
                       @else
                       <tr>
                         <td style="text-align: center"><input wire:model="street" type="text" class="form-control form-control-sm"></td>

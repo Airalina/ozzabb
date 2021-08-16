@@ -3,10 +3,11 @@
             <div class="card-header">
                 <h3 class="card-title">Pedidos Registrados</h3>
                 <div class="card-tools">
-            
-                    <div>
-                      <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Pedido</button>
+                @if (auth()->user()->can('storepedidos', auth()->user()))
+                  <div>
+                    <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Pedido</button>
     	            </div>
+                @endif
                     <div class="input-group input-group-sm" style="width: 150px;">
                         <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Pedido...">
                     </div>
@@ -60,9 +61,12 @@
                       <td >
                       <button type="button" wire:click="explora({{ $order->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i>    Ver</button>
                       @if($order->order_state==1)
-                        <button type="button" wire:click="update({{ $order->id }})" class="btn btn-primary btn-xs"> actualizar</button>
-                        
+                        @if (auth()->user()->can('updatepedidos', auth()->user()))
+                          <button type="button" wire:click="update({{ $order->id }})" class="btn btn-primary btn-xs"> actualizar</button>
+                        @endif
+                        @if (auth()->user()->can('deletepedidos', auth()->user()))
                         <button wire:click="deleteorder({{ $order->id }})" type="button" class="btn btn-danger btn-xs">Borrar</button>
+                        @endif
                       @endif
                       </td>      
                 </tr>

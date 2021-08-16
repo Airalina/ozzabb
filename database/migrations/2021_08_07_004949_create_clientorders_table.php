@@ -17,6 +17,7 @@ class CreateClientordersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->string('customer_name');
+            $table->unsignedBigInteger("deliverydomicile_id")->nullable();
             $table->dateTime('date');
             $table->date('deadline');
             $table->dateTime('start_date')->nullable();

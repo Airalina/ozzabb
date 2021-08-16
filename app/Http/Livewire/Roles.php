@@ -39,8 +39,7 @@ class Roles extends Component
                 'create' => 0,
                 'update' => 0,
                 'delete' => 0,
-                'role_id' => $ro->id,
-                
+                'role_id' => $ro->id,     
             ]);
             Permission::Create([
                 'name' => "Administracion de Roles",
@@ -48,8 +47,7 @@ class Roles extends Component
                 'create' => 0,
                 'update' => 0,
                 'delete' => 0,
-                'role_id' => $ro->id,
-                
+                'role_id' => $ro->id,  
             ]);
             Permission::Create([
                 'name' => "Administracion de Clientes",
@@ -57,8 +55,15 @@ class Roles extends Component
                 'create' => 0,
                 'update' => 0,
                 'delete' => 0,
+                'role_id' => $ro->id,   
+            ]);
+            Permission::Create([
+                'name' => "Administracion de Pedidos De Clientes",
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' => 0,
                 'role_id' => $ro->id,
-                
             ]);
         }
         

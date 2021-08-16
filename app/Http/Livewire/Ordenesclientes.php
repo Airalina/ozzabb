@@ -13,7 +13,7 @@ class Ordenesclientes extends Component
 {
     public $orders, $order, $idp, $funcion="list", $namecust, $customer_id, $date, $deadline, $deadline1, $start_date, $buys, $order_state, $order_job, $usd_price, $arp_price, $search;
     public $codinstall, $upusd, $installid=false, $cant, $cantidad, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
-    public  $customer, $customers, $usd=180, $count=0, $address, $countaddress, $selectcustomer=false, $update=false, $addaddress=false, $newaddress;
+    public  $customer, $customers, $usd=180, $count=0, $address, $address_id, $countaddress, $selectcustomer=false, $update=false, $addaddress=false, $selectaddress=false, $newaddress;
     Public $street, $number, $newtotal=0, $location, $province, $country, $postcode, $detailcollect, $order_id, $detail_id, $nuevafecha=false;
     public $detail=array(), $detailup;
     public $details=array();
@@ -28,6 +28,7 @@ class Ordenesclientes extends Component
         $this->funcion="ordernew";
         $this->namecust=$client->name;
         $this->customer_id=$client->id;
+        $this->selectaddress($client);
     }
 
     public function render()
@@ -85,6 +86,11 @@ class Ordenesclientes extends Component
             $this->newaddress->postcode=$this->postcode;
             $this->newaddress->client_id=$this->customer_id;
             $this->newaddress->save();
+            $this->order->deliverydomicile_id=$this->newaddress->id;
+            $this->order->save();
+        }else{
+            $this->order->deliverydomicile_id=$this->address_id;
+            $this->order->save();
         }
            
         return redirect()->to('pedidos');
@@ -120,7 +126,7 @@ class Ordenesclientes extends Component
             $this->funcion="0";
         }
         $this->customer=Customer::find($clientorder->customer_id);
-        $this->selectaddress($this->customer);
+        $this->address=DomicileDelivery::find($this->order->deliverydomicile_id);
     }
 
     public function volver()
@@ -152,11 +158,20 @@ class Ordenesclientes extends Component
 
     public function selectaddress(Customer $client)
     {
-        $this->address=DomicileDelivery::where('client_id',$client->id)->orderby('created_at','DESC')->take(1)->get();
-        foreach($this->address as $add)
-        {
-            $this->address=$add;
-        }
+        $this->address=DomicileDelivery::where('client_id',$client->id)->get();
+    }
+
+    public function selectadd(DomicileDelivery $address)
+    {
+        $this->selectaddress=true;
+        $this->address_id=$address->id;
+        $this->address=DomicileDelivery::find($address->id);
+    }
+
+    public function cancelaradd(Customer $client)
+    {
+        $this->address=DomicileDelivery::where('client_id',$client->id)->get();
+        $this->selectaddress=false;
     }
 
     public function addaddress()
@@ -192,12 +207,13 @@ class Ordenesclientes extends Component
         $this->namecust=$this->customer->name;
         $this->deadline = $order->deadline;
         $this->total=$order->usd_price;
+        $this->address=DomicileDelivery::find($order->deliverydomicile_id);
         $this->detailcollect=Orderdetail::where('clientorder_id', $order->id)->get();
         $this->update =true;
         $this->funcion="ordernew";
         }
+        $this->selectaddress=true;
         $this->installid=false;
-        
     }
 
     public function updatecantidad(Orderdetail $detail)
@@ -222,6 +238,7 @@ class Ordenesclientes extends Component
             $this->newtotal=$this->newtotal+$detail->unit_price_usd*$detail->cantidad;
         }
         $this->order->usd_price=$this->newtotal;
+        $this->order->arp_price=$this->newtotal*$this->usd;
         $this->order->save();
         $this->update($this->order);
 
@@ -232,6 +249,20 @@ class Ordenesclientes extends Component
         $this->order=Clientorder::find($detail);
         if($this->nuevafecha==true){
             $this->order->deadline = $this->deadline1;
+        }
+        if($this->addaddress==true){
+            $this->newaddress=new Domiciledelivery;
+            $this->newaddress->street=$this->street;
+            $this->newaddress->number=$this->number;
+            $this->newaddress->location=$this->location;
+            $this->newaddress->province=$this->province;
+            $this->newaddress->country=$this->country;
+            $this->newaddress->postcode=$this->postcode;
+            $this->newaddress->client_id=$this->order->customer_id;
+            $this->newaddress->save();
+            $this->order->deliverydomicile_id=$this->newaddress->id;
+        }else{
+        $this->order->deliverydomicile_id=$this->address->id;
         }
         $this->order->usd_price = $this->total;
         $this->order->arp_price = $this->total*$this->usd;
