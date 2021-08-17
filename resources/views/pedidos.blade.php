@@ -8,7 +8,9 @@
 
 @section('content')
     @livewireStyles
-        @livewire('ordenesclientes')
+        @if (auth()->user()->can('seepedidos', auth()->user()))
+            @livewire('ordenesclientes')
+        @endif
     @livewireScripts
 @stop
 

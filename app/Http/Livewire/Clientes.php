@@ -9,10 +9,6 @@ class Clientes extends Component
 {
     public $funcion="", $idcli, $clientes, $cliente, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
     public $street, $location, $number, $province, $country, $postcode, $client_id, $explora='inactivo',$domicilios;
-    
-   
-
-    
 
     public function render()
     {

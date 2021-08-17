@@ -12,7 +12,7 @@ use Carbon\Carbon;
 class Ordenesclientes extends Component
 {
     public $orders, $order, $idp, $funcion="list", $namecust, $customer_id, $date, $deadline, $deadline1, $start_date, $buys, $order_state, $order_job, $usd_price, $arp_price, $search;
-    public $codinstall, $upusd, $installid=false, $cant, $cantidad, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
+    public $codinstall, $upusd, $installid=false, $cant, $cantidad=0, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
     public  $customer, $customers, $usd=180, $count=0, $address, $address_id, $countaddress, $selectcustomer=false, $update=false, $addaddress=false, $selectaddress=false, $newaddress;
     Public $street, $number, $newtotal=0, $location, $province, $country, $postcode, $detailcollect, $order_id, $detail_id, $nuevafecha=false;
     public $detail=array(), $detailup;
@@ -58,6 +58,13 @@ class Ordenesclientes extends Component
 
     public function storepedido()
     {
+       
+        $this->usd_price=$this->total;
+        $this->arp_price=$this->total*$this->usd;
+        $this->validate([
+            'usd_price' => 'required|numeric|min:0',
+            'arp_price' => 'required|numeric|min:0',
+        ]);
         $this->date=Carbon::now();
         $this->order=new Clientorder;
         $this->order->customer_id = $this->customer_id;
@@ -65,18 +72,30 @@ class Ordenesclientes extends Component
         $this->order->date = $this->date;
         $this->order->deadline = $this->deadline;
         $this->order->order_state = 1;
-        $this->order->usd_price = $this->total;
-        $this->order->arp_price = $this->total*$this->usd;
+        $this->order->usd_price = $this->usd_price;
+        $this->order->arp_price = $this->arp_price;
         $this->order->save();
         foreach($this->details as $detail){
+            $this->cantidad=$detail[2];
+            $this->validate([
+                'cantidad' => 'required|integer|min:0',
+            ]);
             $this->newdetail=new Orderdetail;
             $this->newdetail->clientorder_id=$this->order->id;
             $this->newdetail->material_id=$detail[0];
             $this->newdetail->unit_price_usd=$detail[1];
-            $this->newdetail->cantidad=$detail[2];
+            $this->newdetail->cantidad=$this->cantidad;
             $this->newdetail->save();
         }
         if($this->addaddress==true){
+            $this->validate([
+                'street' => 'required|string|min:4',
+                'number' => 'required|numeric|min:0',
+                'location' => 'required|string|min:4',
+                'province' => 'required|string|min:4',
+                'country' => 'required|string|min:3',
+                'postcode' => 'required|numeric|min:0',
+            ]);
             $this->newaddress=new Domiciledelivery;
             $this->newaddress->street=$this->street;
             $this->newaddress->number=$this->number;
@@ -86,14 +105,16 @@ class Ordenesclientes extends Component
             $this->newaddress->postcode=$this->postcode;
             $this->newaddress->client_id=$this->customer_id;
             $this->newaddress->save();
+            $this->addadress=false;
             $this->order->deliverydomicile_id=$this->newaddress->id;
             $this->order->save();
         }else{
             $this->order->deliverydomicile_id=$this->address_id;
             $this->order->save();
         }
-           
-        return redirect()->to('pedidos');
+        $this->cantidad=0;
+        return redirect()->to('/pedidos');
+
     }
 
     public function addinstallation(Installation $install)
@@ -105,6 +126,7 @@ class Ordenesclientes extends Component
         $this->details[]=$this->detail;
         $this->total=$this->total+$this->detail[1]*$this->detail[2];
         $this->count=$this->count+1;
+        $this->cant=0;
     }
 
     public function downinstallation($algo,$detailpu,$detailcant)
@@ -228,6 +250,9 @@ class Ordenesclientes extends Component
 
     public function nuevacantidad(Orderdetail $detail)
     {
+            $this->validate([
+                'cantidad' => 'required|integer|min:0',
+            ]);
         $this->newdetail=Orderdetail::find($detail->id);
         $this->newdetail->cantidad=$this->cantidad;
         $this->newdetail->save();
@@ -237,8 +262,14 @@ class Ordenesclientes extends Component
         foreach($details as $detail){
             $this->newtotal=$this->newtotal+$detail->unit_price_usd*$detail->cantidad;
         }
-        $this->order->usd_price=$this->newtotal;
-        $this->order->arp_price=$this->newtotal*$this->usd;
+        $this->usd_price=$this->newtotal;
+        $this->arp_price=$this->newtotal*$this->usd;
+        $this->validate([
+            'usd_price' => 'required|numeric|min:0',
+            'arp_price' => 'required|numeric|min:0',
+        ]);
+        $this->order->usd_price=$this->usd_price;
+        $this->order->arp_price=$this->arp_price;
         $this->order->save();
         $this->update($this->order);
 
@@ -251,6 +282,14 @@ class Ordenesclientes extends Component
             $this->order->deadline = $this->deadline1;
         }
         if($this->addaddress==true){
+            $this->validate([
+                'street' => 'required|string|min:4',
+                'number' => 'required|numeric|min:0',
+                'location' => 'required|string|min:4',
+                'province' => 'required|string|min:4',
+                'country' => 'required|string|min:3',
+                'postcode' => 'required|numeric|min:0',
+            ]);
             $this->newaddress=new Domiciledelivery;
             $this->newaddress->street=$this->street;
             $this->newaddress->number=$this->number;
@@ -261,18 +300,29 @@ class Ordenesclientes extends Component
             $this->newaddress->client_id=$this->order->customer_id;
             $this->newaddress->save();
             $this->order->deliverydomicile_id=$this->newaddress->id;
+            $this->addadress=false;
         }else{
         $this->order->deliverydomicile_id=$this->address->id;
         }
-        $this->order->usd_price = $this->total;
-        $this->order->arp_price = $this->total*$this->usd;
+        $this->usd_price= $this->total;
+        $this->arp_price= $this->total*$this->usd;
+        $this->validate([
+            'usd_price' => 'required|numeric|min:0',
+            'arp_price' => 'required|numeric|min:0',
+        ]);
+        $this->order->usd_price=$this->usd_price;
+        $this->order->arp_price=$this->arp_price;
         $this->order->save();
         foreach($this->details as $detail){
+            $this->cantidad=$detail[2];
+            $this->validate([
+                'cantidad' => 'required|integer|min:0',
+            ]);
             $this->newdetail=new Orderdetail;
             $this->newdetail->clientorder_id=$this->order->id;
             $this->newdetail->material_id=$detail[0];
             $this->newdetail->unit_price_usd=$detail[1];
-            $this->newdetail->cantidad=$detail[2];
+            $this->newdetail->cantidad=$this->cantidad;
             $this->newdetail->save();
         }
 
