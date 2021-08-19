@@ -283,6 +283,11 @@ return [
                     'text' => 'Materiales',
                     'url'  => 'materiales',
                 ],
+
+                [
+                    'text' => 'Proveedores',
+                    'url'  => 'proveedores',
+                ],
             ],
         ],
     ],

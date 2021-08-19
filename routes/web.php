@@ -35,4 +35,9 @@ Route::get('/materiales', function () {
     return view('materiales');
 })->middleware(['auth'])->name('livewire-material');
 
+
+Route::get('/proveedores', function () {
+    return view('providers');
+})->middleware(['auth'])->name('providers');
+
 require __DIR__.'/auth.php';
