@@ -30,6 +30,15 @@ class Usuarios extends Component
    
     public function store()
     {
+        $this->validate([
+            'name' => 'required|string|min:5',
+            'email' => 'required|email',
+            'nombre_y_apellido' => 'required|string|min:10',
+            'domicilio' => 'required|min:6',
+            'dni' => 'required|numeric|min:1000000',
+            'telefono' => 'required|numeric|min:1000000000',
+            'password' => 'required|min:8'
+        ]);
         if (auth()->user()->cannot('store', auth()->user()))
         {
             abort(403);
@@ -71,6 +80,8 @@ class Usuarios extends Component
         $this->telefono=null;
         $this->email=null;
         $this->dni=null;
+        $this->password=null;
+        $this->password1=null;
     }
     
     public function endfunctions()
@@ -91,8 +102,16 @@ class Usuarios extends Component
         $this->funcionru="";
     }
 
-    public function editar()
-    {
+    public function editar(){
+        $this->validate([
+            'name' => 'required|string|min:5',
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$this->idu.''],
+            'nombre_y_apellido' => 'required|string|min:10',
+            'domicilio' => 'required|min:6',
+            'dni' => 'required|numeric|min:1000000',
+            'telefono' => 'required|numeric|min:1000000000',
+        ]);
+        
         $userup =User::find($this->idu);
         $userup->nombre_y_apellido=$this->nombre_y_apellido;
         $userup->dni=$this->dni;
@@ -103,12 +122,22 @@ class Usuarios extends Component
         $this->funcion="";
     }
 
+    public function volver(){
+        $this->funcion="";
+        $this->funcionru="";
+    }
+
     public function rolusuario(User $user)
     {   
         $this->idus=$user->id;
+        $this->name=$user->name;
         $this->nombre_y_apellido=$user->nombre_y_apellido;
+        $this->domicilio=$user->domicilio;
+        $this->telefono=$user->telefono;
+        $this->email=$user->email;
+        $this->dni=$user->dni;
         $this->funcionru="asigna";
-        $this->funcion="";   
+        $this->funcion="0";   
     }
 
     public function asignarols(Role $rol)

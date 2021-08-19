@@ -8,7 +8,8 @@ use Livewire\Component;
 class Clientes extends Component
 {
     public $funcion="", $idcli, $clientes, $cliente, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
-    public $street, $location, $number, $province, $country, $postcode, $client_id, $explora='inactivo',$domicilios=[];
+    public $street, $location, $number, $province, $country, $postcode, $client_id, $explora='inactivo',$domicilios;
+
     public function render()
     {
         $this->clientes=Customer::where('name','LIKE','%' . $this->search . '%')
@@ -57,6 +58,20 @@ class Clientes extends Component
     }
 
     public function store(){
+        $this->validate([
+            'name' => 'required|string|min:5',
+            'email' => 'required|unique:customers,email|email',
+            'contact' => 'required|string|min:6',
+            'phone' => 'required|numeric|min:1000000000',
+            'post_contact' => 'required|string|min:3',
+            'domicile_admin' => 'required|string|min:5',
+            'street' => 'required|string|min:4',
+            'number' => 'required|numeric|min:0',
+            'location' => 'required|string|min:4',
+            'province' => 'required|string|min:4',
+            'country' => 'required|string|min:3',
+            'postcode' => 'required|numeric|min:0',
+        ]);
         Customer::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -118,8 +133,14 @@ class Clientes extends Component
         $this->explora="activo";
     }
 
-    public function editar()
-    {
+    public function editar(){   
+        $this->validate([
+        'name' => 'required|string|min:5',
+        'email' => ['required', 'email', 'max:255', 'unique:customers,email,'.$this->idcli.''],
+        'contact' => 'required|string|min:6',
+        'phone' => 'required|numeric|min:1000000000',
+        'post_contact' => 'required|string|min:3',
+        'domicile_admin' => 'required|string|min:5',]);
         $cliente =Customer::find($this->idcli);
         $cliente->name=$this->name;
         $cliente->phone=$this->phone;
@@ -147,4 +168,16 @@ class Clientes extends Component
             $this->explorar($this->cliente);
     }
 
+    public function goOrder(Customer $client)
+    {
+        $this->emit('newOrder', $client->id);
+        $this->funcion="neworder";
+        $this->explora="inactivo";
+    }
+
+    public function volverexplora()
+    {
+        $this->explora='activo';
+        $this->funcion="0";
+    }
 }

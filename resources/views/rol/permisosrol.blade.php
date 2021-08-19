@@ -1,11 +1,15 @@
 <div>
+    <div>
+      <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+    <br>
+    <div class="card-tools">
+    <h4>Usted a seleccionado el rol: {{ $nombre }} </h4>
+    <br>               
     <table>
     <tr>
         <th>
             <h4>Permisos del Rol: </h4>
-        </th>
-        <th>    
-            <h4>{{ $nombre }}</h4>
         </th>
     </tr>
     </table>
