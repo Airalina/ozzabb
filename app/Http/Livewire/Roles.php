@@ -9,6 +9,10 @@ use Livewire\Component;
 class Roles extends Component
 {
     public $search, $rol, $idrol,$funcion="", $nombre, $permisos, $funcionpr;
+    public $rules = [
+        'nombre'=>'required|string|min:3',
+    ];
+
     public function render()
     {
         $this->permisos=Permission::where('role_id',$this->idrol)->get();
@@ -22,6 +26,7 @@ class Roles extends Component
 
     public function store()
     {
+        $this->validate();
         Role::create([
             'nombre' => $this->nombre,
             'activo' => 1,
@@ -34,8 +39,7 @@ class Roles extends Component
                 'create' => 0,
                 'update' => 0,
                 'delete' => 0,
-                'role_id' => $ro->id,
-                
+                'role_id' => $ro->id,     
             ]);
             Permission::Create([
                 'name' => "Administracion de Roles",
@@ -43,12 +47,32 @@ class Roles extends Component
                 'create' => 0,
                 'update' => 0,
                 'delete' => 0,
+                'role_id' => $ro->id,  
+            ]);
+            Permission::Create([
+                'name' => "Administracion de Clientes",
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' => 0,
+                'role_id' => $ro->id,   
+            ]);
+            Permission::Create([
+                'name' => "Administracion de Pedidos De Clientes",
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' => 0,
                 'role_id' => $ro->id,
-                
             ]);
         }
         
         $this->funcion="";
+    }
+
+    public function volver(){
+        $this->funcion="";
+        $this->funcionpr="";
     }
 
     public function destruir(Role $rol)
@@ -64,8 +88,7 @@ class Roles extends Component
         $this->funcionpr="";
     }
 
-    public function update(Role $rol)
-    {   
+    public function update(Role $rol){   
         $this->idrol=$rol->id;
         $this->nombre=$rol->nombre;
         $this->funcion="adaptar";
@@ -74,6 +97,7 @@ class Roles extends Component
 
     public function editar()
     {
+        $this->validate();
         $rolup =Role::find($this->idrol);
         $rolup->nombre=$this->nombre;
         $rolup->save();
@@ -87,7 +111,7 @@ class Roles extends Component
         $this->permisos=Permission::where('role_id', $rol->id)->get();
         $this->nombre=$rol->nombre;
         $this->funcionpr="asigna";
-        $this->funcion="";
+        $this->funcion="0";
     }
 
     public function permisosrolsee(Permission $permiso)

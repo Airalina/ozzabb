@@ -1,0 +1,23 @@
+<div>
+@switch($funcion)
+    @case("list")
+        @if (auth()->user()->can('seepedidos', auth()->user()))
+            @include("pedidos.listado")
+        @endif
+        @break
+    @case("ordernew")
+            @include("pedidos.order")
+        @break
+    @case("orderfromorder")
+        @include("pedidos.orderfromorder")
+        @break
+    @case("addinstallationtoorder")
+        @include("pedidos.addinstallation")
+        @break
+@endswitch
+@switch($explora)
+      @case("activo")
+        @include("pedidos.listadodetail")
+        @break         
+@endswitch
+</div>

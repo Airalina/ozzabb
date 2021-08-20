@@ -27,9 +27,10 @@
             <tbody>
               @forelse($roles as $rol)
                   <tr class="registros" >
-                      <td wire:click="verpermisos({{ $rol->id }})">{{ $rol->id }}</td>
-                      <td wire:click="verpermisos({{ $rol->id }})">{{ $rol->nombre }}</td>
+                      <td >{{ $rol->id }}</td>
+                      <td >{{ $rol->nombre }}</td>
                       <td>
+                          <button type="button" wire:click="verpermisos({{ $rol->id }})" class="btn btn-primary"><i class="fas fa-file-alt"></i>    Ver</button>
                           @if (auth()->user()->can('deleterol', auth()->user()))
                             <button wire:click="destruir({{ $rol->id }})" type="button" class="btn btn-danger">Borrar</button>
                           @endif

@@ -3,3 +3,10 @@
 - ## Documentación Funcional
   - [ABM de Materiales](/{{route}}/{{version}}/ABM_de_Materiales)
   - [ABM de Proveedores](/{{route}}/{{version}}/ABM_de_Proveedores)
+  - [Clientes](/{{route}}/{{version}}/Clientes)
+  - [Pedidos de Clientes](/{{route}}/{{version}}/Pedidos_de_Clientes)
+  - [Instalaciones](/{{route}}/{{version}}/Instalaciones)
+  - [Depósitos](/{{route}}/{{version}}/Depositos)
+  - [Ordenes de Compras](/{{route}}/{{version}}/Ordenes_de_Compras)
+  - [Ordenes de Ingreso de Materiales](/{{route}}/{{version}}/ordenes_de_ingreso)
+  - [DER](/{{route}}/{{version}}/der)

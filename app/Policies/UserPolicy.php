@@ -151,4 +151,148 @@ class UserPolicy
         }
         return false;
     }
+
+    public function seecust(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->see==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function storecust(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->create==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function updatecust(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->update==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function deletecust(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->delete==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function seepedidos(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Pedidos De Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->see==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function storepedidos(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Pedidos De Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->create==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function updatepedidos(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Pedidos De Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->update==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function deletepedidos(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Pedidos De Clientes')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->delete==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
 }

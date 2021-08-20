@@ -32,5 +32,25 @@ class PermissionSeeder extends Seeder
             'delete' =>1,
             'role_id' => 1,
         ]);
+
+        \DB::table('permissions')->insert([
+            
+            'name' => 'Administracion de Clientes',
+            'see' => 1,
+            'create' => 1,
+            'update' => 1,
+            'delete' =>1,
+            'role_id' => 1,
+        ]);
+
+        \DB::table('permissions')->insert([
+            
+            'name' => 'Administracion de Pedidos De Clientes',
+            'see' => 1,
+            'create' => 1,
+            'update' => 1,
+            'delete' =>1,
+            'role_id' => 1,
+        ]);
     }
 }

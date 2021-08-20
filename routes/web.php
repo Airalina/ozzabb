@@ -26,4 +26,21 @@ Route::get('/admin', function () {
     return view('adminlterol');
 })->middleware(['auth'])->name('adminlterol');
 
+Route::get('/clientes', function () {
+    return view('clients');
+})->middleware(['auth'])->name('clients');
+
+Route::get('/pedidos', function () {
+    return view('pedidos');
+})->middleware(['auth'])->name('pedidos');
+
+Route::get('/materiales', function () {
+    return view('materiales');
+})->middleware(['auth'])->name('livewire-material');
+
+
+Route::get('/proveedores', function () {
+    return view('providers');
+})->middleware(['auth'])->name('providers');
+
 require __DIR__.'/auth.php';
