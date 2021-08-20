@@ -124,7 +124,7 @@
               </div>
                     <br>
                     <div class="row">
-                    <div class="col-7">
+                    <div class="col-6">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Seleccione instalación a ser agregada</h3>
@@ -139,8 +139,9 @@
                           <table class="table table-hover text-nowrap">
                             <thead>
                               <tr>
-                                <th style="text-align: center">Codigo instalación</th>
-                                <th style="text-align: center">Precio Unitario U$D</th>
+                                <th style="text-align: center">Cod.</th>
+                                <th style="text-align: center">Descripción</th>
+                                <th style="text-align: center">P/U U$D</th>
                                 <th style="text-align: center">Cantidad</th>
                                 <th></th>
                               </tr>
@@ -149,8 +150,9 @@
                             @forelse($installations as $install)
                               <tr>
                                 <td style="text-align: center">{{ $install->code }}</td>
+                                <td style="text-align: center">{{ $install->description}}</td>
                                 <td style="text-align: center">{{ $install->usd_price }}</td>
-                                <td style="text-align: center"><input wire:model="cant" type="number"></td>
+                                <td style="text-align: center"><input wire:model="cant" size="4" type="number"></td>
                                 <td><button type="button"  wire:click="addinstallation({{ $install->id }})" class="btn btn-success btn-xs">Agregar</button></td>
                               </tr>
                               @empty
@@ -167,7 +169,7 @@
                       </div>
                       <!-- /.card -->
                     </div>
-                    <div class="col-5">
+                    <div class="col-6">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Detalle</h3>
