@@ -11,6 +11,9 @@
         @include("provider.registro")
         @break
 
+    @case("crearmat")
+        @include("provider.registromat")      
+        @break
 
     @case("actualizar")
         @include("provider.registro")

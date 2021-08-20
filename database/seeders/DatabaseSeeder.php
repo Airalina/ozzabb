@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Provider;
+use App\Models\Material;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,5 +24,6 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
        ]);
        Provider::factory(10)->create();
+       Material::factory(6)->create();
     }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire;
 use App\Models\Provider;
+use App\Models\Material;
 use Livewire\Component;
 
 class Providers extends Component
 {
-    public $funcion="", $id_provider, $idu, $providers, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name';
-    
+    public $funcion="", $id_provider, $idu, $providers, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
+    public $code, $name_material, $stock, $unit, $presentation, $usd_price, $ars_price;
+
     public function render()
     {
          
@@ -58,12 +60,15 @@ class Providers extends Component
     }
 
     public function back(){
-        $this->funcion="";    
+        $this->funcion="";
+        $this->explora='inactivo';   
     }
 
     public function explorar(Provider $provider_id){
         $this->provider_id=$provider_id;
         $this->provider=Provider::where('id', $this->provider_id->id)->first();
+        $this->materials=Material::where('provider_id', $this->provider->id)->get();
+       // var_dump($this->materials);
         if($this->explora=='inactivo'){
             $this->explora='activo';
             $this->funcion=" ";
@@ -117,5 +122,42 @@ class Providers extends Component
             $this->funcion="";
             $this->explora="inactivo";
         }
+    }
+
+    public function agregamat(){
+        $this->code=null;
+        $this->name_material=null;
+        $this->stock=null;
+        $this->unit=null;
+        $this->presentation=null;
+        $this->usd_price=null;
+        $this->ars_price=null;
+        $this->explora='inactivo';
+        $this->funcion="crearmat";    
+    }
+
+    public function storemat(Provider $provider){
+    //   dd($provider->id);
+    // $unit = (float)$this->unit;
+     $consulta=  Material::create([
+            'provider_id' =>$provider->id,
+            'code' =>$this->code,       
+            'name' =>$this->name_material,
+            'stock' =>$this->stock,
+            'unit' =>$this->unit,
+            'presentation' =>$this->presentation,
+            'usd_price' =>$this->usd_price,
+            'ars_price' =>$this->ars_price,
+            
+        ]);
+        $this->funcion="";
+        $this->explorar($provider);
+
+    }
+    public function destruirmat(Material $material)
+    {
+            $material->delete();
+            $this->funcion="0";
+            $this->explorar($this->provider);
     }
 }

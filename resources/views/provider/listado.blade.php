@@ -46,14 +46,14 @@
             <tbody>
               @forelse($providers as $provider)
                 <tr class="registros">
-                      <td>{{ $provider->id }}
-                      <td>{{ $provider->name }}
-                      <td>{{ $provider->address }}
-                      <td>{{ $provider->phone }}
-                      <td>{{ $provider->email }}
-                      <td>{{ $provider->contact_name }}
-                      <td>{{ $provider->point_name }}
-                      <td>{{ $provider->site_url }}
+                      <td>{{ $provider->id }}</td>
+                      <td>{{ $provider->name }}</td>
+                      <td>{{ $provider->address }}</td>
+                      <td>{{ $provider->phone }}</td>
+                      <td>{{ $provider->email }}</td>
+                      <td>{{ $provider->contact_name }}</td>
+                      <td>{{ $provider->point_name }}</td>
+                      <td>{{ $provider->site_url }}</td>
                       @if($provider->status==1)
                         <td>Activo</td>
                       @else
@@ -67,7 +67,7 @@
                         @if (auth()->user()->can('delete', auth()->user()))
                             <button wire:click="destruir({{ $provider->id }})" type="button" class="btn btn-danger btn-xs">Borrar</button>
                           @endif
-                          
+                
                             
                       </td>      
                 </tr>
