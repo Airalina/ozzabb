@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\Material;
+use  App\Models\ProviderPrice;
 
 class Provider extends Model
 {
@@ -15,6 +16,9 @@ class Provider extends Model
     public function materials()
     {
         return $this->belongsToMany(Material::class);
+    }
+    public function provider_prices(){
+        return $this->hasMany(ProviderPrice::class); 
     }
 
 }

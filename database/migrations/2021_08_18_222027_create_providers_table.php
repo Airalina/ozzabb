@@ -15,6 +15,7 @@ class CreateProvidersTable extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('material_id');
             $table->string('name', 100);
             $table->string('address', 100);
             $table->string('phone', 100)->nullable();
@@ -23,8 +24,11 @@ class CreateProvidersTable extends Migration
             $table->string('point_contact', 100)->nullable();
             $table->string('site_url', 100)->nullable();
             $table->integer('status');
+            
+          //  $table->foreign('material_id')->references('id')->on('materials');
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 

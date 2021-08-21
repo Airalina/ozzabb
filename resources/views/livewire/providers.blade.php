@@ -18,7 +18,11 @@
     @case("actualizar")
         @include("provider.registro")
         @break
-  
+    
+    @case("actualizarmat")
+        @include("provider.registromat")      
+        @break
+
   @endswitch
 
   @switch($explora)

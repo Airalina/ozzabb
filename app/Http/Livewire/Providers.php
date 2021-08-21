@@ -3,12 +3,15 @@
 namespace App\Http\Livewire;
 use App\Models\Provider;
 use App\Models\Material;
+use App\Models\Price;
+use App\Models\ProviderPrice;
 use Livewire\Component;
+
 
 class Providers extends Component
 {
-    public $funcion="", $id_provider, $idu, $providers, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
-    public $code, $name_material, $stock, $unit, $presentation, $usd_price, $ars_price;
+    public $funcion="", $mat_n,$id_provider, $idu, $providers, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
+    public $code, $validar, $amount, $name_material, $material, $id_material, $material_up, $stock, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price;
 
     public function render()
     {
@@ -67,8 +70,10 @@ class Providers extends Component
     public function explorar(Provider $provider_id){
         $this->provider_id=$provider_id;
         $this->provider=Provider::where('id', $this->provider_id->id)->first();
-        $this->materials=Material::where('provider_id', $this->provider->id)->get();
-       // var_dump($this->materials);
+        $this->provider_prices=ProviderPrice::where('provider_id', $this->provider->id)->get();
+        $this->prices=Price::where('provider_id', $this->provider->id)->get();
+        
+        
         if($this->explora=='inactivo'){
             $this->explora='activo';
             $this->funcion=" ";
@@ -124,33 +129,65 @@ class Providers extends Component
         }
     }
 
-    public function agregamat(){
-        $this->code=null;
-        $this->name_material=null;
-        $this->stock=null;
+    public function agregamat(Provider $provider){
+       
+        $this->amount=null;
         $this->unit=null;
         $this->presentation=null;
+        $this->material=null;
         $this->usd_price=null;
         $this->ars_price=null;
+        $this->info_mat = Material::all();
+        $this->mat_n = null;
+
         $this->explora='inactivo';
         $this->funcion="crearmat";    
     }
 
     public function storemat(Provider $provider){
-    //   dd($provider->id);
-    // $unit = (float)$this->unit;
-     $consulta=  Material::create([
+        
+        $this->validar= $this->validate([
+            'amount' => 'required|numeric|integer',
+            'unit' => 'required|numeric',
+            'presentation' => 'required',
+            'usd_price' => 'required|numeric',
+            'ars_price' => 'required|numeric',
+            'material' => 'required|numeric',
+        ], [
+            'amount.required' => 'El campo cantidad es requerido',
+            'amount.numeric' => 'El campo cantidad debe ser numérico',
+            'amount.required' => 'El campo cantidad debe ser un número entero',
+            'unit.required' => 'El campo unidad es requerido',
+            'unit.numeric' => 'El campo unidad debe ser numérico',
+            'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+            'usd_price.required' => 'El campo precio U$D es requerido',
+            'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
+            'ars_price.required' => 'El campo precio AR$ es requerido',
+            'ars_price.numeric' => 'El campo precio AR$ es numérico',
+            'material.required' => 'Seleccione una opción para el campo de materiales',
+            'material.numeric' => 'Seleccione una opción para el campo de materiales',
+       
+        ]);
+
+        
+       $provider_price= ProviderPrice::create([
             'provider_id' =>$provider->id,
-            'code' =>$this->code,       
-            'name' =>$this->name_material,
-            'stock' =>$this->stock,
+            'material_id' =>$this->material,
+            'amount' =>$this->amount,
             'unit' =>$this->unit,
             'presentation' =>$this->presentation,
             'usd_price' =>$this->usd_price,
             'ars_price' =>$this->ars_price,
             
         ]);
-        $this->funcion="";
+        $price= Price::create([
+             'date' => date("d-m-Y"),
+             'provider_price_id' => $provider_price->id,
+             'provider_id' =>$provider->id,
+             'price' =>$this->usd_price,
+        ]);
+        
+        $this->funcion="0";
         $this->explorar($provider);
 
     }
@@ -160,4 +197,68 @@ class Providers extends Component
             $this->funcion="0";
             $this->explorar($this->provider);
     }
+    public function updatemat(ProviderPrice $provider_price)
+    {   ;
+       
+        $this->id_provider_price = $provider_price->id;
+        $this->material=$provider_price->material_id;
+        $this->id_provider=$provider_price->provider_id;
+        $this->amount=$provider_price->amount;
+        $this->unit=$provider_price->unit;
+        $this->presentation=$provider_price->presentation;
+        $this->usd_price=$provider_price->usd_price;
+        $this->ars_price=$provider_price->ars_price;;
+        $this->mat_n = $provider_price->material;
+        $this->info_mat = Material::all();
+        $this->explora= 'inactivo';
+        $this->funcion="actualizarmat";
+    }
+
+    public function editarmat(){
+        
+      $this->validar=  $this->validate([
+            'amount' => 'required|numeric|integer',
+            'unit' => 'required|numeric',
+            'presentation' => 'required',
+            'usd_price' => 'required|numeric',
+            'ars_price' => 'required|numeric',
+        ], [
+            'amount.required' => 'El campo cantidad es requerido',
+            'amount.numeric' => 'El campo cantidad debe ser numérico',
+            'amount.integer' => 'El campo cantidad debe ser un número entero',
+            'unit.required' => 'El campo unidad es requerido',
+            'unit.numeric' => 'El campo unidad debe ser numérico',
+            'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+            'usd_price.required' => 'El campo precio U$D es requerido',
+            'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
+            'ars_price.required' => 'El campo precio AR$ es requerido',
+            'ars_price.numeric' => 'El campo precio AR$ es numérico',
+            'material.numeric' => 'Seleccione una opción para el campo de materiales',
+        ]);
+        $provider =Provider::find($this->id_provider);
+        $material_up =ProviderPrice::find($this->id_provider_price);
+        $material_up->amount=$this->amount; 
+        $material_up->material_id=$this->material;
+        $material_up->provider_id=$this->id_provider;
+        $material_up->unit=$this->unit;
+        $material_up->presentation=$this->presentation;
+        $material_up->ars_price=$this->ars_price;
+       if($material_up->usd_price != $this->usd_price){
+            $price= Price::create([
+                'date' => date("d-m-Y"),
+                'provider_price_id' => $this->id_provider_price,
+                'provider_id' =>$this->id_provider,
+                'price' =>$this->usd_price,
+            ]);
+       }
+       $material_up->usd_price = $this->usd_price;
+        $material_up->save();
+        $this->funcion="0";
+        $this->explorar($provider);
+    }
+    public function backmat(){
+        $this->funcion="0";
+        $this->explora='activo';   
+    }
+
 }

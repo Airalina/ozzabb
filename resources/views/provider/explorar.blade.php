@@ -24,14 +24,13 @@
                   </thead>
                   <tbody>
                     <tr>
-                    <td>{{ $provider->id }}
-                      <td>{{ $provider->name }}
-                      <td>{{ $provider->address }}
-                      <td>{{ $provider->phone }}
-                      <td>{{ $provider->email }}
-                      <td>{{ $provider->contact_name }}
-                      <td>{{ $provider->point_name }}
-                      <td>{{ $provider->site_url }}
+                      <td>{{ $provider->name }} </td>
+                      <td>{{ $provider->address }}  </td>
+                      <td>{{ $provider->phone }} </td>
+                      <td>{{ $provider->email }} </td>
+                      <td>{{ $provider->contact_name }} </td>
+                      <td>{{ $provider->point_contact }} </td>
+                      <td>{{ $provider->site_url }} </td>
                       @if($provider->status==1)
                         <td>Activo</td>
                       @else
@@ -55,7 +54,7 @@
                 <div class="card-tools">
                   @if (auth()->user()->can('storecust', auth()->user()))  
                     <div>
-                      <button wire:click="agregamat()" type="button" class="btn btn-info">Agregar Material</button>
+                      <button wire:click="agregamat({{ $provider->id }})" type="button" class="btn btn-info">Agregar Material</button>
     	              </div>
                   @endif
                 </div>
@@ -75,16 +74,17 @@
                     </tr>
                   </thead>
                   <tbody>
-                  @forelse($materials as $material)
+                  
+                  @forelse($provider_prices as $provider_price)
                         <tr>
-                            <td>{{$material->code}}</td>
-                            <td>{{$material->name}}</td>
-                            <td>{{$material->stock}}</td>
-                            <td>{{$material->unit}} {{$material->presentation}}</td>
-                            <td>@if($material->usd_price) ${{$material->usd_price}}  @endif</td>
-                            <td>@if($material->ars_price) ${{$material->ars_price}}  @endif</td>
+                            <td>{{$provider_price->material->code}}</td>
+                            <td>{{ $provider_price->material->name }}</td>
+                            <td>{{ $provider_price->amount }}</td>
+                            <td>{{$provider_price->unit}} {{$provider_price->presentation}}</td>
+                            <td>{{ $provider_price->usd_price }}</td>
+                            <td>{{ $provider_price->ars_price }}</td>
                             @if (auth()->user()->can('deletecust', auth()->user()))
-                            <td><button wire:click="destruirmat({{ $material->id }})" type="button" class="btn btn-danger btn-sm">Borrar</button></td>
+                            <td><button wire:click="updatemat({{ $provider_price->id }})" type="button" class="btn btn-success btn-sm">Actualizar</button></td>
                             @endif
                         </tr>
                     @empty
@@ -98,5 +98,43 @@
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
-       
+            <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Historial de precios del Proveedor</h3>
+              </div>
+              <!-- /.card-header -->
+             
+              <div class="card-body p-0">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Código de material </th>
+                      <th>Nombre</th>
+                      <th>Precio en U$D</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  
+              @forelse($prices as $price)
+                  
+                  <tr>
+                      <td>{{ $price->date }}</td>
+                      <td>{{ $price->provider_price->material->code }}</td>
+                      <td>{{ $price->provider_price->material->name }}</td>
+                      <td>{{ $price->price }}</td>
+                  </tr>
+              @empty
+                  <tr class="text-center">
+                      <td colspan="4" class="py-3 italic">No hay información</td>
+                  </tr>
+              @endforelse
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
 </div>
