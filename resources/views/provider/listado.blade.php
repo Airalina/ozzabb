@@ -17,7 +17,7 @@
               <div class="card-body table-responsive p-0">
                 <table class="table table-head text-nowrap">
                 <div class="form-group" data-select2-id="45">
-                  <label>Ordenar por...</label>
+                  <label>Ordenar por</label>
                   <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible" style="width: 100%;"  tabindex="-1" aria-hidden="true">
                     <option data-select2-id="47" value="id">Id</option>
                     <option data-select2-id="48" value="name">Nombre</option>
@@ -52,7 +52,7 @@
                       <td>{{ $provider->phone }}</td>
                       <td>{{ $provider->email }}</td>
                       <td>{{ $provider->contact_name }}</td>
-                      <td>{{ $provider->point_name }}</td>
+                      <td>{{ $provider->point_contact }}</td>
                       <td>{{ $provider->site_url }}</td>
                       @if($provider->status==1)
                         <td>Activo</td>

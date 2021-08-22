@@ -48,6 +48,19 @@ class Providers extends Component
             'name' => 'required|string',
             'address' => 'required|string',
             'email' => 'required|unique:providers,email|email',
+            'phone' => 'numeric|nullable',
+            'contact_name' => 'string|nullable',
+            'site_url' => 'url|nullable'
+        ], [
+            'name.required' => 'El campo nombre es requerido',
+            'name.string' => 'El campo nombre no debe tener números ni carácteres',
+            'address.required' => 'El campo dirección es requerido',
+            'email.required' => 'El campo correo electrónico para ventas es requerido',
+            'email.unique' => 'El email correo electrónico para ventas ya se encuentra registrado',
+            'email.email' => 'El campo correo electrónico para ventas debe ser un email',
+            'phone.numeric' => 'El campo teléfono debe ser numérico',
+            'contact_name' => 'El campo nombre de contacto no debe tener números ni carácteres',
+            'site_url.url' => 'El campo página web no es válido',
         ]);
         Provider::create([
             'name' => $this->name,
@@ -98,10 +111,23 @@ class Providers extends Component
     public function editar(){
         
         $this->validate([
-            'name' => 'required|string',
-            'address' => 'required|string',
+            'name' => 'required',
+            'address' => 'required',
             'email' => ['required', 'email', 'unique:providers,email,'.$this->idu.''],
+            'phone' => 'numeric',
+            'site_url' => 'url'
+        ], [
+            'name.required' => 'El campo nombre es requerido',
+            'name.string' => 'El campo nombre no debe tener números ni carácteres',
+            'address.required' => 'El campo dirección es requerido',
+            'email.required' => 'El campo correo electrónico para ventas es requerido',
+            'email.unique' => 'El email correo electrónico para ventas ya se encuentra registrado',
+            'email.email' => 'El campo correo electrónico para ventas debe ser un email',
+            'phone.numeric' => 'El campo teléfono debe ser numérico',
+            'contact_name' => 'El campo nombre de contacto no debe tener números ni carácteres',
+            'site_url.url' => 'El campo página web no es válido',
         ]);
+
         
         $provider_up =Provider::find($this->idu);
         $provider_up->name=$this->name;
@@ -156,7 +182,7 @@ class Providers extends Component
         ], [
             'amount.required' => 'El campo cantidad es requerido',
             'amount.numeric' => 'El campo cantidad debe ser numérico',
-            'amount.required' => 'El campo cantidad debe ser un número entero',
+            'amount.integer' => 'El campo cantidad debe ser un número entero',
             'unit.required' => 'El campo unidad es requerido',
             'unit.numeric' => 'El campo unidad debe ser numérico',
             'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',

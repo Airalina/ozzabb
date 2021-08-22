@@ -15,7 +15,6 @@ class CreateMaterialsTable extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('provider_id');
             $table->string('code', 100);
             $table->string('name', 100);
             $table->enum('family', ['Conectores', 'Terminales', 'Cables', 'Sellos']);

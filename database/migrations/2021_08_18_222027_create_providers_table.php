@@ -15,7 +15,6 @@ class CreateProvidersTable extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('material_id');
             $table->string('name', 100);
             $table->string('address', 100);
             $table->string('phone', 100)->nullable();
