@@ -113,26 +113,50 @@ class Ordenesclientes extends Component
             $this->order->save();
         }
         $this->cantidad=0;
-        return redirect()->to('/pedidos');
+        return redirect()->to('pedidos');
 
     }
 
     public function addinstallation(Installation $install)
     {
+        $this->validate([
+            'cant' => 'required|integer|min:1|max:1000000'
+        ]);
+        foreach($this->details as $detail){
+            if($detail[0]==$install->code){
+                $this->downinstallation($detail[3],$detail[1],$detail[2]);
+            }        
+        }
         $this->detail[0]=$install->code;
         $this->detail[1]=$install->usd_price;
         $this->detail[2]=$this->cant;
         $this->detail[3]=$this->count;
-        $this->details[]=$this->detail;
+        $this->details[$this->count]=$this->detail;
         $this->total=$this->total+$this->detail[1]*$this->detail[2];
+        $this->count=$this->count+1;
+        $this->cant=0;
+    }
+    public function addinstallationup(Installation $install)
+    {
+        foreach($this->details as $detail){
+            if($detail[0]==$install->code){
+                $this->downinstallation($detail[3],$detail[1],$detail[2]);
+            }        
+        }
+        $this->detail[0]=$install->code;
+        $this->detail[1]=$install->usd_price;
+        $this->detail[2]=$this->cant;
+        $this->detail[3]=$this->count;
+        $this->details[$this->count]=$this->detail;
+        $this->total=$this->total+$this->detail[1]*$this->detail[2];
+        round($this->total,2);
         $this->count=$this->count+1;
         $this->cant=0;
     }
 
     public function downinstallation($algo,$detailpu,$detailcant)
     {
-        $this->count=$this->count-1;
-        $this->total=$this->total-$detailcant*$detailpu;
+        $this->total=$this->total-$detailcant*$detailpu; 
         unset($this->details[$algo]);
         if($this->funcion!="ordernew" && empty($this->details)){
             $this->total=0;
@@ -155,6 +179,7 @@ class Ordenesclientes extends Component
     {
         $this->funcion="list";
         $this->explora='inactivo';
+        $this->reset();
     }
 
     public function funcion()
@@ -224,18 +249,18 @@ class Ordenesclientes extends Component
     public function update(Clientorder $order)
     {
         if($order->order_state==1){
-        $this->order_id=$order->id;
-        $this->customer=Customer::find($order->customer_id);
-        $this->namecust=$this->customer->name;
-        $this->deadline = $order->deadline;
-        $this->total=$order->usd_price;
-        $this->address=DomicileDelivery::find($order->deliverydomicile_id);
-        $this->detailcollect=Orderdetail::where('clientorder_id', $order->id)->get();
-        $this->update =true;
-        $this->funcion="ordernew";
+            $this->order_id=$order->id;
+            $this->customer=Customer::find($order->customer_id);
+            $this->namecust=$this->customer->name;
+            $this->deadline = $order->deadline;
+            $this->total=$order->usd_price;
+            $this->address=DomicileDelivery::find($order->deliverydomicile_id);
+            $this->detailcollect=Orderdetail::where('clientorder_id', $order->id)->get();
+            $this->update =true;
+            $this->funcion="ordernew";
         }
-        $this->selectaddress=true;
-        $this->installid=false;
+            $this->selectaddress=true;
+            $this->installid=false;
     }
 
     public function updatecantidad(Orderdetail $detail)

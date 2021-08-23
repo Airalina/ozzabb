@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Provider;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,5 +22,6 @@ class DatabaseSeeder extends Seeder
             DomicileDeliverySeeder::class,
             PermissionSeeder::class,
        ]);
+       Provider::factory(10)->create();
     }
 }
