@@ -20,7 +20,7 @@ class Ordenesclientes extends Component
     protected $listeners =[
         'newOrder'
         ];
-    protected $dates = ['deadline'];
+    protected $dates = ['deadline', 'date', 'start_date'];
 
     public function newOrder(Customer $client)
     {
@@ -172,7 +172,7 @@ class Ordenesclientes extends Component
             $this->funcion="0";
         }
         $this->customer=Customer::find($clientorder->customer_id);
-        $this->address=DomicileDelivery::find($this->order->deliverydomicile_id);
+        $this->address=DomicileDelivery::find($clientorder->deliverydomicile_id);
     }
 
     public function volver()

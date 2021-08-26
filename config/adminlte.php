@@ -296,6 +296,11 @@ return [
                     'text' => 'Proveedores',
                     'url'  => 'proveedores',
                 ],
+
+                [
+                    'text' => 'Instalaciones',
+                    'url'  => 'instalaciones',
+                ],
             ],
         ],
     ],

@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Installation extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'id',
+        'code',
+        'date',
+        'date_admission',
+        'usd_price'
+    ];
 }

@@ -295,4 +295,76 @@ class UserPolicy
         }
         return false;
     }
+
+    public function seeinstall(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Instalaciones')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->see==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function storeinstall(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Instalaciones')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->create==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function updateinstall(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Instalaciones')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->update==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public function deleteinstall(User $user)
+    {
+        $roles=User::find($user->id)->roles()->where('user_id',$user->id)->get();
+        
+        foreach($roles as $rol)
+        {
+            $permisos=$rol->permissions()->where('role_id',$rol->id)->where('name','Administracion de Instalaciones')->get();
+            foreach($permisos as $permiso)
+            {
+                if($permiso->delete==1)
+                {
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
 }

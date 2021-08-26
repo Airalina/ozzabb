@@ -3,13 +3,15 @@
 namespace App\Http\Livewire;
 use App\Models\Customer;
 use App\Models\DomicileDelivery;
+use App\Models\Clientorder;
 use Livewire\Component;
 
 class Clientes extends Component
 {
     public $funcion="", $idcli, $clientes, $cliente, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
-    public $street, $location, $number, $province, $country, $postcode, $client_id, $explora='inactivo',$domicilios;
+    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios;
 
+    protected $dates = ['deadline', 'date', 'start_date'];
     public function render()
     {
         $this->clientes=Customer::where('name','LIKE','%' . $this->search . '%')
@@ -108,6 +110,7 @@ class Clientes extends Component
     public function explorar(Customer $cliente){
         $this->cliente=$cliente;
         $this->domicilios=DomicileDelivery::where('client_id', $this->cliente->id)->get();
+        $this->historial=Clientorder::where('customer_id', $this->cliente->id)->get();
         if($this->explora=='inactivo'){
             $this->explora='activo';
             $this->funcion="0";
