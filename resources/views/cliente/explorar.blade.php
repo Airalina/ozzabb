@@ -121,7 +121,32 @@
                     </tr>
                   </thead>
                   <tbody>
-                    
+                  @forelse($historial as $historia)
+                <tr class="registros">
+                      <td style="text-align: center">{{ $historia->id }}/2021</td>
+                      <td style="text-align: center">{{ Carbon\Carbon::parse($historia->date)->format('d/m/Y') }}</td>
+                      <td style="text-align: center">{{ $historia->deadline->format('d/m/Y') }}</td>
+                      <td style="text-aling: center">{{ Carbon\Carbon::parse($historia->start_date)->format('d/m/Y') }}</td>
+                      @if($historia->order_state==1)
+                        <td style="text-align: center">Nuevo</td>
+                      @elseif($historia->order_state==2)
+                        <td style="text-align: center">Confirmado</td>
+                      @elseif($historia->order_state==3)
+                        <td style="text-align: center">Rechazado</td> 
+                      @elseif($historia->order_state==4)
+                        <td style="text-align: center">Demorado</td>
+                      @elseif($historia->order_state==5)
+                        <td style="text-align: center">En Producción</td>
+                      @elseif($historia->order_state==6)
+                        <td style="text-align: center"> En Depósito</td> 
+                      @endif
+                      <td style="text-align: center">{{ $historia->usd_price }} U$D</td>
+                </tr>
+              @empty
+                <tr class="text-center">
+                  <td colspan="4" class="py-3 italic">No hay información</td>
+                </tr>
+              @endforelse 
                   </tbody>
                 </table>
               </div>
