@@ -22,6 +22,7 @@ class MaterialFactory extends Factory
     public function definition()
     {
         return [
+            'provider_id' =>  rand(1,10),
             'code' => $this->faker->randomNumber(5),
             'name' => $this->faker->word(),
             'family' => $this->faker->randomElement(['Conectores', 'Terminales', 'Cables', 'Sellos']),

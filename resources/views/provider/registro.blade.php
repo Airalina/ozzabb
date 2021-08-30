@@ -5,10 +5,22 @@
               <div class="card-header">
                 @if($funcion=="crear")<h3 class="card-title">Agregar Proveedor</h3>@else<h3 class="card-title">Informacion sobre el Proveedor: {{$name}}</h3>@endif
               </div>
+			  
               <form>
+				  
 				<div class="card-body">
+				@if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        
+                        @endif
 					<div class="form-group">
-						<label for="exampleInputEmail1">Nombre de la empresa</label>
+						<label for="name">Nombre de la empresa</label>
 						<input type="text" class="form-control" id="name" wire:model="name" placeholder="Nombre de la empresa" required>
 					</div>
 					<div class="form-group">
@@ -25,7 +37,7 @@
 					</div>
 					<div class="form-group">
 						<label for="contact_name">Nombre de contacto</label>
-						<input type="text" class="form-control" id="contact_name" wire:model="contact_name" placeholder="Nombre de contacto">
+						<input type="text" class="form-control" id="contact_name" pattern="[A-Za-z]" wire:model="contact_name" placeholder="Nombre de contacto">
 					</div>
 					<div class="form-group">
 						<label for="point_contact">Puesto de contacto</label>

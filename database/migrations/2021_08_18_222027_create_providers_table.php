@@ -23,8 +23,11 @@ class CreateProvidersTable extends Migration
             $table->string('point_contact', 100)->nullable();
             $table->string('site_url', 100)->nullable();
             $table->integer('status');
+            
+          //  $table->foreign('material_id')->references('id')->on('materials');
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
