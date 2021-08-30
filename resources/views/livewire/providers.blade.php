@@ -2,7 +2,7 @@
   
   @switch($funcion)
     @case("")
-        @if (auth()->user()->can('seecust', auth()->user()))
+        @if (auth()->user()->can('seeproviders', auth()->user()))
           @include("provider.listado")
         @endif
         @break
