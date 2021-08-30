@@ -14,13 +14,13 @@ class CreateRevisiondetailsTable extends Migration
     public function up()
     {
         Schema::create('revisiondetails', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('installation_id');
             $table->unsignedBigInteger('number_version');
             $table->unsignedBigInteger('material_id');
             $table->unsignedBigInteger('amount');
             $table->timestamps();
             $table->softDeletes();
-            $table->primary(['installation_id','number_version']);
         });
     }
 

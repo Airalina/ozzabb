@@ -78,12 +78,11 @@ Para cada material pedido en la orden de compra registramos los siguientes datos
 | Cod. Material | Es cód. interno del material pedido. | Automático |
 | Descripción | Descripción del material. | Automático |
 | Lote | Es el nro. de lote del proveedor. viene en el remito. | No |
-| Proveedor | Es el nombre del proveedor que realizó en el envío. | Sí |
 | Cantidad Pedida | Es la cantidad de la orden de compra. | Automático |
 | Cantidad Remito | Es la cantidad que manifiesta haber enviado el cliente. | Sí |
 | Cantidad Enviada | Anotamos lo recibido. | Sí |
 | Cantidad Recibida | La cantidad de material que hemos recibido hasta el momento en todas las ordenes de ingreso para esta orden de compra y este material. | Automático |
-| Diferencia | Recibida - Pedida | Sí |
+| Diferencia | Recibida - Pedida | Automático |
 | Sin Entrega | Es la cantidad que sabemos que no vamos a recibir. | Automático |
 | Depósito | Permite elegir el depósito al que va ir el material recibido. | Sí |
 

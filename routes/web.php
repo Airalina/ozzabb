@@ -43,4 +43,8 @@ Route::get('/proveedores', function () {
     return view('providers');
 })->middleware(['auth'])->name('providers');
 
+Route::get('/instalaciones', function () {
+    return view('instalaciones');
+})->middleware(['auth'])->name('instalaciones');
+
 require __DIR__.'/auth.php';
