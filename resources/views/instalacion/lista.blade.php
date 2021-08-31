@@ -38,7 +38,7 @@
                       <td style="text-align: center">{{ $instalacion->code }}</td>
                       <td style="text-align: center">{{ $instalacion->description }}</td>
                       <td style="text-align: center">{{ $instalacion->usd_price }}</td>
-                      <td style="text-align: center">{{ $instalacion->date_admission }}</td>
+                      <td style="text-align: center">{{ date('d-m-Y', strtotime($instalacion->date_admission)) }}</td>
                       <td style="text-align: center">
                         <button type="button" wire:click="explora({{ $instalacion->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
                         @if (auth()->user()->can('deleteinstall', auth()->user()))
