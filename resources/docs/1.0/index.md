@@ -9,4 +9,5 @@
   - [Depósitos](/{{route}}/{{version}}/Depositos)
   - [Ordenes de Compras](/{{route}}/{{version}}/Ordenes_de_Compras)
   - [Ordenes de Ingreso de Materiales](/{{route}}/{{version}}/ordenes_de_ingreso)
+  - [Ordenes de Egreso de Materiales]((/{{route}}/{{version}}/ordenes_de_engreso_de_materiales))
   - [DER](/{{route}}/{{version}}/der)
