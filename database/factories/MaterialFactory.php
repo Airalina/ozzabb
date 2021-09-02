@@ -22,7 +22,6 @@ class MaterialFactory extends Factory
     public function definition()
     {
         return [
-            'provider_id' =>  rand(1,10),
             'code' => $this->faker->randomNumber(5),
             'name' => $this->faker->word(),
             'family' => $this->faker->randomElement(['Conectores', 'Terminales', 'Cables', 'Sellos']),
@@ -30,7 +29,7 @@ class MaterialFactory extends Factory
             'description' => $this->faker->text(),
             'line_id' => $this->faker->randomElement(['1', '2','3']),
             'usage_id' => $this->faker->randomElement(['1', '2','3']),
-            'replace' => $this->faker->randomElement(['1', '2','3']),
+            'replace_id' => $this->faker->randomElement(['1', '2','3']),
             'stock_min' => $this->faker->randomNumber(2),
             'stock_max' => $this->faker->randomNumber(2),
             'stock' => $this->faker->randomNumber(2),
