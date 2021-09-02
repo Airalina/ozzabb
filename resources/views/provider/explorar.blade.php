@@ -37,10 +37,10 @@
                         <td>Inactivo</td>
                       @endif
                       <td>
-                        @if (auth()->user()->can('updatecust', auth()->user()))
+                        @if (auth()->user()->can('updateprovider', auth()->user()))
                           <button wire:click="update({{ $provider->id }})" type="button"  class="btn btn-primary btn-sm">Actualizar</button>
                         @endif
-                        @if (auth()->user()->can('deletecust', auth()->user())) 
+                        @if (auth()->user()->can('deleteprovider', auth()->user())) 
                           <button wire:click="destruir({{ $provider->id }})" type="button" class="btn btn-danger btn-sm">Borrar</button>
                         @endif
                       <td>
@@ -52,7 +52,7 @@
             <div class="card-header">
                 <h3 class="card-title">Lista de precios del proveedor</h3>
                 <div class="card-tools">
-                  @if (auth()->user()->can('storecust', auth()->user()))  
+                  @if (auth()->user()->can('storeprovider', auth()->user()))  
                     <div>
                       <button wire:click="agregamat({{ $provider->id }})" type="button" class="btn btn-info">Agregar Material</button>
     	              </div>

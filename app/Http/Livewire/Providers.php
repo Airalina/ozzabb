@@ -11,7 +11,7 @@ use Livewire\Component;
 class Providers extends Component
 {
     public $funcion="", $mat_n,$id_provider, $idu, $providers, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
-    public $code, $validar, $amount, $name_material, $material, $id_material, $material_up, $stock, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price;
+    public $code, $validar, $amount, $name_material, $material, $id_material, $material_up, $stock, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex;
 
     public function render()
     {
@@ -43,14 +43,15 @@ class Providers extends Component
 
     public function store(){
         
-        
+        $regex = '/^((?:www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/'; 
+
         $this->validate([
             'name' => 'required|string',
             'address' => 'required|string',
             'email' => 'required|unique:providers,email|email',
             'phone' => 'numeric|nullable',
             'contact_name' => 'string|nullable',
-            'site_url' => 'url|nullable'
+            'site_url' => 'nullable|regex: '.$regex
         ], [
             'name.required' => 'El campo nombre es requerido',
             'name.string' => 'El campo nombre no debe tener números ni carácteres',
@@ -60,7 +61,7 @@ class Providers extends Component
             'email.email' => 'El campo correo electrónico para ventas debe ser un email',
             'phone.numeric' => 'El campo teléfono debe ser numérico',
             'contact_name' => 'El campo nombre de contacto no debe tener números ni carácteres',
-            'site_url.url' => 'El campo página web no es válido',
+            'site_url.regex' => 'El formato correcto para la url es: www.tupagina.com',
         ]);
         Provider::create([
             'name' => $this->name,
