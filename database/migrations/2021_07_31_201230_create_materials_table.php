@@ -19,12 +19,12 @@ class CreateMaterialsTable extends Migration
             $table->string('name', 100);
             $table->enum('family', ['Conectores', 'Terminales', 'Cables', 'Sellos']);
             $table->string('color', 50);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('line_id');
             $table->integer('usage_id');
-            $table->string('replace', 50);
+            $table->integer('replace_id')->nullable();
             $table->integer('stock_min');
-            $table->integer('stock_max');
+            $table->integer('stock_max')->nullable();
             $table->integer('stock');
             $table->timestamps();
             $table->softDeletes();
