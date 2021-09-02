@@ -45,7 +45,7 @@
 					</div>
                     <div class="form-group">
 						<label for="site_url">Página web</label>
-						<input type="text" class="form-control" id="site_url" wire:model="site_url" placeholder="Página web">
+						<input type="text" class="form-control" id="site_url" wire:model="site_url" placeholder="www.paginaweb.com">
 					</div>
 					<div class="form-group">
                         <input type="checkbox" wire:model="status" class="form-check-input" id="exampleCheck1"  checked="">
