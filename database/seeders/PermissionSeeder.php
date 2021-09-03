@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
     {
         \DB::table('permissions')->insert([
             
-            'name' => 'Administracion de Usuarios',
+            'name' => 'Administración de Usuarios',
             'see' => 1,
             'create' => 1,
             'update' => 1,
@@ -25,7 +25,7 @@ class PermissionSeeder extends Seeder
 
         \DB::table('permissions')->insert([
             
-            'name' => 'Administracion de Roles',
+            'name' => 'Administración de Roles',
             'see' => 1,
             'create' => 1,
             'update' => 1,
@@ -35,7 +35,7 @@ class PermissionSeeder extends Seeder
 
         \DB::table('permissions')->insert([
             
-            'name' => 'Administracion de Clientes',
+            'name' => 'Administración de Clientes',
             'see' => 1,
             'create' => 1,
             'update' => 1,
@@ -45,7 +45,7 @@ class PermissionSeeder extends Seeder
 
         \DB::table('permissions')->insert([
             
-            'name' => 'Administracion de Pedidos De Clientes',
+            'name' => 'Administración de Pedidos De Clientes',
             'see' => 1,
             'create' => 1,
             'update' => 1,
@@ -55,7 +55,17 @@ class PermissionSeeder extends Seeder
         
         \DB::table('permissions')->insert([
             
-            'name' => 'Administracion de Instalaciones',
+            'name' => 'Administración de Instalaciones',
+            'see' => 1,
+            'create' => 1,
+            'update' => 1,
+            'delete' =>1,
+            'role_id' => 1,
+        ]);
+
+        \DB::table('permissions')->insert([
+            
+            'name' => 'Administración de Depósitos',
             'see' => 1,
             'create' => 1,
             'update' => 1,

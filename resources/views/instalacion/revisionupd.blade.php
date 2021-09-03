@@ -55,7 +55,7 @@
                                   </table>
                                 </div>
                             @endif
-                            <div class="row">
+                  <div class="row">
                     <div class="col-7">
                       <div class="card">
                         <div class="card-header">
