@@ -47,4 +47,8 @@ Route::get('/instalaciones', function () {
     return view('instalaciones');
 })->middleware(['auth'])->name('instalaciones');
 
+Route::get('/depositos', function () {
+    return view('depositos');
+})->middleware(['auth'])->name('depositos');
+
 require __DIR__.'/auth.php';

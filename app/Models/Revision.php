@@ -13,4 +13,9 @@ class Revision extends Model
         'number_version',
         'installation_id'
     ];
+
+    public function installations()
+    {
+        return $this->belongsTo(Installation::class,'installation_id');
+    }
 }

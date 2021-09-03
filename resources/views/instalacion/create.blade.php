@@ -5,7 +5,7 @@
               
               <form>
                     <div class="card-body">
-                        <h5>Datos de Instalacioón</h5>
+                        <h5>Datos de Instalación</h5>
                         <br>    
                         <div class="form-group">
                             <label>Código</label>
@@ -17,7 +17,7 @@
                         </div>
                         <div class="form-group">
                             <label>Precio U$D</label>
-                            <input class="form-control form-control-sm" type="text" wire:model="usd_price" placeholder="Ingrese precio en dolares">
+                            <input class="form-control form-control-sm" type="text" wire:model="usd_price" placeholder="Ingrese precio en dolares (para decimales usar 'punto(.)')">
                         </div>
                         <div class="form-group">
                             <label>Fecha de Ingreso</label>

@@ -301,6 +301,11 @@ return [
                     'text' => 'Instalaciones',
                     'url'  => 'instalaciones',
                 ],
+
+                [
+                    'text' => 'Depósitos',
+                    'url'  => 'depositos',
+                ],
             ],
         ],
     ],

@@ -1,5 +1,5 @@
 <div>
-                    <button wire:click="cancelar()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+  <button wire:click="cancelar()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
 </div>
 <br>
 <div class="card card-primary">
