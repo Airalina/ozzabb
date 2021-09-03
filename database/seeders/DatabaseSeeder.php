@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Provider;
 use App\Models\Material;
+use App\Models\Usage;
+use App\Models\Line;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +26,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
        ]);
        Provider::factory(10)->create();
-       Material::factory(6)->create();
+      # Material::factory(6)->create();
+       Line::factory(4)->create();
+       Usage::factory(6)->create();
     }
 }

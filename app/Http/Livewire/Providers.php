@@ -111,12 +111,14 @@ class Providers extends Component
 
     public function editar(){
         
+        $regex = '/^((?:www\.)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*)$/'; 
+
         $this->validate([
             'name' => 'required',
             'address' => 'required',
             'email' => ['required', 'email', 'unique:providers,email,'.$this->idu.''],
             'phone' => 'numeric',
-            'site_url' => 'url'
+            'site_url' => 'nullable|regex: '.$regex
         ], [
             'name.required' => 'El campo nombre es requerido',
             'name.string' => 'El campo nombre no debe tener números ni carácteres',
@@ -126,7 +128,7 @@ class Providers extends Component
             'email.email' => 'El campo correo electrónico para ventas debe ser un email',
             'phone.numeric' => 'El campo teléfono debe ser numérico',
             'contact_name' => 'El campo nombre de contacto no debe tener números ni carácteres',
-            'site_url.url' => 'El campo página web no es válido',
+            'site_url.regex' =>  'El formato correcto para la url es: www.tupagina.com',
         ]);
 
         

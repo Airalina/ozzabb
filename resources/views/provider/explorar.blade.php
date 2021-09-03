@@ -83,7 +83,7 @@
                             <td>{{$provider_price->unit}} {{$provider_price->presentation}}</td>
                             <td>{{ $provider_price->usd_price }}</td>
                             <td>{{ $provider_price->ars_price }}</td>
-                            @if (auth()->user()->can('deletecust', auth()->user()))
+                            @if (auth()->user()->can('deleteprovider', auth()->user()))
                             <td><button wire:click="updatemat({{ $provider_price->id }})" type="button" class="btn btn-success btn-sm">Actualizar</button></td>
                             @endif
                         </tr>

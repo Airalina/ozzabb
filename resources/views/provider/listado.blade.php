@@ -3,7 +3,7 @@
             <div class="card-header">
                 <h3 class="card-title">Proveedores Registrados</h3>
                 <div class="card-tools">
-                  @if (auth()->user()->can('storecust', auth()->user()))
+                  @if (auth()->user()->can('storeprovider', auth()->user()))
                     <div>
                       <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Proveedor</button>
     	              </div>
@@ -14,7 +14,7 @@
                 </div>
             </div>
               <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
+              <div class="card-body table-responsive">
                 <table class="table table-head text-nowrap">
                 <div class="form-group" data-select2-id="45">
                   <label>Ordenar por</label>
@@ -61,10 +61,10 @@
                       @endif
                       <td >
                         <button type="button" wire:click="explorar({{ $provider->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i>    Ver</button>
-                        @if (auth()->user()->can('update', auth()->user()))
+                        @if (auth()->user()->can('updateprovider', auth()->user()))
                             <button wire:click="update({{ $provider->id }})" type="button" class="btn btn-success btn-xs">Actualizar</button>
                           @endif
-                        @if (auth()->user()->can('delete', auth()->user()))
+                        @if (auth()->user()->can('deleteprovider', auth()->user()))
                             <button wire:click="destruir({{ $provider->id }})" type="button" class="btn btn-danger btn-xs">Borrar</button>
                           @endif
                 
