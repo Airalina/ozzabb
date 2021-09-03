@@ -18,7 +18,7 @@ class CreatePricesTable extends Migration
             $table->string('date');
             $table->unsignedBigInteger('provider_price_id');
             $table->unsignedBigInteger('provider_id');
-            $table->unsignedBigInteger('price_id')->nullable();
+            $table->string('price')->nullable();
 
             $table->timestamps();
         });

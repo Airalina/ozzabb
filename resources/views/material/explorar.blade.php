@@ -70,7 +70,44 @@
                   @endif
                 </div>
             </div>
-             
+               <!-- /.card-header -->
+            <div class="card-body p-0">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Código de Material</th>
+                      <th>Nombre del Material</th>
+                      <th>Nombre del proveedor</th>
+                      <th>Unidad de presentación</th>
+                      <th>Precio U$D</th>
+                      <th>Precio AR$</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  @forelse($provider_prices as $provider_price)
+                        <tr>
+                            <td>{{$provider_price->material->code}}</td>
+                            <td>{{ $provider_price->material->name }}</td>
+                            <td>{{ $provider_price->provider->name }}</td>
+                            <td>{{$provider_price->unit}} {{$provider_price->presentation}}</td>
+                            <td>{{ $provider_price->usd_price }}</td>
+                            <td>{{ $provider_price->ars_price }}</td>
+                            @if (auth()->user()->can('deleteprovider', auth()->user()))
+                            <td><button wire:click="updatemat({{ $provider_price->id }})" type="button" class="btn btn-success btn-sm">Actualizar</button></td>
+                            @endif
+                        </tr>
+                    @empty
+                        <tr class="text-center">
+                            <td colspan="4" class="py-3 italic">No hay información</td>
+                        </tr>
+                    @endforelse
+                  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
             <!-- /.card -->
           </div>
 </div>
