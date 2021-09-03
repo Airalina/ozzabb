@@ -22,7 +22,6 @@ class ProviderFactory extends Factory
     public function definition()
     {
         return [
-            'material_id' =>  rand(1,6),
             'name' => $this->faker->name,
             'address' => $this->faker->address,
             'phone' => $this->faker->phoneNumber,
