@@ -21,7 +21,7 @@ class Instalaciones extends Component
             ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('line_id','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('usage_id','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('replace','LIKE','%'.$this->searchmateriales.'%')
+            //->orWhere('replace','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
