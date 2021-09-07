@@ -34,12 +34,27 @@ class Instalaciones extends Component
 
     public function store()
     {
+       
         if($this->funcion=="create"){
             $this->validate([
-                'code'=>'required|integer|min:1',
+                'code'=>'required|integer|min:1|max:100000000',
                 'description'=>'required|string|min:5|max:300',
                 'date_admission'=>'required|date',
-                'usd_price'=>'required|numeric|min:1'
+                'usd_price'=>'required|numeric|min:0|max:1000000',
+            ],[
+                'date_admission.required' => 'El campo Fecha es requerido',
+                'code.required' => 'El campo Código es requerido',
+                'code.integer' => 'El camppo Código debe ser un número entero',
+                'code.min' => 'El campo Código debe ser igual o mayor a 1(uno)',
+                'code.max' => 'El campo Código debe ser menor o igual a 10000000(diez millones)',
+                'description.required' => 'El campo Descripción es requerido',
+                'description.min' => 'El campo Descripción tiene al menos 5 caracteres',
+                'description.max' => 'El campo Descripción tiene como máximo 300 caracteres',
+                'date_admission.requred' => 'El campo Fecha es requerido',
+                'usd_price.required' => 'El campo Precio U$D es requerido',
+                'usd_price.numeric' => 'El campo Precio U$D es numérico',
+                'usd_price.max' => 'El campo precio U$D tiene como maximo 1000000(un millon)',
+    
             ]);
             $this->instalacion= new Installation;
             $this->instalacion->code=$this->code;
@@ -65,6 +80,15 @@ class Instalaciones extends Component
             $this->volver();
         }
         if($this->funcion=="newrevision"){
+            $this->validate([
+                'date'=>'required|date',
+                'reason'=>'required|string|min:5|max:300'
+            ],[
+                'date.required' => 'El campo Fecha es requerido',
+                'reason.required' => 'El campo Razón es requerido',
+                'reason.min' => 'El campo Razón tiene como mínimo 5 caracteres',
+                'reason.max' => 'El campo Razón tiene como maximo 300 caracteres',
+            ]);
             $this->number_version=count(Revision::where('installation_id', $this->installation_id)->get());
             $this->revision=new Revision;
             $this->revision->installation_id=$this->installation_id;
@@ -121,7 +145,10 @@ class Instalaciones extends Component
         $this->validate([
             'amount'=>'required|integer|min:1|max:1000000'
         ], [
-            'amount.required'=>'El campo cantidad es requerido. Valor máximo 1000000'
+            'amount.required'=>'El campo Cantidad es requerido',
+            'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
+            'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
+            'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
         ]);
         $this->detail->amount=$this->amount;
         $this->detail->save();
@@ -155,7 +182,10 @@ class Instalaciones extends Component
         $this->validate([
             'amount'=>'required|integer|min:1|max:1000000'
         ], [
-            'amount.required'=>'El campo cantidad es requerido. Valor máximo 1000000'
+            'amount.required'=>'El campo Cantidad es requerido',
+            'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
+            'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
+            'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
         ]);
         foreach($this->details as $detail){
             if($detail[0]==$material->code){
@@ -186,7 +216,7 @@ class Instalaciones extends Component
     {
         $this->funcion="explora";
         $this->update($instalacion);
-
+        $this->resetValidation();
     }
 
     public function exploradetail(int $revision)
