@@ -94,7 +94,6 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                           
                                 <label for="connector">Contraparte</label>
                                 <select wire:model="connector"  id="connector" class="form-control form-control-sm">
                              
@@ -290,7 +289,12 @@
 						<label for="stock">Stock en planta</label>
 						<input type="text" class="form-control" id="stock" wire:model="stock" placeholder="Stock en planta">
 					</div>
-				</div>
+                    <div class="form-group">
+                    <label for="images">Imagen</label>
+                        <input wire:model="images" type="file" name="images" class="form-control-file" multiple>
+                    </div>
+                </div>
+               
                 <div class="card-footer">
 				@if($funcion=="crear")
                         <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar</button></td>

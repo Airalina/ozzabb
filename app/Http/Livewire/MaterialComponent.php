@@ -14,16 +14,17 @@ use App\Models\Provider;
 use App\Models\ProviderPrice;
 use App\Models\Price;
 use Livewire\WithPagination;
-
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class MaterialComponent extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     protected $paginationTheme = 'bootstrap';
 
 
-    public $ma,$search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $materials, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro;
+    public $ma,$search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $materials, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [];
 
     public function render()
     {
@@ -94,8 +95,9 @@ class MaterialComponent extends Component
         $this->info_sell=Seal::all();
         $this->info_con=Connector::all();
     }
-
+    
     public function store(){
+
         $this->validate([
             'code' => 'required',
             'name' => 'required',
@@ -108,7 +110,7 @@ class MaterialComponent extends Component
             'stock_min' => 'numeric|required',
             'stock_max' => 'numeric|nullable',
             'stock' => 'numeric|required',
-            
+            'images' => 'nullable'
         ],[
             'code.required' => 'El campo código es requerido',
             'name.required' => 'El campo nombre es requerido',
@@ -123,7 +125,8 @@ class MaterialComponent extends Component
             'stock.required' => 'El campo stock es requerido',
             'stock.numeric' => 'El campo stock es numérico',
         ]);
-        
+       
+
         if($this->family == 'Conectores'){
             $this->validate([
                 'terminal' => 'nullable',
@@ -149,8 +152,10 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock
+                'stock' => $this->stock,
+                'image' => $this->images
             ]);
+            
             Connector::create([
                 'material_id' => $this->material->id,
                 'terminal_id' => $this->terminal,
@@ -181,7 +186,8 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock
+                'stock' => $this->stock,
+                'image' => $this->images
             ]);
             Terminal::create([
                 'material_id' => $this->material->id,
@@ -211,7 +217,8 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock
+                'stock' => $this->stock,
+                'image' => $this->images
             ]);
             Cable::create([
                 'material_id' => $this->material->id,
@@ -231,8 +238,19 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock
+                'stock' => $this->stock,
             ]);
+
+            if(!empty($this->images)){
+                foreach ($this->images as $key => $image) {
+                    $this->images[$key] = $image->store('materials','public');
+                }
+                
+                $this->images = json_encode($this->images);
+                $this->material->image = $this->images;
+                $this->material->save();
+            }
+
             Seal::create([
                 'material_id' => $this->material->id,
             ]);
@@ -258,6 +276,8 @@ class MaterialComponent extends Component
         $this->line=$material->line->id;
         $this->usage_id=$material->usage;
         $this->line_id=$material->line;
+        $this->images_up=json_decode($material->image);
+        $this->images =  $material->image;
         $this->info_line=Line::all();
         $this->info_usage=Usage::all();
         $this->info_term=Terminal::all();
@@ -438,7 +458,24 @@ class MaterialComponent extends Component
         $material_up->stock_min=$this->stock_min;
         $material_up->stock_max=$this->stock_max;
         $material_up->stock=$this->stock;
-
+        if(!empty($this->images) && is_array($this->images)){
+           if(!empty(array_diff($this->images, json_decode($material_up->image)))){
+                if($material_up->image != null){
+                    foreach (json_decode($material_up->image) as $key => $image) {
+                        Storage::disk('public')->delete($image); 
+                    }
+            }
+            foreach ($this->images as $key => $image) {
+                $this->images[$key] = $image->store('materials','public');
+            }
+         
+            $this->images = json_encode($this->images);
+            
+            $material_up->image = $this->images;
+        }
+            
+        }
+   
         $material_up->save();
         $this->funcion="";
     }
@@ -622,5 +659,6 @@ public function backmat(){
     $this->funcion="0";
     $this->explora='activo';   
 }
+
 
 }

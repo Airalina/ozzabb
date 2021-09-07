@@ -13,7 +13,7 @@ class Material extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['provider_id','date','code','name', 'stock', 'family','color','description','line_id','usage_id','replace_id','stock_min','stock_max','stock'];
+    protected $fillable = ['code','name', 'stock', 'family','color','description','line_id','usage_id','replace_id','stock_min','stock_max','stock','image'], $photo;
     
     public function provider_prices(){
         return $this->hasMany(ProviderPrice::class); 
@@ -30,6 +30,9 @@ class Material extends Model
     public function material()
     {
         return $this->belongsTo(Material::class, 'replace_id');
+    }
+    public function getUrl($photo){
+        return url("storage/$photo");
     }
 
 }
