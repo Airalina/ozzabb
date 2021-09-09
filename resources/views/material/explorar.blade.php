@@ -84,7 +84,7 @@
                 <div class="card-tools">
                   @if (auth()->user()->can('storeprovider', auth()->user()))  
                     <div>
-                      <button wire:click="agregamat({{ $material->id }})" type="button" class="btn btn-info">Agregar Proveedor</button>
+                      <button wire:click="agregamat({{ $material->id }})" type="button" class="btn btn-info">Agregar Precio</button>
     	              </div>
                   @endif
                 </div>

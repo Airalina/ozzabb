@@ -24,7 +24,7 @@ class MaterialComponent extends Component
     protected $paginationTheme = 'bootstrap';
 
 
-    public $ma,$search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $materials, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img;
+    public $ma,$search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $materials, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider;
 
     public function render()
     {
@@ -572,7 +572,10 @@ class MaterialComponent extends Component
     $this->ars_price=null;
     $this->info_pro = Provider::all();
     $this->mat_n = null;
-
+    $this->name_provider = null;
+    $this->addres_provider = null;
+    $this->email_provider = null;
+    
     $this->explora='inactivo';
     $this->funcion="crearmat";    
 }
@@ -585,8 +588,7 @@ public function storemat(Material $material){
         'presentation' => 'required',
         'usd_price' => 'required|numeric',
         'ars_price' => 'required|numeric',
-        'provider' => 'required|numeric',
-    ], [
+      ], [
         'unit.required' => 'El campo unidad es requerido',
         'unit.numeric' => 'El campo unidad debe ser numérico',
         'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
@@ -594,12 +596,37 @@ public function storemat(Material $material){
         'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
         'ars_price.required' => 'El campo precio AR$ es requerido',
         'ars_price.numeric' => 'El campo precio AR$ es numérico',
-        'provider.required' => 'Seleccione una opción para el campo de proveedor',
-        'provider.numeric' => 'Seleccione una opción para el campo de proveedor',
-   
     ]);
     
+    if($this->addProvider){
+        $this->validar= $this->validate([
+            'name_provider' => 'required',
+            'addres_provider' => 'required',
+            'email_provider' => 'required|unique:providers,email|email',
+          ], [
+            'name_provider.required' => 'El campo nombre es requerido',
+            'addres_provider.required' => 'El campo domicilio es requerido',
+            'email_provider.required' => 'El campo correo electrónico para ventas es requerido',
+            'email_provider.unique' => 'El correo electrónico para ventas ya se encuentra registrado',
+            'email_provider.email' => 'El campo correo electrónico para ventas debe ser un email',
+              ]);
 
+        $provider = Provider::create([
+            'name' => $this->name_provider,
+            'address' => $this->addres_provider,
+            'email' => $this->email_provider,
+            'status'=>1
+        ]);
+        $this->provider = $provider->id;
+    }else{
+        $this->validar= $this->validate([
+            'provider' => 'required|numeric',
+        ], [
+            'provider.required' => 'Seleccione una opción para el campo de proveedor',
+            'provider.numeric' => 'Seleccione una opción para el campo de proveedor',
+        ]);
+    }
+  
    $provider_price= ProviderPrice::create([
         'provider_id' =>$this->provider,
         'material_id' =>$material->id,
@@ -638,7 +665,10 @@ public function updatemat(ProviderPrice $provider_price)
     $this->usd_price=$provider_price->usd_price;
     $this->ars_price=$provider_price->ars_price;;
     $this->mat_n = $provider_price->provider;
-    $this->info_pro = Provider::all();
+    $this->info_pro = Provider::all();  
+    $this->name_provider = null;
+    $this->addres_provider = null;
+    $this->email_provider = null;
     $this->explora= 'inactivo';
     $this->funcion="actualizarmat";
 }
@@ -662,8 +692,35 @@ public function editarmat(){
         'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
         'ars_price.required' => 'El campo precio AR$ es requerido',
         'ars_price.numeric' => 'El campo precio AR$ es numérico',
-        'material.numeric' => 'Seleccione una opción para el campo de materiales',
     ]);
+    if($this->addProvider){
+        $this->validar= $this->validate([
+            'name_provider' => 'required',
+            'addres_provider' => 'required',
+            'email_provider' => 'required|unique:providers,email|email',
+          ], [
+            'name_provider.required' => 'El campo nombre es requerido',
+            'addres_provider.required' => 'El campo domicilio es requerido',
+            'email_provider.required' => 'El campo correo electrónico para ventas es requerido',
+            'email_provider.unique' => 'El correo electrónico para ventas ya se encuentra registrado',
+            'email_provider.email' => 'El campo correo electrónico para ventas debe ser un email',
+              ]);
+
+        $provider = Provider::create([
+            'name' => $this->name_provider,
+            'address' => $this->addres_provider,
+            'email' => $this->email_provider,
+            'status'=>1
+        ]);
+        $this->provider = $provider->id;
+    }else{
+        $this->validar= $this->validate([
+            'provider' => 'required|numeric',
+        ], [
+            'provider.required' => 'Seleccione una opción para el campo de proveedor',
+            'provider.numeric' => 'Seleccione una opción para el campo de proveedor',
+        ]);
+    }
     $pro =Material::find($this->marterial);
     $material_up =ProviderPrice::find($this->id_provider_price);
     $material_up->amount=$this->amount; 
@@ -685,14 +742,18 @@ public function editarmat(){
     $this->funcion="0";
     $this->explorar($pro);
 }
-public function backmat(){
-    $this->funcion="0";
-    $this->explora='activo';   
-}
-public function deleteImg($img){
-  
-    unset($this->images[$img]);
- 
-}
-
+    public function backmat(){
+        $this->funcion="0";
+        $this->addProvider = false;
+        $this->explora='activo';   
+        
+    }
+    public function deleteImg($img){
+    
+        unset($this->images[$img]);
+    
+    }
+    public function addProvider(){
+        $this->addProvider = true;
+    }
 }
