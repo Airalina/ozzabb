@@ -4,6 +4,15 @@
               </div>
               
               <form>
+              @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                @endif
                     <div class="card-body">
                         <h5>Datos de Instalación:</h5>
                         <br>    
@@ -16,7 +25,7 @@
                         <h5>Datos de Revisión</h5>
                         <br>
                         <div class="form-group">
-                            <label>Razon</label>
+                            <label>Razón</label>
                             <textarea class="form-control form-control-sm" rows="3" wire:model="reason" placeholder="Razon de revisión ..."></textarea>
                         </div>
                         <div class="form-group">

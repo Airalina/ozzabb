@@ -26,6 +26,7 @@ class CreateMaterialsTable extends Migration
             $table->integer('stock_min');
             $table->integer('stock_max')->nullable();
             $table->integer('stock');
+            $table->string('image', 1000)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
