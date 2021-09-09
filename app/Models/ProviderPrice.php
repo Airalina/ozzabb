@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\Material;
+use  App\Models\Provider;
 
 class ProviderPrice extends Model
 {
@@ -13,5 +14,9 @@ class ProviderPrice extends Model
    
     public function material(){
         return $this->belongsTo(Material::class); 
+    }
+
+    public function provider(){
+        return $this->belongsTo(Provider::class); 
     }
 }
