@@ -290,10 +290,44 @@
 						<input type="text" class="form-control" id="stock" wire:model="stock" placeholder="Stock en planta">
 					</div>
                     <div class="form-group">
-                    <label for="images">Imagen</label>
-                        <input wire:model="images" type="file" name="images" class="form-control-file" multiple>
+                    <label for="exampleInputFile">Imagen</label>   
+                    <div class="input-group">
+                      <div class="custom-file">
+                         <input wire:model="images" type="file" name="images" class="custom-file-input" multiple>
+                           <label class="custom-file-label" for="exampleInputFile">Selecciona las imágenes</label>
+                      </div>
                     </div>
-                </div>
+                    <div>
+                    @if($funcion=="crear")
+                    @if($images)
+                        Vista previa de la foto:
+                      <div>
+                      @foreach($images as $img)
+                      <div wire:key="{{$loop->index}}">
+                        <img src="{{ $img->temporaryUrl() }}"  class="img-fluid img-thumbnail" style="width:150px;height:150px">
+                        <button wire:click="deleteImg({{$loop->index}})" type="button" class="btn-danger rounded-circle">x</button>
+                      </div>
+                      @endforeach
+                      </div>
+                      @endif
+                      @else
+                      @if($images)
+                      @foreach($images as $img)
+                      <div wire:key="{{$loop->index}}">
+                          @if(is_string($img))
+                            <img src="{{ $material->getUrl($img) }}"  class="img-fluid img-thumbnail" style="width:150px;height:150px">
+                          @else
+                            <img src="{{ $img->temporaryUrl() }}"  class="img-fluid img-thumbnail" style="width:150px;height:150px">
+                            <button wire:click="deleteImg({{$loop->index}})" type="button" class="btn-danger rounded-circle">x</button>
+                  
+                            @endif
+                       </div>
+                      @endforeach
+                      @endif
+                      @endif
+                    </div>
+                    </div>
+               
                
                 <div class="card-footer">
 				@if($funcion=="crear")
@@ -305,3 +339,5 @@
                     </div>
              </form>
             </div>
+
+           
