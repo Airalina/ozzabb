@@ -64,6 +64,7 @@ class Ordenesclientes extends Component
         $this->validate([
             'usd_price' => 'required|numeric|min:0',
             'arp_price' => 'required|numeric|min:0',
+            'customer_id' => 'required',
         ]);
         $this->date=Carbon::now();
         $this->order=new Clientorder;
@@ -109,8 +110,13 @@ class Ordenesclientes extends Component
             $this->order->deliverydomicile_id=$this->newaddress->id;
             $this->order->save();
         }else{
+            if($this->address_id==null){
+            $this->order->deliverydomicile_id=1;
+            $this->order->save();
+            }else{
             $this->order->deliverydomicile_id=$this->address_id;
             $this->order->save();
+            }
         }
         $this->cantidad=0;
         return redirect()->to('pedidos');

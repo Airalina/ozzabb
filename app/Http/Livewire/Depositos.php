@@ -65,6 +65,17 @@ class Depositos extends Component
                 'name' => 'required|string|min:4|max:100',
                 'location' => 'required|string|min:4|max:300',
                 'purpose' => 'required|string|min:4|max:300',
+            ],
+            [
+                'name.required' => 'El campo Nombre es requerido',
+                'name.min' => 'El campo Nombre tiene por lo menos 4 caracteres',
+                'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
+                'location.required' => 'El campo Ubicación es requerido',
+                'location.min' => 'El campo Ubicación tiene como minimo 4 caracteres',
+                'location.max' => 'El campo Ubicación tiene como maximo 300 caracteres',
+                'purpose.required' => 'El campo Propósito es requerido',
+                'purpose.min' => 'El campo Propósito tiene como minimo 4 caracteres',
+                'purpose.max' => 'El campo Propósito tiene como maximo 300 caracteres',
             ]);
             $this->deposito=new Warehouse;
             $this->deposito->name=$this->name;
@@ -79,6 +90,11 @@ class Depositos extends Component
             if($this->seleccion=="Material"){
                 $this->validate([
                     'amount' => 'required|integer|min:1|max:1000000',
+                ],[
+                    'amount.required' => 'El campo Cantidad es requerido',
+                    'amount.integer' => 'El campo Cantidad es entero',
+                    'amount.min' => 'El campo Cantidad tiene como mínimo 1(uno)',
+                    'amount.max' => 'El campo Cantidad tiene como maximo 1000000(un millon)',
                 ]);
                 $this->ingreso=DepositMaterial::where('material_id', $this->material_id)->where('is_material',true)->where('warehouse_id', $this->deposito_id)->get();
                 if($this->ingreso->count()==0){
@@ -105,6 +121,11 @@ class Depositos extends Component
             }elseif($this->seleccion=="Ensamblado"){
                 $this->validate([
                     'amount' => 'required|integer|min:1|max:1000000',
+                ],[
+                    'amount.required' => 'El campo Cantidad es requerido',
+                    'amount.integer' => 'El campo Cantidad es entero',
+                    'amount.min' => 'El campo Cantidad tiene como mínimo 1(uno)',
+                    'amount.max' => 'El campo Cantidad tiene como maximo 1000000(un millon)',
                 ]);
                 $this->ingreso=DepositMaterial::where('material_id', $this->material_id)->where('is_material', false)->where('warehouse_id', $this->deposito_id)->get();
                 if($this->ingreso->count()==0){
@@ -133,6 +154,18 @@ class Depositos extends Component
                     'serial_number' => 'required|string|min:4|max:100',
                     'client_order_id' => 'required|numeric|min:0|max:1000000',
                     'number_version' => 'required|numeric|min:0|max:1000000',
+                ],[
+                    'serial_number.required' => 'El campo Número de serie es requerido',
+                    'serial_number.min' => 'El campo Número de serie tiene como minimo 4 caracteres',
+                    'serial_number.max' => 'El campo Número de serie tiene como maximo 100 caracteres',
+                    'number_version.required' => 'El campo N° de version es requerido',
+                    'number_version.numeric' => 'El campo N° de version es numerico',
+                    'number_version.min' => 'El campo N° de version tiene como mínimo 0(cero)',
+                    'number_version.max' => 'El campo N° de version tiene como maximo 10000000(diez millon)',
+                    'client_order_id.required' => 'El campo Id orden de cliente es requerido',
+                    'client_order_id.numeric' => 'El campo Id orden de cliente es numerico',
+                    'client_order_id.min' => 'El campo Id orden de cliente tiene como mínimo 0(cero)',
+                    'client_order_id.max' => 'El campo Id orden de cliente tiene como maximo 10000000(diez millon)',
                 ]);
                     $this->ingreso=new DepositInstallation;
                     $this->ingreso->warehouse_id=$this->deposito_id;
@@ -149,6 +182,17 @@ class Depositos extends Component
                     'follow_number' => 'required|string|min:4|max:100',
                     'entry_order_id' => 'required|numeric|min:0|max:10000000',
                     'buy_order_id' => 'required|numeric|min:0|max:10000000',
+                ],['follow_number.required' => 'El campo N° de remito es requerido',
+                    'follow_number.min' => 'El campo N° de remito tiene como minimo 4 caracteres',
+                    'follow_number.max' => 'El campo N° de remito tiene como maximo 100 caracteres',
+                    'entry_order_id.required' => 'El campo Id orden de entrada es requerido',
+                    'entry_order_id.numeric' => 'El campo Id orden de entrada es numerico',
+                    'entry_order_id.min' => 'El campo Id orden de entrada tiene como mínimo 0(cero)',
+                    'entry_order_id.max' => 'El campo Id orden de entradae como maximo 10000000(diez millon)',
+                    'buy_order_id.required' => 'El campo Id orden de compra es requerido',
+                    'buy_order_id.numeric' => 'El campo Id orden de compra es numerico',
+                    'buy_order_id.min' => 'El campo Id orden de compra tiene como mínimo 0(cero)',
+                    'buy_order_idn.max' => 'El campo Id orden de compra tiene como maximo 10000000(diez millon)',
                 ]);
                 $this->ingreso=new MaterialEntryOrder;
                 $this->ingreso->entry_order_id=$this->entry_order_id;
@@ -165,6 +209,12 @@ class Depositos extends Component
             $this->validate([
                 'sta' => 'required|string|min:0|max:15',
                 'user' => 'required|string|min:4|max:300',
+            ],[ 'sta.required' => 'El campo Estado es requerido',
+                'sta.min' => 'El campo Estado tiene como minimo 4 caracteres',
+                'sta.max' => 'El campo Estado tiene como maximo 300 caracteres',
+                'user.required' => 'El campo Usuario es requerido',
+                'user.min' => 'El campo Usuario tiene como minimo 4 caracteres',
+                'user.max' => 'El campo Usuario tiene como maximo 300 caracteres',
             ]);
             $this->ordenegreso=new ExpendOrder;
             $this->ordenegreso->date_time=Carbon::now();
@@ -249,8 +299,21 @@ class Depositos extends Component
                 }
             } 
             $this->validate([
-                'egreso' => 'required|integer|min:1',
-                'destination' => 'required|string|min:4|max:300'
+                'egreso' => 'required|integer|min:1|max:1000000',
+                'destination' => 'required|string|min:4|max:300',
+                'amount' => 'required|integer|min:1|max:1000000',
+            ],[
+                'destination.required' => 'El campo Destino  es requerido',
+                'destination.min' => 'El campo Destino tiene como minimo 4 caracteres',
+                'destination.max' => 'El campo Destino tiene como maximo 300 caracteres',
+                'amount.required' => 'El campo Cantidad es requerido',
+                'amount.integer' => 'El campo Cantidad es entero',
+                'amount.min' => 'El campo Cantidad tiene como mínimo 1(uno)',
+                'amount.max' => 'El campo Cantidad tiene como maximo 1000000(un millon)',
+                'egreso.required' => 'El campo Egreso es requerido',
+                'egreso.integer' => 'El campo Egreso es entero',
+                'egreso.min' => 'El campo Egreso tiene como mínimo 1(uno)',
+                'egreso.max' => 'El campo Egreso tiene como maximo 1000000(un millon)',
             ]);
             $this->detail[0]=$this->material_id;
             $this->detail[1]=$this->amount;
@@ -334,6 +397,10 @@ class Depositos extends Component
 
     public function toexplora()
     {
+        $this->resetValidation();
+        $this->sta=null;
+        $this->user=null;
+        $this->seleccion="";
         $this->select=false;
         $this->funcion="explora";
     }
@@ -352,6 +419,7 @@ class Depositos extends Component
 
     public function volver()
     {
+        $this->resetValidation();
         $this->reset();
     }
 }
