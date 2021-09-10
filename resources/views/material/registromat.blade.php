@@ -8,16 +8,8 @@
                     <div class="card-body">                        
                         <h5>Datos del material</h5>
                         <br>    
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        
-                        @endif
+                        <x-form-validation-errors :errors="$errors" />
+
 
                         @if($addProvider)
     

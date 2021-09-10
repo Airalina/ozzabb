@@ -401,7 +401,8 @@ class Providers extends Component
              'provider_id' =>$provider->id,
              'price' =>$this->usd_price,
         ]);
-        
+        $this->div=null;
+        $this->addMaterial = false;
         $this->funcion="0";
         $this->explorar($provider);
 
@@ -461,7 +462,7 @@ class Providers extends Component
         $this->info_term=Terminal::all();
         $this->info_sell=Seal::all();
         $this->info_con=Connector::all();
-
+        $this->addMaterial = false;
         $this->explora= 'inactivo';
         $this->funcion="actualizarmat";
     }
@@ -658,6 +659,7 @@ class Providers extends Component
     }
     public function backmat(){
         $this->funcion="0";
+        $this->div=null;
         $this->addMaterial = false;
         $this->explora='activo';   
     }

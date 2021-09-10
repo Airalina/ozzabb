@@ -279,7 +279,7 @@ class MaterialComponent extends Component
             }
             $this->material->save();
         }
-        
+        $this->div=null;
         $this->funcion="";
     }
     
@@ -301,6 +301,7 @@ class MaterialComponent extends Component
         $this->line=$material->line->id;
         $this->usage_id=$material->usage;
         $this->line_id=$material->line;
+        $this->div=$material->family;
         $this->images_up=json_decode($material->image);
         $this->images = json_decode($material->image);
         $this->info_line=Line::all();
@@ -531,7 +532,6 @@ class MaterialComponent extends Component
 
     public function con(){
         $this->div=$this->family;
-        #dd($this->div);
         $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->get();
         
    }
@@ -643,7 +643,8 @@ public function storemat(Material $material){
          'provider_id' =>$this->provider,
          'price' =>$this->usd_price,
     ]);
-    
+    $this->div=null;
+    $this->addProvider = false;
     $this->funcion="0";
     $this->explorar($material);
 
@@ -669,6 +670,7 @@ public function updatemat(ProviderPrice $provider_price)
     $this->name_provider = null;
     $this->addres_provider = null;
     $this->email_provider = null;
+    $this->addProvider = false;
     $this->explora= 'inactivo';
     $this->funcion="actualizarmat";
 }
