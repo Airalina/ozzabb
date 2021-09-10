@@ -44,7 +44,7 @@
                           <h3 class="card-title">Seleccione material a ser agregado:</h3>
                           <br>
                           <div class="input-group input-group-sm" style="width: 150px;">
-                            <input wire:model="searchmateriales" type="text" class="form-control form-control-xs float-right" placeholder="Buscar instalación...">
+                            <input wire:model="searchmateriales" type="text" class="form-control form-control-xs float-right" placeholder="Buscar material...">
                           </div>
                         </div>
                         <!-- /.card-header -->
@@ -85,7 +85,8 @@
                     <div class="col-5">
                       <div class="card">
                         <div class="card-header">
-                          <h3 class="card-title">Materiales agregadas:</h3>
+                          <h3 class="card-title">Materiales agregados:</h3>
+                          <h6 class="card-title">(Los materiales ya agregados, son aquellos presentes en su ultima revisión</h6>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">

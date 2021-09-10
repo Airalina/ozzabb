@@ -10,8 +10,8 @@
                           <table class="table table-hover text-nowrap">
                                 <thead>
                                 <tr>
-                                <th style="text-align: center">Codigo instalación</th>
-                                <th style="text-align: center">Precio Unitario U$D</th>
+                                <th style="text-align: center">Codigo Material</th>
+                                <th style="text-align: center">Descripción</th>
                                 <th style="text-align: center">Cantidad</th>
                                 <th></th>
                               </tr>
