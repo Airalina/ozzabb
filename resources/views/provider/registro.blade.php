@@ -9,16 +9,8 @@
               <form>
 				  
 				<div class="card-body">
-				@if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        
-                        @endif
+					<x-form-validation-errors :errors="$errors" />
+
 					<div class="form-group">
 						<label for="name">Nombre de la empresa</label>
 						<input type="text" class="form-control" id="name" wire:model="name" placeholder="Nombre de la empresa" required>
@@ -48,7 +40,7 @@
 						<input type="text" class="form-control" id="site_url" wire:model="site_url" placeholder="www.paginaweb.com">
 					</div>
 					<div class="form-group">
-                        <input type="checkbox" wire:model="status" class="form-check-input" id="exampleCheck1"  checked="">
+                        <input type="checkbox" wire:model="status" class="form-check-input" id="exampleCheck1"  checked="" class="form-control">
 						<label for="exampleCheck1">Activo</label>
 					</div>
 				</div>
