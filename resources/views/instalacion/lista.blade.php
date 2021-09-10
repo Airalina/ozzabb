@@ -41,6 +41,9 @@
                       <td style="text-align: center">{{ date('d-m-Y', strtotime($instalacion->date_admission)) }}</td>
                       <td style="text-align: center">
                         <button type="button" wire:click="explora({{ $instalacion->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
+                        @if (auth()->user()->can('updateinstall', auth()->user()))
+                          <button type="button" wire:click="updateinstallation({{ $instalacion->id }})" class="btn btn-primary btn-xs">Actualizar</button>
+                        @endif
                         @if (auth()->user()->can('deleteinstall', auth()->user()))
                           <button type="button" wire:click="delete({{ $instalacion->id }})" class="btn btn-danger btn-xs">Borrar</button>
                         @endif
