@@ -121,9 +121,18 @@ class Instalaciones extends Component
         }
     }
 
-    public function update(Installation $instalacion)
-    {
+    public function updateinstallation(Installation $instalacion)
+    {   
         $this->funcion="update";
+        $this->instalacion=Installation::find($instalacion->id);
+        $this->installation_id=$instalacion->id;
+        $this->code=$instalacion->code;
+        $this->description=$instalacion->description;
+        $this->date_admission=$instalacion->date_admission;
+        $this->usd_price=$instalacion->usd_price;
+    }
+    public function update(Installation $instalacion)
+    {   
         $this->instalacion=Installation::find($instalacion->id);
         $this->installation_id=$instalacion->id;
         $this->code=$instalacion->code;
