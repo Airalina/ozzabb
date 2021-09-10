@@ -10,7 +10,7 @@ use App\Models\Revisiondetail;
 
 class Instalaciones extends Component
 {
-    public $instalaciones, $instalacion, $installation_id, $code, $description, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
+    public $instalaciones, $instalacion, $installation_id, $code, $description, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
     public $details=array(), $detail=array(), $detailslist, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false;
     public function render()
     {
@@ -21,7 +21,6 @@ class Instalaciones extends Component
             ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('line_id','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('usage_id','LIKE','%'.$this->searchmateriales.'%')
-            //->orWhere('replace','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
@@ -105,6 +104,7 @@ class Instalaciones extends Component
                 $this->newdetail->amount=$detail[2];
                 $this->newdetail->save(); 
             }
+            $this->volver();
         }
         if($this->funcion=="exploradetail"){
 
@@ -123,12 +123,40 @@ class Instalaciones extends Component
 
     public function update(Installation $instalacion)
     {
+        $this->funcion="update";
         $this->instalacion=Installation::find($instalacion->id);
         $this->installation_id=$instalacion->id;
         $this->code=$instalacion->code;
         $this->description=$instalacion->description;
         $this->date_admission=$instalacion->date_admission;
         $this->usd_price=$instalacion->usd_price;
+    }
+    
+    public function edit(){
+        $this->validate([
+            'code'=>'required|integer|min:1|max:100000000',
+            'description'=>'required|string|min:5|max:300',
+            'usd_price'=>'required|numeric|min:0|max:1000000',
+        ],[
+            'code.required' => 'El campo Código es requerido',
+            'code.integer' => 'El camppo Código debe ser un número entero',
+            'code.min' => 'El campo Código debe ser igual o mayor a 1(uno)',
+            'code.max' => 'El campo Código debe ser menor o igual a 10000000(diez millones)',
+            'description.required' => 'El campo Descripción es requerido',
+            'description.min' => 'El campo Descripción tiene al menos 5 caracteres',
+            'description.max' => 'El campo Descripción tiene como máximo 300 caracteres',
+            'date_admission.requred' => 'El campo Fecha es requerido',
+            'usd_price.required' => 'El campo Precio U$D es requerido',
+            'usd_price.numeric' => 'El campo Precio U$D es numérico',
+            'usd_price.max' => 'El campo precio U$D tiene como maximo 1000000(un millon)',
+
+        ]);
+        $this->instalacion=Installation::find($this->installation_id);
+        $this->instalacion->code=$this->code;
+        $this->instalacion->description=$this->description;
+        $this->instalacion->usd_price=$this->usd_price;
+        $this->instalacion->save();
+        $this->volver();
     }
 
     public function updatecantidad(Revisiondetail $det){
@@ -202,6 +230,17 @@ class Instalaciones extends Component
         $this->amount=0;
     }
 
+    public function newrevision()
+    {
+        $this->funcion="newrevision";
+        $this->number_version=(count(Revision::where('installation_id', $this->installation_id)->get())-1);
+        $this->revisiond=Revisiondetail::where('installation_id',$this->installation_id)->where('number_version', $this->number_version)->get();
+        foreach($this->revisiond as $revisiondetail){
+            $this->amount=$revisiondetail->amount;
+            $this->addmaterial($revisiondetail->materials);
+
+                }
+    }
     public function downmaterial($orden)
     {
         unset($this->details[$orden]);
@@ -236,11 +275,6 @@ class Instalaciones extends Component
             $this->mat[$det->material_id]=Material::find($det->material_id);
         }
         $this->funcion="listadodetail";
-    }
-
-    public function newrevision()
-    {
-        $this->funcion="newrevision";
     }
 
     public function volver()

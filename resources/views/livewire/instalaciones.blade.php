@@ -20,5 +20,8 @@
     @case("listadodetail")
         @include("instalacion.revisioneslista")
         @break
+    @case("update")
+        @include("instalacion.update")
+        @break
 @endswitch
 </div>
