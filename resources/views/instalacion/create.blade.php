@@ -36,6 +36,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>Plano de instalación</label>
+                            <div class="row">
+                                <div class="col-6">
+                                  <input type="file" wire:model="photo">
+                                </div>
+                            </div>
+                            @if ($photo)
+                              <img src="{{ $photo->temporaryUrl() }}">
+                             @endif
+                        </div>
                     </div>
                     <div class="row">
                     <div class="col-7">

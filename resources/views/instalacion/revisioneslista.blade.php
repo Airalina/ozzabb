@@ -5,8 +5,9 @@
 <div class="card card-primary">
             <div class="card-body">
                 <div class="form-group">
-                    <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Instalaciones registradas en el pedido:</font></font></label>
-                    
+                @if($seeimg==false)
+                    <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Materiales registrados en la instalación:</font></font></label>
+
                           <table class="table table-hover text-nowrap">
                                 <thead>
                                 <tr>
@@ -31,7 +32,14 @@
                               @endforelse
 
                             </tbody>
-                          </table>
+                            </table>
+                          <button type="button" wire:click="verimagen()" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver Diagrama</button>
+                          @else
+                          <img src="{{ asset('images/'.$photo.'')}}">
+                          <br>
+                          <br>
+                          <button type="button" wire:click="noverimagen()" class="btn btn-primary btn-xs"> Volver a la descripción</button>
+                          @endif
                 </div>
             </div>
 </div>

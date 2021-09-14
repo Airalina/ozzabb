@@ -7,11 +7,13 @@ use App\Models\Installation;
 use App\Models\Material;
 use App\Models\Revision;
 use App\Models\Revisiondetail;
+use Livewire\WithFileUploads;
 
 class Instalaciones extends Component
 {
+    use WithFileUploads;
     public $instalaciones, $instalacion, $installation_id, $code, $description, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
-    public $details=array(), $detail=array(), $detailslist, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false;
+    public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $photo, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false;
     public function render()
     {
         $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
@@ -36,6 +38,7 @@ class Instalaciones extends Component
        
         if($this->funcion=="create"){
             $this->validate([
+                'photo'=>'file',
                 'code'=>'required|integer|min:1|max:100000000',
                 'description'=>'required|string|min:5|max:300',
                 'date_admission'=>'required|date',
@@ -65,6 +68,9 @@ class Instalaciones extends Component
             $this->revision->installation_id=$this->instalacion->id;
             $this->revision->number_version=0;
             $this->revision->create_date=$this->date_admission;
+            $this->nombrefile=$this->photo->getClientOriginalName();
+            $this->photo->storeAs('images',$this->nombrefile);
+            $this->revision->image=$this->nombrefile;
             $this->revision->reason="Modelo base";
             $this->revision->save();
             foreach($this->details as $detail)
@@ -80,6 +86,7 @@ class Instalaciones extends Component
         }
         if($this->funcion=="newrevision"){
             $this->validate([
+                'photo'=>'file',
                 'date'=>'required|date',
                 'reason'=>'required|string|min:5|max:300'
             ],[
@@ -94,6 +101,7 @@ class Instalaciones extends Component
             $this->revision->number_version=$this->number_version;
             $this->revision->create_date=$this->date;
             $this->revision->reason=$this->reason;
+            $this->revision->image=$this->photo;
             $this->revision->save();
             foreach($this->details as $detail)
             {
@@ -243,6 +251,8 @@ class Instalaciones extends Component
     {
         $this->funcion="newrevision";
         $this->number_version=(count(Revision::where('installation_id', $this->installation_id)->get())-1);
+        $this->revision=Revision::where('installation_id', $this->installation_id)->last();
+        $this->photo=$this->revision->image;
         $this->revisiond=Revisiondetail::where('installation_id',$this->installation_id)->where('number_version', $this->number_version)->get();
         foreach($this->revisiond as $revisiondetail){
             $this->amount=$revisiondetail->amount;
@@ -279,6 +289,10 @@ class Instalaciones extends Component
 
     public function seedetail(int $revision){
         $this->number_version=$revision;
+        $this->revision=Revision::where('number_version', $this->number_version)->where('installation_id', $this->installation_id)->get();
+        foreach($this->revision as $rev){
+            $this->photo=$rev->image;
+        }
         $this->detailslist=Revisiondetail::where('number_version', $this->number_version)->where('installation_id', $this->installation_id)->get();
         foreach($this->detailslist as $det){
             $this->mat[$det->material_id]=Material::find($det->material_id);
@@ -294,7 +308,15 @@ class Instalaciones extends Component
     public function cancelarupdetail(){
         $this->upca=false;
     }
+
+    public function verimagen(){
+        $this->seeimg=true;
+    }
     
+    public function noverimagen(){
+        $this->seeimg=false;
+    }
+
     public function cancelar(){
         $this->details=null;
         $this->amount=null;
