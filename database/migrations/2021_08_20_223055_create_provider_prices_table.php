@@ -15,7 +15,7 @@ class CreateProviderPricesTable extends Migration
     {
         Schema::create('provider_prices', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount');
+            $table->integer('amount')->nullable();
             $table->unsignedBigInteger('material_id');
             $table->unsignedBigInteger('provider_id');
             $table->float('unit',8,2);

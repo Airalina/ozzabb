@@ -1,41 +1,35 @@
 <div class="card card-primary">
               <div class="card-header">
-              @if($funcion=="crearmat")<h3 class="card-title">Agregar Proveedor</h3>@else<h3 class="card-title">Informacion sobre el proveedor: {{$name}}</h3>@endif
+              @if($funcion=="crearmat")<h3 class="card-title">Agregar Precio</h3>@else<h3 class="card-title">Informacion sobre el precio: </h3>@endif
           
               </div>
               
               <form>
                     <div class="card-body">                        
                         <h5>Datos del material</h5>
-                        <br>
-            <!--
-                        <div class="form-group">
-                            <label for="code">Código de material</label>
-                            <input class="form-control form-control-sm" type="text"  id="code" wire:model="code" placeholder="Ingrese el código" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="name_material">Nombre</label>
-                            <input class="form-control form-control-sm" type="text"  id="name_material" wire:model="name_material" placeholder="Ingrese el nombre">
-                        </div>
+                        <br>    
+                        <x-form-validation-errors :errors="$errors" />
 
+
+                        @if($addProvider)
+    
                         <div class="form-group">
-                            <label for="stock">Cantidad</label>
-                            <input class="form-control form-control-sm" type="string"  id="stock" wire:model="stock" placeholder="Ingrese la cantidad">
+                            <label for="name_provider">Nombre de la empresa</label>
+                            <input type="text" class="form-control" id="name_provider" wire:model="name_provider" placeholder="Nombre de la empresa" required>
                         </div>
-            -->
-            
-            
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <div class="form-group">
+                                <label for="addres_provider">Domicilio</label>
+                                <input type="text" class="form-control" id="addres_provider" wire:model="addres_provider" placeholder="Domicilio" required>
+                        </div>
+                        <div class="form-group">
+                                <label for="email_provider">Correo electrónico para ventas</label>
+                                <input type="email" class="form-control" id="email_provider" wire:model="email_provider" placeholder="Correo electrónico para ventas" required>
+                        </div>
                         
-                        @endif
-                        
+                        @else
+                        <div class="form-group">
+                            <button wire:click="addProvider()" type="button" class="btn btn-info">Añadir proveedor</button>
+                        </div>
                         <div class="form-group">
                         
                             <select wire:model="provider"  id="provider" class="form-control form-control-sm">
@@ -54,6 +48,7 @@
                              @endforeach
                             </select>
                         </div>   
+                        @endif
                         <div class="form-group">
                             <label for="unit">Unidad de presentación</label>
                             <div class="d-flex">

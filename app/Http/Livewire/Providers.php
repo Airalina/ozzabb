@@ -3,6 +3,12 @@
 namespace App\Http\Livewire;
 use App\Models\Provider;
 use App\Models\Material;
+use App\Models\Line;
+use App\Models\Usage;
+use App\Models\Terminal;
+use App\Models\Seal;
+use App\Models\Connector;
+use App\Models\Cable;
 use App\Models\Price;
 use App\Models\ProviderPrice;
 use Livewire\Component;
@@ -11,7 +17,8 @@ use Livewire\Component;
 class Providers extends Component
 {
     public $funcion="", $mat_n,$id_provider, $idu, $providers, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
-    public $code, $validar, $amount, $name_material, $material, $id_material, $material_up, $stock, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex;
+    public $validar, $amount, $material, $id_material, $material_up, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex, $addMaterial;
+    public $code, $name_material, $family, $terminal, $connector, $seal ,$color, $line_id, $usage_id, $replace_id, $stock_min, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace;
 
     public function render()
     {
@@ -168,6 +175,42 @@ class Providers extends Component
         $this->ars_price=null;
         $this->info_mat = Material::all();
         $this->mat_n = null;
+        $this->code=null;
+        $this->name_material=null;
+        $this->family=null;
+        $this->color=null;
+        $this->replace=null;
+        $this->stock_min=null;
+        $this->stock=null;
+        $this->usage=null;
+        $this->terminal=null;
+        $this->seal=null;
+        $this->line=null;
+        $this->number_of_ways=null;
+        $this->type=null;
+        $this->connector=null;
+        $this->size=null;
+        $this->minimum_section=null;
+        $this->maximum_section=null;
+        $this->usage_id=null;
+        $this->line_id=null;
+        $this->conn = null;
+        $this->conn_id=null;
+        $this->terminal_id=null;
+        $this->seal_id=null;
+        $this->connector_id=null;
+        $this->term=null;
+        $this->term_id=null;
+        $this->size=null;
+        $this->minimum_section=null;
+        $this->maximum_section=null;
+        $this->rplce = null;
+        $this->images = null;
+        $this->info_line=Line::all();
+        $this->info_usage=Usage::all();
+        $this->info_term=Terminal::all();
+        $this->info_sell=Seal::all();
+        $this->info_con=Connector::all();
 
         $this->explora='inactivo';
         $this->funcion="crearmat";    
@@ -181,7 +224,6 @@ class Providers extends Component
             'presentation' => 'required',
             'usd_price' => 'required|numeric',
             'ars_price' => 'required|numeric',
-            'material' => 'required|numeric',
         ], [
             'amount.required' => 'El campo cantidad es requerido',
             'amount.numeric' => 'El campo cantidad debe ser numérico',
@@ -193,11 +235,155 @@ class Providers extends Component
             'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
             'ars_price.required' => 'El campo precio AR$ es requerido',
             'ars_price.numeric' => 'El campo precio AR$ es numérico',
-            'material.required' => 'Seleccione una opción para el campo de materiales',
-            'material.numeric' => 'Seleccione una opción para el campo de materiales',
-       
-        ]);
+          ]);
 
+        if($this->addMaterial){
+            
+            $this->validate([
+                'code' => 'required',
+                'name_material' => 'required',
+                'family' => 'required',
+                'color' => 'required',
+                'line' => 'required',
+                'usage' => 'required',
+                'replace' => 'nullable',
+                'stock_min' => 'numeric|required',
+                'stock' => 'numeric|required',
+            ],[
+                'code.required' => 'El campo código es requerido',
+                'name_material.required' => 'El campo nombre es requerido',
+                'family.required' => 'El campo familia es requerido',
+                'color.required' => 'El campo color es requerido',
+                'line.required' => 'Seleccione una opción para el campo de línea',
+                'usage.required' => 'Seleccione una opción para el campo de uso',
+                'stock_min.required' => 'El campo stock mínimo es requerido',
+                'stock_min.numeric' => 'El campo stock mínimo es numérico',
+                'stock.required' => 'El campo stock es requerido',
+                'stock.numeric' => 'El campo stock es numérico',
+            ]);
+        
+            if($this->family == 'Conectores'){
+                $this->validate([
+                    'terminal' => 'nullable',
+                    'seal' => 'nullable',
+                    'number_of_ways' => 'numeric|integer|digits:2|required',
+                    'type' => 'required',
+                    'connector' =>'nullable'
+                ], [
+                    'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
+                    'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
+                    'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de dos cifras',
+                    'number_of_ways.required' => 'El campo cantidad de vías es requerido',
+                    'type.required' => 'El campo tipo es requerido',
+                ]);
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                
+                Connector::create([
+                    'material_id' => $this->material->id,
+                    'terminal_id' => $this->terminal,
+                    'seal_id' => $this->seal,
+                    'number_of_ways' => $this->number_of_ways,
+                    'type' => $this->type,
+                    'connector_id' => $this->connector,
+                ]);
+            
+                $this->material = $this->material->id;
+            }elseif($this->family == 'Terminales'){
+                $this->validate([
+                    'size' => 'numeric|required',
+                    'minimum_section' => 'numeric|nullable',
+                    'maximum_section' => 'numeric|nullable',
+                ], [
+                    'size.numeric' => 'El campo tamaño es numérico',
+                    'size.required' => 'El campo tamaño es requerido',
+                    'minimum_section.numeric' => 'El campo sección mínima es numérico',
+                    'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                ]);
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                Terminal::create([
+                    'material_id' => $this->material->id,
+                    'size' => $this->size,
+                    'minimum_section' => $this->minimum_section,
+                    'maximum_section' => $this->maximum_section,
+                ]);
+                
+                $this->material = $this->material->id;
+            }elseif($this->family == 'Cables'){
+            
+                $this->validate([
+                    'size' => 'numeric|required',
+                    'minimum_section' => 'numeric|nullable',
+                    'maximum_section' => 'numeric|nullable',
+                ],[
+                    'size.numeric' => 'El campo tamaño es numérico',
+                    'size.required' => 'El campo tamaño es requerido',
+                    'minimum_section.numeric' => 'El campo sección mínima es numérico',
+                    'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                ]);
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                Cable::create([
+                    'material_id' => $this->material->id,
+                    'size' => $this->size,
+                    'minimum_section' => $this->minimum_section,
+                    'maximum_section' => $this->maximum_section,
+                ]);
+            
+                $this->material = $this->material->id;
+            }else{
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                Seal::create([
+                    'material_id' => $this->material->id,
+                ]);
+                $this->material = $this->material->id;
+        }
+    }else{
+        $this->validar= $this->validate([
+            'material' => 'required|numeric',
+        ], [
+            'material.required' => 'Seleccione una opción para el campo de material',
+            'material.numeric' => 'Seleccione una opción para el campo de material',
+        ]);
+    }
         
        $provider_price= ProviderPrice::create([
             'provider_id' =>$provider->id,
@@ -215,7 +401,8 @@ class Providers extends Component
              'provider_id' =>$provider->id,
              'price' =>$this->usd_price,
         ]);
-        
+        $this->div=null;
+        $this->addMaterial = false;
         $this->funcion="0";
         $this->explorar($provider);
 
@@ -227,7 +414,7 @@ class Providers extends Component
             $this->explorar($this->provider);
     }
     public function updatemat(ProviderPrice $provider_price)
-    {   ;
+    {   
        
         $this->id_provider_price = $provider_price->id;
         $this->material=$provider_price->material_id;
@@ -238,7 +425,44 @@ class Providers extends Component
         $this->usd_price=$provider_price->usd_price;
         $this->ars_price=$provider_price->ars_price;;
         $this->mat_n = $provider_price->material;
-        $this->info_mat = Material::all();
+        $this->info_mat = Material::all();        
+        $this->code=null;
+        $this->name_material=null;
+        $this->family=null;
+        $this->color=null;
+        $this->replace=null;
+        $this->stock_min=null;
+        $this->stock=null;
+        $this->usage=null;
+        $this->terminal=null;
+        $this->seal=null;
+        $this->line=null;
+        $this->number_of_ways=null;
+        $this->type=null;
+        $this->connector=null;
+        $this->size=null;
+        $this->minimum_section=null;
+        $this->maximum_section=null;
+        $this->usage_id=null;
+        $this->line_id=null;
+        $this->conn = null;
+        $this->conn_id=null;
+        $this->terminal_id=null;
+        $this->seal_id=null;
+        $this->connector_id=null;
+        $this->term=null;
+        $this->term_id=null;
+        $this->size=null;
+        $this->minimum_section=null;
+        $this->maximum_section=null;
+        $this->rplce = null;
+        $this->images = null;
+        $this->info_line=Line::all();
+        $this->info_usage=Usage::all();
+        $this->info_term=Terminal::all();
+        $this->info_sell=Seal::all();
+        $this->info_con=Connector::all();
+        $this->addMaterial = false;
         $this->explora= 'inactivo';
         $this->funcion="actualizarmat";
     }
@@ -264,6 +488,154 @@ class Providers extends Component
             'ars_price.numeric' => 'El campo precio AR$ es numérico',
             'material.numeric' => 'Seleccione una opción para el campo de materiales',
         ]);
+        if($this->addMaterial){
+            
+            $this->validate([
+                'code' => 'required',
+                'name_material' => 'required',
+                'family' => 'required',
+                'color' => 'required',
+                'line' => 'required',
+                'usage' => 'required',
+                'replace' => 'nullable',
+                'stock_min' => 'numeric|required',
+                'stock' => 'numeric|required',
+            ],[
+                'code.required' => 'El campo código es requerido',
+                'name_material' => 'El campo nombre es requerido',
+                'family.required' => 'El campo familia es requerido',
+                'color.required' => 'El campo color es requerido',
+                'line.required' => 'Seleccione una opción para el campo de línea',
+                'usage.required' => 'Seleccione una opción para el campo de uso',
+                'stock_min.required' => 'El campo stock mínimo es requerido',
+                'stock_min.numeric' => 'El campo stock mínimo es numérico',
+                'stock.required' => 'El campo stock es requerido',
+                'stock.numeric' => 'El campo stock es numérico',
+            ]);
+        
+            if($this->family == 'Conectores'){
+                $this->validate([
+                    'terminal' => 'nullable',
+                    'seal' => 'nullable',
+                    'number_of_ways' => 'numeric|integer|digits:2|required',
+                    'type' => 'required',
+                    'connector' =>'nullable'
+                ], [
+                    'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
+                    'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
+                    'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de dos cifras',
+                    'number_of_ways.required' => 'El campo cantidad de vías es requerido',
+                    'type.required' => 'El campo tipo es requerido',
+                ]);
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                
+                Connector::create([
+                    'material_id' => $this->material->id,
+                    'terminal_id' => $this->terminal,
+                    'seal_id' => $this->seal,
+                    'number_of_ways' => $this->number_of_ways,
+                    'type' => $this->type,
+                    'connector_id' => $this->connector,
+                ]);
+            
+                $this->material = $this->material->id;
+            }elseif($this->family == 'Terminales'){
+                $this->validate([
+                    'size' => 'numeric|required',
+                    'minimum_section' => 'numeric|nullable',
+                    'maximum_section' => 'numeric|nullable',
+                ], [
+                    'size.numeric' => 'El campo tamaño es numérico',
+                    'size.required' => 'El campo tamaño es requerido',
+                    'minimum_section.numeric' => 'El campo sección mínima es numérico',
+                    'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                ]);
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                Terminal::create([
+                    'material_id' => $this->material->id,
+                    'size' => $this->size,
+                    'minimum_section' => $this->minimum_section,
+                    'maximum_section' => $this->maximum_section,
+                ]);
+                
+                $this->material = $this->material->id;
+            }elseif($this->family == 'Cables'){
+            
+                $this->validate([
+                    'size' => 'numeric|required',
+                    'minimum_section' => 'numeric|nullable',
+                    'maximum_section' => 'numeric|nullable',
+                ],[
+                    'size.numeric' => 'El campo tamaño es numérico',
+                    'size.required' => 'El campo tamaño es requerido',
+                    'minimum_section.numeric' => 'El campo sección mínima es numérico',
+                    'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                ]);
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                Cable::create([
+                    'material_id' => $this->material->id,
+                    'size' => $this->size,
+                    'minimum_section' => $this->minimum_section,
+                    'maximum_section' => $this->maximum_section,
+                ]);
+            
+                $this->material = $this->material->id;
+            }else{
+                $this->material=Material::create([
+                    'code' => $this->code,
+                    'name' => $this->name_material,
+                    'family' => $this->family,
+                    'color' => $this->color,
+                    'line_id'=>$this->line,
+                    'usage_id'=>$this->usage,
+                    'replace_id'=>$this->replace,
+                    'stock_min'=>$this->stock_min,
+                    'stock' => $this->stock,
+                ]);
+                Seal::create([
+                    'material_id' => $this->material->id,
+                ]);
+                $this->material = $this->material->id;
+        }
+    }else{
+        $this->validar= $this->validate([
+            'material' => 'required|numeric',
+        ], [
+            'material.required' => 'Seleccione una opción para el campo de material',
+            'material.numeric' => 'Seleccione una opción para el campo de material',
+        ]);
+    }
+
         $provider =Provider::find($this->id_provider);
         $material_up =ProviderPrice::find($this->id_provider_price);
         $material_up->amount=$this->amount; 
@@ -287,7 +659,17 @@ class Providers extends Component
     }
     public function backmat(){
         $this->funcion="0";
+        $this->div=null;
+        $this->addMaterial = false;
         $this->explora='activo';   
     }
-
+    public function addMaterial(){
+        $this->addMaterial = true;
+    }
+    public function con(){
+        $this->div=$this->family;
+        #dd($this->div);
+        $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->get();
+        
+   }
 }
