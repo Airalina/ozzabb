@@ -46,7 +46,6 @@
                    
                   </tbody>
                 </table>
-                {{$revision}}
               </div>
               <!-- /.card-body -->
             </div>
