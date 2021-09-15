@@ -53,11 +53,11 @@
                 <td>{{ $material->stock_max }} </td>
                 <td>{{ $material->stock }} </td>
                 <td>
-                    @if (auth()->user()->can('updateprovider', auth()->user()))
+                    @if (auth()->user()->can('updatematerial', auth()->user()))
                         <button wire:click="update({{ $material->id }})" type="button"
                             class="btn btn-primary btn-sm">Actualizar</button>
                     @endif
-                    @if (auth()->user()->can('deleteprovider', auth()->user()))
+                    @if (auth()->user()->can('deletematerial', auth()->user()))
                         <button wire:click="destruir({{ $material->id }})" type="button"
                             class="btn btn-danger btn-sm">Borrar</button>
                     @endif
@@ -88,7 +88,7 @@
             <div class="card-header">
                 <h3 class="card-title">Lista de precios del material</h3>
                 <div class="card-tools">
-                    @if (auth()->user()->can('storeprovider', auth()->user()))
+                    @if (auth()->user()->can('storematerial', auth()->user()))
                         <div>
                             <button wire:click="agregamat({{ $material->id }})" type="button"
                                 class="btn btn-info">Agregar Precio</button>
@@ -120,7 +120,7 @@
                                 <td>{{ $provider_price->created_at->format('d/m/Y') }}</td>
                                 <td>{{ $provider_price->usd_price }}</td>
 
-                                @if (auth()->user()->can('deleteprovider', auth()->user()))
+                                @if (auth()->user()->can('updatematerial', auth()->user()))
                                     <td><button wire:click="updatemat({{ $provider_price->id }})" type="button"
                                             class="btn btn-success btn-sm">Actualizar</button></td>
                                 @endif
