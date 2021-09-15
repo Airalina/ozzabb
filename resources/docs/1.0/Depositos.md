@@ -19,13 +19,15 @@ Un depósito puede ser temporal o permanente y debo poder darle de baja, siempre
 
 Un depósito puede almacenar objetos de distinto tipo.
 
-Para registrar el ingreso de Materiales a un depósito se debe confeccionar una Orden de Ingreso de Materiales.
+Para registrar el ingreso de Materiales a un depósito se debe confeccionar una Orden de Ingreso de Materiales. Las ordenes de ingreso de materiales se describen en otro documento.
 
-Para registrar un ingreso de productos ensamblados o finales se realizará la modificación del registro de producto en el depósito correspondiente cuando se realice una carga de nuevo productos terminados.
+Los Materiales se ingresan a depósito por presentación, es decir por paquete. Se guarda la cantidad de paquetes de cierto tamaño de unidades que tenemos en el depósito. por ej. si tenemos 12000 conectores de tipo X en bolsas de 3000 unidades en el depósito Y, entonces en Código de material dirá X, Presentación dirá 3000 y en cantidad de unidades 4. Esto sirve para poder contestar a preguntas del estilo. ¿Cuántas bolsas de 3000 conectores tipo X tenemos en un depósito Y?
 
-Los productos semi-ensamblados se registrar por cantidad, de forma similar a las de los materiales, pero los productos terminados (instalaciones) se registran con número de serie y nro. de pedido al que pertenecen.
+Si un material no viene en empaques, por ejemplo los cables o se ingresan ensamblados ambos se anotan con Presentación = 1. De esta manera la fórmula (Presentación * [Cantidad de unidades]) nos dará el total de unidades que se han almacenado de un material o ensamblado.
 
-Para cada depósito debo poder ver la lista de materiales, productos y subproductos que están almacenados en él.
+Los productos terminados (instalaciones) se registran de manera diferente, en vez de anotar una presentación y una cantidad de unidades, cada mazo se anotará con cantidad 1 y su nro. de serie de serie y nro. de pedido al que pertenecen. Esto nos permite hacer envíos a los clientes de manera más sencilla al tener la información del pedido.
+
+Para cada depósito debo poder ver la lista de materiales, productos terminados y ensamblados que están almacenados en él.
 
 Debo poder ver una lista de los depósitos registrados en el sistema y explorar sus existencias. También debo poder realizar ingresos y egresos de objetos desde el formulario de administración de un depósito.
 
@@ -42,7 +44,8 @@ Para un depósito debo poder registrar los siguientes datos:
 | Ubicación | Descripción de la ubicación de lugar de almacenamiento. | Sí |
 | Estado | Habilitado, Lleno, Deshabilitado. | Sí: Habilitado |
 | Fecha | Fecha de Creación del depósito. | Sí |
-| Propósito | Descripción breve de qué se pretende almacenar mayormente. | No |
+| Descripción | Descripción breve de qué se pretende almacenar mayormente. | No |
+
 
 <a name='detalle-de-objetos-almacenados'></a>
 
@@ -61,17 +64,19 @@ El ingreso de materiales a un depósito se registra mediante la confección de u
 El ingreso de Materiales puede darse por dos razones: 1) Cuando llega un envío con pedidos de clientes. 2) Cuando se registra un ingreso para corregir datos de stock.
 
 <a name='detalle-de-ensamblados-almacenados'></a>
+
 ### Detalle de Ensamblados almacenados
 
 Para registrar productos ensamblados se registrarán los siguientes datos:
 
 | Dato | Descripción | Requerido |
 | :--  | :------     | :--:  |
-| Código | De ensamblado. Es el código creado al crear un producto ensamblado. | Sí |
+| Código | De ensamblado. Es el código numérico secuencial asignado al crear un producto ensamblado. | Sí |
 | Cantidad | Cantidad de unidades del objeto. Siempre mayor de 0. | Sí |
 | Fecha ingreso | Fecha del último ingreso de material al depósito | Sí |
 
 <a name='detalle-de-instalaciones-almacenadas'></a>
+
 ### Detalle de Instalaciones almacenadas
 
 Para registrar productos terminados en un depósito se registrarán los siguientes datos:
@@ -80,7 +85,7 @@ Para registrar productos terminados en un depósito se registrarán los siguient
 | :--  | :------     | :--:  |
 | Código | De instalación. | Sí |
 | Nro. Versión | Es el nro. de revisión de la instalación almacenada | Sí |
-| Número de Serio | Es el número otorgado en la ficha de producción al mazo. | Sí |
+| Número de Serie | Es el número otorgado en la ficha de producción al mazo. | Sí |
 | Cód. Pedido de Cliente | Es el código de pedido al que perteneces el mazo ingresado | Sí |
 | Fecha ingreso | Fecha del último ingreso de material al depósito | Sí |
 
