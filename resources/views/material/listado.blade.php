@@ -3,7 +3,7 @@
         <div class="card-header">
             <h3 class="card-title">Materiales Registrados</h3>
             <div class="card-tools">
-                @if (auth()->user()->can('storeprovider', auth()->user()))
+                @if (auth()->user()->can('storematerial', auth()->user()))
                     <div>
                         <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Material</button>
                     </div>
@@ -81,11 +81,11 @@
                             <td>
                                 <button type="button" wire:click="explorar({{ $material->id }})"
                                     class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
-                                @if (auth()->user()->can('update', auth()->user()))
+                                @if (auth()->user()->can('updatematerial', auth()->user()))
                                     <button wire:click="update({{ $material->id }})" type="button"
                                         class="btn btn-success btn-xs">Actualizar</button>
                                 @endif
-                                @if (auth()->user()->can('delete', auth()->user()))
+                                @if (auth()->user()->can('deletematerial', auth()->user()))
                                     <button wire:click="destruir({{ $material->id }})" type="button"
                                         class="btn btn-danger btn-xs">Borrar</button>
                                 @endif
