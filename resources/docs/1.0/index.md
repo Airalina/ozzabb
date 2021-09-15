@@ -12,3 +12,4 @@
   - [Ordenes de Egreso de Materiales]((/{{route}}/{{version}}/ordenes_de_engreso_de_materiales))
   - [Ordenes de Trabajo]((/{{route}}/{{version}}/ordenes_de_trabajo))
   - [DER](/{{route}}/{{version}}/der)
+  - [DER V2](/{{route}}/{{version}}/derv2) 
