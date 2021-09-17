@@ -24,7 +24,7 @@ class MaterialComponent extends Component
     protected $paginationTheme = 'bootstrap';
 
 
-    public $ma,$search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $materials, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider;
+    public $ma,$search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $materials, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex;
 
     public function render()
     {
@@ -98,7 +98,7 @@ class MaterialComponent extends Component
     }
     
     public function store(){
-
+       
         $this->validate([
             'code' => 'required',
             'name' => 'required',
@@ -174,15 +174,20 @@ class MaterialComponent extends Component
             }
             $this->material->save();
         }elseif($this->family == 'Terminales'){
+
+            $regex = '/^[\d]{0,4}(\.[\d]{1,1})?$/';
+
             $this->validate([
                 'size' => 'numeric|required',
-                'minimum_section' => 'numeric|nullable',
-                'maximum_section' => 'numeric|nullable',
+                'minimum_section' => 'numeric|nullable|regex: '.$regex,
+                'maximum_section' => 'numeric|nullable|regex: '.$regex,
             ], [
                 'size.numeric' => 'El campo tamaño es numérico',
                 'size.required' => 'El campo tamaño es requerido',
                 'minimum_section.numeric' => 'El campo sección mínima es numérico',
                 'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 1 posición decimal',
+                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 1 posición decimal',
             ]);
             $this->material=Material::create([
                 'code' => $this->code,
@@ -214,15 +219,19 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Cables'){
           
+            $regex = '/^[\d]{0,4}(\.[\d]{1,1})?$/';
+
             $this->validate([
                 'size' => 'numeric|required',
-                'minimum_section' => 'numeric|nullable',
-                'maximum_section' => 'numeric|nullable',
-            ],[
+                'minimum_section' => 'numeric|nullable|regex: '.$regex,
+                'maximum_section' => 'numeric|nullable|regex: '.$regex,
+            ], [
                 'size.numeric' => 'El campo tamaño es numérico',
                 'size.required' => 'El campo tamaño es requerido',
                 'minimum_section.numeric' => 'El campo sección mínima es numérico',
                 'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 1 posición decimal',
+                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 1 posición decimal',
             ]);
             $this->material=Material::create([
                 'code' => $this->code,
@@ -411,16 +420,21 @@ class MaterialComponent extends Component
             $connector_up->save();
             }
         }elseif($this->family == 'Terminales'){
+            $regex = '/^[\d]{0,4}(\.[\d]{1,1})?$/';
+
             $this->validate([
                 'size' => 'numeric|required',
-                'minimum_section' => 'numeric|nullable',
-                'maximum_section' => 'numeric|nullable',
+                'minimum_section' => 'numeric|nullable|regex: '.$regex,
+                'maximum_section' => 'numeric|nullable|regex: '.$regex,
             ], [
                 'size.numeric' => 'El campo tamaño es numérico',
                 'size.required' => 'El campo tamaño es requerido',
                 'minimum_section.numeric' => 'El campo sección mínima es numérico',
                 'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 1 posición decimal',
+                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 1 posición decimal',
             ]);
+
             $terminal_up =Terminal::find($this->term_id);
             if($terminal_up == null){
                 Terminal::create([
@@ -438,15 +452,19 @@ class MaterialComponent extends Component
             }
             
         }elseif($this->family == 'Cables'){
+            $regex = '/^[\d]{0,4}(\.[\d]{1,1})?$/';
+
             $this->validate([
                 'size' => 'numeric|required',
-                'minimum_section' => 'numeric|nullable',
-                'maximum_section' => 'numeric|nullable',
-            ],[
+                'minimum_section' => 'numeric|nullable|regex: '.$regex,
+                'maximum_section' => 'numeric|nullable|regex: '.$regex,
+            ], [
                 'size.numeric' => 'El campo tamaño es numérico',
                 'size.required' => 'El campo tamaño es requerido',
                 'minimum_section.numeric' => 'El campo sección mínima es numérico',
                 'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 1 posición decimal',
+                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 1 posición decimal',
             ]);
             $cable_up =Cable::find($this->term_id);
             if($cable_up == null){
