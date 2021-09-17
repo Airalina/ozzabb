@@ -17,8 +17,8 @@ class CreateCablesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('material_id');
             $table->float('size', 9, 1);
-            $table->float('minimum_section', 9, 2);
-            $table->float('maximum_section', 9, 2);
+            $table->float('minimum_section', 5, 1);
+            $table->float('maximum_section', 5,1);
             $table->timestamps();
         });
     }
