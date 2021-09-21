@@ -25,8 +25,12 @@
                             <input class="form-control form-control-sm" type="email" wire:model="location" placeholder="Ingrese ubicación del depósito">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Propósito</label>
-                            <input class="form-control form-control-sm" type="text" wire:model="purpose" placeholder="Ingrese propósito del depósito">
+                            <label for="exampleInputEmail1">Descripción</label>
+                            <textarea class="form-control form-control-sm" rows="3" wire:model="descriptionw" placeholder="Descripción ..."></textarea>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" wire:model="temporary" class="form-check-input" id="exampleCheck1"  checked="">
+                            <label for="exampleInputEmail1">Temporal ( Indica si el depósito es temporal "tildado" )</label>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Fecha de creación</label>

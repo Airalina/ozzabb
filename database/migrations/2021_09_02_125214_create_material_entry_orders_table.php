@@ -15,10 +15,10 @@ class CreateMaterialEntryOrdersTable extends Migration
     {
         Schema::create('material_entry_orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('entry_order_id');
-            $table->unsignedBigInteger('warehouse_id');
-            $table->unsignedBigInteger('buy_order_id');
-            $table->string('follow_number');
+            $table->unsignedBigInteger('buy_order_id')->nullable();
+            $table->string('follow_number')->nullable();
+            $table->string('origin')->nullable();
+            $table->string('reason')->nullable();
             $table->date('date');
             $table->time('hour');
             $table->timestamps();

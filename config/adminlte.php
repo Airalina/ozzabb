@@ -308,6 +308,10 @@ return [
                 ],
 
                 [
+                    'text' => 'Ordenes de entrada de materiales',
+                    'url'  => 'ordenes-de-entrada-de-materiales',
+                ],
+                [
                     'text' => 'Planillas de Compras',
                     'url'  => 'planilla_de_compras',
                 ],

@@ -1,0 +1,13 @@
+<div>
+    @switch($funcion)
+        @case("")
+            @include("orden-de-entrada-de-material.lista")
+            @break
+        @case("create")
+            @include("orden-de-entrada-de-material.create")
+            @break
+        @case("explora")
+            @include("orden-de-entrada-de-material.explora")
+            @break
+    @endswitch
+</div>

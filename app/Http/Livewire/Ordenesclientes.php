@@ -63,7 +63,7 @@ class Ordenesclientes extends Component
         $this->arp_price=$this->total*$this->usd;
         $this->validate([
             'usd_price' => 'required|numeric|min:0',
-            'arp_price' => 'required|numeric|min:0',
+            'arp_price' => 'required|numeric|min:0|max:1000000000',
             'customer_id' => 'required',
         ]);
         $this->date=Carbon::now();
@@ -297,7 +297,7 @@ class Ordenesclientes extends Component
         $this->arp_price=$this->newtotal*$this->usd;
         $this->validate([
             'usd_price' => 'required|numeric|min:0',
-            'arp_price' => 'required|numeric|min:0',
+            'arp_price' => 'required|numeric|min:0|max:100000000',
         ]);
         $this->order->usd_price=$this->usd_price;
         $this->order->arp_price=$this->arp_price;

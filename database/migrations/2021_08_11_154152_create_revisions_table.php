@@ -19,6 +19,7 @@ class CreateRevisionsTable extends Migration
             $table->unsignedBigInteger('number_version');
             $table->date('create_date');
             $table->string('reason', 300);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
