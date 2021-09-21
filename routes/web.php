@@ -51,4 +51,8 @@ Route::get('/depositos', function () {
     return view('depositos');
 })->middleware(['auth'])->name('depositos');
 
+Route::get('/planilla_de_compras', function () {
+    return view('pucharsing-sheets');
+})->middleware(['auth'])->name('pucharsing-sheets');
+
 require __DIR__.'/auth.php';

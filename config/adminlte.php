@@ -306,6 +306,11 @@ return [
                     'text' => 'Depósitos',
                     'url'  => 'depositos',
                 ],
+
+                [
+                    'text' => 'Planillas de Compras',
+                    'url'  => 'planilla_de_compras',
+                ],
             ],
         ],
     ],
