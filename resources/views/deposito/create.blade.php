@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-check">
                             <input type="checkbox" wire:model="temporary" class="form-check-input" id="exampleCheck1"  checked="">
-                            <label for="exampleInputEmail1">Temporal ( Indaca si el deposito es temporal "tildado" )</label>
+                            <label for="exampleInputEmail1">Temporal ( Indica si el depósito es temporal "tildado" )</label>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Fecha de creación</label>
