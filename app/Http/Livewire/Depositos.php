@@ -8,8 +8,10 @@ use App\Models\Material;
 use App\Models\DepositMaterial;
 use App\Models\DepositInstallation;
 use App\Models\Deposit;
+use App\Models\AssembledDetail;
 use App\Models\Assembled;
 use App\Models\Installation;
+use App\Models\MaterialEntryOrderDetail;
 use App\Models\MaterialEntryOrder;
 use App\Models\ExpendOrder;
 use App\Models\ExpendOrderDetail;
@@ -18,10 +20,10 @@ use Carbon\Carbon;
 
 class Depositos extends Component
 {
-    public $depositos, $deposito, $deposito_id, $name, $location, $state, $create_date, $amount, $purpose, $searchensamblados="", $searchdeposito="", $searchmateriales="", $searchinstallation="", $funcion="", $selector;
-    public $seleccion, $ingreso, $material_id, $materiales, $code, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id, $materialesdepo, $ensambladosdepo, $instalacionesdepo;
-    public $entry_order_id, $buy_order_id, $follow_number, $ordenesdepo, $egreso, $details=array(), $detail=array(), $id_depomaterial;
-    public $material_description, $material_code, $count=0, $ordenegreso, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination;
+    public $depositos, $deposito, $origen, $causa, $modo, $deposito_id, $name, $location, $state, $create_date, $amount, $searchensamblados="", $searchdeposito="", $searchmateriales="", $searchinstallation="", $funcion="", $selector;
+    public $seleccion, $ingreso, $material_id, $materiales, $code, $descriptionw, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id, $materialesdepo, $ensambladosdepo, $instalacionesdepo;
+    public $entry_order_id, $buy_order_id, $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
+    public $material_description, $material_code, $temporary, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation;
     public function render()
     {
         $this->ensamblados=Assembled::where('id','like','%'.$this->searchensamblados.'%')
@@ -36,20 +38,18 @@ class Depositos extends Component
             ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('line_id','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('usage_id','LIKE','%'.$this->searchmateriales.'%')
-            //->orWhere('replace','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
         $this->depositos=Warehouse::where('id','LIKE','%'.$this->searchdeposito.'%')
             ->orWhere('name','LIKE','%'.$this->searchdeposito.'%')
             ->orWhere('location','LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('state','Like','%'.$this->searchdeposito.'%')
+            ->orWhere('description','Like','%'.$this->searchdeposito.'%')
             ->orWhere('create_date', 'LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('purpose','LIKE','%'.$this->searchdeposito.'%')->get();
+            ->orWhere('temporary','LIKE','%'.$this->searchdeposito.'%')->get();
         $this->materialesdepo=DepositMaterial::where('is_material', true)->where('warehouse_id', $this->deposito_id)->get();
         $this->ensambladosdepo=DepositMaterial::where('is_material', false)->where('warehouse_id', $this->deposito_id)->get();
         $this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->get();
-        $this->ordenesdepo=MaterialEntryOrder::where('warehouse_id', $this->deposito_id)->get();
         return view('livewire.depositos');
         
     }
@@ -64,7 +64,7 @@ class Depositos extends Component
             $this->validate([
                 'name' => 'required|string|min:4|max:100',
                 'location' => 'required|string|min:4|max:300',
-                'purpose' => 'required|string|min:4|max:300',
+                'descriptionw' => 'string|min:4|max:300',
             ],
             [
                 'name.required' => 'El campo Nombre es requerido',
@@ -73,48 +73,60 @@ class Depositos extends Component
                 'location.required' => 'El campo Ubicación es requerido',
                 'location.min' => 'El campo Ubicación tiene como minimo 4 caracteres',
                 'location.max' => 'El campo Ubicación tiene como maximo 300 caracteres',
-                'purpose.required' => 'El campo Propósito es requerido',
-                'purpose.min' => 'El campo Propósito tiene como minimo 4 caracteres',
-                'purpose.max' => 'El campo Propósito tiene como maximo 300 caracteres',
+                'descriptionw.min' => 'El campo Descripción tiene como minimo 4 caracteres',
+                'descriptionw.max' => 'El campo Descripción tiene como maximo 300 caracteres',
             ]);
             $this->deposito=new Warehouse;
             $this->deposito->name=$this->name;
             $this->deposito->location=$this->location;
             $this->deposito->state=1;
             $this->deposito->create_date=$this->create_date;
-            $this->deposito->purpose=$this->purpose;
+            $this->deposito->description=$this->descriptionw;
+            if($this->temporary==null){
+                $this->temporary=false;
+            }
+            $this->deposito->temporary=$this->temporary;
             $this->deposito->save();
             $this->volver();
         }  
         elseif($this->funcion=="ingreso"){
             if($this->seleccion=="Material"){
-                $this->validate([
-                    'amount' => 'required|integer|min:1|max:1000000',
-                ],[
-                    'amount.required' => 'El campo Cantidad es requerido',
-                    'amount.integer' => 'El campo Cantidad es entero',
-                    'amount.min' => 'El campo Cantidad tiene como mínimo 1(uno)',
-                    'amount.max' => 'El campo Cantidad tiene como maximo 1000000(un millon)',
-                ]);
-                $this->ingreso=DepositMaterial::where('material_id', $this->material_id)->where('is_material',true)->where('warehouse_id', $this->deposito_id)->get();
-                if($this->ingreso->count()==0){
-                    $this->ingreso=new DepositMaterial;
-                    $this->ingreso->warehouse_id=$this->deposito_id;
-                    $this->ingreso->material_id=$this->material_id;
-                    $this->ingreso->amount=$this->amount;
-                    $this->ingreso->date_change=Carbon::now();
-                    $this->ingreso->is_material=true;
-                    $this->ingreso->save();
-                    $this->funcion="explora";
-                    $this->seleccion="";
-                }else{
-                    foreach($this->ingreso as $ing){
-                        $ing->amount=($ing->amount+$this->amount);
-                        $ing->date_change=Carbon::now();
-                        $ing->save();
-                        $this->funcion="explora";
-                        $this->seleccion="";
-                    }
+                if($this->modo=="Sin orden de compra"){
+                    $this->orden=new MaterialEntryOrder;
+                    $this->orden->date=$this->date;
+                    $this->orden->hour=$this->hour;
+                    $this->orden->origin=$this->origen;
+                    $this->orden->reason=$this->causa;
+                    $this->orden->save();
+                    foreach($this->details as $detail){
+                        $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$detail[6])->get();
+                        if($this->ingreso->count()==0){
+                            $this->depositm=new DepositMaterial;
+                            $this->depositm->material_id=$detail[4];
+                            $this->depositm->warehouse_id=$detail[6];
+                            $this->depositm->presentation=$detail[5];
+                            $this->depositm->amount=$detail[2];
+                            $this->depositm->date_change=$this->date;
+                            $this->depositm->is_material=1;
+                            $this->depositm->save();
+                        }else{
+                            foreach($this->ingreso as $ing){
+                                $ing->amount=($ing->amount+$detail[2]);
+                                $ing->date_change=Carbon::now();
+                                $ing->save();
+                                $this->funcion="explora";
+                                $this->seleccion="";
+                            }
+                        }
+                        $this->detailem=new MaterialEntryOrderDetail;
+                        $this->detailem->entry_order_id=$this->orden->id;
+                        $this->detailem->material_code=$detail[0];
+                        $this->detailem->material_description=$detail[1];
+                        $this->detailem->warehouse_id=$detail[6];
+                        $this->detailem->presentation=$detail[5];
+                        $this->detailem->amount_received=$detail[2];
+                        $this->detailem->save();
+                    }      
                 }
                 $this->amount=0;
                 $this->select=false;
@@ -135,6 +147,7 @@ class Depositos extends Component
                     $this->ingreso->amount=$this->amount;
                     $this->ingreso->date_change=Carbon::now();
                     $this->ingreso->is_material=false;
+                    $this->ingreso->presentation=1;
                     $this->ingreso->save();
                     $this->funcion="explora";
                     $this->seleccion="";
@@ -175,35 +188,9 @@ class Depositos extends Component
                     $this->ingreso->client_order_id=$this->client_order_id;
                     $this->ingreso->date_admission=Carbon::now();
                     $this->ingreso->save();
+                    $this->description=null;
                     $this->funcion="explora";
                     $this->seleccion="";              
-            }elseif($this->seleccion=="Orden de ingreso de materiales"){
-                $this->validate([
-                    'follow_number' => 'required|string|min:4|max:100',
-                    'entry_order_id' => 'required|numeric|min:0|max:10000000',
-                    'buy_order_id' => 'required|numeric|min:0|max:10000000',
-                ],['follow_number.required' => 'El campo N° de remito es requerido',
-                    'follow_number.min' => 'El campo N° de remito tiene como minimo 4 caracteres',
-                    'follow_number.max' => 'El campo N° de remito tiene como maximo 100 caracteres',
-                    'entry_order_id.required' => 'El campo Id orden de entrada es requerido',
-                    'entry_order_id.numeric' => 'El campo Id orden de entrada es numerico',
-                    'entry_order_id.min' => 'El campo Id orden de entrada tiene como mínimo 0(cero)',
-                    'entry_order_id.max' => 'El campo Id orden de entradae como maximo 10000000(diez millon)',
-                    'buy_order_id.required' => 'El campo Id orden de compra es requerido',
-                    'buy_order_id.numeric' => 'El campo Id orden de compra es numerico',
-                    'buy_order_id.min' => 'El campo Id orden de compra tiene como mínimo 0(cero)',
-                    'buy_order_idn.max' => 'El campo Id orden de compra tiene como maximo 10000000(diez millon)',
-                ]);
-                $this->ingreso=new MaterialEntryOrder;
-                $this->ingreso->entry_order_id=$this->entry_order_id;
-                $this->ingreso->warehouse_id=$this->deposito_id;
-                $this->ingreso->buy_order_id=$this->buy_order_id;
-                $this->ingreso->follow_number=$this->follow_number;
-                $this->ingreso->date=Carbon::now();
-                $this->ingreso->hour=Carbon::now()->format('H:i:s');
-                $this->ingreso->save();
-                $this->funcion="explora";
-                $this->seleccion="";               
             }
         }elseif($this->funcion=="egreso"){
             $this->validate([
@@ -225,9 +212,11 @@ class Depositos extends Component
                 $this->ordenegresodetail=new ExpendOrderDetail;
                 $this->ordenegresodetail->expend_order_id=$this->ordenegreso->id;
                 $this->ordenegresodetail->material_id=$detail[0];
+                $this->ordenegresodetail->description=$detail[7];
                 $this->ordenegresodetail->warehouse_id=$this->deposito_id;
                 $this->ordenegresodetail->amount=$detail[2];
                 $this->ordenegresodetail->destination=$detail[8];
+                $this->ordenegresodetail->presentation=$detail[9];
                 $this->ordenegresodetail->save();
                 $this->egreso=DepositMaterial::find($detail[5]);
                 $this->egreso->amount=$this->egreso->amount-$detail[2];
@@ -243,7 +232,28 @@ class Depositos extends Component
             $this->egreso=0;
             $this->destination=null;
             $this->funcion="explora"; 
-        }
+        }elseif($this->funcion=="createassembled"){
+            $this->validate([
+                'description' => 'required|string|min:5|max:200'
+            ],[
+                'description.required' => 'El campo Descripción es requerido',
+                'description.min' => 'El campo Descripción tiene como mínimo 5 caracteres',
+                'description.max' => 'El campo Descripción tiene como máximo 200 caracteres'
+            ]);
+            $this->assembled=new Assembled;
+            $this->assembled->description=$this->description;
+            $this->assembled->create_date=$this->date;
+            $this->assembled->save();
+            foreach($this->details as $detail){
+                $this->assembleddetail=new AssembledDetail;
+                $this->assembleddetail->assembled_id=$this->assembled->id;
+                $this->assembleddetail->material_id=$detail[0];
+                $this->assembleddetail->amount=$detail[2];
+                $this->assembleddetail->save();
+                }
+            }
+        
+
         $this->select=false;
     }
 
@@ -255,7 +265,7 @@ class Depositos extends Component
         $this->location=$deposito->location;
         $this->state=$deposito->state;
         $this->create_date=$deposito->create_date;
-        $this->purpose=$deposito->purpose;
+        $this->descriptionw=$deposito->description;
     }
 
     public function addmaterial(Material $material)
@@ -278,6 +288,30 @@ class Depositos extends Component
         $this->amount=null;
     }
 
+    public function addmateriald(Material $material)
+    {
+        foreach($this->details as $detail){
+            if($detail[0]==$material->code && $detail[5]==$this->presentation && $detail[6]==$this->deposito_id){
+                $this->downmateriald($detail[3]);
+            }        
+        }  
+        $this->detail[0]=$material->code;
+        $this->detail[1]=$material->description;
+        $this->detail[2]=$this->amount;
+        $this->detail[3]=$this->count;
+        $this->detail[4]=$material->id;
+        $this->detail[5]=$this->presentation;
+        $this->detail[6]=$this->deposito_id;
+        $this->details[]=$this->detail;
+        $this->count=$this->count+1;
+        $this->amount=0;
+        $this->presentation=0;
+        $this->searchmateriales="";
+    }
+    public function downmateriald($orden)
+    {
+        unset($this->details[$orden]);
+    }
     public function retiromaterial(DepositMaterial $material)
     {
         $this->select=true;
@@ -287,6 +321,7 @@ class Depositos extends Component
         $this->material_id=$material->material_id;
         $this->amount=$material->amount;
         $this->id_depomaterial=$material->id;
+        $this->presentation=$material->presentation;
         
     }
 
@@ -324,6 +359,7 @@ class Depositos extends Component
             $this->detail[6]=$this->material_code;
             $this->detail[7]=$this->material_description;
             $this->detail[8]=$this->destination;
+            $this->detail[9]=$this->presentation;
             $this->details[]=$this->detail;
             $this->egreso=0;
             $this->count=$this->count+1;
@@ -415,6 +451,41 @@ class Depositos extends Component
         if( ($this->materialesdepo->count()==0) && ($this->ensambladosdepo->count()==0)  && ($this->instalacionesdepo->count()==0) && ($this->ordenesdepo->count()==0)){
             $deposito->delete();
         }
+    }
+
+    public function createassembled()
+    {
+        $this->funcion="createassembled";
+    }
+
+    public function addmateriall(Material $material)
+    {
+        $this->validate([
+            'amount'=>'required|integer|min:1|max:1000000'
+        ], [
+            'amount.required'=>'El campo Cantidad es requerido',
+            'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
+            'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
+            'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
+        ]);
+        foreach($this->details as $detail){
+            if($detail[0]==$material->code){
+                $this->downmaterial($detail[3]);
+            }        
+        }
+        $this->detail[0]=$material->code;
+        $this->detail[1]=$material->description;
+        $this->detail[2]=$this->amount;
+        $this->detail[3]=$this->count;
+        $this->detail[4]=$material->id;
+        $this->details[]=$this->detail;
+        $this->count=$this->count+1;
+        $this->amount=0;
+    }
+
+    public function downmateriall($orden)
+    {
+        unset($this->details[$orden]);
     }
 
     public function volver()

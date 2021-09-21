@@ -51,4 +51,8 @@ Route::get('/depositos', function () {
     return view('depositos');
 })->middleware(['auth'])->name('depositos');
 
+Route::get('/ordenes-de-entrada-de-materiales', function () {
+    return view('ordenes-de-entrada-de-materiales');
+})->middleware(['auth'])->name('ordenes-de-entrada-de-materiales');
+
 require __DIR__.'/auth.php';

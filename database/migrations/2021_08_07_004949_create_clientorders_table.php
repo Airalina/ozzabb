@@ -25,7 +25,7 @@ class CreateClientordersTable extends Migration
             $table->unsignedBigInteger('order_state')->nullable();
             $table->unsignedBigInteger('order_job')->nullable();
             $table->float('usd_price')->nullable();
-            $table->float('arp_price')->nullable();
+            $table->double('arp_price')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

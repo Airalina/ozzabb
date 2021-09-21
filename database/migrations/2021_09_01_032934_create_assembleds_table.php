@@ -16,6 +16,7 @@ class CreateAssembledsTable extends Migration
         Schema::create('assembleds', function (Blueprint $table) {
             $table->id();
             $table->string("description", 200);
+            $table->date("create_date");
             $table->timestamps();
             $table->softDeletes();
         });

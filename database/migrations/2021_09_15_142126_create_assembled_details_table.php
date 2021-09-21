@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExpendOrderDetailsTable extends Migration
+class CreateAssembledDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateExpendOrderDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('expend_order_details', function (Blueprint $table) {
+        Schema::create('assembled_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('expend_order_id');
+            $table->unsignedBigInteger('assembled_id');
             $table->unsignedBigInteger('material_id');
-            $table->string('description');
-            $table->unsignedBigInteger('warehouse_id');
-            $table->integer('presentation');
             $table->integer('amount');
-            $table->string('destination', 300);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -34,6 +29,6 @@ class CreateExpendOrderDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expend_order_details');
+        Schema::dropIfExists('assembled_details');
     }
 }

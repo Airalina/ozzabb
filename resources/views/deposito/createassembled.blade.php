@@ -14,38 +14,19 @@
                             </div>
                 @endif
                     <div class="card-body">
-                        <h5>Datos de Instalación</h5>
+                        <h5>Datos de Ensamblado</h5>
                         <br>    
-                        <div class="form-group">
-                            <label>Código</label>
-                            <input class="form-control form-control-sm" type="text" wire:model="code" placeholder="Ingrese código de instalación">
-                        </div>
                         <div class="form-group">
                             <label>Descripción</label>
                             <textarea class="form-control form-control-sm" rows="3" wire:model="description" placeholder="Descripción ..."></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Precio U$D</label>
-                            <input class="form-control form-control-sm" type="text" wire:model="usd_price" placeholder="Ingrese precio en dolares (para decimales usar 'punto(.)')">
-                        </div>
-                        <div class="form-group">
                             <label>Fecha de Ingreso</label>
                             <div class="row">
                                 <div class="col-4">
-                                    <input type="date" wire:model="date_admission" class="form-control form-control-sm" placeholder="dd/mm/AAAA" >
+                                    <input type="date" wire:model="date" class="form-control form-control-sm" placeholder="dd/mm/AAAA" >
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Plano de instalación</label>
-                            <div class="row">
-                                <div class="col-6">
-                                  <input type="file" wire:model="photo">
-                                </div>
-                            </div>
-                            @if ($photo)
-                              <img src="{{ $photo->temporaryUrl() }}">
-                             @endif
                         </div>
                     </div>
                     <div class="row">
@@ -77,7 +58,7 @@
                                 <td style="text-align: center">{{ $material->code }}</td>
                                 <td style="text-align: center">{{ $material->description }}</td>
                                 <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                <td><button type="button"  wire:click="addmateriall({{ $material->id }})" class="btn btn-success btn-xs">Agregar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -115,7 +96,7 @@
                                 <td style="text-align: center">{{ $detail[0] }}</td>
                                 <td style="text-align: center">{{ $detail[1] }}</td>
                                 <td style="text-align: center">{{ $detail[2] }}</td>
-                                <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
+                                <td style="text-align: center"><button type="button"  wire:click="downmateriall({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
                               </tr>
                               @endforeach
                             </tbody>

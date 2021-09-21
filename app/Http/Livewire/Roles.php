@@ -77,7 +77,11 @@ class Roles extends Component
 
     public function destruir(Role $rol)
     {
-        $rol->delete();
+        if($rol->nombre!="Gerente"){
+            $rol->delete();
+        }elseif($rol->nombre!="Administrador"){
+            $rol->delete();
+        }     
     }
 
     public function funcion()

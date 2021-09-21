@@ -17,6 +17,7 @@ class CreateDepositMaterialsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('material_id');
+            $table->integer('presentation');
             $table->integer('amount');
             $table->date('date_change');
             $table->boolean('is_material');
