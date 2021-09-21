@@ -16,10 +16,11 @@ class CreateWarehousesTable extends Migration
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('location',200);
-            $table->integer('state');
+            $table->string('description',300);
+            $table->string('location');
             $table->date('create_date');
-            $table->string('purpose', 200);
+            $table->integer('state');
+            $table->boolean('temporary')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

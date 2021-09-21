@@ -151,7 +151,6 @@ class Usuarios extends Component
 
     public function quitarol(Role $rol)
     {   
-        
         $rol->users()->detach($this->idus);                      
     }
 }

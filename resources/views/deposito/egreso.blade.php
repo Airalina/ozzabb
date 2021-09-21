@@ -2,27 +2,36 @@
     <div class="card-header">
         <h6 class="card-title">Deposito: {{ $name }} </h6><br>
         <h6 class="card-title">Ubicación: {{ $location }} </h6><br>
-        <h6 class="card-title">Propósito: {{ $purpose}} </h6><br>
+        <h6 class="card-title">Descripción: {{ $descriptionw}} </h6><br>
         <h6 class="card-title">Fecha de creación: {{ date('d-m-Y', strtotime($create_date)) }} </h6><br>
         <br>
         <h6 class="card-title">Materiales en el deposito: </h6><br>
     </div>
     <div class="card card-primary card-tabs">
-    @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-    @endif
+      @if ($errors->any())
+                              <div class="alert alert-danger">
+                                  <ul>
+                                      @foreach ($errors->all() as $error)
+                                          <li>{{ $error }}</li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+      @endif
             <div class="card-body">
                             <h5>Datos de egreso</h5>
                             <br>    
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Estado</label>
-                                <input class="form-control form-control-sm" type="text" wire:model="sta" placeholder="Ingrese nombre del deposito">
+                                <div class="row">
+                                  <div class="col-4">
+                                    <select class="form-control select2 select2-hidden-accessible" wire:model="sta" style="width: 100%;">
+                                        <option selected="selected" ></option>
+                                        <option >Nuevo</option>
+                                        <option >Cerrada</option>
+                                        <option >Cancelada</option>
+                                    </select>
+                                 </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Usuario que retira</label>
@@ -44,6 +53,7 @@
                                 <th style="text-align: center">Id</th>
                                 <th style="text-align: center">Código</th>
                                 <th style="text-align: center">Descripción</th>
+                                <th style="text-align: center">Presentación</th>
                                 <th style="text-align: center">Cantidad en deposito</th>
                                 <th></th>
                               </tr>
@@ -54,6 +64,7 @@
                                 <td style="text-align: center">{{ $material->material_id }}</td>
                                 <td style="text-align: center">{{ $material->materials->code }}</td>
                                 <td style="text-align: center">{{ $material->materials->description }}</td>
+                                <td style="text-align: center">{{ $material->presentation }}</td>
                                 <td style="text-align: center">{{ $material->amount }}</td>
                                 <td><button type="button"  wire:click="retiromaterial({{ $material->id }})" class="btn btn-success btn-xs">Retirar</button></td>
                               </tr>

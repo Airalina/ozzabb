@@ -306,6 +306,11 @@ return [
                     'text' => 'Depósitos',
                     'url'  => 'depositos',
                 ],
+
+                [
+                    'text' => 'Ordenes de entrada de materiales',
+                    'url'  => 'ordenes-de-entrada-de-materiales',
+                ],
             ],
         ],
     ],

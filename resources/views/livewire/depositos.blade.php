@@ -20,5 +20,8 @@
     @case("retiros")
         @include("deposito.retiros")
         @break
+    @case("createassembled")
+        @include("deposito.createassembled")
+        @break
 @endswitch
 </div>

@@ -1,14 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', 'Instalaciones')
+@section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Administracion de Instalaciones</h1>
+    <h1>Ordenes de entrada de materiales</h1>
 @stop
 
 @section('content')
     @livewireStyles
-        @livewire('instalaciones')
+        @livewire('orden-de-entrada-de-materiales')
     @livewireScripts
 @stop
 
