@@ -267,6 +267,17 @@ return [
             'url'  => 'pedidos',
             'icon' => 'fas fa-fw fa-users',
         ],
+        ['header' => 'MATERIALES'],
+        [
+            'text' => 'Materiales',
+            'url'  => 'materiales',
+            'icon' => 'fas fa-fw fa-box',
+        ],
+        [
+            'text' => 'Planillas de Compras',
+            'url'  => 'planilla-de-compras',
+            'icon' => 'fas fa-clipboard-list',
+        ],
         ['header' => 'Cuenta'],
         [
             'text' => 'profile',
@@ -288,11 +299,6 @@ return [
                 ],
 
                 [
-                    'text' => 'Materiales',
-                    'url'  => 'materiales',
-                ],
-
-                [
                     'text' => 'Proveedores',
                     'url'  => 'proveedores',
                 ],
@@ -310,10 +316,6 @@ return [
                 [
                     'text' => 'Ordenes de entrada de materiales',
                     'url'  => 'ordenes-de-entrada-de-materiales',
-                ],
-                [
-                    'text' => 'Planillas de Compras',
-                    'url'  => 'planilla_de_compras',
                 ],
             ],
         ],
