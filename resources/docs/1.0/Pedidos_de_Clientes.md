@@ -61,11 +61,12 @@ Es la lista de los Productos que el cliente solicitó en su pedido.
 
 La lista de productos debe tener los siguientes datos:
 
-| Dato                   |  Descripción                                         |
-| :-----                 | :-------                                             |
-| Código de Producto     | Es el código interno de la empresa para el producto. |
-| Cantidad               | 
-| Precio Unitario en U$D |
+| Dato                   |  Descripción                                                    |
+| :-----                 | :-------                                                        |
+| Código de Producto     | Es el código interno de la empresa para el producto.            |
+| Código de Versión      | Es el nro. de versión del producto seleccionado.                |
+| Cantidad               | Cantidad de unidades del producto que se pidieron.              |
+| Precio Subtotal en U$D | El subtotal de la cantidad de productos por el precio unitario. |
 
 
 <a name='domicilio-de-entrega'></a>
