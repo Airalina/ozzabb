@@ -267,6 +267,17 @@ return [
             'url'  => 'pedidos',
             'icon' => 'fas fa-fw fa-users',
         ],
+        ['header' => 'MATERIALES'],
+        [
+            'text' => 'Materiales',
+            'url'  => 'materiales',
+            'icon' => 'fas fa-fw fa-box',
+        ],
+        [
+            'text' => 'Planillas de Compras',
+            'url'  => 'planilla-de-compras',
+            'icon' => 'fas fa-clipboard-list',
+        ],
         ['header' => 'Cuenta'],
         [
             'text' => 'profile',
@@ -285,11 +296,6 @@ return [
                 [
                     'text' => 'Usuarios y Roles',
                     'url'  => 'admin',
-                ],
-
-                [
-                    'text' => 'Materiales',
-                    'url'  => 'materiales',
                 ],
 
                 [
