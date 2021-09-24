@@ -9,10 +9,6 @@ use Livewire\Component;
 class Roles extends Component
 {
     public $search, $rol, $idrol,$funcion="", $nombre, $permisos, $funcionpr;
-    public $rules = [
-        'nombre'=>'required|string|min:3',
-    ];
-
     public function render()
     {
         $this->permisos=Permission::where('role_id',$this->idrol)->get();
@@ -26,7 +22,12 @@ class Roles extends Component
 
     public function store()
     {
-        $this->validate();
+        $this->validate([
+            'nombre'=>'required|string|min:3',
+        ],[
+            'nombre.required' => 'El campo "Nombre" es requerido',
+            'nombre.min' => 'El campo "Nombre" tiene como mínimo 3(tres) caracteres'
+        ]);
         Role::create([
             'nombre' => $this->nombre,
             'activo' => 1,
@@ -68,11 +69,13 @@ class Roles extends Component
         }
         
         $this->funcion="";
+        $this->resetValidation();
     }
 
     public function volver(){
         $this->funcion="";
         $this->funcionpr="";
+        $this->resetValidation();
     }
 
     public function destruir(Role $rol)
@@ -177,5 +180,6 @@ class Roles extends Component
     public function endfunctions()
     {
         $this->funcion="";
+        $this->resetValidation();
     }
 }
