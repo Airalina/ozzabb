@@ -34,10 +34,26 @@ class Usuarios extends Component
             'name' => 'required|string|min:5',
             'email' => 'required|email',
             'nombre_y_apellido' => 'required|string|min:10',
-            'domicilio' => 'required|min:6',
-            'dni' => 'required|numeric|min:1000000',
+            'domicilio' => 'required|string|min:6',
+            'dni' => 'required|numeric|min:1000000|max:100000000',
             'telefono' => 'required|numeric|min:1000000000',
             'password' => 'required|min:8'
+        ],[
+            'name.required' => 'El campo "Nombre" es requerido',
+            'name.min' => 'El campo "Nombre" debe tener como mínimo 5(cinco) caracteres',
+            'email.required' => 'El campo "Email" es requerido ',
+            'email.email' => 'El email no es válido',
+            'nombre_y_apellido.required' => 'El campo "Nombre y Apellido" es requerido',
+            'nombre_y_apellido.min' => 'El campo "Nombre y Apellido" debe tener como mínimo 10(diez) caracteres',
+            'domicilio.required' => 'El campo "Domicilio" es requerido',
+            'domicilio.min' => 'El campo "Domicilio" debe tener como mínimo 6(seis) caracteres',
+            'dni.required' => 'El campo "D.N.I" es requerido',
+            'dni.min' => 'El campo "D.N.I" está incompleto, verifique',
+            'dni.max' => 'El campo "D.N.I" tiene numeros de más, verifique',
+            'telefono.required' => 'El campo "Teléfono" es requerido',
+            'telefono.min' => 'El campo "Teléfono" está incompleto, verifique',
+            'password.required' => 'El campo "Contraseña" es requerido',
+            'password.min' => 'El campo "Contraseña" debe tener como mínimo 8(ocho) caracteres',
         ]);
         if (auth()->user()->cannot('store', auth()->user()))
         {
@@ -87,6 +103,7 @@ class Usuarios extends Component
     public function endfunctions()
     {
         $this->funcion="";
+        $this->resetValidation();
     }
 
     public function update(User $user)
@@ -108,8 +125,22 @@ class Usuarios extends Component
             'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$this->idu.''],
             'nombre_y_apellido' => 'required|string|min:10',
             'domicilio' => 'required|min:6',
-            'dni' => 'required|numeric|min:1000000',
+            'dni' => 'required|numeric|min:1000000|max:100000000',
             'telefono' => 'required|numeric|min:1000000000',
+        ],[
+            'name.required' => 'El campo "Nombre" es requerido',
+            'name.min' => 'El campo "Nombre" debe tener como mínimo 5(cinco) caracteres',
+            'email.required' => 'El campo "Email" es requerido ',
+            'email.email' => 'El email no es válido',
+            'nombre_y_apellido.required' => 'El campo "Nombre y Apellido" es requerido',
+            'nombre_y_apellido.min' => 'El campo "Nombre y Apellido" debe tener como mínimo 10(diez) caracteres',
+            'domicilio.required' => 'El campo "Domicilio" es requerido',
+            'domicilio.min' => 'El campo "Domicilio" debe tener como mínimo 6(seis) caracteres',
+            'dni.required' => 'El campo "D.N.I" es requerido',
+            'dni.min' => 'El campo "D.N.I" está incompleto, verifique',
+            'dni.max' => 'El campo "D.N.I" tiene numeros de más, verifique',
+            'telefono.required' => 'El campo "Teléfono" es requerido',
+            'telefono.min' => 'El campo "Teléfono" está incompleto, verifique',
         ]);
         
         $userup =User::find($this->idu);
@@ -120,11 +151,13 @@ class Usuarios extends Component
         $userup->email=$this->email;
         $userup->save();
         $this->funcion="";
+        $this->resetValidation();
     }
 
     public function volver(){
         $this->funcion="";
         $this->funcionru="";
+        $this->resetValidation();
     }
 
     public function rolusuario(User $user)

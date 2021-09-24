@@ -91,7 +91,23 @@ class Depositos extends Component
         }  
         elseif($this->funcion=="ingreso"){
             if($this->seleccion=="Material"){
-                if($this->modo=="Sin orden de compra"){
+                $this->validate([
+                    'date' => 'required',
+                    'hour' => 'required',
+                    'origen' => 'string|min:4|max:300',
+                    'causa' => 'string|min:4|max:300',
+                ],
+                [
+                    'date.required' => 'El campo Fecha es requerido',
+                    'hour.required' => 'El campo Hora es requerido',
+                    'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
+                    'origen.required' => 'El campo Origen es requerido',
+                    'origen.min' => 'El campo Origen tiene como minimo 4 caracteres',
+                    'origen.max' => 'El campo Origen tiene como maximo 300 caracteres',
+                    'causa.required' => 'El campo Origen es requerido',
+                    'causa.min' => 'El campo Origen tiene como minimo 4 caracteres',
+                    'causa.max' => 'El campo Origen tiene como maximo 300 caracteres',
+                ]);
                     $this->orden=new MaterialEntryOrder;
                     $this->orden->date=$this->date;
                     $this->orden->hour=$this->hour;
@@ -125,11 +141,16 @@ class Depositos extends Component
                         $this->detailem->warehouse_id=$detail[6];
                         $this->detailem->presentation=$detail[5];
                         $this->detailem->amount_received=$detail[2];
-                        $this->detailem->save();
-                    }      
+                        $this->detailem->save();      
                 }
                 $this->amount=0;
                 $this->select=false;
+                $this->origen=null;
+                $this->causa=null;
+                $this->date=null;
+                $this->hour=null;
+                $this->details=null;
+                $this->resetValidation();
             }elseif($this->seleccion=="Ensamblado"){
                 $this->validate([
                     'amount' => 'required|integer|min:1|max:1000000',
@@ -162,6 +183,7 @@ class Depositos extends Component
                 }
                 $this->amount=0;
                 $this->select=false;
+                $this->resetValidation();
             }elseif($this->seleccion=="Instalacion"){
                 $this->validate([
                     'serial_number' => 'required|string|min:4|max:100',
@@ -190,7 +212,8 @@ class Depositos extends Component
                     $this->ingreso->save();
                     $this->description=null;
                     $this->funcion="explora";
-                    $this->seleccion="";              
+                    $this->seleccion=""; 
+                    $this->resetValidation();             
             }
         }elseif($this->funcion=="egreso"){
             $this->validate([
@@ -231,7 +254,8 @@ class Depositos extends Component
             $this->user=null;
             $this->egreso=0;
             $this->destination=null;
-            $this->funcion="explora"; 
+            $this->funcion="explora";
+            $this->resetValidation(); 
         }elseif($this->funcion=="createassembled"){
             $this->validate([
                 'description' => 'required|string|min:5|max:200'

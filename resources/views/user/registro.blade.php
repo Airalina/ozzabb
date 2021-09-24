@@ -1,6 +1,15 @@
 
 <div class="col-md-6">
             <!-- general form elements -->
+			@if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
             <div class="card card-primary">
               <div class="card-header">
                 @if($funcion=="crear")<h3 class="card-title">Agregar Usuario</h3>@else<h3 class="card-title">Informacion sobre el usuario: {{$name}}</h3>@endif

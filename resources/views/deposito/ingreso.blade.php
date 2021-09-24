@@ -41,14 +41,6 @@
                         <h5>Datos de depósito</h5>
                         <br>    
                         <div class="form-group">
-                        <label>Modo de ingreso:</label>
-                                <select class="form-control select2 select2-hidden-accessible" wire:model="modo" style="width: 100%;">
-                                    <option selected="selected" ></option>
-                                    <option >Con orden de compra</option>
-                                    <option >Sin orden de compra</option>
-                                </select>
-                        </div>
-                        @if($modo=="Sin orden de compra")
                         <div class="form-group">
                             <label for="exampleInputEmail1">Origen</label>
                             <input class="form-control form-control-sm" type="text" wire:model="origen" placeholder="Ingrese origen del material a ser ingresado">
@@ -57,7 +49,6 @@
                             <label for="exampleInputEmail1">Causa</label>
                             <input class="form-control form-control-sm" type="text" wire:model="causa" placeholder="Ingrese causa por la cual ingresa los materiales">
                         </div>
-                        @endif
                         <div class="form-group">
                             <label for="exampleInputEmail1">Fecha</label>
                             <div class="row">
