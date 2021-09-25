@@ -7,6 +7,8 @@ use App\Models\Clientorder;
 use App\Models\Orderdetail;
 use App\Models\Installation;
 use App\Models\Revisiondetail;
+use App\Models\Material;
+use App\Models\DepositMaterial;
 use App\Models\PucharsingSheet;
 use App\Models\PucharsingSheetDetail;
 use App\Models\PucharsingSheetOrder;
@@ -14,8 +16,9 @@ use App\Models\PucharsingSheetOrder;
 class PurchasingSheet extends Component
 {
  
-    public $orders, $ottPlatform = '', $search, $clientOrders = [], $clientorders = [], $order = [], $order_detail = [], $installations, $installation_code = [[]], $revision_detail, $total_amount = [], $buys = [], $div = false, $select = false;
+    public $x, $mat = [], $orders, $ottPlatform = '', $search, $clientOrders = [], $clientorders = [], $order = [], $order_detail = [], $installations, $installation_code = [[]], $revision_detail, $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $present = [], $suma = [];
     protected $listeners = ['clientOrdersSelected'];
+    private $select_presentation = [];
 
     public function render()
     {    
@@ -44,15 +47,37 @@ class PurchasingSheet extends Component
                         foreach ($installation as $llave => $revision) {
                             if(isset($revision->id)){
                                  $this->revision_detail[$ind] = Revisiondetail::where('installation_id', $revision->id)->get();
-                            }
+                              #   dd($this->revision_detail);
+                                 foreach($this->revision_detail[$ind] as $j => $lol){
+                                     $this->deposit_material[$j]=DepositMaterial::where('material_id', $lol->material_id)->groupBy('material_id', 'presentation')->selectRaw('material_id, presentation, sum(amount) as sum')->get();
+                                 #dd($this->deposit_material[$key][$j]);
+                                  #  $this->mat[$j] = $this->x->get();
+                                    
+                                        # $this->deposit_material[$key][$j] = DepositMaterial::where('material_id', $lol->material_id)->groupBy('presentation')->selectRaw('material_id, presentation, sum(amount) as sum')->get();
+                                 #  $this-> = DepositMaterial::where('material_id', $lol->material_id)->groupBy('presentation');
+                                  
+                                }
+                             
+                                }
                         }
                     }
             }
-      
+           
           
         }
         
-        
+        if(!empty($this->presentation)){
+            $this->select_presentation = json_decode($this->presentation);
+            $this->material_id = $this->select_presentation->material_id; 
+            $this->suma[$this->material_id] = $this->select_presentation->sum;
+         #   $this->presentation =  $this->select_presentation->presentation;
+            $this->present[$this->material_id] =$this->select_presentation->presentation;
+       #     dd($this->presentation); 
+           
+    }
+        }
+       # dd($this->mat);
+      #   dd($this->deposit_material);       
    }
-
-}
+   
+  
