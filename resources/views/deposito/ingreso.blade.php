@@ -29,18 +29,14 @@
                         </div>
                         @if($seleccion=="Material")
                         <div class="card-body">
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
                         <h5>Datos de depósito</h5>
                         <br>    
-                        <div class="form-group">
+                        <select class="form-control select2 select2-hidden-accessible" wire:model="modo" style="width: 100%;">
+                            <option selected="selected" ></option>
+                            <option >Sin orden de compra</option>
+                            <option >Con orden de compra</option>
+                        </select>
+                        @if($modo=="Sin orden de compra")
                         <div class="form-group">
                             <label for="exampleInputEmail1">Origen</label>
                             <input class="form-control form-control-sm" type="text" wire:model="origen" placeholder="Ingrese origen del material a ser ingresado">
@@ -143,6 +139,54 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
+                        @elseif($modo=="Con orden de compra")
+                        <div class="card-header">
+                <h3 class="card-title">Ordenes de compra:</h3>
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                  <div>
+                    <input type="text" name="searchordenesem" wire:model="searchorderbuy" class="form-control float-right" placeholder="Buscar">
+                  </div>
+                  </div>
+                </div>
+                 </div>
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th style="text-align: center">N° Orden de compra</th>
+                      <th style="text-aling: center">Id de proveedor</th>
+                      <th style="text-aling: center">Precio Total U$D</th>
+                      <th style="text-align: center">Id planilla de compra</th>
+                      <th style="text-align: center">Estado</th>
+                      <th style="text-align: center">Fecha orden de compra</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @forelse($buyorders as $order)
+                    <tr>
+                      <td style="text-align: center">{{ $order->order_number }}</td>
+                      <td style="text-align: center">{{ $order->provider_id }}</td>
+                      <td style="text-align: center">{{ $order->total_price}}</td>
+                      <td style="text-align: center">{{ $order->purchasing_sheet_id}}</td>
+                      <td style="text-align: center">{{ $order->state}}</td>
+                      <td style="text-align: center">{{ date('d-m-Y', strtotime($order->buy_date)) }}</td>
+                      <td style="text-align: center">
+                        <button type="button" wire:click="explorabuyorder({{$order->id}})" class="btn btn-success btn-xs"><i class="fas fa-file-alt"></i> Crear orden de ingreso</button>
+                      </td>
+                    </tr>
+                    @empty
+                      <tr class="text-center">
+                        <td style="text-align: center" colspan="4" class="py-3 italic">No hay información</td>
+                      </tr>
+                    @endforelse
+                  </tbody>
+                </table>
+              </div>
+          </div>
+                        @endif
                         @endif
                         @if($seleccion=="Ensamblado")
                                     <div class="card">

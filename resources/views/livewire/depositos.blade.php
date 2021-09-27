@@ -23,5 +23,8 @@
     @case("createassembled")
         @include("deposito.createassembled")
         @break
+    @case("createbo")
+        @include("deposito.createbo")
+        @break
 @endswitch
 </div>
