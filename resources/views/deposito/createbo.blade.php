@@ -186,7 +186,6 @@
                                       <tr>
                                         <th style="text-align: center">Código Material</th>
                                         <th style="text-align: center">Descripción</th>
-                                        <th style="text-aling: center">N° Deposito</th>
                                         <th style="text-align: center">Presentación</th>
                                         <th style="text-align: center">Cantidad requerida</th>
                                         <th style="text-align: center">Cantidad remito</th>
@@ -202,14 +201,6 @@
                                       <tr>
                                       <td style="text-align: center">{{$code}}</td>
                                       <td style="text-align: center">{{$description}}</td>
-                                      <td style="text-align: center">
-                                          <select class="form-control select2 select2-hidden-accessible" wire:model="nombre_deposito" style="width: 100%;">
-                                              <option selected="selected" ></option>
-                                              @foreach($depositos as $deposito)
-                                              <option >{{$deposito->name}}</option>
-                                              @endforeach
-                                          </select>
-                                      </td>
                                       <td style="text-align: center">{{$presentation}}</td>
                                       <td style="text-align: center">{{$amount_requested}}</td>
                                       <td style="text-align: center"><input wire:model="amount_follow" type="number"></td>
@@ -217,7 +208,7 @@
                                       <td style="text-align: center">{{$amount_requested-$amount}}</td>
                                       <td style="text-align: center"><input wire:model="amount_undelivered" type="number"></td>
                                       <td style="text-align: center"><input wire:model="set" type="text"></td>
-                                      <td style="text-align: center"><button type="button" wire:click="addmaterial({{$material_id}})" class="btn btn-success btn-xs"> Ingresar</button></td>
+                                      <td style="text-align: center"><button type="button" wire:click="addmateriald({{$material_id}})" class="btn btn-success btn-xs"> Ingresar</button></td>
                                       </tr>
                                     </tbody>
                                   </table>
@@ -235,7 +226,6 @@
                                     <tr>
                                       <th style="text-align: center">Código Material</th>
                                       <th style="text-align: center">Descripción</th>
-                                      <th style="text-aling: center">N° Deposito</th>
                                       <th style="text-align: center">Presentación</th>
                                       <th style="text-align: center">Cantidad recibida</th>
                                       <th style="text-align: center">Cantidad requerida</th>
@@ -250,15 +240,14 @@
                                     @forelse($details as $detail)
                                     <tr>
                                       <td style="text-align: center">{{ $detail[0]}}</td>
-                                      <td style="text-align: center">{{ $detail[1] }}</td>
-                                      <td style="text-align: center">{{ $detail[6] }}</td>
+                                      <td style="text-align: center">{{ $detail[1]}}</td>
                                       <td style="text-align: center">{{ $detail[5]}}</td>
                                       <td style="text-align: center">{{ $detail[7]}}</td>
                                       <td style="text-align: center">{{ $detail[2]}}</td>
                                       <td style="text-align: center">{{ $detail[8]}}</td>
-                                      <td style="text-align: center">{{ $detail[10]}}</td>
+                                      <td style="text-align: center">{{ $detail[8]}}</td>
                                       <td style="text-align: center">{{ $detail[9]}}</td>
-                                      <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
+                                      <td style="text-align: center"><button type="button"  wire:click="downmateriald({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
                                     </tr>
                                     @empty
                                       <tr class="text-center">
@@ -273,7 +262,7 @@
                             @endif
                     <div class="card-footer">
                         <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar </button></td>
-                        <td><button wire:click="volver()" type="button" class="btn btn-primary">Cancelar</button></td>
+                        <td><button wire:click="toingreso()" type="button" class="btn btn-primary">Cancelar</button></td>
                     </div>
             </form>
 </div>
