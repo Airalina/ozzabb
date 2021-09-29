@@ -2,7 +2,15 @@
               <div class="card-header">
                 <h3 class="card-title">Registro de cliente</h3>
               </div>
-              
+              @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
               <form>
                     <div class="card-body">
                         <h5>Datos de contacto</h5>
