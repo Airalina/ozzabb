@@ -150,7 +150,7 @@ class Ordenesclientes extends Component
             }
         }
         $this->cantidad=0;
-        return redirect()->to('pedidos');
+        $this->funcion="";
 
     }
 

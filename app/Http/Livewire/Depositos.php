@@ -73,7 +73,7 @@ class Depositos extends Component
             $this->validate([
                 'name' => 'required|string|min:4|max:100',
                 'location' => 'required|string|min:4|max:300',
-                'descriptionw' => 'string|min:4|max:300',
+                'descriptionw' => 'required|string|min:4|max:300',
             ],
             [
                 'name.required' => 'El campo Nombre es requerido',

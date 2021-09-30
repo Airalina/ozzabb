@@ -13,4 +13,9 @@ class MaterialEntryOrder extends Model
     {
         return $this->hasMany(MaterialEntryOrderDetail::class, 'entry_order_id');
     }
+
+    public function buyorders()
+    {
+        return $this->belongsToMany(MaterialEntryOrder::class,'buy_order_material_entry_orders','buy_order_id','entry_order_id');
+    }
 }

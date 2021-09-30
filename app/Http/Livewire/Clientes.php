@@ -72,7 +72,7 @@ class Clientes extends Component
             'location' => 'required|string|min:4',
             'province' => 'required|string|min:4',
             'country' => 'required|string|min:3',
-            'postcode' => 'required|integer|min:1',
+            'postcode' => 'required|integer|min:1'
         ],[
             'name.required' => 'El campo "Nombre" es requerido',
             'name.min' => 'El campo "Nombre" tiene como mínimo 5(cinco) caracteres',
