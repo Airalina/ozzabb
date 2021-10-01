@@ -142,8 +142,6 @@ class OrdenDeEntradaDeMateriales extends Component
                         $ing->amount=($ing->amount+$detail[2]);
                         $ing->date_change=$this->date;
                         $ing->save();
-                        $this->modo="";
-                        $this->funcion="";
                     }
                 }
                 $this->detailem=new MaterialEntryOrderDetail;
@@ -161,6 +159,8 @@ class OrdenDeEntradaDeMateriales extends Component
                 $this->detailem->save();
             }
         }
+        $this->modo="";
+        $this->funcion="";
         $this->function="";
         $this->resetValidation();
     }

@@ -62,9 +62,20 @@ class Ordenesclientes extends Component
         $this->usd_price=$this->total;
         $this->arp_price=$this->total*$this->usd;
         $this->validate([
-            'usd_price' => 'required|numeric|min:0',
+            'usd_price' => 'required|numeric|min:0|max:1000000000',
             'arp_price' => 'required|numeric|min:0|max:1000000000',
             'customer_id' => 'required',
+        ],[
+            'customer_id.required' => 'Es Necesario que se seleccione un cliente y su dirección',
+            'usd_price.required' => 'El campo "Precio U$D" es requerido',
+            'arp_price.required' => 'El campo "Precio AR$" es requerido',
+            'usd_price.numeric' => 'El campo "Precio U$D" es numérico',
+            'arp_price.numeric' => 'El campo "Precio AR$" es numérico',
+            'usd_price.min' => 'El campo "Precio U$D" es como mínimo 0(cero)',
+            'arp_price.min' => 'El campo "Precio AR$" es como mínimo 0(cero)',
+            'usd_price.max' => 'El campo "Precio U$D" es como máximo 100000000(cien millones)',
+            'arp_price.max' => 'El campo "Precio AR$" es como máximo 100000000(cien millones)',
+
         ]);
         $this->date=Carbon::now();
         $this->order=new Clientorder;
@@ -80,6 +91,11 @@ class Ordenesclientes extends Component
             $this->cantidad=$detail[2];
             $this->validate([
                 'cantidad' => 'required|integer|min:0',
+            ].[
+                'cantidad.required' => 'El campo "Cantidad" es requerido',
+                'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
+                'cantidad.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
+                'cantidad.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
             ]);
             $this->newdetail=new Orderdetail;
             $this->newdetail->clientorder_id=$this->order->id;
@@ -91,11 +107,26 @@ class Ordenesclientes extends Component
         if($this->addaddress==true){
             $this->validate([
                 'street' => 'required|string|min:4',
-                'number' => 'required|numeric|min:0',
+                'number' => 'required|integer|min:1',
                 'location' => 'required|string|min:4',
                 'province' => 'required|string|min:4',
                 'country' => 'required|string|min:3',
-                'postcode' => 'required|numeric|min:0',
+                'postcode' => 'required|integer|min:1',
+            ],[
+                'street.required' => 'El campo "Calle" es requerido',
+                'street.min' => 'El campo "Calle" tiene como mínimo 4(cuatro) caracteres',
+                'location.required' => 'El campo "Localidad" es requerido',
+                'location.min' => 'El campo "Localidad" tiene como mínimo 4(cuatro) caracteres',
+                'province.required' => 'El campo "Provincia" es requerido',
+                'province.min' => 'El campo "Provincia" tiene como mínimo 4(cuatro) caracteres',
+                'country.required' => 'El campo "País" es requerido',
+                'country.min' => 'El campo "País" tiene como mínimo 3(tres) caracteres',
+                'number.required' => 'El campo "Número" es requerido',
+                'number.integer' => 'El campo "Número" es numérico',
+                'number.min' => 'El campo "Número" es como mínimo 1(uno)',
+                'postcode.required' => 'El campo "Código Postal" es requerido',
+                'postcode.integer' => 'El campo "Código Postal" es numérico',
+                'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
             ]);
             $this->newaddress=new Domiciledelivery;
             $this->newaddress->street=$this->street;
@@ -119,7 +150,7 @@ class Ordenesclientes extends Component
             }
         }
         $this->cantidad=0;
-        return redirect()->to('pedidos');
+        $this->funcion="";
 
     }
 
@@ -127,6 +158,11 @@ class Ordenesclientes extends Component
     {
         $this->validate([
             'cant' => 'required|integer|min:1|max:1000000'
+        ],[
+            'cant.required' => 'El campo "Cantidad" es requerido',
+            'cant.integer' => 'El campo "Cantidad" debe ser un entero',
+            'cant.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
+            'cant.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
         ]);
         foreach($this->details as $detail){
             if($detail[0]==$install->code){
@@ -283,6 +319,11 @@ class Ordenesclientes extends Component
     {
             $this->validate([
                 'cantidad' => 'required|integer|min:0',
+            ],[
+                'cantidad.required' => 'El campo "Cantidad" es requerido',
+                'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
+                'cantidad.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
+                'cantidad.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
             ]);
         $this->newdetail=Orderdetail::find($detail->id);
         $this->newdetail->cantidad=$this->cantidad;
@@ -296,8 +337,17 @@ class Ordenesclientes extends Component
         $this->usd_price=$this->newtotal;
         $this->arp_price=$this->newtotal*$this->usd;
         $this->validate([
-            'usd_price' => 'required|numeric|min:0',
+            'usd_price' => 'required|numeric|min:0|max:100000000',
             'arp_price' => 'required|numeric|min:0|max:100000000',
+        ].[
+            'usd_price.required' => 'El campo "Precio U$D" es requerido',
+            'arp_price.required' => 'El campo "Precio AR$" es requerido',
+            'usd_price.numeric' => 'El campo "Precio U$D" es numérico',
+            'arp_price.numeric' => 'El campo "Precio AR$" es numérico',
+            'usd_price.min' => 'El campo "Precio U$D" es como mínimo 0(cero)',
+            'arp_price.min' => 'El campo "Precio AR$" es como mínimo 0(cero)',
+            'usd_price.max' => 'El campo "Precio U$D" es como máximo 100000000(cien millones)',
+            'arp_price.max' => 'El campo "Precio AR$" es como máximo 100000000(cien millones)',
         ]);
         $this->order->usd_price=$this->usd_price;
         $this->order->arp_price=$this->arp_price;
@@ -315,11 +365,26 @@ class Ordenesclientes extends Component
         if($this->addaddress==true){
             $this->validate([
                 'street' => 'required|string|min:4',
-                'number' => 'required|numeric|min:0',
+                'number' => 'required|numeric|min:1',
                 'location' => 'required|string|min:4',
                 'province' => 'required|string|min:4',
                 'country' => 'required|string|min:3',
-                'postcode' => 'required|numeric|min:0',
+                'postcode' => 'required|numeric|min:1',
+            ],[
+                'street.required' => 'El campo "Calle" es requerido',
+                'street.min' => 'El campo "Calle" tiene como mínimo 4(cuatro) caracteres',
+                'location.required' => 'El campo "Localidad" es requerido',
+                'location.min' => 'El campo "Localidad" tiene como mínimo 4(cuatro) caracteres',
+                'province.required' => 'El campo "Provincia" es requerido',
+                'province.min' => 'El campo "Provincia" tiene como mínimo 4(cuatro) caracteres',
+                'country.required' => 'El campo "País" es requerido',
+                'country.min' => 'El campo "País" tiene como mínimo 3(tres) caracteres',
+                'number.required' => 'El campo "Número" es requerido',
+                'number.integer' => 'El campo "Número" es numérico',
+                'number.min' => 'El campo "Número" es como mínimo 1(uno)',
+                'postcode.required' => 'El campo "Código Postal" es requerido',
+                'postcode.integer' => 'El campo "Código Postal" es numérico',
+                'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
             ]);
             $this->newaddress=new Domiciledelivery;
             $this->newaddress->street=$this->street;
@@ -338,8 +403,17 @@ class Ordenesclientes extends Component
         $this->usd_price= $this->total;
         $this->arp_price= $this->total*$this->usd;
         $this->validate([
-            'usd_price' => 'required|numeric|min:0',
-            'arp_price' => 'required|numeric|min:0',
+            'usd_price' => 'required|numeric|min:0|max:100000000',
+            'arp_price' => 'required|numeric|min:0|max:100000000',
+        ],[
+            'usd_price.required' => 'El campo "Precio U$D" es requerido',
+            'arp_price.required' => 'El campo "Precio AR$" es requerido',
+            'usd_price.numeric' => 'El campo "Precio U$D" es numérico',
+            'arp_price.numeric' => 'El campo "Precio AR$" es numérico',
+            'usd_price.min' => 'El campo "Precio U$D" es como mínimo 0(cero)',
+            'arp_price.min' => 'El campo "Precio AR$" es como mínimo 0(cero)',
+            'usd_price.max' => 'El campo "Precio U$D" es como máximo 100000000(cien millones)',
+            'arp_price.max' => 'El campo "Precio AR$" es como máximo 100000000(cien millones)',
         ]);
         $this->order->usd_price=$this->usd_price;
         $this->order->arp_price=$this->arp_price;
@@ -347,7 +421,12 @@ class Ordenesclientes extends Component
         foreach($this->details as $detail){
             $this->cantidad=$detail[2];
             $this->validate([
-                'cantidad' => 'required|integer|min:0',
+                'cantidad' => 'required|integer|min:0|max:100000000',
+            ],[
+                'cantidad.required' => 'El campo "Cantidad" es requerido',
+                'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
+                'cantidad.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
+                'cantidad.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
             ]);
             $this->newdetail=new Orderdetail;
             $this->newdetail->clientorder_id=$this->order->id;
