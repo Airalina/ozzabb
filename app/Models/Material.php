@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use  App\Models\ProviderPrice;
 use  App\Models\Line;
 use  App\Models\Usage;
+use  App\Models\Revisiondetail;
 
 
 class Material extends Model
@@ -34,5 +35,8 @@ class Material extends Model
     public function getUrl($photo){
         return url("storage/$photo");
     }
-
+    public function revisiondetails(){
+        return $this->hasMany(Revisiondetail::class); 
+    
+    }
 }
