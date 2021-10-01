@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PucharsingSheet extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['date'];
+
 }

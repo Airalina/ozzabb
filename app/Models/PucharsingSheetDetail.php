@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PucharsingSheetDetail extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['pucharsing_sheet_id','material_id','amount','presentation','provider_id'];
+
 }
