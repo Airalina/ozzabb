@@ -91,7 +91,7 @@ class Ordenesclientes extends Component
             $this->cantidad=$detail[2];
             $this->validate([
                 'cantidad' => 'required|integer|min:0',
-            ].[
+            ],[
                 'cantidad.required' => 'El campo "Cantidad" es requerido',
                 'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
                 'cantidad.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
@@ -142,10 +142,10 @@ class Ordenesclientes extends Component
             $this->order->save();
         }else{
             if($this->address_id==null){
-            $this->order->deliverydomicile_id=1;
+            $this->order->deliverydomicile_id=$this->address->first()->id;
             $this->order->save();
             }else{
-            $this->order->deliverydomicile_id=$this->address_id;
+            $this->order->deliverydomicile_id=$this->address->id;
             $this->order->save();
             }
         }
@@ -254,7 +254,7 @@ class Ordenesclientes extends Component
     {
         $this->selectaddress=true;
         $this->address_id=$address->id;
-        $this->address=DomicileDelivery::find($address->id);
+        $this->address=DomicileDelivery::find($this->address_id);
     }
 
     public function cancelaradd(Customer $client)
