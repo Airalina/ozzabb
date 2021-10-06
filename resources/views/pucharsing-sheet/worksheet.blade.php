@@ -6,28 +6,72 @@
         <!-- /.card-header -->
         <div class="card-body table-responsive">
             <form>
-                <div class="form-group">
-                    <label>Fecha pedido</label>
-                    <div class="input-group input-group-sm">
-                        <div>
-                            <input wire:model="date" type="date" class="form-control" value="{{ date('Y-m-d') }}">
+                <div class="card-header">
+                    <h3 class="card-title">Seleccione pedido a ser agregado:</h3>
+                    <br />
+
+                    <div wire:ignore class="input-group input-group-sm" style="width: 130px">
+                        <input wire:model="search" type="text" class="form-control form-control-xs float-right" wire:change="order_change"
+                            placeholder="Buscar pedido..." />
+                    </div>
+
+                </div>
+                @if ($search != '')
+                    <div class="form-group">
+                        <label>Fecha planilla de compras</label>
+                        <div class="input-group input-group-sm">
+                            <div>
+                                <input wire:model="date" type="date" class="form-control"  wire:change="order_change"
+                                    value="{{ date('Y-m-d') }}">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div wire:ignore>
-                    <label>Número de pedido</label>
-                    <select class="form-control" id="select2-dropdown" multiple="multiple">
-                        <option>Seleccione una opción</option>
-                        @foreach ($orders as $order)
-                            <option value="{{ $order->id }}">{{ $order->id }}/2021</option>
-                        @endforeach
-                    </select>
-                    <div class="form-group">
-                        <button type="button" wire:click="order_change()"
-                            class="btn btn-success btn-xs">Seleccionar</button>
+                    <x-form-validation-errors :errors="$errors" />
+                    <div class="card-body table-responsive p-0">
+                    @if(isset($msg))
+                         <span class="alert alert-danger"> {{  $msg }}</span> 
+                    @endif
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Código</th>
+                                    <th style="text-align: center">Nombre del cliente</th>
+                                    <th style="text-align: center">Fecha estimada</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($orders as $ord => $order)
+                                    <tr>
+                                        <td style="text-align: center">{{ $order->id }}/2021</td>
+                                        <td style="text-align: center">
+                                            {{ $order->customer_name }}
+                                        </td>
+                                        <td style="text-align: center">
+                                            {{ $order->deadline->format('d/m/Y') }}
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <button type="button" wire:click="addorder({{ $order->id }})"
+                                                    class="btn btn-success btn-xs">
+                                                    Agregar
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr class="text-center">
+                                        <td colspan="4" class="py-3 italic">No hay información</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                </div>
+                @endif
                 @if ($select)
+                 @if(isset($msg))
+                         <span class="alert alert-danger"> {{  $msg_error }}</span> 
+                @endif
                     <table class="table table-head text-nowrap">
                         <thead>
                             <tr>
@@ -128,7 +172,8 @@
                                         </div>
                                     </td>
                                     <td>
-                                        @if ($cant)
+
+                                        @if (!empty($cantidad[$key]))
                                             <div wire:ignore>
                                                 <input class="form-control form-control-sm" type="text"
                                                     wire:model="amount.{{ $key }}"
@@ -147,13 +192,13 @@
                 </table>
 
                 <label>Subtotal</label>
-                <p>{{ isset($subtotal) ? $subtotal : '' }}</p>
+                <p>{{ isset($subtotal) ? $subtotal : '-' }}</p>
                 <label>IVA(%)</label>
                 <input class="form-control form-control-sm" type="text" wire:model="iva" wire:change="order_change()"
                     placeholder="IVA" style="width: 40px;">
                 <label>Precio total</label>
 
-                <p>{{ isset($total_price) ? $total_price : '' }}</p>
+                <p>{{ isset($total_price) ? $total_price : '-' }}</p>
 
                 <div class="form-group">
                     <button wire:click="save()" type="button" class="btn btn-primary">Realizar pedido</button>
@@ -166,21 +211,3 @@
         <!-- /.card-body -->
     </div>
 </div>
-
-
-@section('js')
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#select2-dropdown').select2();
-            $('#select2-dropdown').on('change', function(e) {
-                var data = $('#select2-dropdown').select2("val");
-                var data2 = $('select2-selection__choice__remove').select2("val");
-
-                @this.emit('clientOrdersSelected', data);
-            });
-        });
-    </script>
-@stop
