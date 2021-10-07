@@ -251,7 +251,7 @@ class Instalaciones extends Component
     {
         $this->funcion="newrevision";
         $this->number_version=(count(Revision::where('installation_id', $this->installation_id)->get())-1);
-        $this->revision=Revision::where('installation_id', $this->installation_id)->last();
+        $this->revision=Revision::where('installation_id', $this->installation_id)->get()->last();
         $this->photo=$this->revision->image;
         $this->revisiond=Revisiondetail::where('installation_id',$this->installation_id)->where('number_version', $this->number_version)->get();
         foreach($this->revisiond as $revisiondetail){
