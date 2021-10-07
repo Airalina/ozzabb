@@ -11,26 +11,14 @@
                     <br />
 
                     <div wire:ignore class="input-group input-group-sm" style="width: 130px">
-                        <input wire:model="search" type="text" class="form-control form-control-xs float-right" wire:change="order_change"
-                            placeholder="Buscar pedido..." />
+                        <input wire:model="search" type="text" class="form-control form-control-xs float-right"
+                            wire:change="order_change" placeholder="Buscar pedido..." />
                     </div>
 
                 </div>
                 @if ($search != '')
-                    <div class="form-group">
-                        <label>Fecha planilla de compras</label>
-                        <div class="input-group input-group-sm">
-                            <div>
-                                <input wire:model="date" type="date" class="form-control"  wire:change="order_change"
-                                    value="{{ date('Y-m-d') }}">
-                            </div>
-                        </div>
-                    </div>
-                    <x-form-validation-errors :errors="$errors" />
+
                     <div class="card-body table-responsive p-0">
-                    @if(isset($msg))
-                         <span class="alert alert-danger"> {{  $msg }}</span> 
-                    @endif
                         <table class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
@@ -69,127 +57,151 @@
                     </div>
                 @endif
                 @if ($select)
-                 @if(isset($msg))
-                         <span class="alert alert-danger"> {{  $msg_error }}</span> 
-                @endif
-                    <table class="table table-head text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Código Pedido</th>
-                                <th>Fecha entrega</th>
-                                <th>Cantidad total</th>
-                                <th>Estado</th>
-                                <th>Compras</th>
-                                <th>Fecha de inicio</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="form-group">
+                        @if (isset($msg))
+                            <span class="alert alert-danger"> {{ $msg }}</span>
+                        @endif
+                        <table class="table table-head text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Código Pedido</th>
+                                    <th>Fecha entrega</th>
+                                    <th>Cantidad total</th>
+                                    <th>Estado</th>
+                                    <th>Compras</th>
+                                    <th>Fecha de inicio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($clientorders)
+                                    @forelse($clientorders as $key => $clientorder)
+                                        @if (isset($clientorder->id))
+                                            <tr class="registros">
+                                                <td>{{ $clientorder->id }} </td>
+                                                <td>{{ $clientorder->deadline->format('d-m-Y') }} </td>
+                                                <td>{{ $total_amount[$key] }} </td>
+                                                <td>{{ $clientorder->order_state }} </td>
+                                                <td>
+                                                    @if (!empty($buys))
+                                                        No
+                                                    @else
+                                                        Sí
+                                                    @endif
+                                                </td>
+                                                <td> {{ isset($clientorder->created_at) ? $clientorder->created_at->format('d-m-Y') : '' }}
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @empty
+                                        <div> No hay registros</div>
+                                    @endforelse
+                                @endif
+                            </tbody>
+                        </table>
+                        <label>Fecha planilla de compras</label>
+                        <div class="input-group input-group-sm">
+                            <div>
+                                <input wire:model="date" type="date" class="form-control" wire:change="order_change"
+                                    value="{{ date('Y-m-d') }}">
+                            </div>
+                        </div>
+                    </div>
+                    <x-form-validation-errors :errors="$errors" />
+                    @if ($pedidos)
+                        <div>
+                            @if (isset($msg_error))
+                                @foreach ($msg_error as $errormessage)
+                                    <span class="alert alert-danger"> {{ $errormessage }}</span>
+                                @endforeach
+                            @endif
+                        </div>
+                        <table class="table table-head text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Código de material</th>
+                                    <th>Descripción</th>
+                                    <th>Presentación</th>
+                                    <th>Stock</th>
+                                    <th>En tránsito</th>
+                                    <th>Necesidad</th>
+                                    <th>Proveedor</th>
+                                    <th>Comprar</th>
+                                    <th>Precio de la compra</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (isset($materials))
+                                    @forelse($materials as $key => $mat)
+                                        @if (isset($mat->material->id))
+                                            <tr class="registros">
+                                                <td>{{ $mat->material->code }} </td>
+                                                <td>{{ $mat->material->description }} </td>
+                                                <td>
+                                                    @if ($select_present)
+                                                        <div>
+                                                            <select wire:model="presentation" id="presentation"
+                                                                class="form-control form-control-sm"
+                                                                wire:change="order_change()">
+                                                                <option>Seleccione una presentación </option>
+                                                                @if (!empty($present[$key]))
+                                                                    @foreach ($present[$key] as $prov)
+                                                                        @if (!empty($prov->id))
+                                                                            <option
+                                                                                value='{"material_id":{{ $prov->material_id }}, "unit":{{ $prov->unit }}}'>
+                                                                                {{ $prov->unit }}
+                                                                                {{ $prov->presentation }}
+                                                                            </option>
+                                                                        @endif
+                                                                    @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @endif
 
-                            @forelse($clientorders as $key => $clientorder)
-                                @if (isset($clientorder->id))
-                                    <tr class="registros">
-                                        <td>{{ $clientorder->id }} </td>
-                                        <td>{{ $clientorder->deadline->format('d-m-Y') }} </td>
-                                        <td>{{ $total_amount[$key] }} </td>
-                                        <td>{{ $clientorder->order_state }} </td>
+                                        @endif
+                                        </td>
                                         <td>
-                                            @if (!empty($buys))
-                                                No
-                                            @else
-                                                Sí
+                                            {{ $mat->material->stock }}
+                                        </td>
+                                        <td> {{ isset($transit[$key]) ? $transit[$key] : '' }}</td>
+                                        <td> {{ isset($req[$key]) ? $req[$key] : '' }}</td>
+                                        <td>
+                                            @if($selection_provider)
+                                            <div wire:ignore>
+                                                <select wire:model="provider" id="provider"
+                                                    class="form-control form-control-sm" wire:change="order_change()">
+                                                    <option>Seleccione un proveedor</option>
+                                                    @foreach ($providers[$key] as $provider)
+                                                        <option
+                                                            value='{"material_id":{{ $provider->material_id }},"provider_id":{{ $provider->provider_id }},"unit":{{ $provider->unit }}}'>
+                                                            {{ $provider->provider->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             @endif
                                         </td>
-                                        <td> {{ isset($clientorder->created_at) ? $clientorder->created_at->format('d-m-Y') : '' }}
+                                        <td>
+
+                                            @if (!empty($cantidad[$key]))
+                                                <div wire:ignore>
+                                                    <input class="form-control form-control-sm" type="text"
+                                                        wire:model="amount.{{ $key }}"
+                                                        wire:change="order_change()" placeholder="Cantidad">
+                                                </div>
+                                            @endif
                                         </td>
-                                    </tr>
-                                @endif
-                            @empty
-                                <div> No hay registros</div>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    <table class="table table-head text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Código de material</th>
-                                <th>Descripción</th>
-                                <th>Presentación</th>
-                                <th>Stock</th>
-                                <th>En tránsito</th>
-                                <th>Necesidad</th>
-                                <th>Proveedor</th>
-                                <th>Comprar</th>
-                                <th>Precio de la compra</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (isset($materials))
-                                @forelse($materials as $key => $mat)
-                                    @if (isset($mat->material->id))
-                                        <tr class="registros">
-                                            <td>{{ $mat->material->code }} </td>
-                                            <td>{{ $mat->material->description }} </td>
-                                            <td>
-                                                @if ($select_present)
-                                                    <div>
-                                                        <select wire:model="presentation" id="presentation"
-                                                            class="form-control form-control-sm"
-                                                            wire:change="order_change()">
-                                                            <option>Seleccione una presentación </option>
-                                                            @if (!empty($present[$key]))
-                                                                @foreach ($present[$key] as $prov)
-                                                                    @if (!empty($prov->id))
-                                                                        <option
-                                                                            value='{"material_id":{{ $prov->material_id }}, "unit":{{ $prov->unit }}}'>
-                                                                            {{ $prov->unit }}
-                                                                            {{ $prov->presentation }}
-                                                                        </option>
-                                                                    @endif
-                                                                @endforeach
-                                                        </select>
-                                                    </div>
-                                                @endif
-
+                                        <td>{{ isset($comprar[$key]) ? $comprar[$key] : '' }}</td>
+                                        </tr>
                                     @endif
-                                    </td>
-                                    <td>
-                                        {{ isset($stock[$key]) ? $stock[$key] : '' }}
-                                    </td>
-                                    <td> {{ isset($transit[$key]) ? $transit[$key] : '' }}</td>
-                                    <td> {{ isset($req[$key]) ? $req[$key] : '' }}</td>
-                                    <td>
-                                        <div wire:ignore>
-                                            <select wire:model="provider" id="provider"
-                                                class="form-control form-control-sm" wire:change="order_change()">
-                                                <option>Seleccione un proveedor</option>
-                                                @foreach ($providers[$key] as $provider)
-                                                    <option
-                                                        value='{"material_id":{{ $provider->material_id }},"provider_id":{{ $provider->provider_id }},"unit":{{ $provider->unit }}}'>
-                                                        {{ $provider->provider->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td>
+                                @empty
+                                    <div> No hay registros</div>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    @endif
 
-                                        @if (!empty($cantidad[$key]))
-                                            <div wire:ignore>
-                                                <input class="form-control form-control-sm" type="text"
-                                                    wire:model="amount.{{ $key }}"
-                                                    wire:change="order_change()" placeholder="Cantidad">
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td>{{ isset($comprar[$key]) ? $comprar[$key] : '' }}</td>
-                                    </tr>
-                                @endif
-                            @empty
-                                <div> No hay registros</div>
-                            @endforelse
                 @endif
-                </tbody>
-                </table>
+
 
                 <label>Subtotal</label>
                 <p>{{ isset($subtotal) ? $subtotal : '-' }}</p>
