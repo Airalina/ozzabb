@@ -10,6 +10,7 @@ use App\Models\Revisiondetail;
 use App\Models\Material;
 use App\Models\DepositMaterial;
 use App\Models\ProviderPrice;
+use App\Models\Provider;
 use App\Models\PucharsingSheet;
 use App\Models\PucharsingSheetDetail;
 use App\Models\PucharsingSheetOrder;
@@ -17,8 +18,7 @@ use App\Models\PucharsingSheetOrder;
 class PurchasingSheet extends Component
 {
  
-    public $funcion="", $ord, $searchMounth='', $explora, $pedidos = false, $detail = array(), $count=0,$date, $provider_price_unit, $provider_price_price, $provider_id, $i = 0, $x = 0, $orderC, $total = [], $mats = [], $material = [], $materials = [], $present = [], $orders, $ottPlatform = '', $search = '', $clientOrders, $clientorders = [], $order = [], $order_detail = [], $installations, $installation, $installation_code = [[]], $revision_detail = [], $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $stock, $suma = [], $block = true, $selection = false, $providers = [], $provider, $in_transit = [], $transit = [], $transits, $requirements = [], $requirement = [], $req = [], $amount, $provider_price = [], $provider_presentation = [], $comprar = [], $iva, $subtotal, $total_price, $select_present, $m_comprar = [], $purchasing_sheets, $searchP, $searchmateriales, $months, $cantidad, $msg, $msg_error, $selection_provider = true, $provider_selected;
-  #  protected $listeners = ['clientOrdersSelected'];
+    public $funcion="", $ord, $searchMounth='', $explora, $pedidos = false, $detail = array(), $count=0,$date, $provider_price_unit, $provider_price_price, $provider_id, $i = 0, $x = 0, $orderC, $total = [], $mats = [], $material = [], $materials = [], $present = [], $orders, $ottPlatform = '', $search = '', $clientOrders, $clientorders = [], $order = [], $order_detail = [], $installations, $installation, $installation_code = [[]], $revision_detail = [], $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $stock, $suma = [], $block = true, $selection = false, $providers = [], $provider, $in_transit = [], $transit = [], $transits, $requirements = [], $requirement = [], $req = [], $amount, $provider_price = [], $provider_presentation = [], $comprar = [], $iva, $subtotal, $total_price, $select_present, $m_comprar = [], $purchasing_sheets, $searchP, $searchmateriales, $months, $cantidad, $msg, $msg_error, $selection_provider, $provider_selected, $mate, $orders_amount;
     private $select_presentation = [], $select_provider = [];
 
     public function render()
@@ -41,6 +41,7 @@ class PurchasingSheet extends Component
         ->get();
         return view('livewire.purchasing-sheet');
     }
+
     public function addorder(Clientorder $order){
      //   dd($orderC);
       //  $this->select=true;
@@ -55,7 +56,6 @@ class PurchasingSheet extends Component
     }
     public function order_change(){
      
-      #  dd($this->clientOrders);
       if(!empty($this->clientOrders)){
         foreach ($this->clientOrders as $key => $order) {
             $this->clientorders[$key] = Clientorder::find($order);
@@ -88,6 +88,7 @@ class PurchasingSheet extends Component
                     if(isset($revision->material_id)){
                     $this->materials[$revision->material_id] = $revision;
                     $this->material[$revision->material_id] = $revision->material_id;
+                    $this->selection_provider[$revision->material_id] = true;
                     }
                 }
             }
@@ -106,7 +107,7 @@ class PurchasingSheet extends Component
                             if($requi->material_id == $key){
                                 $this->requirement[$key][$inst->id] = $requi;
                             }
-                        
+                            $this->selection_provider[$requi->material_id] = true;
                         }
                     }
                 }       
@@ -116,47 +117,48 @@ class PurchasingSheet extends Component
                     }
         }
         if(!empty($this->provider)){
-        //  dd($this->provider);
+         # dd($this->provider);
             $this->select_present = true;
-            $this->selection_provider = false;
-            $this->select_provider = json_decode($this->provider);
-           //  dd($this->select_provider);
-            $this->present[$this->select_provider->material_id]= ProviderPrice::where('material_id', $this->select_provider->material_id)->where('provider_id', $this->select_provider->provider_id)->get();
-//dd($this->present);
+            foreach ($this->provider as $material_id => $provider_id) {
+                $this->mat = $material_id;
+                $this->select_provider[$material_id] = json_decode($provider_id);
+                $this->present[$material_id]= ProviderPrice::where('material_id',  $this->select_provider[$material_id]->material_id)->where('provider_id',  $this->select_provider[$material_id]->provider_id)->get();
+            }
+         #   $this->selection_provider[$this->select_provider->material_id] = false;
+          #  $this->provider_selected[$this->select_provider->material_id] = Provider::where('id', $this->select_provider->provider_id)->first();
+          //  dd($this->select_provider);
+       
+ //dd($this->present);
           
-                if(!empty($this->presentation)){
+                if(!empty($this->presentation[$this->mat])){
                    
-                    $this->cantidad[$this->select_provider->material_id] = true;
-                 
-                    $this->select_presentation = json_decode($this->presentation);
-                    $this->transits = $this->in_transit[$this->select_presentation->material_id];
-             
-                    foreach ($this->transits as $k => $value) {
-                   
-                        if($value->presentation == $this->select_presentation->unit){
-                            $this->transit[$this->select_presentation->material_id]= $value->sum;
-                        }
+                    $this->cantidad[$this->mat] = true;
+                    
+                    foreach ($this->presentation as $material_id => $presentation_amount) {
+                        $this->select_presentation[$material_id] = json_decode($presentation_amount);
                     }
+                    #dd($this->select_presentation);
+  
                 
                 }
-            $this->provider_price = $this->providers[$this->select_provider->material_id];
+            $this->provider_price = $this->providers[$this->mat];
          
             foreach ($this->provider_price as $index => $price) {
                
-                if(!empty($this->select_presentation)){
-                    if (($this->select_provider->provider_id == $price->provider_id) && ($this->select_presentation->unit == $price->unit)){
+                if(!empty($this->select_presentation[$this->mat])){
+                    if (($this->select_provider[$this->mat]->provider_id == $price->provider_id) && ($this->select_presentation[$this->mat]->unit == $price->unit)){
                       //  dd($price);
-                        $this->provider_price_price[$this->select_provider->material_id]=$price->usd_price;
-                        $this->provider_price_unit[$this->select_provider->material_id]=$price->unit;
-                        $this->provider_id[$this->select_provider->material_id]=$price->provider_id;
+                        $this->provider_price_price[$this->mat]=$price->usd_price;
+                        $this->provider_price_unit[$this->mat]=$price->unit;
+                        $this->provider_id[$this->mat]=$price->provider_id;
                     }
                    
                 }
             
                 }
-                if(!empty($this->amount[$this->select_provider->material_id])){
-                    if(is_numeric($this->amount[$this->select_provider->material_id])){
-                        $this->m_comprar[$this->select_provider->material_id] = true;
+                if(!empty($this->amount[$this->mat])){
+                    if(is_numeric($this->amount[$this->mat])){
+                        $this->m_comprar[$this->mat] = true;
                         //   $this->cantidad = true;
                         //   dd($this->m_comprar);
                            foreach($this->amount as $i => $amnt){
@@ -166,7 +168,7 @@ class PurchasingSheet extends Component
                            foreach ($this->total as $t => $cant) {
                                
                                if(isset($this->provider_price_price[$t])){
-                             $this->comprar[$this->select_provider->material_id] = ($this->provider_price_price[$t]*$cant)/$this->provider_price_unit[$t];
+                             $this->comprar[$this->mat] = ($this->provider_price_price[$t]*$cant)/$this->provider_price_unit[$t];
                                } 
                            }
                          #  dd($this->comprar);
@@ -200,8 +202,6 @@ class PurchasingSheet extends Component
 
      public function save(){
   //     dd($this->total);
-
-        
         $this->validate([
             'date' => 'required|date',
         ], [ 
@@ -210,6 +210,8 @@ class PurchasingSheet extends Component
         ]);
         $this->pucharsing_sheet = PucharsingSheet::create([
             'date' => $this->date,
+            'count_orders' => count($this->clientorders),
+            'total_price' => $this->total_price
         ]);
       
      

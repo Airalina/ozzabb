@@ -21,6 +21,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Fecha</th>
+                        <th>N° de órdenes</th>
+                        <th>Costo total</th>
                     </tr>
                 </thead>
 
@@ -29,6 +31,12 @@
                         <tr class="registros">
                             <td>{{ $purchasing_sheet->id }}</td>
                             <td>{{ $purchasing_sheet->date }}</td>
+                            <td>{{ $purchasing_sheet->count_orders }}</td>
+                            @if(!empty($purchasing_sheet->total_price))
+                            <td>${{ $purchasing_sheet->total_price }}</td>
+                            @else
+                            <td></td>
+                            @endif
                             <td>
                                
                             </td>

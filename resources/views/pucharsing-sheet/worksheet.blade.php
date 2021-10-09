@@ -24,7 +24,7 @@
                                 <tr>
                                     <th style="text-align: center">Código</th>
                                     <th style="text-align: center">Nombre del cliente</th>
-                                    <th style="text-align: center">Fecha estimada</th>
+                                     <th style="text-align: center">Fecha estimada</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -139,7 +139,7 @@
                                                 <td>
                                                     @if ($select_present)
                                                         <div>
-                                                            <select wire:model="presentation" id="presentation"
+                                                            <select wire:model="presentation.{{ $key }}" id="presentation"
                                                                 class="form-control form-control-sm"
                                                                 wire:change="order_change()">
                                                                 <option>Seleccione una presentación </option>
@@ -165,20 +165,20 @@
                                         <td> {{ isset($transit[$key]) ? $transit[$key] : '' }}</td>
                                         <td> {{ isset($req[$key]) ? $req[$key] : '' }}</td>
                                         <td>
-                                            @if($selection_provider)
-                                            <div wire:ignore>
-                                                <select wire:model="provider" id="provider"
-                                                    class="form-control form-control-sm" wire:change="order_change()">
-                                                    <option>Seleccione un proveedor</option>
-                                                    @foreach ($providers[$key] as $provider)
-                                                        <option
-                                                            value='{"material_id":{{ $provider->material_id }},"provider_id":{{ $provider->provider_id }},"unit":{{ $provider->unit }}}'>
-                                                            {{ $provider->provider->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            @endif
+                                                <div wire:ignore>
+                                                    <select id="provider"
+                                                        class="form-control form-control-sm"
+                                                        wire:model="provider.{{ $key }}"
+                                                        wire:change="order_change()">
+                                                        <option>Seleccione un proveedor</option>
+                                                        @foreach ($providers[$key] as $provider)
+                                                            <option
+                                                                value='{"material_id":{{ $provider->material_id }},"provider_id":{{ $provider->provider_id }},"unit":{{ $provider->unit }}}'>
+                                                                {{ $provider->provider->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                         </td>
                                         <td>
 
@@ -223,3 +223,4 @@
         <!-- /.card-body -->
     </div>
 </div>
+
