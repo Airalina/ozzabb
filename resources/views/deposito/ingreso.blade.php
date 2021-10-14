@@ -1,3 +1,7 @@
+<div>
+    <button wire:click="toexplora()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
 <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Ingreso a deposito: {{$name}}</h3>
@@ -14,42 +18,31 @@
                                 </ul>
                             </div>
                     @endif
-                        <h5>Datos de Ingreso</h5>
-                        <br>    
-                        <div class="form-group">
-                            @if($select==false)
-                                <label>Seleccione lo que desea ingresar:</label>
-                                <select class="form-control select2 select2-hidden-accessible" wire:model="seleccion" style="width: 100%;">
-                                    <option selected="selected" ></option>
-                                    <option >Material</option>
-                                    <option >Instalacion</option>
-                                    <option >Ensamblado</option>
-                                </select>
-                            @endif
-                        </div>
-                        @if($seleccion=="Material")
+                        <h5>Datos de Ingreso</h5>  
+                        @if($type==1||$type==2)
                         <div class="card-body">
-                        <h5>Datos de depósito</h5>
-                        <br>    
-                        <select class="form-control select2 select2-hidden-accessible" wire:model="modo" style="width: 100%;">
+                        @if($type==1)   
+                        <select class="form-control select2 select2-hidden-accessible" wire:model="modo" style="width: auto;">
                             <option selected="selected" ></option>
                             <option >Sin orden de compra</option>
                             <option >Con orden de compra</option>
                         </select>
-                        @if($modo=="Sin orden de compra")
+                        @endif
+                        <br>
+                        @if($modo=="Sin orden de compra"|| $type==2)
                         <div class="form-group">
                             <label for="exampleInputEmail1">Origen</label>
-                            <input class="form-control form-control-sm" type="text" wire:model="origen" placeholder="Ingrese origen del material a ser ingresado">
+                            <input class="form-control form-control-sm" type="text" wire:model="origen" style="width: 300px" placeholder="Ingrese origen del material a ser ingresado">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Causa</label>
-                            <input class="form-control form-control-sm" type="text" wire:model="causa" placeholder="Ingrese causa por la cual ingresa los materiales">
+                            <input class="form-control form-control-sm" type="text" wire:model="causa" style="width: 300px" placeholder="Ingrese causa por la cual ingresa los materiales">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Fecha</label>
                             <div class="row">
                                 <div class="col-4">
-                                    <input type="date" wire:model="date" class="form-control form-control-sm" placeholder="dd/mm/AAAA" >
+                                    <input type="date" wire:model="date" class="form-control form-control-sm" style="width: auto" placeholder="dd/mm/AAAA" >
                                 </div>
                             </div>
                         </div>
@@ -57,7 +50,7 @@
                             <label for="exampleInputEmail1">Hora</label>
                             <div class="row">
                                 <div class="col-4">
-                                    <input type="time" wire:model="hour" class="form-control form-control-sm" placeholder="" >
+                                    <input type="time" wire:model="hour"  style="width: auto" class="form-control form-control-sm" placeholder="" >
                                 </div>
                             </div>
                         </div>
@@ -73,7 +66,7 @@
                         <!-- /.card-header -->
                         @if($searchmateriales!="")
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Codigo</th>
@@ -90,7 +83,7 @@
                                 <td style="text-align: center" >{{ $material->description }}</td>
                                 <td style="text-align: center"><input wire:model="presentation" type="number"></td>
                                 <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                <td><button type="button"  wire:click="addmateriald({{ $material->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                <td><button type="button"  wire:click="addmateriald({{ $material->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -113,7 +106,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                             <tr>
                                 <th style="text-align: center">Codigo</th>
@@ -130,7 +123,7 @@
                                 <td style="text-align: center">{{ $detail[1] }}</td>
                                 <td style="text-align: center">{{ $detail[5] }}</td>
                                 <td style="text-align: center">{{ $detail[2] }}</td>
-                                <td style="text-align: center"><button type="button"  wire:click="downmateriald({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
+                                <td style="text-align: center"><button type="button"  wire:click="downmateriald({{ $detail[3] }})" class="btn btn-danger btn-sm">Quitar</button></td>
                               </tr>
                               @endforeach
                             </tbody>
@@ -151,7 +144,7 @@
                 </div>
                  </div>
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                <table class="table table-hover table-sm">
                   <thead>
                     <tr>
                       <th style="text-align: center">N° Orden de compra</th>
@@ -174,7 +167,7 @@
                       <td style="text-align: center">{{ $order->state}}</td>
                       <td style="text-align: center">{{ date('d-m-Y', strtotime($order->buy_date)) }}</td>
                       <td style="text-align: center">
-                        <button type="button" wire:click="explorabuyorder({{$order->id}})" class="btn btn-success btn-xs"><i class="fas fa-file-alt"></i> Crear orden de ingreso</button>
+                        <button type="button" wire:click="explorabuyorder({{$order->id}})" class="btn btn-success btn-sm"><i class="fas fa-file-alt"></i> Crear orden de ingreso</button>
                       </td>
                     </tr>
                     @empty
@@ -188,7 +181,7 @@
           </div>
                         @endif
                         @endif
-                        @if($seleccion=="Ensamblado")
+                        @if($type==3)
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="card-tools">
@@ -203,7 +196,7 @@
                             <!-- /.card-header -->
                                         @if($searchensamblados!="" && $select==false && $seleccion="Ensamblado" )
                                         <div class="card-body table-responsive p-0">
-                                            <table class="table table-hover text-nowrap">
+                                            <table class="table table-hover table-sm">
                                                 <thead>
                                                     <tr>
                                                         <th style="text-align: center">Código</th>
@@ -218,7 +211,7 @@
                                                             <td style="text-align: center">{{ $ensamble->id }}</td>
                                                             <td style="text-align: center">{{ $ensamble->description }}</td>
                                                             <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                                            <td><button type="button"  wire:click="addassembled({{ $ensamble->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                                            <td><button type="button"  wire:click="addassembled({{ $ensamble->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                                                         </tr>
                                                     @empty
                                                         <tr class="text-center">
@@ -231,7 +224,7 @@
                                         @endif
                                         @if($select==true  && $seleccion="Ensamblado")
                                             <div class="card-body table-responsive p-0">
-                                                <table class="table table-hover text-nowrap">
+                                                <table class="table table-hover table-sm">
                                                     <thead>
                                                         <tr>
                                                             <th style="text-align: center">Código</th>
@@ -252,7 +245,7 @@
                                             </div>
                                         @endif
                         @endif
-                                    @if($seleccion=="Instalacion")
+                                    @if($type==4)
                                     <div class="card">
                                         <div class="card-header">
                                             <h3 class="card-title">Seleccione instalacion a ser agregada:</h3>
@@ -336,12 +329,28 @@
                                                 </table>
                                             </div>
                                             <div>
-                                                <label for="exampleInputEmail1">N° de serie: </label>
-                                                <input type="text" wire:model="serial_number" class="form-control form-control-sm" placeholder="Ingrese N° de serie" >
+                                                <div class="row">
+                                                    <div class="col-5">
+                                                        <label for="exampleInputEmail1">N° de serie: </label>
+                                                        <input type="text" wire:model="serial_number" class="form-control form-control-sm" placeholder="Ingrese N° de serie" >
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div>
-                                                <label for="exampleInputEmail1">N° de orden de cliente: </label>
-                                                <input type="number" wire:model="client_order_id" class="form-control form-control-sm" placeholder="Ingrese N° de orden de cliente" >
+                                                <label for="exampleInputEmail1">N° de pedido de cliente: </label>
+                                                <div class="row">
+                                                    <div class="col-5">
+                                                        <input type="number" wire:model="client_order_id" class="form-control form-control-sm" placeholder="Ingrese N° de orden de cliente" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Fecha de Ingreso</label>
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        <input type="date" wire:model="date" class="form-control form-control-sm" placeholder="dd/mm/AAAA" >
+                                                    </div>
+                                                </div>
                                             </div>
                                         @endif
                                     @endif

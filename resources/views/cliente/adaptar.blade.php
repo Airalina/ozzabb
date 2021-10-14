@@ -1,6 +1,11 @@
+<div>
+    <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
+<div class="col-md-6">
 <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Actualizar informacion de cliente con codigo:  {{ $cliente->id }}</h3>
+                <h3 class="card-title">Actualizar informacion de cliente con codigo:  {{ $idcli }}</h3>
               </div>
               @if ($errors->any())
                             <div class="alert alert-danger">
@@ -39,14 +44,12 @@
                         </div>
                         <div class="form-check">
                             <input type="checkbox" wire:model="estado" class="form-check-input" id="exampleCheck1"  checked="">
-                            <label for="exampleInputEmail1">Estado</label>
-                        </div>
-                        <div>
-                            <h6>Los cambios realizados en el siguiente formulario, se verán reflejados en proximo ingreso a este cliente</h6>
+                            <label for="exampleInputEmail1">Estado (indica si el cliente esta activo o no)</label>
                         </div>
                         <div class="card-footer">
-                            <td><button wire:click="editar({{ $cliente->id }})" type="button" class="btn btn-primary">Guardar Cambios</button></td>
+                            <td><button wire:click="editar({{ $idcli }})" type="button" class="btn btn-primary">Guardar Cambios</button></td>
                         
                             <td><button wire:click="cancelarup()" type="button" class="btn btn-primary">Cancelar</button></td>
                         </div>
+</div>
 </div>

@@ -3,19 +3,27 @@
             <div class="card-header">
                 <h3 class="card-title">Pedidos Registrados</h3>
                 <div class="card-tools">
-                @if (auth()->user()->can('storepedidos', auth()->user()))
-                  <div>
-                    <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Pedido</button>
-    	            </div>
-                @endif
                     <div class="input-group input-group-sm" style="width: 150px;">
                         <input wire:model="search" type="text" class="form-control float-right" placeholder="Buscar Pedido...">
                     </div>
                 </div>
+                
+            </div>
+            <div class="card-header">
+            <div>  
+                  <label class="float-left">Registros por pagina:</label><input style="width: 60px; height: 30px" type="number" min="1" wire:model="paginas" class="form-control">
+            </div>
+            <div class="card-tools">
+                  @if (auth()->user()->can('storepedidos', auth()->user()))
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                      <button wire:click="funcion()" type="button" class="btn btn-info btn-sm">Agregar Pedido</button>
+                    </div>
+                  @endif
+                </div>
             </div>
               <!-- /.card-header -->
-              <div class="card-body p-0">
-                <table class="table table-sm">
+              <div class="card-body table-responsive">
+                <table class="table table-head  table-sm">
                   <thead>
                     <tr>
                       <th style="text-align: center">Pedido #</th>
@@ -26,8 +34,9 @@
                       <th style="text-align: center">Deposito</th>
                       <th style="text-align: center">Fecha de Inicio</th>
                       <th style="text-align: center">Orden de Trabajo</th>
-                      <th style="text-align: center">Precio Total U$D</th>
-                      <th style="text-align: center">Precio Total AR$</th>
+                      <th style="text-align: center">Total U$D</th>
+                      <th style="text-align: center">Total AR$</th>
+                      <th></th>
                     </tr>
                   </thead>
                   
@@ -59,13 +68,13 @@
 
 
                       <td >
-                      <button type="button" wire:click="explora({{ $order->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i>    Ver</button>
+                      <button type="button" wire:click="explora({{ $order->id }})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i>    Ver</button>
                       @if($order->order_state==1)
                         @if (auth()->user()->can('updatepedidos', auth()->user()))
-                          <button type="button" wire:click="update({{ $order->id }})" class="btn btn-primary btn-xs"> actualizar</button>
+                          <button type="button" wire:click="update({{ $order->id }})" class="btn btn-success btn-sm"> Actualizar</button>
                         @endif
                         @if (auth()->user()->can('deletepedidos', auth()->user()))
-                        <button wire:click="deleteorder({{ $order->id }})" type="button" class="btn btn-danger btn-xs">Borrar</button>
+                        <button wire:click="deleteorder({{ $order->id }})" type="button" class="btn btn-danger btn-sm">Borrar</button>
                         @endif
                       @endif
                       </td>      
@@ -77,6 +86,7 @@
               @endforelse 
             </tbody>
                 </table>
+                {{ $orders->links() }}
               </div>
               <!-- /.card-body -->
             </div>

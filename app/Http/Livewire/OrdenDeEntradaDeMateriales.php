@@ -15,22 +15,23 @@ use Livewire\WithPagination;
 class OrdenDeEntradaDeMateriales extends Component
 {
     use WithPagination;
-    protected $orders;
-    public  $date,$ingresa=false, $hour, $buyorders,$buyorderdetails, $orden, $funcion="", $searchorderbuy="", $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false;
+    protected $paginationTheme = 'bootstrap';
+    protected $orders, $buyorders;
+    public  $date,$ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy="", $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false;
     public $orderdetails,$entry_orderbuy, $entry_order_id, $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered;
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
     public function render()
     {
-        $this->buyorders=BuyOrder::where('id','LIKE','%'.$this->searchorderbuy.'%')
-            ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('purchasing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderByDesc('state')->get();
         $this->orders=MaterialEntryOrder::where('id','LIKE','%' . $this->searchordenesem . '%')
         ->orWhere('buy_order_id','LIKE','%'.$this->searchordenesem.'%')
         ->orWhere('follow_number','LIKE','%'.$this->searchordenesem.'%')
+        ->orWhere('origin','LIKE','%'.$this->searchordenesem.'%')
+        ->orWhere('reason','LIKE','%'.$this->searchordenesem.'%')
         ->orWhere('date','LIKE','%'.$this->searchordenesem.'%')
-        ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderByDesc('buy_order_id','desc')->paginate(10);
+        ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderBy('buy_order_id','desc')->paginate($this->paginas);
         $this->depositos=Warehouse::all();
         $this->orderdetails=MaterialEntryOrderDetail::where('entry_order_id', $this->entry_order_id)->get();
         $this->materiales=Material::where('code','like','%'.$this->searchmateriales.'%')
@@ -43,8 +44,14 @@ class OrdenDeEntradaDeMateriales extends Component
             ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
+        $this->buyorders=BuyOrder::where('id','LIKE','%' . $this->searchorderbuy . '%')
+            ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('purchasing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderBy('state','desc')->paginate($this->paginas1);
         return view('livewire.orden-de-entrada-de-materiales',[
-            'orders' => $this->orders
+            'orders' => $this->orders,
+            'buyorders' => $this->buyorders,
         ]);
     }
     public function store()
@@ -60,10 +67,10 @@ class OrdenDeEntradaDeMateriales extends Component
                 'date.required' => 'El campo Fecha es requerido',
                 'hour.required' => 'El campo Hora es requerido',
                 'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-                'origen.required' => 'El campo Origen es requerido',
+                'origen.string' => 'El campo Origen es requerido',
                 'origen.min' => 'El campo Origen tiene como minimo 4 caracteres',
                 'origen.max' => 'El campo Origen tiene como maximo 300 caracteres',
-                'causa.required' => 'El campo Origen es requerido',
+                'causa.string' => 'El campo Origen es requerido',
                 'causa.min' => 'El campo Origen tiene como minimo 4 caracteres',
                 'causa.max' => 'El campo Origen tiene como maximo 300 caracteres',
             ]);

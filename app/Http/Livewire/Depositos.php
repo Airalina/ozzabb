@@ -20,13 +20,21 @@ use App\Models\BuyOrder;
 use App\Models\BuyOrderDetail;
 use App\Models\BuyOrderMaterialEntryOrder;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 class Depositos extends Component
 {
-    public $depositos, $deposito, $origen, $causa, $modo, $deposito_id, $name, $location, $state, $create_date, $amount, $searchensamblados="", $searchdeposito="", $searchmateriales="", $searchinstallation="", $searchorderbuy, $funcion="", $selector;
-    public $seleccion, $ingreso, $material_id, $materiales, $code, $descriptionw, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id, $materialesdepo, $ensambladosdepo, $instalacionesdepo;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+    protected $depositos, $materialesdepo, $ensambladosdepo, $instalacionesdepo ;
+    public $deposito, $origen,$paginas=25, $paginasinternas=10, $causa, $modo, $deposito_id, $name, $location, $state, $create_date, $amount, $searchensamblados="", $searchdeposito="", $searchmateriales="", $searchinstallation="", $searchorderbuy, $funcion="", $selector;
+    public $seleccion, $ingreso, $material_id, $type, $materiales, $code, $descriptionw, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id;
     public $entry_order_id, $buy_order_id, $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
     public $material_description,$amount_requested,$nombre_deposito,$amount_follow,$amount_undelivered,$set, $buyorders, $ingresa=false, $buyorderdetails, $follow, $material_code, $temporary, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation;
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
     public function render()
     {
         $this->buyorders=BuyOrder::where('id','LIKE','%'.$this->searchorderbuy.'%')
@@ -55,11 +63,16 @@ class Depositos extends Component
             ->orWhere('location','LIKE','%'.$this->searchdeposito.'%')
             ->orWhere('description','Like','%'.$this->searchdeposito.'%')
             ->orWhere('create_date', 'LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('temporary','LIKE','%'.$this->searchdeposito.'%')->get();
-        $this->materialesdepo=DepositMaterial::where('is_material', true)->where('warehouse_id', $this->deposito_id)->get();
-        $this->ensambladosdepo=DepositMaterial::where('is_material', false)->where('warehouse_id', $this->deposito_id)->get();
-        $this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->get();
-        return view('livewire.depositos');
+            ->orWhere('temporary','LIKE','%'.$this->searchdeposito.'%')->orderBy('type')->paginate($this->paginas);
+        $this->materialesdepo=DepositMaterial::where('is_material', true)->where('warehouse_id', $this->deposito_id)->paginate($this->paginasinternas);
+        $this->ensambladosdepo=DepositMaterial::where('is_material', false)->where('warehouse_id', $this->deposito_id)->paginate($this->paginasinternas);
+        $this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->paginate($this->paginasinternas);
+        return view('livewire.depositos',[
+            'depositos' => $this->depositos,
+            'materialesdepo' => $this->materialesdepo,
+            'ensambladosdepo' => $this->ensambladosdepo,
+            'instalacionesdepo' => $this->instalacionesdepo,
+        ]);
         
     }
     public function create()
@@ -89,6 +102,20 @@ class Depositos extends Component
             $this->deposito->name=$this->name;
             $this->deposito->location=$this->location;
             $this->deposito->state=1;
+            switch($this->type){
+                case "Almacén":
+                    $this->deposito->type=1;
+                    break;
+                case "Producción":
+                    $this->deposito->type=2;
+                    break;
+                case "Ensamblados":
+                    $this->deposito->type=3;
+                    break;
+                case "Expedición":
+                    $this->deposito->type=4;
+                    break;    
+            }
             $this->deposito->create_date=$this->create_date;
             $this->deposito->description=$this->descriptionw;
             if($this->temporary==null){
@@ -97,7 +124,16 @@ class Depositos extends Component
             $this->deposito->temporary=$this->temporary;
             $this->deposito->save();
             $this->volver();
-        }elseif($this->funcion=="createbo"){
+        }elseif($this->funcion=="update"){
+            $this->deposito=Warehouse::find($this->deposito_id);
+            $this->deposito->name=$this->name;
+            $this->deposito->location=$this->location;
+            $this->deposito->state=1;
+            $this->deposito->description=$this->descriptionw;
+            $this->deposito->save();
+            $this->explora($this->deposito);
+        }
+        elseif($this->funcion=="createbo"){
             {
                 $this->validate([
                     'date' => 'required',
@@ -178,7 +214,7 @@ class Depositos extends Component
             $this->modo="";
         }  
         elseif($this->funcion=="ingreso"){
-            if($this->seleccion=="Material"){
+            if($this->seleccion==1||$this->seleccion==2){
                 if($this->modo=="Sin orden de compra"){
                     $this->validate([
                         'date' => 'required',
@@ -240,7 +276,7 @@ class Depositos extends Component
                     $this->funcion="explora";
                     $this->seleccion="";
                     $this->modo="";
-            }elseif($this->seleccion=="Ensamblado"){
+            }elseif($this->seleccion==2){
                 $this->validate([
                     'amount' => 'required|integer|min:1|max:1000000',
                 ],[
@@ -273,11 +309,12 @@ class Depositos extends Component
                 $this->amount=0;
                 $this->select=false;
                 $this->resetValidation();
-            }elseif($this->seleccion=="Instalacion"){
+            }elseif($this->type==4){
                 $this->validate([
                     'serial_number' => 'required|string|min:4|max:100',
                     'client_order_id' => 'required|numeric|min:0|max:1000000',
                     'number_version' => 'required|numeric|min:0|max:1000000',
+                    'date' => 'required|date',
                 ],[
                     'serial_number.required' => 'El campo Número de serie es requerido',
                     'serial_number.min' => 'El campo Número de serie tiene como minimo 4 caracteres',
@@ -290,6 +327,8 @@ class Depositos extends Component
                     'client_order_id.numeric' => 'El campo Id orden de cliente es numerico',
                     'client_order_id.min' => 'El campo Id orden de cliente tiene como mínimo 0(cero)',
                     'client_order_id.max' => 'El campo Id orden de cliente tiene como maximo 10000000(diez millon)',
+                    'date.required' => 'El campo Fecha es requerido',
+                    'date.date' => 'El campo Fecha debe ser una fecha con formato "dd/mm/AAAA"',
                 ]);
                     $this->ingreso=new DepositInstallation;
                     $this->ingreso->warehouse_id=$this->deposito_id;
@@ -297,7 +336,7 @@ class Depositos extends Component
                     $this->ingreso->serial_number=$this->serial_number;
                     $this->ingreso->number_version=$this->number_version;
                     $this->ingreso->client_order_id=$this->client_order_id;
-                    $this->ingreso->date_admission=Carbon::now();
+                    $this->ingreso->date_admission=$this->date;
                     $this->ingreso->save();
                     $this->description=null;
                     $this->funcion="explora";
@@ -369,11 +408,22 @@ class Depositos extends Component
 
         $this->select=false;
     }
+    public function update(Warehouse $deposito)
+    {
+        $this->funcion="update";
+        $this->deposito_id=$deposito->id;
+        $this->name=$deposito->name;
+        $this->location=$deposito->location;
+        $this->state=$deposito->state;
+        $this->create_date=$deposito->create_date;
+        $this->descriptionw=$deposito->description;
+    }
 
     public function explora(Warehouse $deposito)
     {
         $this->funcion="explora";
         $this->deposito_id=$deposito->id;
+        $this->type=$deposito->type;
         $this->name=$deposito->name;
         $this->location=$deposito->location;
         $this->state=$deposito->state;
@@ -603,6 +653,7 @@ class Depositos extends Component
         $this->select=false;
         $this->funcion="explora";
         $this->modo=null;
+        $this->details=null;
     }
     public function toingreso()
     {

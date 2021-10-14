@@ -10,7 +10,7 @@ class Revisiondetail extends Model
 {
     use HasFactory;
 
-    public function material()
+    public function materials()
     {
         return $this->belongsTo(Material::class,'material_id');
     }

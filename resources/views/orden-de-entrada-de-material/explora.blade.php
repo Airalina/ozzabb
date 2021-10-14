@@ -7,7 +7,7 @@
                 <h3 class="card-title">Detalle de orden de entrada: {{$entry_order_id}}</h3>
               </div>
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                <table class="table table-hover table-sm">
                   <thead>
                     <tr>
                       <th style="text-align: center">Código Material</th>

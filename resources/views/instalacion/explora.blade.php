@@ -15,7 +15,7 @@
                 </div>
               </div>
 <div class="row">
-    <table class="table table-hover text-nowrap">
+    <table class="table table-hover table-sm">
           <thead>        
             
                     <tr>
@@ -33,12 +33,12 @@
                             <td>{{ $rev->reason }}</td>
                             <td>{{ date('d-m-Y', strtotime($rev->create_date)) }}</td>                 
                             <td>
-                              <button type="button" wire:click="seedetail({{$rev->number_version}})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
+                              <button type="button" wire:click="seedetail({{$rev->number_version}})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
                               @if (auth()->user()->can('updateinstall', auth()->user()))
-                                <button type="button" wire:click="exploradetail({{$rev->number_version}})" class="btn btn-primary btn-xs"> Actualizar</button>
+                                <button type="button" wire:click="exploradetail({{$rev->number_version}})" class="btn btn-success btn-sm"> Actualizar</button>
                               @endif
                               @if (auth()->user()->can('deleteinstall', auth()->user()))
-                                <button type="button" wire:click="borrarevision({{ $rev }})" class="btn btn-danger btn-xs">Borrar</button>
+                                <button type="button" wire:click="borrarevision({{ $rev }})" class="btn btn-danger btn-sm">Borrar</button>
                               @endif
                             </td>
                         </tr>

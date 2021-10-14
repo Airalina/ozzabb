@@ -26,5 +26,8 @@
     @case("createbo")
         @include("deposito.createbo")
         @break
+    @case("update")
+        @include("deposito.update")
+        @break
 @endswitch
 </div>
