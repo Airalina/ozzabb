@@ -9,6 +9,6 @@ class PucharsingSheet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date'];
+    protected $fillable = ['date', 'count_orders', 'total_price'];
 
 }
