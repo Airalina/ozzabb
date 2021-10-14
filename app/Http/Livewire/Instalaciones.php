@@ -8,11 +8,15 @@ use App\Models\Material;
 use App\Models\Revision;
 use App\Models\Revisiondetail;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class Instalaciones extends Component
 {
     use WithFileUploads;
-    public $instalaciones, $instalacion, $installation_id, $code, $description, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
+    use WithPagination;
+    protected $instalaciones;
+    protected $paginationTheme = 'bootstrap';
+    public $instalacion, $installation_id, $code, $paginas=25, $description, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
     public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $photo, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false;
     public function render()
     {
@@ -28,9 +32,11 @@ class Instalaciones extends Component
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
         $this->instalaciones=Installation::where('id','LIKE','%' .$this->searchinstallation. '%')
             ->orWhere('code','LIKE','%'.$this->searchinstallation.'%')
-            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->get();
+            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->paginate($this->paginas);
         $this->revisiones=Revision::where('installation_id', $this->installation_id)->get();
-        return view('livewire.instalaciones');
+        return view('livewire.instalaciones',[
+            'instalaciones' => $this->instalaciones,
+        ]);
     }
 
     public function store()
@@ -272,6 +278,7 @@ class Instalaciones extends Component
 
     public function explora(Installation $instalacion)
     {
+        $this->details=null;
         $this->funcion="explora";
         $this->update($instalacion);
         $this->resetValidation();

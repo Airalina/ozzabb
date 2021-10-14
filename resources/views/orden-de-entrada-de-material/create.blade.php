@@ -1,8 +1,11 @@
+<div>
+        <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
 <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Registro de depósito</h3>
-              </div>
-              
+              </div>      
             <form>
                     <div class="card-body">
                         @if ($errors->any())
@@ -20,33 +23,25 @@
                         @if($modo=="Sin orden de compra")
                           <div class="form-group">
                               <label>Origen</label>
-                              <input class="form-control form-control-sm" type="text" wire:model="origen" placeholder="Ingrese origen del material a ser ingresado">
+                              <input class="form-control form-control-sm" type="text" wire:model="origen" style="width: 300px;" placeholder="Ingrese origen del material a ser ingresado">
                           </div>
                           <div class="form-group">
                               <label>Causa</label>
-                              <input class="form-control form-control-sm" type="text" wire:model="causa" placeholder="Ingrese causa por la cual ingresa los materiales">
+                              <input class="form-control form-control-sm" type="text" wire:model="causa" style="width: 300px;" placeholder="Ingrese causa por la cual ingresa los materiales">
                           </div>
                         @elseif($modo=="Con orden de compra")
                         <div class="form-group">
                               <label>N° de remito:</label>
-                              <input class="form-control form-control-sm" type="text" wire:model="follow" placeholder="Ingrese N° remito">
+                              <input class="form-control form-control-sm" type="text" wire:model="follow" style="width: 300px;"  placeholder="Ingrese N° remito">
                         </div>
                         @endif
                         <div class="form-group">
                             <label>Fecha</label>
-                            <div class="row">
-                                <div class="col-4">
-                                    <input type="date" wire:model="date" class="form-control form-control-sm" placeholder="dd/mm/AAAA" >
-                                </div>
-                            </div>
+                            <input type="date" wire:model="date" class="form-control form-control-sm" style="width: auto" placeholder="dd/mm/AAAA" >
                         </div>
                         <div class="form-group">
                             <label>Hora</label>
-                            <div class="row">
-                                <div class="col-4">
-                                    <input type="time" wire:model="hour" class="form-control form-control-sm" placeholder="" >
-                                </div>
-                            </div>
+                                    <input type="time" wire:model="hour" class="form-control form-control-sm" style="width: auto" placeholder="" >
                         </div>
                         @if($modo=="Sin orden de compra")
                           <div class="col">
@@ -61,7 +56,7 @@
                               <!-- /.card-header -->
                               @if($searchmateriales!="")
                               <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-hover table-sm">
                                   <thead>
                                     <tr>
                                       <th style="text-align: center">Codigo</th>
@@ -77,8 +72,8 @@
                                     <tr>
                                       <td style="text-align: center">{{ $material->code }}</td>
                                       <td style="text-align: center" >{{ $material->description }}</td>
-                                      <td style="text-align: center"><input wire:model="presentation" type="number"></td>
-                                      <td style="text-align: center"><input wire:model="amount" type="number"></td>
+                                      <td style="text-align: center"><input wire:model="presentation" type="number" style="width: 100px;"></td>
+                                      <td style="text-align: center"><input wire:model="amount" type="number" style="width: 100px;"></td>
                                       <td style="text-align: center">
                                           <select class="form-control select2 select2-hidden-accessible" wire:model="nombre_deposito" style="width: 100%;">
                                               <option selected="selected" ></option>
@@ -87,7 +82,7 @@
                                               @endforeach
                                           </select>
                                       </td>
-                                      <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                      <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                                     </tr>
                                     @empty
                                       <tr class="text-center">
@@ -110,7 +105,7 @@
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-hover table-sm">
                                   <thead>
                                   <tr>
                                       <th style="text-align: center">Codigo</th>
@@ -129,7 +124,7 @@
                                       <td style="text-align: center">{{ $detail[5] }}</td>
                                       <td style="text-align: center">{{ $detail[2] }}</td>
                                       <td style="text-align: center">{{ $detail[6] }}</td>
-                                      <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
+                                      <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-sm">-</button></td>
                                     </tr>
                                     @endforeach
                                   </tbody>
@@ -141,19 +136,18 @@
                             @elseif($modo=="Con orden de compra")
                             <div class="card">
                               <div class="card-header">
-                                <h3 class="card-title">Detalle de orden de compra: {{$buy_order_id}}</h3>
+                                <h3>Detalle de orden de compra: {{$buy_order_id}}</h3>
                               </div>
                               @if($ingresa==false)
                               <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-hover table-sm">
                                   <thead>
                                     <tr>
                                       <th style="text-align: center">Código material</th>
                                       <th style="text-align: center">Descripción</th>
-                                      <th style="text-aling: center">N° orden de compra</th>
+                                      <th style="text-align: center">N° orden de compra</th>
                                       <th style="text-align: center">Presentación</th>
                                       <th style="text-align: center">Cantidad requerida</th>>
-                                      <th></th>
                                       <th></th>
                                     </tr>
                                   </thead>
@@ -165,7 +159,7 @@
                                       <td style="text-align: center">{{ $order->buyorders->order_number }}</td>
                                       <td style="text-align: center">{{ $order->presentation}}</td>
                                       <td style="text-align: center">{{ $order->amount}}</td>
-                                      <td style="text-align: center"><button type="button" wire:click="ingresomaterial({{$order->id}})" class="btn btn-success btn-xs"> Ingresar</button></td>
+                                      <td style="text-align: center"><button type="button" wire:click="ingresomaterial({{$order->id}})" class="btn btn-success btn-sm"> Ingresar</button></td>
                                     </tr>
                                     @empty
                                       <tr class="text-center">
@@ -180,8 +174,8 @@
                                 <div class="card-header">
                                   <h3 class="card-title">Detalle de orden de entrada: {{$entry_order_id}}</h3>
                                 </div>
-                                <div class="card-body table-responsive p-0">
-                                  <table class="table table-hover text-nowrap">
+                                <div class="card-body table-responsive  p-0">
+                                  <table class="table table-hover table-sm">
                                     <thead>
                                       <tr>
                                         <th style="text-align: center">Código Material</th>
@@ -212,12 +206,12 @@
                                       </td>
                                       <td style="text-align: center">{{$presentation}}</td>
                                       <td style="text-align: center">{{$amount_requested}}</td>
-                                      <td style="text-align: center"><input wire:model="amount_follow" type="number"></td>
-                                      <td style="text-align: center"><input wire:model="amount" type="number"></td>
+                                      <td style="text-align: center"><input style="width: 100px" wire:model="amount_follow" type="number"></td>
+                                      <td style="text-align: center"><input  style="width: 100px" wire:model="amount" type="number"></td>
                                       <td style="text-align: center">{{$amount_requested-$amount}}</td>
-                                      <td style="text-align: center"><input wire:model="amount_undelivered" type="number"></td>
-                                      <td style="text-align: center"><input wire:model="set" type="text"></td>
-                                      <td style="text-align: center"><button type="button" wire:click="addmaterial({{$material_id}})" class="btn btn-success btn-xs"> Ingresar</button></td>
+                                      <td style="text-align: center"><input style="width: 100px" wire:model="amount_undelivered" type="number"></td>
+                                      <td style="text-align: center"><input style="width: 100px" wire:model="set" type="text"></td>
+                                      <td style="text-align: center"><button type="button" wire:click="addmaterial({{$material_id}})" class="btn btn-success btn-sm"> Ingresar</button></td>
                                       </tr>
                                     </tbody>
                                   </table>
@@ -230,7 +224,7 @@
                                 <h3 class="card-title">Detalle de orden de entrada</h3>
                               </div>
                               <div class="card-body table-responsive p-0">
-                                <table class="table table-hover text-nowrap">
+                                <table class="table table-hover table-sm">
                                   <thead>
                                     <tr>
                                       <th style="text-align: center">Código Material</th>
@@ -258,7 +252,7 @@
                                       <td style="text-align: center">{{ $detail[8]}}</td>
                                       <td style="text-align: center">{{ $detail[10]}}</td>
                                       <td style="text-align: center">{{ $detail[9]}}</td>
-                                      <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
+                                      <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-sm">-</button></td>
                                     </tr>
                                     @empty
                                       <tr class="text-center">

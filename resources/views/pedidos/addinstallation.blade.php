@@ -16,7 +16,7 @@
                         <!-- /.card-header -->
                         @if($searchinstallation!="")
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Codigo instalación</th>
@@ -54,7 +54,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Codigo instalación</th>

@@ -1,7 +1,11 @@
+<div>
+    <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
 <div class="card card-primary">
-              <div class="card-header">
+            <div class="card-header">
                 <h3 class="card-title">Registro de Instalación</h3>
-              </div>
+            </div>
               
               <form>
                 @if ($errors->any())

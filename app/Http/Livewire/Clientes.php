@@ -5,13 +5,20 @@ use App\Models\Customer;
 use App\Models\DomicileDelivery;
 use App\Models\Clientorder;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Clientes extends Component
 {
-    public $funcion="", $idcli, $clientes, $cliente, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+    protected $clientes;
+    public $funcion="", $idcli, $cliente, $paginas=25, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
     public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios;
-
     protected $dates = ['deadline', 'date', 'start_date'];
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
     public function render()
     {
         $this->clientes=Customer::where('name','LIKE','%' . $this->search . '%')
@@ -20,8 +27,10 @@ class Clientes extends Component
         ->orWhere('phone','LIKE','%'.$this->search.'%')
         ->orWhere('contact','LIKE','%'.$this->search.'%')
         ->orWhere('post_contact','LIKE','%'.$this->search.'%')
-        ->orWhere('email','LIKE','%'.$this->search.'%')->get();
-        return view('livewire.clientes');
+        ->orWhere('email','LIKE','%'.$this->search.'%')->paginate($this->paginas);
+        return view('livewire.clientes',[
+            'clientes' => $this->clientes,
+        ]);
     }
 
     public function volver(){

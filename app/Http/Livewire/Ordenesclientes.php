@@ -8,10 +8,14 @@ use App\Models\DomicileDelivery;
 use App\Models\Customer;
 use Livewire\Component;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 class Ordenesclientes extends Component
 {
-    public $orders, $order, $idp, $funcion="list", $namecust, $customer_id, $date, $deadline, $deadline1, $start_date, $buys, $order_state, $order_job, $usd_price, $arp_price, $search;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+    protected $orders;
+    public $order, $idp, $funcion="list", $namecust, $paginas=25, $customer_id, $date, $deadline, $deadline1, $start_date, $buys, $order_state, $order_job, $usd_price, $arp_price, $search;
     public $codinstall, $upusd, $installid=false, $cant, $cantidad=0, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
     public  $customer, $customers, $usd=180, $count=0, $address, $address_id, $countaddress, $selectcustomer=false, $update=false, $addaddress=false, $selectaddress=false, $newaddress;
     Public $street, $number, $newtotal=0, $location, $province, $country, $postcode, $detailcollect, $order_id, $detail_id, $nuevafecha=false;
@@ -21,7 +25,10 @@ class Ordenesclientes extends Component
         'newOrder'
         ];
     protected $dates = ['deadline', 'date', 'start_date'];
-
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
     public function newOrder(Customer $client)
     {
         $this->customer=$client;
@@ -50,8 +57,10 @@ class Ordenesclientes extends Component
         ->orWhere('deadline','LIKE','%'.$this->search.'%')
         ->orWhere('start_date','LIKE','%'.$this->search.'%')
         ->orWhere('buys','LIKE','%'.$this->search.'%')
-        ->orWhere('order_job','LIKE','%'.$this->search.'%')->orderBy('order_state')->get();
-        return view('livewire.ordenesclientes');
+        ->orWhere('order_job','LIKE','%'.$this->search.'%')->orderBy('order_state')->paginate($this->paginas);
+        return view('livewire.ordenesclientes',[
+            'orders' => $this->orders,
+        ]);
     }
 
     
@@ -150,7 +159,7 @@ class Ordenesclientes extends Component
             }
         }
         $this->cantidad=0;
-        $this->funcion="";
+        $this->explora($this->order);
 
     }
 
@@ -444,6 +453,10 @@ class Ordenesclientes extends Component
     public function nuevafecha()
     {
         $this->nuevafecha=true;
+    }
+    public function cancelarnewadd()
+    {
+        $this->addaddress=false;
     }
     public function cancelacantidad()
     {

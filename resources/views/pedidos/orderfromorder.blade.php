@@ -19,7 +19,7 @@
                       </div>
                     @if($searchclient!="")
                     <div class="card-body p-0">
-                        <table class="table table-sm">
+                        <table class="table  table-hover table-sm">
                         <thead>
                             <tr>
                             <th style="text-align: center">Nombre</th>
@@ -42,7 +42,7 @@
                                 <td style="text-align: center">Inactivo</td>
                             @endif
                             <td style="text-align: center">
-                                <button type="button" wire:click="selectcustomer({{ $cliente->id }})" class="btn btn-primary btn-xs"> Seleccionar</button>
+                                <button type="button" wire:click="selectcustomer({{ $cliente->id }})" class="btn btn-primary btn-sm"> Seleccionar</button>
                             </td>      
                         </tr>
                     @empty
@@ -62,7 +62,7 @@
                 <label>Domicilio de entrega:</label>
                 <br>
                 <div class="card-body p-0">
-                  <table class="table table-sm">
+                  <table class="table table-hover table-sm">
                     <thead>
                       <tr>
                         <th style="text-align: center">Calle</th>
@@ -71,7 +71,7 @@
                         <th style="text-align: center">Provincia</th>
                         <th style="text-align: center">País</th>
                         <th style="text-align: center">Codigo Postal</th>
-                        <th style="text-align: center"> @if($addaddress==false)<button type="button" wire:click="addaddress()" class="btn btn-primary btn-xs"> Otra Dirección</button>@endif</th>
+                        <th style="text-align: center"> @if($addaddress==false)<button type="button" wire:click="addaddress()" class="btn btn-primary btn-sm"> Otra Dirección</button>@endif</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -85,7 +85,7 @@
                         <td style="text-align: center">{{ $addres->province }}</td>
                         <td style="text-align: center">{{ $addres->country }}</td>
                         <td style="text-align: center">{{ $addres->postcode }}</td>
-                        <td style="text-align: center"><button type="button" wire:click="selectadd({{ $addres->id }})" class="btn btn-success btn-xs"> Seleccionar</button></td>
+                        <td style="text-align: center"><button type="button" wire:click="selectadd({{ $addres->id }})" class="btn btn-success btn-sm"> Seleccionar</button></td>
                       </tr>
                       @endforeach
                       @else
@@ -96,7 +96,7 @@
                         <td style="text-align: center">{{ $address->province }}</td>
                         <td style="text-align: center">{{ $address->country }}</td>
                         <td style="text-align: center">{{ $address->postcode }}</td>
-                        <td style="text-align: center"><button type="button" wire:click="cancelaradd({{ $customer->id }})" class="btn btn-danger btn-xs">Cancelar Selección</button></td>
+                        <td style="text-align: center"><button type="button" wire:click="cancelaradd({{ $customer->id }})" class="btn btn-danger btn-sm">Cancelar Selección</button></td>
                       </tr>
                       @endif
 
@@ -108,7 +108,7 @@
                         <td style="text-align: center"><input wire:model="province" type="text" class="form-control form-control-sm"></td>
                         <td style="text-align: center"><input wire:model="country" type="text" class="form-control form-control-sm"></td>
                         <td style="text-align: center"><input wire:model="postcode" type="text" class="form-control form-control-sm"></td>
-                        <td style="text-align: center"></td>
+                        <td style="text-align: center"><button type="button" wire:click="cancelarnewadd()" class="btn btn-danger btn-sm">Cancelar</button></td>
                       </tr>
                       @endif
                     </tbody>
@@ -117,11 +117,7 @@
               @endif
               <br>
               <h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de entrega estimada:</font></font></h4>
-              <div class="row">
-                <div class="col-4">
-                    <input type="date" wire:model="deadline" class="form-control form-control-sm" placeholder="dd/mm/AAAA" >
-                </div>
-              </div>
+                    <input type="date" wire:model="deadline" class="form-control form-control-sm" style="width: auto" placeholder="dd/mm/AAAA" >
                     <br>
                     <div class="row">
                     <div class="col-6">
@@ -136,7 +132,7 @@
                         <!-- /.card-header -->
                         @if($searchinstallation!="")
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Cod.</th>
@@ -153,7 +149,7 @@
                                 <td style="text-align: center">{{ $install->description}}</td>
                                 <td style="text-align: center">{{ $install->usd_price }}</td>
                                 <td style="text-align: center"><input wire:model="cant" size="4" type="number"></td>
-                                <td><button type="button"  wire:click="addinstallation({{ $install->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                <td><button type="button"  wire:click="addinstallation({{ $install->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -176,7 +172,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Codigo instalación</th>
@@ -193,7 +189,7 @@
                                 <td style="text-align: center">{{ $algo[1] }}</td>
                                 <td style="text-align: center">{{ $algo[2] }}</td>
                                 <td style="text-align: center">{{ $algo[1]*$algo[2] }}</td>
-                                <td style="text-align: center"><button type="button"  wire:click="downinstallation({{ $algo[3] }}, '{{ $algo[2] }}', '{{ $algo[1] }}')" class="btn btn-danger btn-xs">-</button></td>
+                                <td style="text-align: center"><button type="button"  wire:click="downinstallation({{ $algo[3] }}, '{{ $algo[2] }}', '{{ $algo[1] }}')" class="btn btn-danger btn-sm">Quitar</button></td>
                               </tr>
                               @endforeach
                               <tr>

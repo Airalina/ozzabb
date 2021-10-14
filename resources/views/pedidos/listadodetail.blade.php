@@ -44,8 +44,8 @@
                 <div class="col-sm-4 invoice-col">
                   Detalles de pedido:
                   <br>
-                  <b>Pedido #:</b> {{ $order->id }}/2021<br>
-                  <b>Fecha y hora de pedido :</b> {{ date('d-m-Y', strtotime($order->date)) }}<br>
+                  <b>Pedido #:</b> {{ $order->id }}/{{ date('Y', strtotime($order->date)) }}<br>
+                  <b>Fecha y hora de pedido :</b> {{ date('d-m-Y H:i', strtotime($order->date)) }}<br>
                   <b>Fecha estimada de entrega :</b> {{ date('d-m-Y', strtotime($order->deadline)) }}<br>
                   <b>Orden de trabajo:</b>{{ $order->order_job }}
                 </div>
