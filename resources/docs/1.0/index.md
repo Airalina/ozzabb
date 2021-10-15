@@ -11,5 +11,6 @@
   - [Ordenes de Ingreso de Materiales](/{{route}}/{{version}}/ordenes_de_ingreso)
   - [Ordenes de Egreso de Materiales]((/{{route}}/{{version}}/ordenes_de_engreso_de_materiales))
   - [Ordenes de Trabajo]((/{{route}}/{{version}}/ordenes_de_trabajo))
+  - [Nuevas Familias de Materiales]((/{{route}}/{{version}}/Nuevas_Familias_de_Materiales))
   - [DER](/{{route}}/{{version}}/der)
   - [DER V2](/{{route}}/{{version}}/derv2) 
