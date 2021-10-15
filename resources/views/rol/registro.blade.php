@@ -1,3 +1,7 @@
+<div>
+      <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+    <br>
 <div class="col-md-6">
 @if ($errors->any())
                             <div class="alert alert-danger">
@@ -19,7 +23,7 @@
 				<div class="card-body">
 					<div class="form-group">
 							<label for="exampleInputEmail1">Nombre Usuario</label>
-							<input type="text" class="form-control" id="name" wire:model="nombre" placeholder="Nombre de Usuario">
+							<input type="text" class="form-control form-control-sm" id="name" wire:model="nombre" placeholder="Nombre de Usuario">
 					</div>
 				</div>
 			  </form>

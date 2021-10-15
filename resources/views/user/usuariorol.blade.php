@@ -3,7 +3,7 @@
       <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
     </div>
     <br>
-    <table class="table table-hover text-nowrap">
+    <table class="table table-hover table-sm">
                   <thead>
                     
                     <div class="card-tools">
@@ -33,7 +33,7 @@
     <br>
     <h6> Roles: </h6>
     <div class="card-body table-responsive p-0" style="height: 300px;">
-        <table class="table table-head-fixed text-nowrap">
+        <table class="table table-hover table-sm ">
             <thead>
               <tr>
                 <th>Nombre</th>

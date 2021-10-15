@@ -1,3 +1,7 @@
+<div>
+    <button wire:click="toexplora()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
 <div class="card-tools">
     <div class="card-header">
         <h6 class="card-title">Deposito: {{ $name }} </h6><br>
@@ -24,7 +28,7 @@
                                 <label for="exampleInputEmail1">Estado</label>
                                 <div class="row">
                                   <div class="col-4">
-                                    <select class="form-control select2 select2-hidden-accessible" wire:model="sta" style="width: 100%;">
+                                    <select class="form-control select2 select2-hidden-accessible" wire:model="sta" style="width: auto">
                                         <option selected="selected" ></option>
                                         <option >Nuevo</option>
                                         <option >Cerrada</option>
@@ -35,19 +39,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Usuario que retira</label>
-                                <input class="form-control form-control-sm" type="email" wire:model="user" placeholder="Ingrese ubicación del depósito">
+                                <input class="form-control form-control-sm" type="email" wire:model="user" style="width: 300px" placeholder="Ingrese ubicación del depósito">
                             </div>
             </div>
-            <div class="row">
             @if($select==false)
-                    <div class="col-7">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Seleccione material a ser retirado:</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Id</th>
@@ -66,7 +68,7 @@
                                 <td style="text-align: center">{{ $material->materials->description }}</td>
                                 <td style="text-align: center">{{ $material->presentation }}</td>
                                 <td style="text-align: center">{{ $material->amount }}</td>
-                                <td><button type="button"  wire:click="retiromaterial({{ $material->id }})" class="btn btn-success btn-xs">Retirar</button></td>
+                                <td><button type="button"  wire:click="retiromaterial({{ $material->id }})" class="btn btn-success btn-sm">Retirar</button></td>
                               </tr>
                             @endforeach
                             </tbody>
@@ -75,12 +77,10 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
-                    </div>
                 @else
-                 <div class="col-7">
                       <div class="card">
                         <div class="card-header">
-                          <h3 class="card-title">Material a ser retirado:</h3>
+                          <h3 class="card-title">Material en deposito:</h3>
                           <br>
                           <div class="input-group input-group-sm" style="width: 150px;">
                             <input wire:model="searchmaterialdepo" type="text" class="form-control form-control-xs float-right" placeholder="Buscar material...">
@@ -88,7 +88,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Id</th>
@@ -106,28 +106,25 @@
                                 <td style="text-align: center">{{ $material_description }}</td>
                                 <td style="text-align: center">{{ $amount }}</td>
                                 <td style="text-aling: center"><input type="number" wire:model="egreso"></td>
-                                <td><button type="button"  wire:click="egresomaterial" class="btn btn-success btn-xs">Retirar</button></td>
+                                <td><button type="button"  wire:click="egresomaterial" class="btn btn-success btn-sm">Retirar</button></td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
                         <!-- /.card-body -->
-                      </div>
                       <!-- /.card -->
                       <div class="form-group">
                                   <label for="exampleInputEmail1">Destino de material</label>
                                   <input class="form-control form-control-sm" type="text" wire:model="destination" placeholder="Ingrese destino del material">
                       </div>
-                    </div>
                 @endif
-                    <div class="col-5">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Materiales a ser retirados:</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                             <tr>
                                 <th style="text-align: center">Código</th>
@@ -142,7 +139,7 @@
                                 <td style="text-align: center">{{$detail[6]}}</td>
                                 <td style="text-align: center">{{$detail[7]}}</td>
                                 <td style="text-align: center">{{$detail[2]}}</td>
-                                <td style="text-align: center"><button type="button"  wire:click="downegreso({{ $detail[4] }})" class="btn btn-danger btn-xs">-</button></td>
+                                <td style="text-align: center"><button type="button"  wire:click="downegreso({{ $detail[4] }})" class="btn btn-danger btn-sm">Quitar</button></td>
                               </tr>
                             @endforeach
                             </tbody>
@@ -151,7 +148,6 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
-                    </div>
                     <div class="card-footer">
                         <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar </button></td>
                         <td><button wire:click="toexplora()" type="button" class="btn btn-primary">Cancelar</button></td>

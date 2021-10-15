@@ -229,7 +229,7 @@ return [
         [
             'type'         => 'navbar-search',
             'text'         => 'search',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
         [
             'type'         => 'fullscreen-widget',
@@ -237,10 +237,6 @@ return [
         ],
 
         // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
         [
             'text' => 'blog',
             'url'  => 'admin/blog',
@@ -259,13 +255,28 @@ return [
             'url'  => 'clientes',
             'icon' => 'fas fa-fw fa-users',
         ],
+        [
+            'text' => 'Proveedores',
+            'url'  => 'proveedores',
+            'icon' => 'fas fa-fw fa-users',
+        ],
         ['header' => 'PEDIDOS',
          'icon' => 'fas fa-fw fa-users',
         ],
         [
             'text' => 'Pedidos',
             'url'  => 'pedidos',
-            'icon' => 'fas fa-fw fa-users',
+            'icon' => 'fas fa-book-open',
+        ],
+        [
+            'text' => 'Planillas de Compras',
+            'url'  => 'planilla-de-compras',
+            'icon' => 'fas fa-book-open',
+        ],
+        [
+            'text' => 'Ordenes de entrada de materiales',
+            'url'  => 'ordenes-de-entrada-de-materiales',
+            'icon' => 'fas fa-book-open',
         ],
         ['header' => 'MATERIALES'],
         [
@@ -274,50 +285,14 @@ return [
             'icon' => 'fas fa-fw fa-box',
         ],
         [
-            'text' => 'Planillas de Compras',
-            'url'  => 'planilla-de-compras',
-            'icon' => 'fas fa-clipboard-list',
-        ],
-        ['header' => 'Cuenta'],
-        [
-            'text' => 'profile',
-            'url'  => '#',//'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'Instalaciones',
+            'url'  => 'instalaciones',
+            'icon' => 'fas fa-fw fa-box',
         ],
         [
-            'text' => 'change_password',
-            'url'  => '#',//'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'Configuracion',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'Usuarios y Roles',
-                    'url'  => 'admin',
-                ],
-
-                [
-                    'text' => 'Proveedores',
-                    'url'  => 'proveedores',
-                ],
-
-                [
-                    'text' => 'Instalaciones',
-                    'url'  => 'instalaciones',
-                ],
-
-                [
-                    'text' => 'Depósitos',
-                    'url'  => 'depositos',
-                ],
-
-                [
-                    'text' => 'Ordenes de entrada de materiales',
-                    'url'  => 'ordenes-de-entrada-de-materiales',
-                ],
-            ],
+            'text' => 'Depósitos',
+            'url'  => 'depositos',
+            'icon' => 'fas fa-industry',  
         ],
     ],
 

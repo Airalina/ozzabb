@@ -20,6 +20,7 @@ class CreateWarehousesTable extends Migration
             $table->string('location');
             $table->date('create_date');
             $table->integer('state');
+            $table->integer('type');
             $table->boolean('temporary')->nullable();
             $table->timestamps();
             $table->softDeletes();

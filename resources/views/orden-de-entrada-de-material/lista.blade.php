@@ -1,3 +1,4 @@
+<div>
 <div class="card">
   <style>
     nav svg {
@@ -5,17 +6,21 @@
     }
   </style>
             <div class="card-header">
-                <h3 class="card-title">Ordenes de compra:</h3>
+                <h3 class="card-title">Ordenes de Compra</h3>
+                <br>
+                <div>  
+                      <label class="float-left">Registros por pagina:</label><input style="width: 60px; height: 30px" type="number" min="1" wire:model="paginas1" class="form-control">
+                </div>
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
                   <div>
-                    <input type="text" name="searchordenesem" wire:model="searchorderbuy" class="form-control float-right" placeholder="Buscar">
+                    <input type="text" wire:model="searchorderbuy" class="form-control float-right" placeholder="Buscar">
                   </div>
                   </div>
                 </div>
                  </div>
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                <table class="table  table-hover  table-sm">
                   <thead>
                     <tr>
                       <th style="text-align: center">N° Orden de compra</th>
@@ -38,7 +43,7 @@
                       <td style="text-align: center">{{ $order->state}}</td>
                       <td style="text-align: center">{{ date('d-m-Y', strtotime($order->buy_date)) }}</td>
                       <td style="text-align: center">
-                        <button type="button" wire:click="explorabuyorder({{$order->id}})" class="btn btn-success btn-xs"><i class="fas fa-file-alt"></i> Crear orden de ingreso</button>
+                        <button type="button" wire:click="explorabuyorder({{$order->id}})" class="btn btn-success btn-sm"><i class="fas fa-file-alt"></i> Crear orden de ingreso</button>
                       </td>
                     </tr>
                     @empty
@@ -48,6 +53,7 @@
                     @endforelse
                   </tbody>
                 </table>
+                {{ $buyorders->links() }}
               </div>
           </div>
           <div class="card">
@@ -57,12 +63,15 @@
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
                   <div>
-                    <input type="text" name="searchordenesem" wire:model="searchdeposito" class="form-control float-right" placeholder="Buscar">
+                    <input type="text" name="searchordenesem" wire:model="searchordenesem" class="form-control float-right" placeholder="Buscar">
                   </div>
                   </div>
                 </div>
                  </div>
               <div class="card-header">
+                <div>  
+                      <label class="float-left">Registros por pagina:</label><input style="width: 60px; height: 30px" type="number" min="1" wire:model="paginas" class="form-control">
+                </div>
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
                     <div>
@@ -72,19 +81,18 @@
                 </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+              <div class="card-body table-responsive  p-0">
+                <table class="table  table-hover  table-sm">
                   <thead>
                     <tr>
-                      <th style="text-align: center">N° Orden de entrada</th>
-                      <th style="text-align: center">N° Orden de compra</th>
-                      <th style="text-aling: center">N° de remito</th>
+                      <th style="text-align: center">Orden de entrada</th>
+                      <th style="text-align: center">Orden de compra</th>
+                      <th style="text-align: center">N° de remito</th>
                       <th style="text-align: center">Proveedor Id </th>
                       <th style="text-align: center">Origen </th>
                       <th style="text-align: center">Causa </th>
-                      <th style="text-align: center">Cantidad de materiales</th>
+                      <th style="text-align: center">Cantidad materiales</th>
                       <th style="text-align: center">Fecha y hora</th>
-                      <th></th>
                       <th></th>
                     </tr>
                   </thead>
@@ -108,7 +116,7 @@
                       <td style="text-align: center">{{ $order->materialentryorderdetails->count()}}</td>
                       <td style="text-align: center">{{ date('d-m-Y', strtotime($order->date)) }} {{ $order->hour }}</td>
                       <td style="text-align: center">
-                        <button type="button" wire:click="explora({{$order->id}})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
+                        <button type="button" wire:click="explora({{$order->id}})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
                       </td>
                     </tr>
                     @empty
@@ -122,3 +130,4 @@
               </div>
               <!-- /.card-body -->
             </div>
+  </div>

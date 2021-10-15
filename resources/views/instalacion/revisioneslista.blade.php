@@ -8,7 +8,7 @@
                 @if($seeimg==false)
                     <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Materiales registrados en la instalación:</font></font></label>
 
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-responsive table-hover table-sm">
                                 <thead>
                                 <tr>
                                 <th style="text-align: center">Codigo Material</th>

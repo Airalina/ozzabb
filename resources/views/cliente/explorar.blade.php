@@ -23,7 +23,6 @@
                       <th>Contacto</th>
                       <th>Cargo del contacto</th>
                       <th>Estado</th>
-                      <th><th>
                     </tr>
                   </thead>
                   <tbody>
@@ -39,14 +38,6 @@
                       @else
                         <td>Inactivo</td>
                       @endif
-                      <td>
-                        @if (auth()->user()->can('updatecust', auth()->user()))
-                          <button wire:click="update({{ $cliente->id }})" type="button"  class="btn btn-primary btn-sm">Actualizar</button>
-                        @endif
-                        @if (auth()->user()->can('deletecust', auth()->user())) 
-                          <button wire:click="destruir({{ $cliente->id }})" type="button" class="btn btn-danger btn-sm">Borrar</button>
-                        @endif
-                      <td>
                     </tr>
                   </tbody>
     </table>

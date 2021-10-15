@@ -1,10 +1,13 @@
-
+<div>
+    <button wire:click="explora({{ $installation_id }})" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
 <div class="card card-primary">
                 <div class="card-body">
                   <div class="form-group">
                     <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Matereriales registradas en la revisión:</font></font></label>
                     
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                                 <thead>
                                 <tr>
                                 <th style="text-align: center">Codigo Material</th>
@@ -21,8 +24,8 @@
                                   <td style="text-align: center">{{ $mat[$detail->material_id]['description']}}</td>
                                   <td style="text-align: center">{{ $detail->amount }}</td>
                                   <td style="text-align: center">
-                                    <button type="submit"  method="POST" wire:click="updatecantidad({{ $detail->id }})" class="btn btn-primary btn-xs">Modificar</button>
-                                    <button type="submit"  wire:click="borradetail({{ $detail->id }})" class="btn btn-danger btn-xs">Borrar</button>
+                                    <button type="submit"  method="POST" wire:click="updatecantidad({{ $detail->id }})" class="btn btn-primary btn-sm">Modificar</button>
+                                    <button type="submit"  wire:click="borradetail({{ $detail->id }})" class="btn btn-danger btn-sm">Borrar</button>
                                   </td>
                                 </tr> 
                               @empty
@@ -35,7 +38,7 @@
                           </table>
                           @if($upca==true)
                             <div class="card-body table-responsive p-0">
-                                  <table class="table table-hover text-nowrap">
+                                  <table class="table table-hover table-sm">
                                     <thead>
                                       <tr>
                                         <th style="text-align: center">Codigo Material</th>
@@ -49,7 +52,7 @@
                                         <td style="text-align: center">{{ $code }}</td>
                                         <td style="text-align: center">{{ $descripcion }}</td>
                                         <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                        <td><button type="button"  wire:click="editdetail()" class="btn btn-success btn-xs">Agregar</button><button type="button"  wire:click="cancelarupdetail()" class="btn btn-danger btn-xs">Cancelar</button></td>
+                                        <td><button type="button"  wire:click="editdetail()" class="btn btn-success btn-sm">Agregar</button><button type="button"  wire:click="cancelarupdetail()" class="btn btn-danger btn-xs">Cancelar</button></td>
                                       </tr>
                                     </tbody>
                                   </table>
@@ -68,7 +71,7 @@
                         <!-- /.card-header -->
                         @if($searchmateriales!="")
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Codigo</th>
@@ -84,7 +87,7 @@
                                 <td style="text-align: center">{{ $material->code }}</td>
                                 <td style="text-align: center">{{ $material->description }}</td>
                                 <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -107,7 +110,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                             <tr>
                                 <th style="text-align: center">Codigo</th>
@@ -122,7 +125,7 @@
                                 <td style="text-align: center">{{ $detail[0] }}</td>
                                 <td style="text-align: center">{{ $detail[1] }}</td>
                                 <td style="text-align: center">{{ $detail[2] }}</td>
-                                <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
+                                <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-sm">Quitar</button></td>
                               </tr>
                               @endforeach
                             </tbody>

@@ -1,3 +1,7 @@
+<div>
+    <button wire:click="explora({{ $installation_id }})" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+</div>
+<br>
 <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Registro de Versiones</h3>
@@ -26,15 +30,12 @@
                         <br>
                         <div class="form-group">
                             <label>Razón</label>
-                            <textarea class="form-control form-control-sm" rows="3" wire:model="reason" placeholder="Razon de revisión ..."></textarea>
+                            <textarea class="form-control form-control-sm" style="width: 300px" wire:model="reason" placeholder="Razon de revisión ..."></textarea>
                         </div>
                         <div class="form-group">
                             <label>Fecha de Ingreso</label>
-                            <div class="row">
-                                <div class="col-4">
-                                    <input type="date" wire:model="date" class="form-control form-control-sm" placeholder="dd/mm/AAAA" >
-                                </div>
-                            </div>
+                                    <input type="date" wire:model="date" class="form-control form-control-sm" style="width: auto" placeholder="dd/mm/AAAA" >
+
                         </div>
                     </div>
                     <div class="row">
@@ -50,7 +51,7 @@
                         <!-- /.card-header -->
                         @if($searchmateriales!="")
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                               <tr>
                                 <th style="text-align: center">Codigo</th>
@@ -66,7 +67,7 @@
                                 <td style="text-align: center">{{ $material->code }}</td>
                                 <td style="text-align: center">{{ $material->description }}</td>
                                 <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -90,7 +91,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                          <table class="table table-hover text-nowrap">
+                          <table class="table table-hover table-sm">
                             <thead>
                             <tr>
                                 <th style="text-align: center">Codigo</th>
@@ -105,7 +106,7 @@
                                 <td style="text-align: center">{{ $detail[0] }}</td>
                                 <td style="text-align: center">{{ $detail[1] }}</td>
                                 <td style="text-align: center">{{ $detail[2] }}</td>
-                                <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-xs">-</button></td>
+                                <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-sm">Quitar</button></td>
                               </tr>
                               @endforeach
                             </tbody>

@@ -10,6 +10,9 @@
                 </div>
               </div>
               <div class="card-header">
+                <div>  
+                  <label class="float-left">Registros por pagina:</label><input style="width: 60px; height: 30px" type="number" min="1" wire:model="paginas" class="form-control">
+                </div>
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
                     <div>
@@ -22,7 +25,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                <table class="table table-hover text-nowrap table-sm">
                   <thead>
                     <tr>
                       <th style="text-align: center">Codigo</th>
@@ -40,12 +43,12 @@
                       <td style="text-align: center">{{ $instalacion->usd_price }}</td>
                       <td style="text-align: center">{{ date('d-m-Y', strtotime($instalacion->date_admission)) }}</td>
                       <td style="text-align: center">
-                        <button type="button" wire:click="explora({{ $instalacion->id }})" class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
+                        <button type="button" wire:click="explora({{ $instalacion->id }})" class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
                         @if (auth()->user()->can('updateinstall', auth()->user()))
-                          <button type="button" wire:click="updateinstallation({{ $instalacion->id }})" class="btn btn-primary btn-xs">Actualizar</button>
+                          <button type="button" wire:click="updateinstallation({{ $instalacion->id }})" class="btn btn-success btn-sm">Actualizar</button>
                         @endif
                         @if (auth()->user()->can('deleteinstall', auth()->user()))
-                          <button type="button" wire:click="delete({{ $instalacion->id }})" class="btn btn-danger btn-xs">Borrar</button>
+                          <button type="button" wire:click="delete({{ $instalacion->id }})" class="btn btn-danger btn-sm">Borrar</button>
                         @endif
                       </td>
                     </tr>
@@ -56,6 +59,7 @@
                     @endforelse
                   </tbody>
                 </table>
+                {{ $instalaciones->links() }}
               </div>
               <!-- /.card-body -->
             </div>
