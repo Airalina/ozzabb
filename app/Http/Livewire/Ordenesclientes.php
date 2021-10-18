@@ -348,7 +348,7 @@ class Ordenesclientes extends Component
         $this->validate([
             'usd_price' => 'required|numeric|min:0|max:100000000',
             'arp_price' => 'required|numeric|min:0|max:100000000',
-        ].[
+        ],[
             'usd_price.required' => 'El campo "Precio U$D" es requerido',
             'arp_price.required' => 'El campo "Precio AR$" es requerido',
             'usd_price.numeric' => 'El campo "Precio U$D" es numérico',
