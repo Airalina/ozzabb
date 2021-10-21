@@ -380,7 +380,7 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        @if($type=3)
+                        @if($type==3)
                             <div class="form-group">
                                 <p><label>Codigo: </label> {{$material_id}}</p>
                             </div>
