@@ -12,7 +12,7 @@
                 @endif
 </div>
 <div class="row">
-    <table class="table table-hover text-nowrap">
+    <table class="table table-hover table-sm">
           <thead>        
             
                     <tr>

@@ -119,8 +119,6 @@
               <h4><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de entrega estimada:</font></font></h4>
                     <input type="date" wire:model="deadline" class="form-control form-control-sm" style="width: auto" placeholder="dd/mm/AAAA" >
                     <br>
-                    <div class="row">
-                    <div class="col-6">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Seleccione instalación a ser agregada</h3>
@@ -147,9 +145,8 @@
                               <tr>
                                 <td style="text-align: center">{{ $install->code }}</td>
                                 <td style="text-align: center">{{ $install->description}}</td>
-                                <td style="text-align: center">{{ $install->usd_price }}</td>
-                                <td style="text-align: center"><input wire:model="cant" size="4" type="number"></td>
-                                <td><button type="button"  wire:click="addinstallation({{ $install->id }})" class="btn btn-success btn-sm">Agregar</button></td>
+                                <td style="text-align: center">{{ $install->usd_price }}</td>                   
+                                <td><button type="button"  wire:click="selectinstallation({{ $install->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -164,8 +161,6 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
-                    </div>
-                    <div class="col-6">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Detalle</h3>
@@ -205,8 +200,6 @@
                       </div>
                       <!-- /.card -->
                     </div>
-                  </div>
-                </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
@@ -214,4 +207,33 @@
                 </div>
               </form>
             </div>
+            <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                <form wire.submit.prevent="addmaterial">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Instalación seleccionada</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                          <p><label>Codigo: </label> {{$codei}}</p>
+                        </div>
+                        <div class="form-group">
+                          <p><label>Descripción: </label> {{$descriptioni}}</p>
+                        </div>
+                        <div class="form-group">
+                        <label>Cantidad:</label>
+                        <input wire:model.defer="cant" type="number">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" wire:click.prevent="addinstallation()" class="btn btn-primary btn-sm" >Agregar</button>
+                      <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
 </div>

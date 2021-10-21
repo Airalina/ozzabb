@@ -15,4 +15,8 @@ class Installation extends Model
         'date_admission',
         'usd_price'
     ];
+    public function revisions()
+    {
+        return $this->hasMany(Revision::class);
+    }
 }

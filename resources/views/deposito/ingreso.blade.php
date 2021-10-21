@@ -71,8 +71,6 @@
                               <tr>
                                 <th style="text-align: center">Codigo</th>
                                 <th style="text-align: center" >Descripción</th>
-                                <th style="text-align: center">Presentación</th>
-                                <th style="text-align: center">Cantidad</th>
                                 <th></th>
                               </tr>
                             </thead>
@@ -81,9 +79,7 @@
                               <tr>
                                 <td style="text-align: center">{{ $material->code }}</td>
                                 <td style="text-align: center" >{{ $material->description }}</td>
-                                <td style="text-align: center"><input wire:model="presentation" type="number"></td>
-                                <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                <td><button type="button"  wire:click="addmateriald({{ $material->id }})" class="btn btn-success btn-sm">Agregar</button></td>
+                                <td><button type="button"  wire:click="selectmaterial({{ $material->id }})" class="btn btn-success btn-sm">Seleccionar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -194,14 +190,13 @@
                                             </div>
                                         </div>
                             <!-- /.card-header -->
-                                        @if($searchensamblados!="" && $select==false && $seleccion="Ensamblado" )
+                                        @if($searchensamblados!="" && $type==3 )
                                         <div class="card-body table-responsive p-0">
                                             <table class="table table-hover table-sm">
                                                 <thead>
                                                     <tr>
                                                         <th style="text-align: center">Código</th>
                                                         <th style="text-align: center">Descripción</th>
-                                                        <th style="text-align: center">Cantidad</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -210,7 +205,6 @@
                                                         <tr>
                                                             <td style="text-align: center">{{ $ensamble->id }}</td>
                                                             <td style="text-align: center">{{ $ensamble->description }}</td>
-                                                            <td style="text-align: center"><input wire:model="amount" type="number"></td>
                                                             <td><button type="button"  wire:click="addassembled({{ $ensamble->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                                                         </tr>
                                                     @empty
@@ -222,7 +216,7 @@
                                             </table>
                                         </div>
                                         @endif
-                                        @if($select==true  && $seleccion="Ensamblado")
+                                        @if($select==true  && $type==3)
                                             <div class="card-body table-responsive p-0">
                                                 <table class="table table-hover table-sm">
                                                     <thead>
@@ -257,7 +251,7 @@
                             <!-- /.card-header -->
                                         @if($searchinstallation!="" && $select==false && $seleccion="Instalacion" )
                                             <div class="card-body table-responsive p-0">
-                                                <table class="table table-hover text-nowrap">
+                                                <table class="table table-hover table-sm">
                                                     <thead>
                                                         <tr>
                                                             <th style="text-align: center">Código</th>
@@ -283,7 +277,7 @@
                                         @endif
                                         @if($select==true  && $seleccion="Instalacion")
                                             <div class="card-body table-responsive p-0">
-                                                <table class="table table-hover text-nowrap">
+                                                <table class="table table-hover table-sm">
                                                     <thead>
                                                         <tr>
                                                             <th style="text-align: center">Código</th>
@@ -374,4 +368,56 @@
                         <td><button wire:click="toexplora()" type="button" class="btn btn-primary">Cancelar</button></td>
                     </div>
             </form>
+
+            <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                <form wire.submit.prevent="addmaterial">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Ingreso material</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        @if($type==3)
+                            <div class="form-group">
+                                <p><label>Codigo: </label> {{$material_id}}</p>
+                            </div>
+                            <div class="form-group">
+                                <p><label>Descripción: </label> {{$description}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad:</label>
+                                <input wire:model.defer="amount" type="number">
+                            </div>
+                        @else
+                            <div class="form-group">
+                            <p><label>Codigo: </label> {{$codem}}</p>
+                            </div>
+                            <div class="form-group">
+                            <p><label>Descripción: </label> {{$descriptionm}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Presentación:</label>
+                                <input wire:model="presentation" type="number">
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad:</label>
+                                <input wire:model.defer="amount" type="number">
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        @if($type==3)
+                            <button type="submit" wire:click.prevent="addassembledd()" class="btn btn-primary btn-sm" >Agregar</button>
+                        @else
+                            <button type="submit" wire:click.prevent="addmateriald()" class="btn btn-primary btn-sm" >Agregar</button>
+                        @endif
+                            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
 </div>

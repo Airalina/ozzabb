@@ -23,26 +23,27 @@
       @endif
             <div class="card-body">
                             <h5>Datos de egreso</h5>
-                            <br>    
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Estado</label>
-                                <div class="row">
-                                  <div class="col-4">
-                                    <select class="form-control select2 select2-hidden-accessible" wire:model="sta" style="width: auto">
-                                        <option selected="selected" ></option>
-                                        <option >Nuevo</option>
-                                        <option >Cerrada</option>
-                                        <option >Cancelada</option>
-                                    </select>
-                                 </div>
+                            <br>
+                            <div class="row">
+                              <div class=col-md-3>    
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Usuario que retira</label>
+                                    <input class="form-control form-control-sm" type="email" wire:model="user" style="width: 300px" placeholder="Ingrese ubicación del depósito">
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Usuario que retira</label>
-                                <input class="form-control form-control-sm" type="email" wire:model="user" style="width: 300px" placeholder="Ingrese ubicación del depósito">
+                              </div>
+                              <div class=col-md-4>    
+                                <div class="form-group">
+                                      <label for="exampleInputEmail1">Destino de material</label>
+                                      <select class="form-control form-control-sm select2 select2-hidden-accessible" wire:model="destination" style="width: auto">
+                                        <option selected="selected" ></option>
+                                        <option >Almacén</option>
+                                        <option >Producción</option>
+                                        <option >Expedición</option>
+                                     </select>
+                                </div>
+                              </div>
                             </div>
             </div>
-            @if($select==false)
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Seleccione material a ser retirado:</h3>
@@ -77,47 +78,6 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
-                @else
-                      <div class="card">
-                        <div class="card-header">
-                          <h3 class="card-title">Material en deposito:</h3>
-                          <br>
-                          <div class="input-group input-group-sm" style="width: 150px;">
-                            <input wire:model="searchmaterialdepo" type="text" class="form-control form-control-xs float-right" placeholder="Buscar material...">
-                          </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0">
-                          <table class="table table-hover table-sm">
-                            <thead>
-                              <tr>
-                                <th style="text-align: center">Id</th>
-                                <th style="text-align: center">Código</th>
-                                <th style="text-align: center">Descripción</th>
-                                <th style="text-align: center">Cantidad en deposito</th>
-                                <th style="text-align: center">Cantidad a retirar</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td style="text-align: center">{{ $material_id }}</td>
-                                <td style="text-align: center">{{ $material_code }}</td>
-                                <td style="text-align: center">{{ $material_description }}</td>
-                                <td style="text-align: center">{{ $amount }}</td>
-                                <td style="text-aling: center"><input type="number" wire:model="egreso"></td>
-                                <td><button type="button"  wire:click="egresomaterial" class="btn btn-success btn-sm">Retirar</button></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <!-- /.card-body -->
-                      <!-- /.card -->
-                      <div class="form-group">
-                                  <label for="exampleInputEmail1">Destino de material</label>
-                                  <input class="form-control form-control-sm" type="text" wire:model="destination" placeholder="Ingrese destino del material">
-                      </div>
-                @endif
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Materiales a ser retirados:</h3>
@@ -129,6 +89,7 @@
                             <tr>
                                 <th style="text-align: center">Código</th>
                                 <th style="text-align: center">Descripción</th>
+                                <th style="text-align: center">Presentación</th>
                                 <th style="text-align: center">Cantidad a retirar</th>
                                 <th></th>
                             </tr>
@@ -138,6 +99,7 @@
                               <tr>
                                 <td style="text-align: center">{{$detail[6]}}</td>
                                 <td style="text-align: center">{{$detail[7]}}</td>
+                                <td style="text-align: center">{{$detail[9]}}</td>
                                 <td style="text-align: center">{{$detail[2]}}</td>
                                 <td style="text-align: center"><button type="button"  wire:click="downegreso({{ $detail[4] }})" class="btn btn-danger btn-sm">Quitar</button></td>
                               </tr>
@@ -154,5 +116,42 @@
                     </div>
               </div>
         </div>
+
+        <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                <form wire.submit.prevent="addmaterial">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Material</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                          <p><label>Codigo: </label> {{$codem}}</p>
+                        </div>
+                        <div class="form-group">
+                          <p><label>Descripción: </label> {{$descriptionm}}</p>
+                        </div>
+                        <div class="form-group">
+                          <p> <label>Presentación: </label> {{$presentation}}</p>
+                        </div>
+                        <div class="form-group">
+                          <p> <label>Cantidad: </label> {{$amount}}</p>
+                        </div>
+                        <div class="form-group">
+                          <label>Cantidad a retirar: </label>
+                          <input wire:model.defer="egreso" type="number">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" wire:click.prevent="egresomaterial()" class="btn btn-primary btn-sm" >Agregar</button>
+                      <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
 </div>
 
