@@ -9,16 +9,16 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                <table class="table table-hover table-sm">
                   <thead>
                     <tr>
                       <th style="text-align: center">Orden N°</th>
                       <th style="text-align: center">Código Material</th>
                       <th style="text-align: center">Descripción Material</th>
-                      <th style="text-aling: center">Cantidad Retirada</th>
+                      <th style="text-align: center">Presentación</th>
+                      <th style="text-align: center">Cantidad Retirada</th>
+                      <th style="text-align: center">Total</th>
                       <th style="text-align: center">Destino</th>
-                      <th></th>
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -27,7 +27,9 @@
                       <td style="text-align: center">{{ $oregreso->id }}</td>
                       <td style="text-align: center">{{ $oregreso->materials->code }}</td>
                       <td style="text-align: center">{{ $oregreso->materials->description }}</td>
+                      <td style="text-align: center">{{ $oregreso->presentation}}</td>
                       <td style="text-align: center">{{ $oregreso->amount }}</td>
+                      <td style="text-align: center">{{ $oregreso->amount*$oregreso->presentation }}</td>
                       <td style="text-align: center">{{ $oregreso->destination }}</td>
                     </tr>
                     @empty

@@ -35,8 +35,8 @@ class Material extends Model
     public function getUrl($photo){
         return url("storage/$photo");
     }
-    public function revisiondetails(){
+    public function revisiondetails()
+    {
         return $this->hasMany(Revisiondetail::class); 
-    
     }
 }

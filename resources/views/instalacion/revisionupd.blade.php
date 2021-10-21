@@ -58,8 +58,6 @@
                                   </table>
                                 </div>
                             @endif
-                  <div class="row">
-                    <div class="col-7">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Seleccione material a ser agregado:</h3>
@@ -86,8 +84,7 @@
                               <tr>
                                 <td style="text-align: center">{{ $material->code }}</td>
                                 <td style="text-align: center">{{ $material->description }}</td>
-                                <td style="text-align: center"><input wire:model="amount" type="number"></td>
-                                <td><button type="button"  wire:click="addmaterial({{ $material->id }})" class="btn btn-success btn-sm">Agregar</button></td>
+                                <td><button type="button"  wire:click="selectmaterial({{ $material->id }})" class="btn btn-success btn-sm">Seleccionar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -102,8 +99,6 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
-                    </div>
-                    <div class="col-5">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Materiales agregadas:</h3>
@@ -134,10 +129,38 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
-                    </div>
-                  </div>
                   <div class="card-footer">
                     <button type="submit"  wire:click="store()" class="btn btn-primary">Guardar Cambios</button>
                     <button type="submit"  wire:click="cancelar()" class="btn btn-primary">Cancelar</button>
                   </div>
+
+                <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <form wire.submit.prevent="addmaterial">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Material</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                              <p><label>Codigo: </label> {{$codem}}</p>
+                            </div>
+                            <div class="form-group">
+                              <p><label>Descripción: </label> {{$descriptionm}}</p>
+                            </div>
+                            <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input wire:model.defer="amount" type="number">
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" wire:click.prevent="addmaterial()" class="btn btn-primary btn-sm" >Agregar</button>
+                          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
 </div>

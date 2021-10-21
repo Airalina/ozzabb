@@ -1,3 +1,4 @@
+
 @if($update==true)
   <div> 
     <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
@@ -96,59 +97,33 @@
                 </div>
                     @if($update==true)
                     <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Instalaciones registradas en el pedido:</font></font></label>
-                    
                           <table class="table table-hover table-sm">
-                                <thead>
+                              <thead>
                                 <tr>
-                                <th style="text-align: center">Codigo instalación</th>
-                                <th style="text-align: center">Precio Unitario U$D</th>
-                                <th style="text-align: center">Cantidad</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($detailcollect as $install)
-                              <tr>
-                                <td style="text-align: center">{{ $install->material_id }}</td>
-                                <td style="text-align: center">{{ $install->unit_price_usd }}</td>
-                                <td style="text-align: center">{{ $install->cantidad }}</td>
-                                <td style="text-align: center">
-                                  <button type="button"  wire:click="updatecantidad({{ $install->id }})" class="btn btn-primary btn-sm">Modificar</button>
-                                </td>
-                              </tr> 
-                            @empty
-                                <tr class="text-center">
-                                  <td colspan="4" class="py-3 italic">No hay información</td>
+                                  <th style="text-align: center">Codigo instalación</th>
+                                  <th style="text-align: center">Precio Unitario U$D</th>
+                                  <th style="text-align: center">Cantidad</th>
+                                  <th></th>
                                 </tr>
-                            @endforelse
-                                @if($installid==true)
-                                <div class="card-body table-responsive p-0">
-                                  <table class="table table-hover table-sm">
-                                    <thead>
-                                      <tr>
-                                        <th style="text-align: center">Codigo instalación</th>
-                                        <th style="text-align: center">Precio Unitario U$D</th>
-                                        <th style="text-align: center">Cantidad</th>
-                                        <th></th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr>
-                                        <td style="text-align: center">{{ $codinstall }}</td>
-                                        <td style="text-align: center">{{$upusd }}</td>
-                                        <td style="text-align: center"><input wire:model="cantidad" type="number"></td>
-                                        <td><button type="button"  wire:click="nuevacantidad({{ $detailup }})" class="btn btn-success btn-sm">Agregar</button><button type="button"  wire:click="cancelacantidad()" class="btn btn-danger btn-xs">Cancelar</button></td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                              @endif
-
+                              </thead>
+                            <tbody>
+                              @forelse($detailcollect as $install)
+                                <tr>
+                                  <td style="text-align: center">{{ $install->installation_id }}</td>
+                                  <td style="text-align: center">{{ $install->unit_price_usd }}</td>
+                                  <td style="text-align: center">{{ $install->cantidad }}</td>
+                                  <td style="text-align: center">
+                                    <button type="button"  wire:click="updatecantidad({{ $install->id }})" class="btn btn-primary btn-sm">Modificar</button>
+                                  </td>
+                                </tr> 
+                              @empty
+                                  <tr class="text-center">
+                                    <td colspan="4" class="py-3 italic">No hay información</td>
+                                  </tr>
+                              @endforelse
                             </tbody>
                           </table>
                     @endif 
-                    <div class="row">
-                    <div class="col-6">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Seleccione instalación a ser agregada</h3>
@@ -166,7 +141,6 @@
                                 <th style="text-align: center">Cod.</th>
                                 <th style="text-align: center">Descripción</th>
                                 <th style="text-align: center">P/U U$D</th>
-                                <th style="text-align: center">Cantidad</th>
                                 <th></th>
                               </tr>
                             </thead>
@@ -176,8 +150,7 @@
                                 <td style="text-align: center">{{ $install->code }}</td>
                                 <td style="text-aling: center">{{ $install->description}}</td>
                                 <td style="text-align: center">{{ $install->usd_price }}</td>
-                                <td style="text-align: center"><input wire:model="cant" size="4" type="number"></td>
-                                <td><button type="button"  wire:click="addinstallationup({{ $install->id }})" class="btn btn-success btn-sm">Agregar</button></td>  
+                                <td><button type="button"  wire:click="selectinstallation({{ $install->id }})" class="btn btn-success btn-sm">Seleccionar</button></td>  
                               </tr>
                               @empty
                                 <tr class="text-center">
@@ -192,8 +165,6 @@
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
-                    </div>
-                    <div class="col-6">
                       <div class="card">
                         <div class="card-header">
                           <h3 class="card-title">Instalaciones agregadas:</h3>
@@ -233,8 +204,6 @@
                       </div>
                       <!-- /.card -->
                     </div>
-                  </div>
-                </div>
                 <!-- /.card-body -->
                 @if($update==true)
                   <div class="card-footer">
@@ -246,5 +215,55 @@
                   </div>
                 @endif
               </form>
+              <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                <form wire.submit.prevent="addmaterial">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Instalación seleccionada</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    @if($installid==true)
+                      <div class="modal-body">
+                          <div class="form-group">
+                            <p><label>Codigo: </label> {{$codinstall}}</p>
+                          </div>
+                          <div class="form-group">
+                            <p><label>Precio Unitario: </label> {{$upusd}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input wire:model.defer="cantidad" type="number">
+                          </div>
+                      </div>
+                    @else
+                      <div class="modal-body">
+                          <div class="form-group">
+                            <p><label>Codigo: </label> {{$codei}}</p>
+                          </div>
+                          <div class="form-group">
+                            <p><label>Descripción: </label> {{$descriptioni}}</p>
+                          </div>
+                          <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input wire:model.defer="cant" type="number">
+                          </div>
+                      </div>
+                    @endif
+                    <div class="modal-footer">
+                      @if($installid==true)
+                        <button type="button"  wire:click.prevent="nuevacantidad({{ $detailup }})" class="btn btn-success btn-sm">Agregar</button>
+                      @else
+                        <button type="submit" wire:click.prevent="addinstallationup()" class="btn btn-primary btn-sm" >Agregar</button>
+                      @endif
+                      <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+              </div>
             </div>
+            
 </div>

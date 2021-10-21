@@ -15,7 +15,7 @@ class Ordenesclientes extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     protected $orders;
-    public $order, $idp, $funcion="list", $namecust, $paginas=25, $customer_id, $date, $deadline, $deadline1, $start_date, $buys, $order_state, $order_job, $usd_price, $arp_price, $search;
+    public $order, $idp, $funcion="list", $namecust, $codei, $descriptioni, $usd_price_i, $paginas=25, $customer_id, $date, $deadline, $deadline1, $start_date, $buys, $order_state, $order_job, $usd_price, $arp_price, $search;
     public $codinstall, $upusd, $installid=false, $cant, $cantidad=0, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
     public  $customer, $customers, $usd=180, $count=0, $address, $address_id, $countaddress, $selectcustomer=false, $update=false, $addaddress=false, $selectaddress=false, $newaddress;
     Public $street, $number, $newtotal=0, $location, $province, $country, $postcode, $detailcollect, $order_id, $detail_id, $nuevafecha=false;
@@ -108,7 +108,7 @@ class Ordenesclientes extends Component
             ]);
             $this->newdetail=new Orderdetail;
             $this->newdetail->clientorder_id=$this->order->id;
-            $this->newdetail->material_id=$detail[0];
+            $this->newdetail->installation_id=$detail[0];
             $this->newdetail->unit_price_usd=$detail[1];
             $this->newdetail->cantidad=$this->cantidad;
             $this->newdetail->save();
@@ -162,8 +162,14 @@ class Ordenesclientes extends Component
         $this->explora($this->order);
 
     }
-
-    public function addinstallation(Installation $install)
+    public function selectinstallation(Installation $install)
+    {
+        $this->codei=$install->code;
+        $this->descriptioni=$install->description;
+        $this->usd_price_i=$install->usd_price;
+        $this->dispatchBrowserEvent('show-form');
+    }
+    public function addinstallation()
     {
         $this->validate([
             'cant' => 'required|integer|min:1|max:1000000'
@@ -174,28 +180,37 @@ class Ordenesclientes extends Component
             'cant.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
         ]);
         foreach($this->details as $detail){
-            if($detail[0]==$install->code){
+            if($detail[0]==$this->codei){
                 $this->downinstallation($detail[3],$detail[1],$detail[2]);
             }        
         }
-        $this->detail[0]=$install->code;
-        $this->detail[1]=$install->usd_price;
+        $this->detail[0]=$this->codei;
+        $this->detail[1]=$this->usd_price_i;
         $this->detail[2]=$this->cant;
         $this->detail[3]=$this->count;
         $this->details[$this->count]=$this->detail;
         $this->total=$this->total+$this->detail[1]*$this->detail[2];
         $this->count=$this->count+1;
         $this->cant=0;
+        $this->dispatchBrowserEvent('hide-form');
     }
-    public function addinstallationup(Installation $install)
+    public function addinstallationup()
     {
+        $this->validate([
+            'cant' => 'required|integer|min:1|max:1000000'
+        ],[
+            'cant.required' => 'El campo "Cantidad" es requerido',
+            'cant.integer' => 'El campo "Cantidad" debe ser un entero',
+            'cant.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
+            'cant.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
+        ]);
         foreach($this->details as $detail){
-            if($detail[0]==$install->code){
+            if($detail[0]==$this->codei){
                 $this->downinstallation($detail[3],$detail[1],$detail[2]);
             }        
         }
-        $this->detail[0]=$install->code;
-        $this->detail[1]=$install->usd_price;
+        $this->detail[0]=$this->codei;
+        $this->detail[1]=$this->usd_price_i;
         $this->detail[2]=$this->cant;
         $this->detail[3]=$this->count;
         $this->details[$this->count]=$this->detail;
@@ -203,6 +218,7 @@ class Ordenesclientes extends Component
         round($this->total,2);
         $this->count=$this->count+1;
         $this->cant=0;
+        $this->dispatchBrowserEvent('hide-form');
     }
 
     public function downinstallation($algo,$detailpu,$detailcant)
@@ -319,15 +335,16 @@ class Ordenesclientes extends Component
         $this->installid=true;
         $this->detailup=$detail;
         $this->upusd=$detail->unit_price_usd;
-        $this->codinstall=$detail->material_id;
+        $this->codinstall=$detail->installation_id;
         $this->detail_id=$detail->id;
         $this->cantidad=$detail->cantidad;
+        $this->dispatchBrowserEvent('show-form');
     }
 
     public function nuevacantidad(Orderdetail $detail)
     {
             $this->validate([
-                'cantidad' => 'required|integer|min:0',
+                'cantidad' => 'required|integer|min:1|max:1000000',
             ],[
                 'cantidad.required' => 'El campo "Cantidad" es requerido',
                 'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
@@ -362,7 +379,7 @@ class Ordenesclientes extends Component
         $this->order->arp_price=$this->arp_price;
         $this->order->save();
         $this->update($this->order);
-
+        $this->dispatchBrowserEvent('hide-form');
     }
 
     public function editar(int $detail)
@@ -430,7 +447,7 @@ class Ordenesclientes extends Component
         foreach($this->details as $detail){
             $this->cantidad=$detail[2];
             $this->validate([
-                'cantidad' => 'required|integer|min:0|max:100000000',
+                'cantidad' => 'required|integer|min:1|max:100000000',
             ],[
                 'cantidad.required' => 'El campo "Cantidad" es requerido',
                 'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
@@ -439,7 +456,7 @@ class Ordenesclientes extends Component
             ]);
             $this->newdetail=new Orderdetail;
             $this->newdetail->clientorder_id=$this->order->id;
-            $this->newdetail->material_id=$detail[0];
+            $this->newdetail->installation_id=$detail[0];
             $this->newdetail->unit_price_usd=$detail[1];
             $this->newdetail->cantidad=$this->cantidad;
             $this->newdetail->save();

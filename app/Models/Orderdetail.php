@@ -11,6 +11,6 @@ class Orderdetail extends Model
 
     public function installations()
     {
-        return $this->hasMany(Installation::class,'description');
+        return $this->hasMany(Installation::class,'code','installation_id');
     }
 }

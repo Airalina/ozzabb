@@ -16,8 +16,8 @@ class Instalaciones extends Component
     use WithPagination;
     protected $instalaciones;
     protected $paginationTheme = 'bootstrap';
-    public $instalacion, $installation_id, $code, $paginas=25, $description, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
-    public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $photo, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false;
+    public $instalacion, $installation_id, $code, $codem, $paginas=25, $description, $descriptionm, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
+    public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $photo=null, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false;
     public function render()
     {
         $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
@@ -44,7 +44,6 @@ class Instalaciones extends Component
        
         if($this->funcion=="create"){
             $this->validate([
-                'photo'=>'file',
                 'code'=>'required|integer|min:1|max:100000000',
                 'description'=>'required|string|min:5|max:300',
                 'date_admission'=>'required|date',
@@ -74,9 +73,11 @@ class Instalaciones extends Component
             $this->revision->installation_id=$this->instalacion->id;
             $this->revision->number_version=0;
             $this->revision->create_date=$this->date_admission;
-            $this->nombrefile=$this->photo->getClientOriginalName();
-            $this->photo->storeAs('images',$this->nombrefile);
-            $this->revision->image=$this->nombrefile;
+            if($this->photo!=null){
+                $this->nombrefile=$this->photo->getClientOriginalName();
+                $this->photo->storeAs('images',$this->nombrefile);
+                $this->revision->image=$this->nombrefile;
+            }
             $this->revision->reason="Modelo base";
             $this->revision->save();
             foreach($this->details as $detail)
@@ -92,7 +93,6 @@ class Instalaciones extends Component
         }
         if($this->funcion=="newrevision"){
             $this->validate([
-                'photo'=>'file',
                 'date'=>'required|date',
                 'reason'=>'required|string|min:5|max:300'
             ],[
@@ -118,7 +118,8 @@ class Instalaciones extends Component
                 $this->newdetail->amount=$detail[2];
                 $this->newdetail->save(); 
             }
-            $this->volver();
+            $this->searchmateriales="";
+            $this->explora($this->revision->installations->find($this->revision->installation_id));
         }
         if($this->funcion=="exploradetail"){
 
@@ -228,10 +229,10 @@ class Instalaciones extends Component
         $this->exploradetail($this->number_version);
     }
 
-    public function addmaterial(Material $material)
+    public function addmaterial()
     {
         $this->validate([
-            'amount'=>'required|integer|min:1|max:1000000'
+           'amount'=>'required|integer|min:1|max:1000000'
         ], [
             'amount.required'=>'El campo Cantidad es requerido',
             'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
@@ -239,22 +240,31 @@ class Instalaciones extends Component
             'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
         ]);
         foreach($this->details as $detail){
-            if($detail[0]==$material->code){
+            if($detail[0]==$this->codem){
                 $this->downmaterial($detail[3]);
             }        
         }
-        $this->detail[0]=$material->code;
-        $this->detail[1]=$material->description;
+        $this->detail[0]=$this->codem;
+        $this->detail[1]=$this->descriptionm;
         $this->detail[2]=$this->amount;
         $this->detail[3]=$this->count;
-        $this->detail[4]=$material->id;
+        $this->detail[4]=$this->material_id;
         $this->details[]=$this->detail;
         $this->count=$this->count+1;
         $this->amount=0;
+        $this->dispatchBrowserEvent('hide-form');
     }
-
+    public function selectmaterial(Material $material)
+    {
+        $this->material_id=$material->id;
+        $this->descriptionm=$material->description;;
+        $this->codem=$material->code;
+        $this->dispatchBrowserEvent('show-form');
+        $this->searchmateriales="";
+    }
     public function newrevision()
     {
+        $this->count=0;
         $this->funcion="newrevision";
         $this->number_version=(count(Revision::where('installation_id', $this->installation_id)->get())-1);
         $this->revision=Revision::where('installation_id', $this->installation_id)->get()->last();
@@ -262,8 +272,10 @@ class Instalaciones extends Component
         $this->revisiond=Revisiondetail::where('installation_id',$this->installation_id)->where('number_version', $this->number_version)->get();
         foreach($this->revisiond as $revisiondetail){
             $this->amount=$revisiondetail->amount;
-            $this->addmaterial($revisiondetail->materials);
-
+            $this->material_id=$revisiondetail->material_id;
+            $this->codem=$revisiondetail->materials->find( $revisiondetail->material_id)->code;
+            $this->descriptionm=$revisiondetail->materials->find( $revisiondetail->material_id)->description;
+            $this->addmaterial();
                 }
     }
     public function downmaterial($orden)

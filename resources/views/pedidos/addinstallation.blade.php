@@ -31,7 +31,7 @@
                                 <td style="text-align: center">{{ $install->code }}</td>
                                 <td style="text-align: center">{{ $install->usd_price }}</td>
                                 <td style="text-align: center"><input wire:model="cant" type="number"></td>
-                                <td><button type="button"  wire:click="addinstallation({{ $install->id }})" class="btn btn-success btn-xs">Agregar</button></td>
+                                <td><button type="button"  wire:click="addinstallation({{ $install->id }})" class="btn btn-success btn-sm">Agregar</button></td>
                               </tr>
                               @empty
                                 <tr class="text-center">
