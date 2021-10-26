@@ -274,8 +274,8 @@ return [
             'icon' => 'fas fa-book-open',
         ],
         [
-            'text' => 'Ordenes de entrada de materiales',
-            'url'  => 'ordenes-de-entrada-de-materiales',
+            'text' => 'Ordenes de ingreso de materiales',
+            'url'  => 'ordenes-de-ingreso-de-materiales',
             'icon' => 'fas fa-book-open',
         ],
         ['header' => 'MATERIALES'],

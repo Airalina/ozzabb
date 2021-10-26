@@ -14,11 +14,11 @@
                       <th style="text-align: center">Descripción</th>
                       <th style="text-aling: center">N° Deposito</th>
                       <th style="text-align: center">Presentación</th>
-                      <th style="text-align: center">Cantidad recibida</th>
-                      <th style="text-align: center">Cantidad requerida</th>
+                      <th style="text-align: center">Cantidad enviada</th>
+                      <th style="text-align: center">Cantidad pedida</th>
                       <th style="text-align: center">Cantidad remito</th>
                       <th style="text-align: center">Diferencia</th>
-                      <th style="text-align: center">Sin Entrgar</th>
+                      <th style="text-align: center">Sin Entregar</th>
                       <th></th>
                       <th></th>
                     </tr>

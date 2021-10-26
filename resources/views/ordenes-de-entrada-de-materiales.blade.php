@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Orden de Ingreso')
 
 @section('content_header')
     <h1>Ordenes de entrada de materiales</h1>
