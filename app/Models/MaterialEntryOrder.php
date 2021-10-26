@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use  App\Models\BuyOrder;
 
 class MaterialEntryOrder extends Model
 {
@@ -17,5 +18,9 @@ class MaterialEntryOrder extends Model
     public function buyorders()
     {
         return $this->belongsToMany(MaterialEntryOrder::class,'buy_order_material_entry_orders','buy_order_id','entry_order_id');
+    }
+    public function buy_order()
+    {
+        return $this->belongsTo(BuyOrder::class, 'buy_order_id');
     }
 }

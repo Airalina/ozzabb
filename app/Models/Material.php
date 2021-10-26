@@ -39,4 +39,8 @@ class Material extends Model
     {
         return $this->hasMany(Revisiondetail::class); 
     }
+    public function buy_order_detail()
+    {
+        return $this->hasOne(BuyOrderDetail::class, 'material_id');
+    }
 }
