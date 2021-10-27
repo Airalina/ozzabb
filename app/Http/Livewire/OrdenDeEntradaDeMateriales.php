@@ -17,8 +17,8 @@ class OrdenDeEntradaDeMateriales extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     protected $orders, $buyorders;
-    public  $material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy="", $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false;
-    public $orderdetails,$entry_orderbuy, $entry_order_id, $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state;
+    public  $material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy="", $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false, $code_m, $description_m, $presentation_m, $id_m, $deposit_m;
+    public $orderdetails,$entry_orderbuy, $entry_order_id, $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present;
   
 
     public function updatingSearch()
@@ -189,7 +189,7 @@ class OrdenDeEntradaDeMateriales extends Component
                                 if($detail[10] == 0){
                                     $this->buy_order_state->state=1;                       
                                 }
-                            
+                                
                                  $this->buy_order_state->save();
                            }
                     }
@@ -241,44 +241,50 @@ class OrdenDeEntradaDeMateriales extends Component
     {  
         if($this->modo=="Sin orden de compra"){
             $this->validate([
-                'nombre_deposito'=>'required|string|min:5|max:100'
-            ], [
-                'nombre_deposito.required'=>'El campo Nombre de Deposito es requerido',
-                'nombre_deposito' => 'El campo Nombre de Deposito tiene como mínimo 5(cinco) caracteres',
-                'nombre_deposito' => 'El campo Nombre de Deposito tiene como máximo 100(cienn) caracteres',
+                'cant' => 'required|integer|min:1|max:1000000',
+                'present' => 'required|integer|min:1|max:1000000',
+                'nombre_deposito' => 'required|string|min:5|max:100'
+            ],[
+                'cant.required' => 'El campo "Cantidad" es requerido',
+                'cant.integer' => 'El campo "Cantidad" debe ser un entero',
+                'cant.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
+                'cant.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millón)',
+                'present.required' => 'El campo "Presentación" es requerido',
+                'present.integer' => 'El campo "Presentación" debe ser un entero',
+                'present.min' => 'El campo "Presentación" debe ser como mínimo 1(Uno)',
+                'present.max' => 'El campo "Presentación" debe ser como máximo 1000000(Un millón)',
+                'nombre_deposito.required' => 'Seleccione una opción del campo "Deposito"'
+    
             ]);
+            
             $warehouse=Warehouse::where('name',$this->nombre_deposito)->get();
             foreach($warehouse as $ware){
                 $this->warehouse_id=$ware->id;
             }
-            $this->validate([
-                'amount'=>'required|integer|min:1|max:1000000'
-            ], [
-                'amount.required'=>'El campo Cantidad recibida es requerido',
-                'amount.integer' => 'El campo Cantidad recibida tiene que ser un número entero',
-                'amount.min' => 'El campo Cantidad recibida es como mínimo 1(uno)',
-                'amount.max' => 'El campo Cantidad recibida es como máximo 1000000(un millon)',
-            ]);
+          
             foreach($this->details as $detail){
-                if($detail[0]==$material->code && $detail[5]==$this->presentation && $detail[6]==$this->warehouse_id){
-                    $this->downmaterial($detail[3]);
+                if($detail[0]==$this->code_m){
+                    $this->downmaterial($detail[3],$detail[1],$detail[2]);
                 }        
-            }
-            $this->validate([
-                'presentation'=>'required|integer|min:1|max:1000000'
-            ], [
-                'presentation.required'=>'El campo Presentación es requerido',
-                'presentation.integer' => 'El campo Presentación tiene que ser un número entero',
-                'presentation.min' => 'El campo Presentación es como mínimo 1(uno)',
-                'presentation.max' => 'El campo Presentación es como máximo 1000000(un millon)',
-            ]);
+            } 
+            
             $this->detail[0]=$material->code;
             $this->detail[1]=$material->description;
             $this->detail[4]=$material->id;
-            $this->detail[2]=$this->amount;
+            $this->detail[2]=$this->cant;
+            $material->stock += $this->cant;
+            
+            if(isset($material->stock)){
+                $material->save();
+            }
             $this->detail[3]=$this->count;
-            $this->detail[5]=$this->presentation;
+            $this->detail[5]=$this->present;
             $this->detail[6]=$this->warehouse_id;
+            $this->cant=0;
+            $this->present=0;
+            $this->nombre_deposito='';
+            $this->dispatchBrowserEvent('hide-form');
+
         }else{
                 
             $this->id_warehouse = Warehouse::where('type', 1)->where('state', 1)->first();
@@ -302,6 +308,14 @@ class OrdenDeEntradaDeMateriales extends Component
             }
             $this->detail[10]=$this->difference[$material->id];
             $this->detail[11]=$material->set;
+
+            $material->stock += $this->received_amount[$material->id];
+            
+            if(isset($material->stock)){
+                $material->save();
+            }
+            
+
         }  
        # dd($material);
         $this->details[]=$this->detail;
@@ -371,6 +385,27 @@ class OrdenDeEntradaDeMateriales extends Component
        
     }
 
+    public function selectmaterial(Material $material){
+        $this->id_m = $material->id;
+        $this->code_m=$material->code;
+        $this->description_m=$material->description;
+        $this->dispatchBrowserEvent('show-form');
+    }
+
+    public function addmaterialup(){
+       
+        $this->detail[0]=$this->code_m;
+        $this->detail[1]=$this->description_m;
+        $this->detail[2]=$this->cant;
+        $this->detail[3]=$this->count;
+        $this->detail[4]=$this->present;
+        $this->detail[5]=$this->nombre_deposito;
+        $this->details[$this->count]=$this->detail;
+        $this->total=$this->total+$this->detail[1]*$this->detail[2];
+        round($this->total,2);
+        $this->count=$this->count+1;
+       
+    }
     
 
 }
