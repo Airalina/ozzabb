@@ -69,10 +69,7 @@
                                                 <tr>
                                                     <th style="text-align: center">Codigo</th>
                                                     <th style="text-align: center">Descripción</th>
-                                                    <th style="text-align: center">Presentación</th>
-                                                    <th style="text-align: center">Cantidad</th>
-                                                    <th style="text-align: center">Deposito</th>
-                                                    <th></th>
+                                                    <th style="text-align: center">&nbsp;</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -82,22 +79,8 @@
                                                         </td>
                                                         <td style="text-align: center">
                                                             {{ $material->description }}</td>
-                                                        <td style="text-align: center"><input wire:model="presentation"
-                                                                type="number" style="width: 100px;"></td>
-                                                        <td style="text-align: center"><input wire:model="amount"
-                                                                type="number" style="width: 100px;"></td>
-                                                        <td style="text-align: center">
-                                                            <select
-                                                                class="form-control select2 select2-hidden-accessible"
-                                                                wire:model="nombre_deposito" style="width: 100%;">
-                                                                <option selected="selected"></option>
-                                                                @foreach ($depositos as $deposito)
-                                                                    <option>{{ $deposito->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </td>
-                                                        <td><button type="button"
-                                                                wire:click="addmaterial({{ $material->id }})"
+                                                        <td style="text-align: center"><button type="button"
+                                                                wire:click="selectmaterial({{ $material->id }})"
                                                                 class="btn btn-success btn-sm">Agregar</button>
                                                         </td>
                                                     </tr>
@@ -183,8 +166,8 @@
                                     </div>
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" wire:model="close_order" class="form-check-input" id="exampleCheck1"
-                                    checked="" class="form-control">
+                                <input type="checkbox" wire:model="close_order" class="form-check-input"
+                                    id="exampleCheck1" checked="" class="form-control">
                                 <label for="exampleCheck1">Cerrar orden</label>
                             </div>
                             @if ($searchorderbuy != '')
@@ -371,4 +354,49 @@
                 </td>
             </div>
     </form>
+    <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form wire.submit.prevent="addmaterial">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Material seleccionado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <p><label>Codigo: </label> {{ $code_m }}</p>
+                            </div>
+                            <div class="form-group">
+                                <p><label>Descripción: </label> {{ $description_m }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Presentación:</label>
+                                <input wire:model.defer="present" type="number">
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad:</label>
+                                <input wire:model.defer="cant" type="number">
+                            </div>
+                            <div class="form-group">
+                                <label>Deposito:</label>
+                                <select class="form-control select2 select2-hidden-accessible"
+                                    wire:model="nombre_deposito" style="width: 100%;">
+                                    <option selected="selected"></option>
+                                    @foreach ($depositos as $deposito)
+                                        <option>{{ $deposito->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                            <button type="submit" wire:click.prevent="addmaterial({{ $id_m }})"
+                                class="btn btn-primary btn-sm">Agregar</button>
+                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
