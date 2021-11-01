@@ -12,13 +12,15 @@ use App\Models\BuyOrder;
 use App\Models\BuyOrderDetail;
 use App\Models\BuyOrderMaterialEntryOrder;
 use Livewire\WithPagination;
+use Carbon\Carbon;
+
 class OrdenDeEntradaDeMateriales extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     protected $orders, $buyorders;
     public  $material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy="", $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false, $code_m, $description_m, $presentation_m, $id_m, $deposit_m;
-    public $orderdetails,$entry_orderbuy, $entry_order_id, $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present;
+    public $orderdetails,$entry_orderbuy, $entry_order_id, $entry_order_type , $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present;
   
 
     public function updatingSearch()
@@ -301,6 +303,7 @@ class OrdenDeEntradaDeMateriales extends Component
             $this->detail[6]=$this->id_warehouse->id;
             $this->detail[7]=$this->requested_amount[$material->id];
             $this->detail[8]=$this->refer_amount[$material->id];
+       #     dd($this->close_order);
             if($this->close_order){
                 $this->detail[9]=abs($this->difference[$material->id]);
             }else{
@@ -340,13 +343,23 @@ class OrdenDeEntradaDeMateriales extends Component
         $this->amount_requested=$buy->amount;
     }
     public function create()
-    {
+    {   
+        $this->date=Carbon::now()->format('Y-m-d');
+        $this->hour=Carbon::now()->format('H:m');
         $this->funcion="create";
+       
        # $this->modo="Sin orden de compra";
     }
     public function explora(MaterialEntryOrder $order)
-    {
-        $this->entry_order_id=$order->id;
+    {  
+        $this->entry_order_id= $order->id;
+        $this->entry_order_type=$order->origin;
+        $this->origen=$order->origin;
+        $this->causa=$order->reason;
+        $this->follow=$order->follow_number;
+        $this->date=$order->date;
+        $this->hour=$order->hour;
+
         $this->funcion="explora";
     }
     public function explorabuyorder(BuyOrder $order)
@@ -407,5 +420,8 @@ class OrdenDeEntradaDeMateriales extends Component
        
     }
     
-
+    public function close(){
+        $this->close_order = true;
+        $this->emit('alertClose');
+    }
 }
