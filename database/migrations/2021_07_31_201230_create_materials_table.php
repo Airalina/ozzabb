@@ -17,11 +17,11 @@ class CreateMaterialsTable extends Migration
             $table->id();
             $table->string('code', 100);
             $table->string('name', 100);
-            $table->enum('family', ['Conectores', 'Terminales', 'Cables', 'Sellos']);
+            $table->enum('family', ['Conectores', 'Terminales', 'Cables', 'Sellos', 'Tubos', 'Accesorios', 'Clips']);
             $table->string('color', 50);
             $table->text('description')->nullable();
-            $table->integer('line_id');
-            $table->integer('usage_id');
+            $table->enum('line', ['Superseal', 'Mini', 'Fit', 'Bulldog', 'Ecoseal', 'Eco']);
+            $table->enum('usage', ['Motos', 'GNC', 'Electro']);
             $table->integer('replace_id')->nullable();
             $table->integer('stock_min');
             $table->integer('stock_max')->nullable();

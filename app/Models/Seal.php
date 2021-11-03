@@ -10,9 +10,9 @@ class Seal extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['material_id'];
+    protected $fillable = ['material_id', 'minimum_diameter', 'maximum_diameter', 'type'];
     
-    public function material()
+    public function material_info()
     {
         return $this->belongsTo(Material::class, 'material_id');
     }

@@ -1,22 +1,32 @@
 <div>
-    <div class="card card-tabs">
+    <div class="card">
         <div class="card-header">
             <h3 class="card-title">Materiales Registrados</h3>
             <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input wire:model="search" type="text" class="form-control float-right"
+                        placeholder="Buscar Material...">
+                </div>
+            </div>
+
+        </div>
+        <div class="card-header">
+            <div>
+                <label class="float-left">Registros por pagina:</label><input style="width: 60px; height: 30px"
+                    type="number" min="1" wire:model="paginas" class="form-control">
+            </div>
+            <div class="card-tools">
                 @if (auth()->user()->can('storematerial', auth()->user()))
-                    <div>
-                        <button wire:click="funcion()" type="button" class="btn btn-info">Agregar Material</button>
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <button wire:click="funcion()" type="button" class="btn btn-info btn-sm">Agregar
+                            Material</button>
                     </div>
                 @endif
-                <div class="input-group input-group-sm" style="width: 135px;">
-                    <input wire:model="search" type="text" class="form-control float-right"
-                        placeholder="Buscar Materiales">
-                </div>
             </div>
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive">
-            <table class="table table-head text-nowrap">
+            <table class="table table-head table-sm">
                 <div class="form-group" data-select2-id="45">
                     <label>Ordenar por</label>
                     <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible"
@@ -35,17 +45,17 @@
                 </div>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Codigo</th>
-                        <th>Nombre</th>
-                        <th>Familia</th>
-                        <th>Color</th>
-                        <th>Linea</th>
-                        <th>Uso</th>
-                        <th>Remplazo</th>
-                        <th>Stock Min.</th>
-                        <th>Stock Max.</th>
-                        <th>Stock</th>
+                        <th style="text-align: center">ID</th>
+                        <th style="text-align: center">Codigo</th>
+                        <th style="text-align: center">Nombre</th>
+                        <th style="text-align: center">Familia</th>
+                        <th style="text-align: center">Color</th>
+                        <th style="text-align: center">Linea</th>
+                        <th style="text-align: center">Uso</th>
+                        <th style="text-align: center">Remplazo</th>
+                        <th style="text-align: center">Stock Min.</th>
+                        <th style="text-align: center">Stock Max.</th>
+                        <th style="text-align: center">Stock</th>
                     </tr>
                 </thead>
 
@@ -54,31 +64,31 @@
                     @forelse($materials as $material)
 
                         <tr class="registros">
-                            <td>{{ $material->id }} </td>
-                            <td>{{ $material->code }} </td>
-                            <td>{{ $material->name }} </td>
-                            <td>{{ $material->family }} </td>
-                            <td>{{ $material->color }} </td>
-                            <td>
+                            <td style="text-align: center">{{ $material->id }} </td>
+                            <td style="text-align: center">{{ $material->code }} </td>
+                            <td style="text-align: center">{{ $material->name }} </td>
+                            <td style="text-align: center">{{ $material->family }} </td>
+                            <td style="text-align: center">{{ $material->color }} </td>
+                            <td style="text-align: center">
                                 @if ($material->line != null)
-                                    {{ $material->line->name }}
+                                    {{ $material->line }}
                                 @endif
                             </td>
-                            <td>
+                            <td style="text-align: center">
                                 @if ($material->usage != null)
-                                    {{ $material->usage->name }}
+                                    {{ $material->usage }}
                                 @endif
                             </td>
-                            <td>
+                            <td style="text-align: center">
                                 @if ($material->material != null)
                                     {{ $material->material->name }}
                                 @endif
                             </td>
-                            <td>{{ $material->stock_min }} </td>
-                            <td>{{ $material->stock_max }} </td>
-                            <td>{{ $material->stock }} </td>
+                            <td style="text-align: center">{{ $material->stock_min }} </td>
+                            <td style="text-align: center">{{ $material->stock_max }} </td>
+                            <td style="text-align: center">{{ $material->stock }} </td>
 
-                            <td>
+                            <td style="text-align: center">
                                 <button type="button" wire:click="explorar({{ $material->id }})"
                                     class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
                                 @if (auth()->user()->can('updatematerial', auth()->user()))
@@ -93,11 +103,12 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="4" class="py-3 italic">No hay información</td>
+                            <td colspan="11" class="py-3 italic">No hay información</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
+            {{ $materials->links() }}
         </div>
         <!-- /.card-body -->
     </div>

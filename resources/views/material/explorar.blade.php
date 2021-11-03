@@ -36,12 +36,12 @@
                 <td>{{ $material->color }} </td>
                 <td>
                     @if ($material->line != null)
-                        {{ $material->line->name }}
+                        {{ $material->line }}
                     @endif
                 </td>
                 <td>
                     @if ($material->usage != null)
-                        {{ $material->usage->name }}
+                        {{ $material->usage }}
                     @endif
                 </td>
                 <td>
