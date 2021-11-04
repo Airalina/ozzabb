@@ -1,17 +1,17 @@
 <div>
       <button wire:click="volver()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
-    </div>
+</div>
     <br>
-<div class="col-md-6">
-@if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+  <div class="col-md-6">
+  @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+    </div>
+  @endif
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
@@ -22,8 +22,8 @@
               <form>
 				<div class="card-body">
 					<div class="form-group">
-							<label for="exampleInputEmail1">Nombre Usuario</label>
-							<input type="text" class="form-control form-control-sm" id="name" wire:model="nombre" placeholder="Nombre de Usuario">
+							<label for="exampleInputEmail1">Nombre Rol</label>
+							<input type="text" class="form-control form-control-sm" id="name" wire:model="nombre" placeholder="Nombre de Rol">
 					</div>
 				</div>
 			  </form>
