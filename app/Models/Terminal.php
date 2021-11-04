@@ -9,9 +9,9 @@ use App\Models\Material;
 class Terminal extends Model
 {
     use HasFactory;
-    protected $fillable = ['material_id','size','minimum_section','maximum_section'];
+    protected $fillable = ['material_id','size','minimum_section','maximum_section', 'material', 'type'];
 
-    public function material()
+    public function material_info()
     {
         return $this->belongsTo(Material::class, 'material_id');
     }

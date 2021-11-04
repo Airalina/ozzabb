@@ -24,12 +24,15 @@
                     <div class="form-group">
                         <label for="family">Familia</label>
                         <select class="form-control form-control-sm" wire:model="family" wire:change="con" id="family">
-                            <option selected value="">Selecciona una familia</option>
-                            <option value="Conectores">conectores</option>
-                            <option value="Cables">cables</option>
-                            <option value="Terminales">terminales</option>
-                            <option value="Sellos">sellos</option>
-                        </select>
+                        <option selected value="">Selecciona una familia</option>
+                        <option value="Conectores">conectores</option>
+                        <option value="Cables">cables</option>
+                        <option value="Terminales">terminales</option>
+                        <option value="Sellos">sellos</option>
+                        <option value="Tubos">tubos</option>
+                        <option value="Accesorios">accesorios</option>
+                        <option value="Clips">clips</option>
+                    </select>
                     </div>
                     <div class="form-group" id="div">
                     </div>
@@ -49,18 +52,29 @@
                             <option value="Verde" class="text-success">Verde</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="line">Línea</label>
-                        <select wire:model="line" id="line" class="form-control form-control-sm">
-                              <x-line-card :line_id="$line_id" :info_line="$info_line" />
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="usage">Uso</label>
-                        <select wire:model="usage" id="usage" class="form-control form-control-sm">
-                             <x-usage-card :usage_id="$usage_id" :info_usage="$info_usage" />
-                        </select>
-                    </div>
+                      <div class="form-group">
+                    @if($family != "Cables")
+                    <label for="line">Línea</label>
+                    <select class="form-control form-control-sm" wire:model="line" id="line">
+                            <option selected>Selecciona una linea</option>
+                            <option value="Superseal">Superseal</option>
+                            <option value="Mini">Mini</option>
+                            <option value="Fit">Fit</option>
+                            <option value="Bulldog">Bulldog</option>
+                            <option value="Econoseal">Econoseal</option>
+                            <option value="Eco">Eco</option>
+                    </select>
+                @endif
+                </div>
+                <div class="form-group">
+                    <label for="usage">Uso</label>
+                    <select wire:model="usage" id="usage" class="form-control form-control-sm">
+                            <option selected>Selecciona un uso</option>
+                            <option value="Motos">Motos</option>
+                            <option value="GNC">GNC</option>
+                            <option value="Electro">Electro</option>
+                    </select>
+                </div>
                     <div class="form-group">
                         <label for="stock_min">Stock mínimo</label>
                         <input type="text" class="form-control" id="stock_min" wire:model="stock_min"
