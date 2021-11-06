@@ -24,7 +24,7 @@ class Providers extends Component
     protected $providers;
     public $funcion="",  $paginas=25, $mat_n,$id_provider, $idu, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
     public $validar, $amount, $material, $id_material, $material_up, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex, $addMaterial;
-    public $code, $name_material, $family, $terminal, $connector, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace;
+    public $code, $name_material, $family, $terminal, $connector, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $descriptionm, $codem, $detail, $details;
 
     public function render()
     {
@@ -37,7 +37,16 @@ class Providers extends Component
         ->orWhere('point_contact','LIKE','%'.$this->search.'%')
         ->orWhere('site_url','LIKE','%'.$this->search.'%')
         ->orderBy($this->order)->paginate($this->paginas);
-        
+        $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
+            ->orWhere('name','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('family','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('color','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('line','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('usage','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
+            ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
         return view('livewire.providers', [
             'providers' => $this->providers,
         ]);
@@ -97,6 +106,16 @@ class Providers extends Component
     }
 
     public function explorar(Provider $provider_id){
+        $this->idexplora=$provider_id->id;
+        $this->name=$provider_id->name;
+        $this->address=$provider_id->address;
+        $this->phone=$provider_id->phone;
+        $this->email=$provider_id->email;
+        $this->contact_name=$provider_id->contact_name;
+        $this->point_contact=$provider_id->point_contact;
+        $this->site_url=$provider_id->site_url;
+        $this->status=$provider_id->status;
+    
         $this->provider_id=$provider_id;
         $this->provider=Provider::where('id', $this->provider_id->id)->first();
         $this->provider_prices=ProviderPrice::where('provider_id', $this->provider->id)->get();
@@ -1100,10 +1119,49 @@ class Providers extends Component
     public function addMaterial(){
         $this->addMaterial = true;
     }
+    public function addmaterialprice()
+    {
+        $this->validate([
+           'amount'=>'required|integer|min:1|max:1000000'
+        ], [
+            'amount.required'=>'El campo Cantidad es requerido',
+            'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
+            'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
+            'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
+        ]);
+        foreach($this->details as $detail){
+            if($detail[0]==$this->codem){
+                $this->downmaterial($detail[3]);
+            }        
+        }
+        $this->detail[0]=$this->codem;
+        $this->detail[1]=$this->descriptionm;
+        $this->detail[2]=$this->amount;
+        $this->detail[3]=$this->count;
+        $this->detail[4]=$this->material_id;
+        $this->details[]=$this->detail;
+        $this->count=$this->count+1;
+        $this->amount=0;
+        $this->dispatchBrowserEvent('hide-form');
+    }
+
+    public function selMaterial(){
+        $this->addMaterial = false;
+    }
+    public function selectmaterial(Material $material)
+    {
+        $this->material_id=$material->id;
+        $this->descriptionm=$material->description;;
+        $this->codem=$material->code;
+        $this->dispatchBrowserEvent('show-form');
+        $this->searchmateriales="";
+    }
+
     public function con(){
         $this->div=$this->family;
         #dd($this->div);
         $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->get();
         
    }
+
 }

@@ -42,14 +42,10 @@
                 </div>
                 <thead>
                     <tr>
-                        <th style="text-align: center">ID</th>
                         <th style="text-align: center">Nombre</th>
                         <th style="text-align: center">Domicilio</th>
                         <th style="text-align: center">Teléfono</th>
                         <th style="text-align: center">Correo electrónico</th>
-                        <th style="text-align: center">Nombre de contacto</th>
-                        <th style="text-align: center">Puesto de contacto</th>
-                        <th style="text-align: center">Página web</th>
                         <th style="text-align: center">Estado</th>
                     </tr>
                 </thead>
@@ -57,14 +53,10 @@
                 <tbody>
                     @forelse($providers as $provider)
                         <tr class="registros">
-                            <td style="text-align: center">{{ $provider->id }}</td>
                             <td style="text-align: center">{{ $provider->name }}</td>
                             <td style="text-align: center">{{ $provider->address }}</td>
                             <td style="text-align: center">{{ $provider->phone }}</td>
                             <td style="text-align: center">{{ $provider->email }}</td>
-                            <td style="text-align: center">{{ $provider->contact_name }}</td>
-                            <td style="text-align: center">{{ $provider->point_contact }}</td>
-                            <td style="text-align: center">{{ $provider->site_url }}</td>
                             @if ($provider->status == 1)
                                 <td style="text-align: center">Activo</td>
                             @else
@@ -72,14 +64,14 @@
                             @endif
                             <td style="text-align: center">
                                 <button type="button" wire:click="explorar({{ $provider->id }})"
-                                    class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
+                                    class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
                                 @if (auth()->user()->can('updateprovider', auth()->user()))
                                     <button wire:click="update({{ $provider->id }})" type="button"
-                                        class="btn btn-success btn-xs">Actualizar</button>
+                                        class="btn btn-success btn-sm">Actualizar</button>
                                 @endif
                                 @if (auth()->user()->can('deleteprovider', auth()->user()))
                                     <button wire:click="destruir({{ $provider->id }})" type="button"
-                                        class="btn btn-danger btn-xs">Borrar</button>
+                                        class="btn btn-danger btn-sm">Borrar</button>
                                 @endif
 
 
