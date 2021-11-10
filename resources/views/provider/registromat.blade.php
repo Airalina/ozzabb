@@ -244,7 +244,11 @@
                             <input type="text" class="form-control form-control-sm" id="stock_max"
                                 wire:model.defer="stock_max" placeholder="Stock máximo del material">
                         </div>
-
+                        <div class="form-group">
+                            <label for="stock">Stock en planta</label>
+                            <input type="text" class="form-control" id="stock" wire:model.defer="stock"
+                                placeholder="En órdenes de ingresos y egresos" readonly>
+                        </div>
                         <div class="modal-footer">
                             @if ($funcion == 'crearmat')
                             <button wire:click.prevent="addmaterialprice()" type="submit"
