@@ -4,7 +4,6 @@
   </div>
   <br>
 
-
   <div class="card card-primary">
       <div class="card-header">
           <h3 class="card-title"> Proveedor código: {{ $idexplora }} </h3>
@@ -73,13 +72,13 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body table-responsive">
-                      <table class="table table-sm ">
+                      <table class="table table-sm">
                           <thead>
                               <tr>
                                   <th>Material</th>
                                   <th>Nombre</th>
                                   <th>Cantidad</th>
-                                  <th>Unidad de presentación</th>
+                                  <th>Presentación</th>
                                   <th>Precio U$D</th>
                                   <th>Precio AR$</th>
                                   <th></th>
