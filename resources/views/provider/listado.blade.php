@@ -16,10 +16,10 @@
             </div>
             <div class="card-tools">
                 @if (auth()->user()->can('storeprovider', auth()->user()))
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <button wire:click="funcion()" type="button" class="btn btn-info btn-sm">Agregar
-                            Proveedor</button>
-                    </div>
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <button wire:click="funcion()" type="button" class="btn btn-info btn-sm">Agregar
+                        Proveedor</button>
+                </div>
                 @endif
             </div>
         </div>
@@ -42,59 +42,49 @@
                 </div>
                 <thead>
                     <tr>
-                        <th style="text-align: center">ID</th>
                         <th style="text-align: center">Nombre</th>
                         <th style="text-align: center">Domicilio</th>
                         <th style="text-align: center">Teléfono</th>
                         <th style="text-align: center">Correo electrónico</th>
-                        <th style="text-align: center">Nombre de contacto</th>
-                        <th style="text-align: center">Puesto de contacto</th>
-                        <th style="text-align: center">Página web</th>
                         <th style="text-align: center">Estado</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @forelse($providers as $provider)
-                        <tr class="registros">
-                            <td style="text-align: center">{{ $provider->id }}</td>
-                            <td style="text-align: center">{{ $provider->name }}</td>
-                            <td style="text-align: center">{{ $provider->address }}</td>
-                            <td style="text-align: center">{{ $provider->phone }}</td>
-                            <td style="text-align: center">{{ $provider->email }}</td>
-                            <td style="text-align: center">{{ $provider->contact_name }}</td>
-                            <td style="text-align: center">{{ $provider->point_contact }}</td>
-                            <td style="text-align: center">{{ $provider->site_url }}</td>
-                            @if ($provider->status == 1)
-                                <td style="text-align: center">Activo</td>
-                            @else
-                                <td style="text-align: center">Inactivo</td>
+                    <tr class="registros">
+                        <td style="text-align: center">{{ $provider->name }}</td>
+                        <td style="text-align: center">{{ $provider->address }}</td>
+                        <td style="text-align: center">{{ $provider->phone }}</td>
+                        <td style="text-align: center">{{ $provider->email }}</td>
+                        @if ($provider->status == 1)
+                        <td style="text-align: center">Activo</td>
+                        @else
+                        <td style="text-align: center">Inactivo</td>
+                        @endif
+                        <td style="text-align: center">
+                            <button type="button" wire:click="explorar({{ $provider->id }})"
+                                class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
+                            @if (auth()->user()->can('updateprovider', auth()->user()))
+                            <button wire:click="update({{ $provider->id }})" type="button"
+                                class="btn btn-success btn-sm">Actualizar</button>
                             @endif
-                            <td style="text-align: center">
-                                <button type="button" wire:click="explorar({{ $provider->id }})"
-                                    class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
-                                @if (auth()->user()->can('updateprovider', auth()->user()))
-                                    <button wire:click="update({{ $provider->id }})" type="button"
-                                        class="btn btn-success btn-xs">Actualizar</button>
-                                @endif
-                                @if (auth()->user()->can('deleteprovider', auth()->user()))
-                                    <button wire:click="destruir({{ $provider->id }})" type="button"
-                                        class="btn btn-danger btn-xs">Borrar</button>
-                                @endif
-
-
-                            </td>
-                        </tr>
+                            @if (auth()->user()->can('deleteprovider', auth()->user()))
+                            <button wire:click="destruir({{ $provider->id }})" type="button"
+                                class="btn btn-danger btn-sm">Borrar</button>
+                            @endif
+                        </td>
+                    </tr>
                     @empty
-                        <tr class="text-center">
-                            <td colspan="10" class="py-3 italic">No hay información</td>
-                        </tr>
+                    <tr class="text-center">
+                        <td colspan="10" class="py-3 italic">No hay información</td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
-             {{ $providers->links() }}
+            {{ $providers->links() }}
         </div>
-        
+
         <!-- /.card-body -->
     </div>
 </div>

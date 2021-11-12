@@ -90,14 +90,14 @@
 
                             <td style="text-align: center">
                                 <button type="button" wire:click="explorar({{ $material->id }})"
-                                    class="btn btn-primary btn-xs"><i class="fas fa-file-alt"></i> Ver</button>
+                                    class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
                                 @if (auth()->user()->can('updatematerial', auth()->user()))
                                     <button wire:click="update({{ $material->id }})" type="button"
-                                        class="btn btn-success btn-xs">Actualizar</button>
+                                        class="btn btn-success btn-sm">Actualizar</button>
                                 @endif
                                 @if (auth()->user()->can('deletematerial', auth()->user()))
                                     <button wire:click="destruir({{ $material->id }})" type="button"
-                                        class="btn btn-danger btn-xs">Borrar</button>
+                                        class="btn btn-danger btn-sm">Borrar</button>
                                 @endif
                             </td>
                         </tr>

@@ -89,7 +89,7 @@
                 <div class="form-group">
                     <label for="stock">Stock en planta</label>
                     <input type="text" class="form-control" id="stock" wire:model="stock"
-                        placeholder="Stock en planta">
+                        placeholder="En órdenes de ingresos y egresos" readonly>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputFile">Imagen</label>

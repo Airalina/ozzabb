@@ -26,7 +26,7 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id;
+    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price;
 
     public function render()
     {
@@ -42,7 +42,13 @@ class MaterialComponent extends Component
             ->orWhere('stock_max','LIKE','%'.$this->search.'%')
             ->orWhere('stock','LIKE','%'.$this->search.'%')
             ->orderBy($this->order)->paginate($this->paginas);
- 
+        $this->providers =Provider::where('name','LIKE','%'.$this->searchproviders.'%')
+            ->orWhere('address','LIKE','%'.$this->searchproviders.'%')
+            ->orWhere('phone','LIKE','%'.$this->searchproviders.'%')
+            ->orWhere('email','LIKE','%'.$this->searchproviders.'%')
+            ->orWhere('contact_name','LIKE','%'.$this->searchproviders.'%')
+            ->orWhere('point_contact','LIKE','%'.$this->searchproviders.'%')
+            ->orWhere('site_url','LIKE','%'.$this->searchproviders.'%')->get();   
         
          return view('livewire.material-component', [
             'materials' => $this->materials,
@@ -983,6 +989,100 @@ class MaterialComponent extends Component
 
     public function explorar(Material $material_id){
         $this->material_id=$material_id;
+        $this->name=$material_id->name; 
+        $this->family=$material_id->family;
+        $this->color=$material_id->color;
+        $this->code=$material_id->code;
+        $this->description=$material_id->description;
+        $this->replace_id=$material_id->replace_id;
+        $this->rplce = Material::where('id',$this->replace_id)->first();
+        $this->stock_min=$material_id->stock_min;
+        $this->stock_max=$material_id->stock_max;
+        $this->stock=$material_id->stock;
+        $this->usage=$material_id->usage;
+        $this->line=$material_id->line;
+        $this->div=$material_id->family;
+        $this->images_up=json_decode($material_id->image);
+        $this->images = json_decode($material_id->image);
+        $this->info_line=Line::all();
+        $this->info_usage=Usage::all();
+        $this->info_term = Terminal::whereExists(function ($query) {
+            $query->select('id')
+                  ->from('materials')
+                  ->where('family','Terminales')
+                  ->whereColumn('terminals.material_id', 'materials.id');
+        })
+        ->get();
+        $this->info_sell=Seal::whereExists(function ($query) {
+            $query->select('id')
+                  ->from('materials')
+                  ->where('family','Sellos')
+                  ->whereColumn('seals.material_id', 'materials.id');
+        })
+        ->get();
+        $this->info_con=Connector::all();
+       
+        if($this->family == 'Conectores'){
+            $this->conn = Connector::where('material_id',$material_id->id)->first();
+            $this->conn_id=$this->conn->id;
+            $this->number_of_ways=$this->conn->number_of_ways;
+            $this->type=$this->conn->type;
+            $this->terminal_id=$this->conn->terminal_id;
+            $this->seal_id=$this->conn->seal_id;
+            $this->connector_id=$this->conn->connector_id;
+            $this->watertight=$this->conn->watertight;
+        if($this->conn !=null){
+            $this->termi = Terminal::where('id',$this->terminal_id)->first();
+            $this->seli = Seal::where('id',$this->seal_id)->first();
+            $this->connect = Connector::where('id',$this->connector_id)->first();
+        }   
+        }elseif($this->family == 'Terminales'){
+            $this->term = Terminal::where('material_id',$material_id->id)->first();
+            $this->term_id=$this->term->id;
+            $this->size=$this->term->size;
+            $this->minimum_section=$this->term->minimum_section;
+            $this->maximum_section=$this->term->maximum_section;
+            $this->term_material=$this->term->material;
+            $this->term_type=$this->term->type;
+        }elseif($this->family == 'Cables'){
+            $this->cab = Cable::where('material_id',$material_id->id)->first();
+            $this->cab_id= $this->cab->id;
+            $this->section=$this->cab->section;
+            $this->base_color=$this->cab->base_color;
+            $this->line_color=$this->cab->line_color;
+            $this->braid_configuration=$this->cab->braid_configuration;
+            $this->norm=$this->cab->norm;
+            $this->number_of_unipolar=$this->cab->number_of_unipolar;
+            $this->mesh_type=$this->cab->mesh_type;
+            $this->operating_temperature=$this->cab->operating_temperature;
+        }elseif($this->family == 'Tubos'){
+            $this->tub = Tube::where('material_id',$material_id->id)->first();
+            $this->tub_id= $this->tub->id;
+            $this->tube_diameter=$this->tub->diameter;
+            $this->wall_thickness=$this->tub->wall_thickness;
+            $this->contracted_diameter=$this->tub->contracted_diameter;
+            $this->minimum_temperature=$this->tub->minimum_temperature;
+            $this->maximum_temperature=$this->tub->maximum_temperature;
+            $this->tube_type=$this->tub->type;
+        }elseif($this->family == 'Clips'){
+            $this->clip = Clip::where('material_id',$material_id->id)->first();
+            $this->clip_id= $this->clip->id;
+            $this->long=$this->clip->long;
+            $this->width=$this->clip->width;
+            $this->hole_diameter=$this->clip->hole_diameter;
+            $this->clip_type=$this->clip->type;
+        }elseif($this->family == 'Accesorios'){
+            $this->acc = Accessory::where('material_id',$material_id->id)->first();
+            $this->acc_id= $this->acc->id;
+            $this->accesory_type=$this->acc->type;
+        }else{
+            $this->sl = Seal::where('material_id',$material_id->id)->first();  
+            $this->sl_id=$this->sl->id;
+            $this->minimum_diameter=$this->sl->minimum_diameter;
+            $this->maximum_diameter=$this->sl->maximum_diameter;
+            $this->seal_type=$this->sl->type;
+        }
+
         $this->material=Material::where('id', $this->material_id->id)->first();
         $this->provider_prices=ProviderPrice::where('material_id', $this->material->id)->get();
         #$this->prices=Price::where('provider_id', $this->provider->id)->get();
@@ -1072,7 +1172,8 @@ class MaterialComponent extends Component
     $this->name_provider = null;
     $this->addres_provider = null;
     $this->email_provider = null;
-    
+    $this->provider_new=null;
+    $this->addProvider = true;
     $this->explora='inactivo';
     $this->funcion="crearmat";    
 }
@@ -1095,37 +1196,8 @@ public function storemat(Material $material){
         'ars_price.numeric' => 'El campo precio AR$ es numérico',
     ]);
     
-    if($this->addProvider){
-        $this->validar= $this->validate([
-            'name_provider' => 'required',
-            'addres_provider' => 'required',
-            'email_provider' => 'required|unique:providers,email|email',
-          ], [
-            'name_provider.required' => 'El campo nombre es requerido',
-            'addres_provider.required' => 'El campo domicilio es requerido',
-            'email_provider.required' => 'El campo correo electrónico para ventas es requerido',
-            'email_provider.unique' => 'El correo electrónico para ventas ya se encuentra registrado',
-            'email_provider.email' => 'El campo correo electrónico para ventas debe ser un email',
-              ]);
-
-        $provider = Provider::create([
-            'name' => $this->name_provider,
-            'address' => $this->addres_provider,
-            'email' => $this->email_provider,
-            'status'=>1
-        ]);
-        $this->provider = $provider->id;
-    }else{
-        $this->validar= $this->validate([
-            'provider' => 'required|numeric',
-        ], [
-            'provider.required' => 'Seleccione una opción para el campo de proveedor',
-            'provider.numeric' => 'Seleccione una opción para el campo de proveedor',
-        ]);
-    }
-  
    $provider_price= ProviderPrice::create([
-        'provider_id' =>$this->provider,
+        'provider_id' =>$this->provider_new->id,
         'material_id' =>$material->id,
         'amount' =>$this->amount,
         'unit' =>$this->unit,
@@ -1137,7 +1209,7 @@ public function storemat(Material $material){
     $price= Price::create([
          'date' => date("d-m-Y"),
          'provider_price_id' => $provider_price->id,
-         'provider_id' =>$this->provider,
+         'provider_id' =>$this->provider_new->id,
          'price' =>$this->usd_price,
     ]);
     $this->div=null;
@@ -1155,7 +1227,7 @@ public function destruirmat(Material $material)
 public function updatemat(ProviderPrice $provider_price)
 {  
     $this->id_provider_price = $provider_price->id;
-    $this->marterial=$provider_price->material_id;
+    $this->material_price=$provider_price->material_id;
     $this->id_provider=$provider_price->provider_id;
     $this->amount=$provider_price->amount;
     $this->unit=$provider_price->unit;
@@ -1167,6 +1239,7 @@ public function updatemat(ProviderPrice $provider_price)
     $this->name_provider = null;
     $this->addres_provider = null;
     $this->email_provider = null;
+    $this->provider_new = Provider::where('id', $provider_price->provider_id)->first();
     $this->addProvider = false;
     $this->explora= 'inactivo';
     $this->funcion="actualizarmat";
@@ -1174,73 +1247,51 @@ public function updatemat(ProviderPrice $provider_price)
 
 public function editarmat(){
     
-  $this->validar=  $this->validate([
-        'amount' => 'nullable',
-        'unit' => 'required|numeric',
-        'presentation' => 'required',
-        'usd_price' => 'required|numeric',
-        'ars_price' => 'required|numeric',
-    ], [
-        'amount.required' => 'El campo cantidad es requerido',
-        'amount.numeric' => 'El campo cantidad debe ser numérico',
-        'amount.integer' => 'El campo cantidad debe ser un número entero',
-        'unit.required' => 'El campo unidad es requerido',
-        'unit.numeric' => 'El campo unidad debe ser numérico',
-        'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
-        'usd_price.required' => 'El campo precio U$D es requerido',
-        'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
-        'ars_price.required' => 'El campo precio AR$ es requerido',
-        'ars_price.numeric' => 'El campo precio AR$ es numérico',
-    ]);
-    if($this->addProvider){
-        $this->validar= $this->validate([
-            'name_provider' => 'required',
-            'addres_provider' => 'required',
-            'email_provider' => 'required|unique:providers,email|email',
-          ], [
-            'name_provider.required' => 'El campo nombre es requerido',
-            'addres_provider.required' => 'El campo domicilio es requerido',
-            'email_provider.required' => 'El campo correo electrónico para ventas es requerido',
-            'email_provider.unique' => 'El correo electrónico para ventas ya se encuentra registrado',
-            'email_provider.email' => 'El campo correo electrónico para ventas debe ser un email',
-              ]);
-
-        $provider = Provider::create([
-            'name' => $this->name_provider,
-            'address' => $this->addres_provider,
-            'email' => $this->email_provider,
-            'status'=>1
-        ]);
-        $this->provider = $provider->id;
-    }else{
-        $this->validar= $this->validate([
-            'provider' => 'required|numeric',
+    $this->validar=  $this->validate([
+            'amount' => 'nullable',
+            'unit' => 'required|numeric',
+            'presentation' => 'required',
+            'usd_price' => 'required|numeric',
+            'ars_price' => 'required|numeric',
         ], [
-            'provider.required' => 'Seleccione una opción para el campo de proveedor',
-            'provider.numeric' => 'Seleccione una opción para el campo de proveedor',
+            'amount.required' => 'El campo cantidad es requerido',
+            'amount.numeric' => 'El campo cantidad debe ser numérico',
+            'amount.integer' => 'El campo cantidad debe ser un número entero',
+            'unit.required' => 'El campo unidad es requerido',
+            'unit.numeric' => 'El campo unidad debe ser numérico',
+            'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+            'usd_price.required' => 'El campo precio U$D es requerido',
+            'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
+            'ars_price.required' => 'El campo precio AR$ es requerido',
+            'ars_price.numeric' => 'El campo precio AR$ es numérico',
         ]);
+        
+        $pro =Material::find($this->material_price);
+        $material_up =ProviderPrice::find($this->id_provider_price);
+        $material_up->amount=$this->amount; 
+        $material_up->material_id=$this->material_price;
+        $material_up->provider_id=$this->provider_new->id;
+        $material_up->unit=$this->unit;
+        $material_up->presentation=$this->presentation;
+        $material_up->ars_price=$this->ars_price;
+    if($material_up->usd_price != $this->usd_price){
+            $price= Price::create([
+                'date' => date("d-m-Y"),
+                'provider_price_id' => $this->id_provider_price,
+                'provider_id' =>$this->provider_new->id,
+                'price' =>$this->usd_price,
+            ]);
     }
-    $pro =Material::find($this->marterial);
-    $material_up =ProviderPrice::find($this->id_provider_price);
-    $material_up->amount=$this->amount; 
-    $material_up->material_id=$this->material->id;
-    $material_up->provider_id=$this->provider;
-    $material_up->unit=$this->unit;
-    $material_up->presentation=$this->presentation;
-    $material_up->ars_price=$this->ars_price;
-   if($material_up->usd_price != $this->usd_price){
-        $price= Price::create([
-            'date' => date("d-m-Y"),
-            'provider_price_id' => $this->id_provider_price,
-            'provider_id' =>$this->id_provider,
-            'price' =>$this->usd_price,
-        ]);
-   }
-   $material_up->usd_price = $this->usd_price;
-    $material_up->save();
-    $this->funcion="0";
-    $this->explorar($pro);
-}
+    $material_up->usd_price = $this->usd_price;
+        $material_up->save();
+        $this->funcion="0";
+        $this->explorar($pro);
+    }
+    public function downprovider()
+    {
+        unset($this->provider_new);
+        $this->addProvider = true;
+    }
     public function backmat(){
         $this->funcion="0";
         $this->addProvider = false;
@@ -1253,6 +1304,53 @@ public function editarmat(){
     
     }
     public function addProvider(){
-        $this->addProvider = true;
+        $this->id_provider=null;
+        $this->name=null;
+        $this->address=null;
+        $this->phone=null;
+        $this->email=null;
+        $this->contact_name=null;
+        $this->point_contact=null;
+        $this->site_url=null;
+        $this->provider_new = null;
+        $this->dispatchBrowserEvent('show-form');
+        $this->searchproviders="";
+
+    }
+    public function addproviderprice(){
+        $this->validate([
+            'name_provider' => 'required',
+            'addres_provider' => 'required',
+            'email_provider' => 'required|unique:providers,email|email',
+          ], [
+            'name_provider.required' => 'El campo nombre es requerido',
+            'addres_provider.required' => 'El campo domicilio es requerido',
+            'email_provider.required' => 'El campo correo electrónico para ventas es requerido',
+            'email_provider.unique' => 'El correo electrónico para ventas ya se encuentra registrado',
+            'email_provider.email' => 'El campo correo electrónico para ventas debe ser un email',
+              ]);
+
+        $this->provider = Provider::create([
+            'name' => $this->name_provider,
+            'address' => $this->addres_provider,
+            'email' => $this->email_provider,
+            'status'=>1
+        ]);
+  
+        $this->showprovider($this->provider);
+        $this->addProvider = false;
+        $this->searchproviders="";
+        $this->dispatchBrowserEvent('hide-form');
+
+    }
+    public function showprovider(Provider $provider){
+        $this->provider_new=$provider;
+    }
+    public function selectprovider(Provider $provider)
+    {
+        $this->provider_new=$provider;
+        $this->provider_name=$provider->name;
+        $this->addProvider = false;
+        $this->searchproviders="";
     }
 }
