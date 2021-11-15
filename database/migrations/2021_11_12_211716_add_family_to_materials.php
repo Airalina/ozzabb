@@ -26,8 +26,6 @@ class AddFamilyToMaterials extends Migration
      */
     public function down()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('family');
-        });
+        
     }
 }
