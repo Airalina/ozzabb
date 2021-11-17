@@ -9,7 +9,7 @@
   - [Depósitos](/{{route}}/{{version}}/Depositos)
   - [Ordenes de Compras](/{{route}}/{{version}}/Ordenes_de_Compras)
   - [Ordenes de Ingreso de Materiales](/{{route}}/{{version}}/ordenes_de_ingreso)
-  - [Ordenes de Egreso de Materiales]((/{{route}}/{{version}}/ordenes_de_engreso_de_materiales))
+  - [Ordenes de Egreso de Materiales]((/{{route}}/{{version}}/ordenes_de_egreso_de_materiales))
   - [Ordenes de Trabajo](/{{route}}/{{version}}/ordenes_de_trabajo)
   - [Nuevas Familias de Materiales](/{{route}}/{{version}}/Nuevas_Familias_de_Materiales)
   - [DER](/{{route}}/{{version}}/der)
