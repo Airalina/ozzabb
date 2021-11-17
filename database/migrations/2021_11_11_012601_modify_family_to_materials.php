@@ -13,9 +13,11 @@ class ModifyFamilyToMaterials extends Migration
      */
     public function up()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->enum('family', ['Conectores', 'Terminales', 'Cables', 'Sellos', 'Tubos', 'Accesorios', 'Clips'])->change();
-        });
+        //Este código es comentado porque no se debería hacer este cambio mediante el comando change.
+        //
+      // Schema::table('materials', function (Blueprint $table) {
+           // $table->enum('family', ['Conectores', 'Terminales', 'Cables', 'Sellos', 'Tubos', 'Accesorios', 'Clips'])->change();
+      //  });
     }
 
     /**
