@@ -41,7 +41,6 @@ class Instalaciones extends Component
 
     public function store()
     {
-       
         if($this->funcion=="create"){
             $this->validate([
                 'code'=>'required|integer|min:1|max:100000000',
