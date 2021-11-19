@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Cable extends Model
 {
     use HasFactory;
-    protected $fillable = ['size','minimum_section','maximum_section','material_id'];
+    protected $fillable = ['section','base_color','line_color', 'braid_configuration', 'norm', 'number_of_unipolar', 'mesh_type', 'operating_temperature', 'material_id'];
 
 }

@@ -12,4 +12,8 @@ class MaterialEntryOrderDetail extends Model
     {
         return $this->belongsTo(MaterialEntryOrder::class, 'entry_order_id');
     }
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
 }

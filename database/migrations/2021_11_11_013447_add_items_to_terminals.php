@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTerminalsTable extends Migration
+class AddItemsToTerminals extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,12 @@ class CreateTerminalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('terminals', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('material_id');
-            $table->float('size', 6, 2);
-            $table->float('minimum_section', 6, 2);
-            $table->float('maximum_section',6, 2);  
+        Schema::table('terminals', function (Blueprint $table) {
+            $table->float('size', 6, 2)->change();
+            $table->float('minimum_section', 6, 2)->change();
+            $table->float('maximum_section',6, 2)->change();  
             $table->enum('material', ['Latón', 'Estañado']);
             $table->enum('type', ['Porta macho', 'Porta hembra']);
-       
-            $table->timestamps();
         });
     }
 
@@ -33,6 +29,9 @@ class CreateTerminalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('terminals');
+        Schema::table('terminals', function (Blueprint $table) {
+            $table->dropColumn('material');
+            $table->dropColumn('type');
+        });
     }
 }

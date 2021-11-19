@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCablesTable extends Migration
+class AddItemsToCables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateCablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('cables', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('material_id');
+        Schema::table('cables', function (Blueprint $table) {
+            $table->dropColumn('size');
+            $table->dropColumn('minimum_section');
+            $table->dropColumn('maximum_section');
             $table->float('section', 6, 2);
             $table->string('base_color');
             $table->string('line_color')->nullable();
@@ -24,7 +25,6 @@ class CreateCablesTable extends Migration
             $table->integer('number_of_unipolar')->nullable();
             $table->string('mesh_type')->nullable();
             $table->float('operating_temperature', 6, 2);
-            $table->timestamps();
         });
     }
 
@@ -35,6 +35,15 @@ class CreateCablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cables');
+        Schema::table('cables', function (Blueprint $table) {
+            $table->dropColumn('section');
+            $table->dropColumn('base_color');
+            $table->dropColumn('line_color');
+            $table->dropColumn('braid_configuration');
+            $table->dropColumn('norm');
+            $table->dropColumn('number_of_unipolar');
+            $table->dropColumn('mesh_type');
+            $table->dropColumn('operating_temperature');
+        });
     }
 }

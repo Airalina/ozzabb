@@ -9,7 +9,7 @@ use  App\Models\Material;
 class Connector extends Model
 {
     use HasFactory;
-    protected $fillable = ['material_id', 'terminal_id', 'seal_id', 'number_of_ways', 'type', 'connector_id'];
+    protected $fillable = ['material_id', 'terminal_id', 'seal_id', 'number_of_ways', 'type', 'connector_id', 'watertight'];
 
     public function material()
     {

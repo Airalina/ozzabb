@@ -14,7 +14,7 @@ class Material extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code','name', 'stock', 'family','color','description','line_id','usage_id','replace_id','stock_min','stock_max','stock','image'], $photo;
+    protected $fillable = ['code','name', 'stock', 'family','color','description','line','usage','replace_id','stock_min','stock_max','stock','image'], $photo;
     
     public function provider_prices()
     {
@@ -40,8 +40,14 @@ class Material extends Model
     {
         return $this->hasMany(Revisiondetail::class); 
     }
+<<<<<<< HEAD
     public function providerprices()
     {
         return $this->hasMany(ProviderPrice::class); 
+=======
+    public function buy_order_detail()
+    {
+        return $this->hasOne(BuyOrderDetail::class, 'material_id');
+>>>>>>> develop
     }
 }

@@ -55,7 +55,7 @@ Route::get('/planilla-de-compras', function () {
     return view('pucharsing-sheets');
 })->middleware(['auth'])->name('pucharsing-sheets');
 
-Route::get('/ordenes-de-entrada-de-materiales', function () {
+Route::get('/ordenes-de-ingreso-de-materiales', function () {
     return view('ordenes-de-entrada-de-materiales');
 })->middleware(['auth'])->name('ordenes-de-entrada-de-materiales');
 

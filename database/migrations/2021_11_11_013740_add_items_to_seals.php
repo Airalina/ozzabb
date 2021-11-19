@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSealsTable extends Migration
+class AddItemsToSeals extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateSealsTable extends Migration
      */
     public function up()
     {
-        Schema::create('seals', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('material_id');
+        Schema::table('seals', function (Blueprint $table) {
             $table->float('minimum_diameter', 6, 2);
             $table->float('maximum_diameter', 6, 2);
             $table->string('type', 100)->nullable();
-            $table->timestamps();
         });
     }
 
@@ -30,6 +27,10 @@ class CreateSealsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seals');
+        Schema::table('seals', function (Blueprint $table) {
+            $table->dropColumn('minimum_diameter');
+            $table->dropColumn('maximum_diameter');
+            $table->dropColumn('type');
+        });
     }
 }

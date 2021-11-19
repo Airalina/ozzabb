@@ -21,6 +21,7 @@ class CreateConnectorsTable extends Migration
             $table->unsignedBigInteger('terminal_id')->nullable();
             $table->tinyInteger('number_of_ways');
             $table->string('type', 100);
+            $table->integer('watertight');
             $table->timestamps();
         });
     }

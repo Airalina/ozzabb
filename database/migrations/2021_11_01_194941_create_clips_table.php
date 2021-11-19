@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTerminalsTable extends Migration
+class CreateClipsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateTerminalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('terminals', function (Blueprint $table) {
+        Schema::create('clips', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('material_id');
-            $table->float('size', 6, 2);
-            $table->float('minimum_section', 6, 2);
-            $table->float('maximum_section',6, 2);  
-            $table->enum('material', ['Latón', 'Estañado']);
-            $table->enum('type', ['Porta macho', 'Porta hembra']);
-       
+            $table->enum('type', ['Clip', 'Precinto']);
+            $table->float('long',6, 2);
+            $table->float('width',6, 2);
+            $table->float('hole_diameter',6, 2);
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateTerminalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('terminals');
+        Schema::dropIfExists('clips');
     }
 }
