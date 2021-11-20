@@ -93,6 +93,7 @@ class Ordenesclientes extends Component
         $this->order->date = $this->date;
         $this->order->deadline = $this->deadline;
         $this->order->order_state = 1;
+        $this->order->buys=1;
         $this->order->usd_price = $this->usd_price;
         $this->order->arp_price = $this->arp_price;
         $this->order->save();

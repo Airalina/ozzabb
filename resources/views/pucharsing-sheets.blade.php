@@ -21,4 +21,18 @@
     <script>
         console.log('Hi!');
     </script>
+    <script>
+        window.addEventListener('show-form', event => {
+            $('#form').modal('show');
+        })
+        window.addEventListener('hide-form', event => {
+            $('#form').modal('hide');
+        })
+        window.addEventListener('show-formmaterial', event => {
+            $('#formmaterial').modal('show');
+        })
+        window.addEventListener('hide-formmaterial', event => {
+            $('#formmaterial').modal('hide');
+        })
+    </script>
 @stop
