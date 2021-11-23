@@ -11,4 +11,10 @@ class PucharsingSheet extends Model
 
     protected $fillable = ['date', 'count_orders', 'total_price'];
 
+    public function purchasing_sheet_orders(){
+        return $this->hasMany(PucharsingSheetOrder::class);
+    }
+    public function purchasing_sheet_details(){
+        return $this->hasMany(PucharsingSheetDetail::class);
+    }
 }

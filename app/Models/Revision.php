@@ -18,4 +18,9 @@ class Revision extends Model
     {
         return $this->belongsTo(Installation::class,'installation_id');
     }
+
+    public function revisiondetails()
+    {
+        return $this->hasMany(Revisiondetail::class,'installation_id','installation_id');
+    }
 }
