@@ -16,18 +16,19 @@ class BuyOrder extends Model
     {
         return $this->belongsToMany(MaterialEntryOrder::class,'buy_order_material_entry_orders','buy_order_id','entry_order_id');
     }
-<<<<<<< HEAD
+
     public function buyorderdetails()
     {
         return $this->hasMany(BuyOrderDetail::class,'id','buy_order_id');
-=======
+    }
+
     public function provider()
     {
         return $this->belongsTo(Provider::class, 'provider_id');
     }
+    
     public function material()
     {
         return $this->belongsTo(Material::class, 'material_id');
->>>>>>> develop
     }
 }
