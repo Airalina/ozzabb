@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStockNullableToMaterialsTable extends Migration
+class DropColumnStockNullableToMaterialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddStockNullableToMaterialsTable extends Migration
     public function up()
     {
         Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('stock');
+            $table->integer('stock')->nullable();
         });
     }
 
