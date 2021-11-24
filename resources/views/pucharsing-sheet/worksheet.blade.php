@@ -1,4 +1,8 @@
 <div>
+    <button wire:click="backlist()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i>
+        Volver</button>
+</div><br>
+<div>
     <div class="card card-tabs">
         <div class="card-header">
             <h3 class="card-title">Pedidos de clientes</h3>
@@ -147,7 +151,7 @@
                             <h3 class="card-title"> Materiales requeridos para los pedidos seleccionados: </h3>
                         </div>
                         <div class="col-md-4">
-                            <button type="button" wire:click.prevent="buscamaterial()" class="btn btn-success btn-sm" style="float: right">Agregar Material</button>
+                            <button type="button" wire:click.prevent="buscamaterial()" class="btn btn-success btn-sm" style="float: right">Agregar material a la orden</button>
                         </div>
                     </div>
                     <br>
@@ -165,8 +169,8 @@
                                     <th style="text-align: center">Presentación</th>
                                     <th style="text-align: center">Cantidad</th>
                                     <th style="text-align: center">Cantidad total</th>
-                                    <th style="text-align: center">P/U</th>
-                                    <th style="text-align: center">Subtotal</th>
+                                    <th style="text-align: center">P/U U$D</th>
+                                    <th style="text-align: center">Subtotal U$D</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -226,7 +230,7 @@
                           <p><label>Descripción: </label>{{$descriptionm}}</p>
                         </div>
                         <div class="form-group">
-                            <label>Proveedor:</label>
+                            <label>Seleccione un proveedor, para ver las presentaciones disponibles.</label>
                             <select class="form-control form-control-sm select2 select2-hidden-accessible" wire:model="proveedor_name" style="width: auto">
                                 <option selected="selected"></option>
                                 @foreach($proveedoresm as $proveedor)
@@ -276,6 +280,9 @@
                       </button>
                     </div>
                     <div class="modal-body">
+                        <div wire:ignore class="input-group input-group-sm" style="width: 130px">
+                            <input wire:model="searchmaterial" type="text" class="form-control form-control-xs float-right" placeholder="Buscar material..." />
+                        </div>
                         <div class="form-group">
                             <label>Materiales</label>
                             <div class="card-body table-responsive p-0">
@@ -290,13 +297,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($materialessinorden as $material)
+                                        @forelse($materials as $material)
                                             <tr>
-                                                <td style="text-align: center">{{ $material['code'] }}</td>
-                                                <td style="text-align: center">{{ $material['description'] }}</td>
-                                                <td style="text-align: center">{{ $material['stock'] }}</td>
-                                                <td style="text-align: center">{{ $material['stock_transit'] }}</td>
-                                                <td><button type="submit" wire:click.prevent="addmaterialsinorden({{$material['id']}})" class="btn btn-primary btn-sm" >Agregar</button></td>
+                                                <td style="text-align: center">{{ $material->code }}</td>
+                                                <td style="text-align: center">{{ $material->description }}</td>
+                                                <td style="text-align: center">{{ $material->stock}}</td>
+                                                <td style="text-align: center">{{ $material->stock_transit }}</td>
+                                                <td><button type="submit" wire:click.prevent="addmaterialsinorden({{$material->id}})" class="btn btn-primary btn-sm" >Agregar</button></td>
                                             </tr>
                                         @empty
                                             <tr class="text-center">

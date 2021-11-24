@@ -35,8 +35,6 @@ class MaterialComponent extends Component
             ->orWhere('family','LIKE','%'.$this->search.'%')
             ->orWhere('color','LIKE','%'.$this->search.'%')
             ->orWhere('description','LIKE','%'.$this->search.'%')
-            ->orWhere('line','LIKE','%'.$this->search.'%')
-            ->orWhere('usage','LIKE','%'.$this->search.'%')
             ->orWhere('replace_id','LIKE','%'.$this->search.'%')
             ->orWhere('stock_min','LIKE','%'.$this->search.'%')
             ->orWhere('stock_max','LIKE','%'.$this->search.'%')
@@ -155,7 +153,6 @@ class MaterialComponent extends Component
             'replace' => 'nullable',
             'stock_min' => 'numeric|required|digits_between:1,6',
             'stock_max' => 'numeric|nullable|digits_between:1,6',
-            'stock' => 'numeric|required',
             'images' => 'nullable'
         ],[
             'code.required' => 'El campo código es requerido',
