@@ -42,8 +42,6 @@ class Providers extends Component
             ->orWhere('family','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('color','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('line','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('usage','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();

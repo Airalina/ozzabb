@@ -22,7 +22,7 @@ use Carbon\Carbon;
 class PurchasingSheet extends Component
 {
     public $prueba=0;
-    public $funcion="", $ord, $searchMounth='', $explora, $pedidos = false, $detail = array(), $count=0,$date, $provider_price_unit, $provider_price_price, $provider_id, $i = 0, $x = 0, $orderC, $total = [], $mats = [], $material = [], $materials = [], $present = [], $orders, $ottPlatform = '', $search = '', $clientOrders, $clientorders = [], $order = [], $order_detail = [], $installations, $installation, $installation_code = [[]], $revision_detail = [], $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $stock, $suma = [], $block = true, $selection = false, $providers = [], $provider, $in_transit = [], $transit = [], $transits, $requirements = [], $requirement = [], $req = [], $amount, $provider_price = [], $provider_presentation = [], $comprar = [], $iva, $subtotal, $total_price, $select_present, $m_comprar = [], $purchasing_sheets, $searchP, $searchmateriales, $months, $cantidad, $msg, $msg_error, $selection_provider, $provider_selected, $mate, $orders_amount;
+    public $funcion="", $ord, $searchMounth='', $explora, $pedidos = false, $detail = array(), $count=0,$date, $provider_price_unit, $provider_price_price, $provider_id, $i = 0, $x = 0, $orderC, $total = [], $mats = [], $material = [], $present = [], $orders, $ottPlatform = '', $search = '', $clientOrders, $clientorders = [], $order = [], $order_detail = [], $installations, $installation, $installation_code = [[]], $revision_detail = [], $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $stock, $suma = [], $block = true, $selection = false, $providers = [], $provider, $in_transit = [], $transit = [], $transits, $requirements = [], $requirement = [], $req = [], $amount, $provider_price = [], $provider_presentation = [], $comprar = [], $iva, $subtotal, $total_price, $select_present, $m_comprar = [], $purchasing_sheets, $searchP, $searchmateriales, $months, $cantidad, $msg, $msg_error, $selection_provider, $provider_selected, $mate, $orders_amount;
     private $select_presentation = [], $select_provider = [];
     public  $providerprice=array(),$providerprices=array(), $purchasing=array(), $purchasings=array(), $materialcount=0;
     public $ordenes=array(), $ordercount=0;
@@ -31,7 +31,7 @@ class PurchasingSheet extends Component
     public $proveedor_name, $material_id, $precio, $subtotalxmaterial;
     public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder;
     public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
-    public $ordenes_de_compra, $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0;
+    public $ordenes_de_compra, $materials, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0;
     public function render()
     {    $this->months = [1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre' ]; 
         foreach ($this->months as $number_month => $month) {
@@ -44,7 +44,12 @@ class PurchasingSheet extends Component
         ->orWhereMonth('date', $this->searchMounth)
         ->orWhereDay('date',  $this->search)
         ->get();
-
+        $this->materials = Material::where('code','like','%'.$this->search.'%')
+        ->orWhere('name','LIKE','%'.$this->search.'%')
+        ->orWhere('family','LIKE','%'.$this->search.'%')
+        ->orWhere('color','LIKE','%'.$this->search.'%')
+        ->orWhere('description','LIKE','%'.$this->search.'%')
+        ->orWhere('replace_id','LIKE','%'.$this->search.'%')->get();
         $this->purchasing_sheets = PucharsingSheet::where('id','LIKE','%'.$this->searchP.'%')
         ->orWhere('date','LIKE','%'.$this->searchP.'%')
         ->get();
@@ -248,16 +253,6 @@ class PurchasingSheet extends Component
     }
     public function buscamaterial()
     {
-        $this->materialessinorden=null;
-        for($i=0;$i<$this->materialcount;$i++){
-            $this->collectionmaterial[$i]=$this->purchasings[$i][12];
-        }
-        $this->exceptmaterials=Material::all();
-        $this->exceptmaterial=$this->exceptmaterials->except($this->collectionmaterial);
-        foreach($this->exceptmaterial as $material){
-            $this->materialessinorden[$this->countmaterial]=$material;
-            $this->countmaterial++;
-        }
         $this->dispatchBrowserEvent('show-formmaterial');
     }
     public function addmaterialsinorden(Material $material)
@@ -346,5 +341,9 @@ class PurchasingSheet extends Component
         $this->ordenes_de_compra->save();
         SendBuyEmail::dispatch($this->ordenes_de_compra);
         $this->funcion="";
+     }
+     public function backlist()
+     {
+        $this->reset();
      }                        
 }

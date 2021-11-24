@@ -40,14 +40,12 @@ class Material extends Model
     {
         return $this->hasMany(Revisiondetail::class); 
     }
-<<<<<<< HEAD
     public function providerprices()
     {
         return $this->hasMany(ProviderPrice::class); 
-=======
+    }
     public function buy_order_detail()
     {
         return $this->hasOne(BuyOrderDetail::class, 'material_id');
->>>>>>> develop
     }
 }
