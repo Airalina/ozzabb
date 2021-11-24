@@ -71,12 +71,12 @@
                             <td style="text-align: center">{{ $material->color }} </td>
                             <td style="text-align: center">
                                 @if ($material->line != null)
-                                    {{ $material->line->name }}
+                                    {{ $material->line }}
                                 @endif
                             </td>
                             <td style="text-align: center">
                                 @if ($material->usage != null)
-                                    {{ $material->usage->name }}
+                                    {{ $material->usage }}
                                 @endif
                             </td>
                             <td style="text-align: center">
