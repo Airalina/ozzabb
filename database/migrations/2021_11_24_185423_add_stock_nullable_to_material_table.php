@@ -13,7 +13,7 @@ class AddStockNullableToMaterialTable extends Migration
      */
     public function up()
     {
-        Schema::table('material', function (Blueprint $table) {
+        Schema::table('materials', function (Blueprint $table) {
             $table->dropColumn('stock');
             $table->integer('stock')->nullable();
         
@@ -27,7 +27,7 @@ class AddStockNullableToMaterialTable extends Migration
      */
     public function down()
     {
-        Schema::table('material', function (Blueprint $table) {
+        Schema::table('materials', function (Blueprint $table) {
             //
         });
     }
