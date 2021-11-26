@@ -35,8 +35,8 @@
                         <option data-select2-id="48" value="name">Nombre</option>
                         <option data-select2-id="49" value="family">Familia</option>
                         <option data-select2-id="50" value="color">Color</option>
-                        <option data-select2-id="51" value="line_id">Linea</option>
-                        <option data-select2-id="52" value="usage_id">Uso</option>
+                        <option data-select2-id="51" value="line">Linea</option>
+                        <option data-select2-id="52" value="usage">Uso</option>
                         <option data-select2-id="53" value="replace_id">Puesto de contacto</option>
                         <option data-select2-id="54" value="stock_min">Stock Min.</option>
                         <option data-select2-id="55" value="stock_min">Stock Max.</option>
