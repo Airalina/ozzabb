@@ -25,8 +25,6 @@ class Instalaciones extends Component
             ->orWhere('family','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('color','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('line','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('usage','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
@@ -41,7 +39,6 @@ class Instalaciones extends Component
 
     public function store()
     {
-       
         if($this->funcion=="create"){
             $this->validate([
                 'code'=>'required|integer|min:1|max:100000000',

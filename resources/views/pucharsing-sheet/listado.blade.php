@@ -31,9 +31,9 @@
                         <tr class="registros">
                             <td>{{ $purchasing_sheet->id }}</td>
                             <td>{{ $purchasing_sheet->date }}</td>
-                            <td>{{ $purchasing_sheet->count_orders }}</td>
-                            @if(!empty($purchasing_sheet->total_price))
-                            <td>${{ $purchasing_sheet->total_price }}</td>
+                            <td>{{ count($purchasing_sheet->purchasing_sheet_orders) }}</td>
+                            @if(!empty($purchasing_sheet->usd_total_price))
+                            <td>${{ $purchasing_sheet->usd_total_price }}</td>
                             @else
                             <td></td>
                             @endif

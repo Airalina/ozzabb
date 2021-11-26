@@ -16,9 +16,9 @@ class Material extends Model
 
     protected $fillable = ['code','name', 'stock', 'family','color','description','line','usage','replace_id','stock_min','stock_max','stock','image'], $photo;
     
-    public function provider_prices(){
+    public function provider_prices()
+    {
         return $this->hasMany(ProviderPrice::class); 
-    
     }
     public function line()
     {
@@ -32,13 +32,20 @@ class Material extends Model
     {
         return $this->belongsTo(Material::class, 'replace_id');
     }
-    public function getUrl($photo){
+    public function getUrl($photo)
+    {
         return url("storage/$photo");
     }
     public function revisiondetails()
     {
         return $this->hasMany(Revisiondetail::class); 
     }
+
+    public function providerprices()
+    {
+        return $this->hasMany(ProviderPrice::class); 
+    }
+
     public function buy_order_detail()
     {
         return $this->hasOne(BuyOrderDetail::class, 'material_id');

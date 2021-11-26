@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLineToMaterials extends Migration
+class AddFildColumnsToPucharsingSheetDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddLineToMaterials extends Migration
      */
     public function up()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('line_id');
-            $table->enum('line', ['Superseal', 'Mini', 'Fit', 'Bulldog', 'Ecoseal', 'Eco'])->nullable();
+        Schema::table('pucharsing_sheet_details', function (Blueprint $table) {
+            $table->float('usd_price')->after("presentation");
         });
     }
 
@@ -26,8 +25,8 @@ class AddLineToMaterials extends Migration
      */
     public function down()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('line');
+        Schema::table('pucharsing_sheet_details', function (Blueprint $table) {
+            //
         });
     }
 }

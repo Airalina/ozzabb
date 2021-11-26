@@ -14,239 +14,336 @@ use App\Models\Provider;
 use App\Models\PucharsingSheet;
 use App\Models\PucharsingSheetDetail;
 use App\Models\PucharsingSheetOrder;
+use App\Models\BuyOrderDetail;
+use App\Models\BuyOrder;
+use App\Jobs\SendBuyEmail;
+use Carbon\Carbon;
 
 class PurchasingSheet extends Component
 {
- 
-    public $funcion="", $ord, $searchMounth='', $explora, $pedidos = false, $detail = array(), $count=0,$date, $provider_price_unit, $provider_price_price, $provider_id, $i = 0, $x = 0, $orderC, $total = [], $mats = [], $material = [], $materials = [], $present = [], $orders, $ottPlatform = '', $search = '', $clientOrders, $clientorders = [], $order = [], $order_detail = [], $installations, $installation, $installation_code = [[]], $revision_detail = [], $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $stock, $suma = [], $block = true, $selection = false, $providers = [], $provider, $in_transit = [], $transit = [], $transits, $requirements = [], $requirement = [], $req = [], $amount, $provider_price = [], $provider_presentation = [], $comprar = [], $iva, $subtotal, $total_price, $select_present, $m_comprar = [], $purchasing_sheets, $searchP, $searchmateriales, $months, $cantidad, $msg, $msg_error, $selection_provider, $provider_selected, $mate, $orders_amount;
+    public $prueba=0;
+    public $funcion="", $ord, $searchMounth='', $explora, $pedidos = false, $detail = array(), $count=0,$date, $provider_price_unit, $provider_price_price, $provider_id, $i = 0, $x = 0, $orderC, $total = [], $mats = [], $material = [], $present = [], $orders, $ottPlatform = '', $search = '', $clientOrders, $clientorders = [], $order = [], $order_detail = [], $installations, $installation, $installation_code = [[]], $revision_detail = [], $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $stock, $suma = [], $block = true, $selection = false, $providers = [], $provider, $in_transit = [], $transit = [], $transits, $requirements = [], $requirement = [], $req = [], $amount, $provider_price = [], $provider_presentation = [], $comprar = [], $iva, $subtotal, $total_price, $select_present, $m_comprar = [], $purchasing_sheets, $searchP, $searchmateriales, $months, $cantidad, $msg, $msg_error, $selection_provider, $provider_selected, $mate, $orders_amount;
     private $select_presentation = [], $select_provider = [];
-
+    public  $providerprice=array(),$providerprices=array(), $purchasing=array(), $purchasings=array(), $materialcount=0;
+    public $ordenes=array(), $ordercount=0;
+    public $ordenes_ingreso, $stock_transito=0, $ordenrep=false, $materialrep=false; 
+    public $codem, $descriptionm, $proveedorm, $proveedormm, $proveedoresm=array(), $proveedorrep=false, $provcount=0, $presentationm,$presentationsm, $pricem, $clavem, $amountm;
+    public $proveedor_name, $material_id, $precio, $subtotalxmaterial;
+    public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder;
+    public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
+    public $ordenes_de_compra, $materials, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0;
     public function render()
     {    $this->months = [1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre' ]; 
-      // dd($this->months);
         foreach ($this->months as $number_month => $month) {
            if($this->search == $month){
             $this->searchMounth =  $number_month;
            } 
         }
-        
         $this->orders = Clientorder::where('id','LIKE','%'.$this->search.'%')
         ->orWhere('customer_name','LIKE','%'.$this->search.'%')
         ->orWhereMonth('date', $this->searchMounth)
         ->orWhereDay('date',  $this->search)
         ->get();
-
+        $this->materials = Material::where('code','like','%'.$this->search.'%')
+        ->orWhere('name','LIKE','%'.$this->search.'%')
+        ->orWhere('family','LIKE','%'.$this->search.'%')
+        ->orWhere('color','LIKE','%'.$this->search.'%')
+        ->orWhere('description','LIKE','%'.$this->search.'%')
+        ->orWhere('replace_id','LIKE','%'.$this->search.'%')->get();
         $this->purchasing_sheets = PucharsingSheet::where('id','LIKE','%'.$this->searchP.'%')
         ->orWhere('date','LIKE','%'.$this->searchP.'%')
         ->get();
-        return view('livewire.purchasing-sheet');
+        $this->proveedorm=Provider::where('name', $this->proveedor_name)->first();
+        if(!empty($this->proveedorm)){
+            $this->presentationsm=ProviderPrice::where('provider_id', $this->proveedorm->id)->where('material_id',$this->material_id)->get();
+        } 
+        if(!empty($this->presentationm))
+        {
+        $this->precio=ProviderPrice::where('provider_id', $this->proveedorm->id)->where('material_id',$this->material_id)->where('unit',$this->presentationm)->first();
+        }
+        if($this->iva==""){
+            $this->iva=0;
+        }
+        $this->total_price = $this->subtotal+($this->subtotal*($this->iva/100));
+        return view('livewire.purchasing-sheet');     
     }
 
     public function addorder(Clientorder $order){
-     //   dd($orderC);
-      //  $this->select=true;
-    
-      $this->clientOrders[$this->count] = $order->id; 
-      $this->count++;
-
-      $this->div=true;
-      $this->select=true;
-      $this->order_change();
-       
-    }
-    public function order_change(){
-     
-      if(!empty($this->clientOrders)){
-        foreach ($this->clientOrders as $key => $order) {
-            $this->clientorders[$key] = Clientorder::find($order);
-            $this->order_detail[$key] = Orderdetail::where('clientorder_id', $this->clientorders[$key]->id)->get();      
-         #W   dd($this->order_detail[$key]);
-            $this->total_amount[$key] = $this->order_detail[$key]->sum('cantidad');
-            $this->buys[$key] = PucharsingSheetOrder::where('clientorder_id', $this->clientorders[$key]->id)->first();
-            
-            foreach($this->order_detail[$key] as $indice => $detail){ 
-                    $this->installations[(int)$this->x] = Installation::where('code',$detail->material_id)->first(); 
-                    $this->x++;
-                }
-           
-        }
-        if(empty($this->installations)){
-            $this->msg  ='El pedido no tiene instalación registrada';
+        if(count($this->ordenes)==0){
+                $this->ordenes[$this->ordercount]=$order;
+                $this->ordercount+=1;
+                foreach($order->orderdetails as $detailorder){
+                    foreach($detailorder->installations as $installation){
+                        $countrevision=$installation->revisions->count()-1;
+                        $revision=$installation->revisions()->orderBy('number_version','desc')->first();
+                        foreach($revision->revisiondetails->where('number_version',$countrevision) as $revisiondetail){
+                                $material=$revisiondetail->materials;
+                                foreach( $this->purchasings as $purchasing){
+                                    if($purchasing[1]==$material->code)
+                                    {
+                                        $this->prueba=$purchasing[5];
+                                        unset($this->purchasings[$purchasing[0]]);
+                                    }
+                                }
+                                $this->purchasing[0]=$this->materialcount;
+                                $this->purchasing[1]=$material->code;
+                                $this->purchasing[2]=$material->description;
+                                $this->purchasing[3]=$material->stock;
+                                $this->purchasing[4]=$material->stock_transit;
+                                $this->purchasing[5]=$this->prueba+$revisiondetail->amount*$detailorder->cantidad;
+                                $this->purchasing[6]=0;
+                                $this->purchasing[7]=0;
+                                $this->purchasing[8]=0;
+                                $this->purchasing[9]=0;
+                                $this->purchasing[10]="";
+                                $this->purchasing[11]=0;
+                                $this->purchasing[12]=$material->id;
+                                $this->purchasings[$this->materialcount]=$this->purchasing;
+                                $this->materialcount+=1;
+                                $this->prueba=0;
+                        }
+                    }
+                }  
         }else{
-           
-            unset($this->msg);
-            foreach ($this->installations as $key => $inst) {
-                if(isset($inst->id)){
-                    $this->installation[$inst->code] = $inst;
-                    $this->revision_detail[(int)$this->i] = Revisiondetail::where('installation_id', $inst->id)->get();
-                    $this->i++; 
+            foreach($this->ordenes as $orden){
+                if($orden['id']==$order->id){
+                    $this->ordenrep=true;
+                }        
+            }
+            if($this->ordenrep==false){
+                $this->ordenes[$this->ordercount]=$order;
+                $this->ordercount+=1;
+                foreach($order->orderdetails as $detailorder){
+                    foreach($detailorder->installations as $installation){
+                        $countrevision=$installation->revisions->count()-1;
+                        $revision=$installation->revisions()->orderBy('number_version','desc')->first();
+                        foreach($revision->revisiondetails->where('number_version',$countrevision) as $revisiondetail){
+                                $material=$revisiondetail->materials;
+                                foreach( $this->purchasings as $purchasing){
+                                    if($purchasing[1]==$material->code)
+                                    {
+                                        $this->materialrep=true;
+                                        $this->prueba=$purchasing[0];
+                                    }
+                                }
+                                if($this->materialrep==false)
+                                {
+                                    $this->purchasing[0]=$this->materialcount;
+                                    $this->purchasing[1]=$material->code;
+                                    $this->purchasing[2]=$material->description;
+                                    $this->purchasing[3]=$material->stock;
+                                    $this->purchasing[4]=$material->stock_transit;
+                                    $this->purchasing[5]=$revisiondetail->amount*$detailorder->cantidad;
+                                    $this->purchasing[6]=0;
+                                    $this->purchasing[7]=0;
+                                    $this->purchasing[8]=0;
+                                    $this->purchasing[9]=0;
+                                    $this->purchasing[10]="";
+                                    $this->purchasing[11]=0;
+                                    $this->purchasing[12]=$material->id;
+                                    $this->purchasings[$this->materialcount]=$this->purchasing;
+                                    $this->materialcount+=1; 
+                                    $this->prueba=0;
+                                }else{
+                                    $this->purchasing[0]=$this->purchasings[$this->prueba][0];
+                                    $this->purchasing[1]=$this->purchasings[$this->prueba][1];
+                                    $this->purchasing[2]=$this->purchasings[$this->prueba][2];
+                                    $this->purchasing[3]=$this->purchasings[$this->prueba][3];
+                                    $this->purchasing[4]=$this->purchasings[$this->prueba][4];
+                                    $this->purchasing[5]=$this->purchasings[$this->prueba][5]+$revisiondetail->amount*$detailorder->cantidad;;
+                                    $this->purchasing[6]=$this->purchasings[$this->prueba][6];
+                                    $this->purchasing[7]=$this->purchasings[$this->prueba][7];
+                                    $this->purchasing[8]=$this->purchasings[$this->prueba][8];
+                                    $this->purchasing[9]=$this->purchasings[$this->prueba][9];
+                                    $this->purchasing[10]=$this->purchasings[$this->prueba][10];
+                                    $this->purchasing[11]=$this->purchasings[$this->prueba][11];
+                                    $this->purchasing[12]=$this->purchasings[$this->prueba][12];
+                                    $this->purchasings[$this->prueba]=$this->purchasing; 
+                                    $this->materialrep=false;
+
+                                }                          
                         }
-            }
-        
-            foreach ($this->revision_detail as $k => $revisions) {
-                foreach ($revisions as $i => $revision) {
-                    if(isset($revision->material_id)){
-                    $this->materials[$revision->material_id] = $revision;
-                    $this->material[$revision->material_id] = $revision->material_id;
-                    $this->selection_provider[$revision->material_id] = true;
                     }
-                }
+                }   
             }
-            if(!empty($this->date)){
-                $this->pedidos = true;
-            }
-            foreach ($this->material as $key => $value) {
-            $this->deposit_material[$key] = DepositMaterial::where('material_id', $value)->groupBy('presentation')->selectRaw('material_id, presentation, sum(amount) as sum')->get();
-            $this->in_transit[$key] = PucharsingSheetDetail::where('material_id', $value)->groupBy('material_id', 'presentation')->selectRaw('material_id, presentation, sum(amount) as sum')->get();
-            $this->providers[$key] = ProviderPrice::where('material_id', $value)->get();
-                    
-            foreach ($this->installation as $inst) {
-                    if(isset($inst->id)){
-                    $this->requirements[$inst->id] = Revisiondetail::where('installation_id', $inst->id)->groupBy('material_id')->selectRaw('material_id, installation_id, sum(amount) as sum')->get();   
-                        foreach ($this->requirements[$inst->id] as $ki => $requi) {
-                            if($requi->material_id == $key){
-                                $this->requirement[$key][$inst->id] = $requi;
-                            }
-                            $this->selection_provider[$requi->material_id] = true;
-                        }
-                    }
-                }       
-            }
-            foreach ($this->requirement as $mat => $material) {
-                            $this->req[$mat] = array_sum(array_column($material, 'sum')); 
-                    }
         }
-        if(!empty($this->provider)){
-         # dd($this->provider);
-            $this->select_present = true;
-            foreach ($this->provider as $material_id => $provider_id) {
-                $this->mat = $material_id;
-                $this->select_provider[$material_id] = json_decode($provider_id);
-                $this->present[$material_id]= ProviderPrice::where('material_id',  $this->select_provider[$material_id]->material_id)->where('provider_id',  $this->select_provider[$material_id]->provider_id)->get();
-            }
-         #   $this->selection_provider[$this->select_provider->material_id] = false;
-          #  $this->provider_selected[$this->select_provider->material_id] = Provider::where('id', $this->select_provider->provider_id)->first();
-          //  dd($this->select_provider);
-       
- //dd($this->present);
-          
-                if(!empty($this->presentation[$this->mat])){
-                   
-                    $this->cantidad[$this->mat] = true;
-                    
-                    foreach ($this->presentation as $material_id => $presentation_amount) {
-                        $this->select_presentation[$material_id] = json_decode($presentation_amount);
-                    }
-                    #dd($this->select_presentation);
-  
-                
-                }
-            $this->provider_price = $this->providers[$this->mat];
-         
-            foreach ($this->provider_price as $index => $price) {
-               
-                if(!empty($this->select_presentation[$this->mat])){
-                    if (($this->select_provider[$this->mat]->provider_id == $price->provider_id) && ($this->select_presentation[$this->mat]->unit == $price->unit)){
-                      //  dd($price);
-                        $this->provider_price_price[$this->mat]=$price->usd_price;
-                        $this->provider_price_unit[$this->mat]=$price->unit;
-                        $this->provider_id[$this->mat]=$price->provider_id;
-                    }
-                   
-                }
-            
-                }
-                if(!empty($this->amount[$this->mat])){
-                    if(is_numeric($this->amount[$this->mat])){
-                        $this->m_comprar[$this->mat] = true;
-                        //   $this->cantidad = true;
-                        //   dd($this->m_comprar);
-                           foreach($this->amount as $i => $amnt){
-                           $this->total[$i] = $amnt;
-                           }
-                         //  dd($this->total);
-                           foreach ($this->total as $t => $cant) {
-                               
-                               if(isset($this->provider_price_price[$t])){
-                             $this->comprar[$this->mat] = ($this->provider_price_price[$t]*$cant)/$this->provider_price_unit[$t];
-                               } 
-                           }
-                         #  dd($this->comprar);
-                           $this->subtotal = array_sum($this->comprar);
-                           if(!empty($this->iva)){
-                               $this->total_price = $this->subtotal * (1 + ($this->iva /100));
-                           }
+        $this->ordenrep=false;
+        $this->materialrep=false;
+        $this->search="";   
+    }
+    public function addmaterial(Material $material)
+    {
+            $this->purchasing[0]=$this->materialcount;
+            $this->purchasing[1]=$material->code;
+            $this->purchasing[2]=$material->description;
+            $this->purchasing[3]=$material->stock;
+            $this->purchasing[4]=$material->stock_transit;
+            $this->purchasing[5]=0;
+            $this->purchasing[6]=0;
+            $this->purchasing[7]=0;
+            $this->purchasing[8]=0;
+            $this->purchasing[9]=0;
+            $this->purchasing[10]="";
+            $this->purchasing[11]=0;
+            $this->purchasing[12]=$material->id;
+            $this->purchasings[$this->materialcount]=$this->purchasing;
+            $this->materialcount+=1;
+            $this->prueba=0;
+            $this->materialsinorden=false;
+
+    }
+    public function buy(int $code)
+    {
+        $this->material=Material::where('code', $code)->first();
+        $this->material_id=$this->material->id;
+        $this->codem=$this->material->code;
+        $this->descriptionm=$this->material->description;
+        foreach($this->material->provider_prices as $mat){
+            if(count($this->proveedoresm)==0){
+            $this->proveedoresm[$this->provcount]=Provider::find($mat->provider_id);
+            $this->provcount+=1;
+            }else{
+                foreach($this->proveedoresm as $prov){
+                    if($prov['id']==$mat->provider_id){
+                        
                     }else{
-                        $this->msg = "La cantidad debe ser un número";
+                        $this->proveedoresm[$this->provcount]=Provider::find($mat->provider_id);
+                        $this->provcount+=1;
                     }
-                    
-                  
-                }           
-            }              
-      }
-             
+                }
+            }
+        }
+        $this->dispatchBrowserEvent('show-form');
+    }
+    public function buy_confirm()
+    {
+        foreach($this->purchasings as $purchasing){
+            if($purchasing[1]==$this->codem){
+                $this->purchasing[0]=$purchasing[0];
+                $this->purchasing[1]=$purchasing[1];
+                $this->purchasing[2]=$purchasing[2];
+                $this->purchasing[3]=$purchasing[3];
+                $this->purchasing[4]=$purchasing[4];
+                $this->purchasing[5]=$purchasing[5];
+                $this->purchasing[6]=$this->presentationm;
+                $this->purchasing[7]=$this->amount;
+                $this->purchasing[8]=$this->presentationm*$this->amount;
+                $this->purchasing[9]=$this->precio->usd_price;
+                $this->purchasing[10]=$this->proveedor_name;
+                $this->purchasing[11]=$this->precio->usd_price*$this->amount;
+                $this->purchasing[12]=$purchasing[12];
+                $this->purchasings[$purchasing[0]]=$this->purchasing;             
+            }
+        }
+        $this->subtotal=0;
+        foreach($this->purchasings as $purchasing){
+            $this->subtotal+=$purchasing[11];
+        }
+        $this->dispatchBrowserEvent('hide-form');
+        $this->provcount=0;
+        $this->proveedoresm=[];
+        $this->proveedor_name=null;
+        $this->presentationm=null;
+        $this->amount=null;
     }
     public function funcion()
     {
+        $this->reset();
         $this->funcion="crear";
-        $this->date=null;
-        $this->search='';
-        $this->pedidos = false;
-        $this->div=false;
-        $this->select=false;
-        $this->total_price = null;
-        $this->subtotal = null;
-        $this->iva = null;
-
     }
-
-     public function save(){
-  //     dd($this->total);
-        $this->validate([
-            'date' => 'required|date',
-        ], [ 
-            'date.required' => 'El campo fecha es requerido',
-            'date.date' => 'El campo fecha debe ser una fecha válida',
-        ]);
-        $this->pucharsing_sheet = PucharsingSheet::create([
-            'date' => $this->date,
-            'count_orders' => count($this->clientorders),
-            'total_price' => $this->total_price
-        ]);
-      
-     
-        foreach ($this->material as $key => $mat) {
-               
-            //dd($this->total);
-            if(isset($this->provider_price_unit[$mat]) && isset($this->provider_id[$mat])){
-                unset($this->msg_error[$mat]);
-                if(empty($this->total[$mat])){
-                    $this->total[$mat] = 0;
-                }       
-                PucharsingSheetDetail::create([
-                    'pucharsing_sheet_id' => $this->pucharsing_sheet->id,
-                    'material_id' => $mat,
-                    'amount' => $this->total[$mat],
-                    'presentation' => $this->provider_price_unit[$mat],
-                    'provider_id' => $this->provider_id[$mat],
-                ]);
-                foreach ($this->clientorders as $order) {
-                    PucharsingSheetOrder::create([
-                        'pucharsing_sheet_id' => $this->pucharsing_sheet->id,
-                        'clientorder_id' => $order["id"],
-                    ]);
-                }
-                return redirect()->to('/planilla-de-compras');
-
-            }else{
-                $this->msg_error[$mat] = 'Escoge un proveedor y presentación para el material nro: '. $mat;
-                $this->order_change();
-            }
-            
+    public function buscamaterial()
+    {
+        $this->dispatchBrowserEvent('show-formmaterial');
+    }
+    public function addmaterialsinorden(Material $material)
+    {
+        $this->addmaterial($material);
+        $this->dispatchBrowserEvent('hide-formmaterial');
+    }
+    public function save(){
+        $this->date=Carbon::now();
+        $this->plantilla= new PucharsingSheet;
+        $this->plantilla->date=$this->date;
+        $this->plantilla->usd_subtotal_price=$this->subtotal;
+        $this->plantilla->iva=$this->iva;
+        $this->plantilla->usd_total_price=$this->total_price;
+        $this->plantilla->save();
+        foreach($this->ordenes as $orden){
+            $this->plantilla_orden= new PucharsingSheetOrder;
+            $this->plantilla_orden->pucharsing_sheet_id=$this->plantilla->id;
+            $this->plantilla_orden->clientorder_id=$orden['id'];
+            $this->plantilla_orden->save();
+            $this->clientorder=Clientorder::find($orden['id']);
+            $this->clientorder->buys=2;
+            $this->clientorder->save();
         }
-     //dd( $this->msg_error);
+        foreach($this->purchasings as $purchasing){
+            if($purchasing[7]>0){
+                $this->plantilla_detail=new PucharsingSheetDetail;
+                $this->plantilla_detail->pucharsing_sheet_id=$this->plantilla->id;
+                $this->plantilla_detail->material_id=$purchasing[12];
+                $this->plantilla_detail->amount=$purchasing[7];
+                $this->plantilla_detail->presentation=$purchasing[6];
+                $this->plantilla_detail->usd_price=$purchasing[11];
+                $this->plantilla_detail->provider_id=Provider::where('name',$purchasing[10])->first()->id;
+                $this->plantilla_detail->save();
+            }
+        }
+        $this->plantilla_ordenes=$this->plantilla->purchasing_sheet_details()->orderBy('provider_id')->get();
+        
+        foreach($this->plantilla_ordenes as $ordenes){
+            if($this->proveedor_id==0){
+                $this->proveedor_id=$ordenes->provider_id;
+                $this->ordenes_de_compra=new BuyOrder;
+                $this->ordenes_de_compra->buy_date=$this->date;
+                $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
+                $this->ordenes_de_compra->total_price+=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra->purchasing_sheet_id=$ordenes->id;
+                $this->ordenes_de_compra->state=1;
+                $this->ordenes_de_compra->save();
+                $this->ordenes_de_compra_detalle= new BuyOrderDetail;
+                $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
+                $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
+                $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
+                $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
+                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra_detalle->save();
+                
+            }elseif($this->proveedor_id!=$ordenes->provider_id){
+                SendBuyEmail::dispatch($this->ordenes_de_compra);
+                $this->ordenes_de_compra=new BuyOrder;
+                $this->ordenes_de_compra->buy_date=$this->date;
+                $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
+                $this->ordenes_de_compra->total_price+=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra->purchasing_sheet_id=$ordenes->id;
+                $this->ordenes_de_compra->state=1;
+                $this->ordenes_de_compra->save();
+                $this->ordenes_de_compra_detalle=new BuyOrderDetail;
+                $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
+                $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
+                $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
+                $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->presentacion;
+                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra_detalle->save();
+            }else{
+                $this->ordenes_de_compra_detalle=new BuyOrderDetail;
+                $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
+                $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
+                $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
+                $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->presentacion;
+                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra_detalle->save();
+            }
+        }
+        $this->ordenes_de_compra->save();
+        SendBuyEmail::dispatch($this->ordenes_de_compra);
+        $this->funcion="";
+     }
+     public function backlist()
+     {
+        $this->reset();
      }                        
 }
-
-   
-  
