@@ -12,6 +12,10 @@
     @livewireScripts
 @stop
 
+@section('footer')
+  <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/" target="_blank">www.codigitar.com</a></strong>
+@stop  
+
 @section('css')
 
     <link rel="stylesheet" href="/css/admin_custom.css">
