@@ -311,7 +311,6 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->save();
                 
             }elseif($this->proveedor_id!=$ordenes->provider_id){
-                SendBuyEmail::dispatch($this->ordenes_de_compra);
                 $this->ordenes_de_compra=new BuyOrder;
                 $this->ordenes_de_compra->buy_date=$this->date;
                 $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
@@ -333,14 +332,20 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
                 $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
                 $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
-                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->presentacion;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
                 $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
                 $this->ordenes_de_compra_detalle->save();
             }
         }
         $this->ordenes_de_compra->save();
-        SendBuyEmail::dispatch($this->ordenes_de_compra);
         $this->funcion="";
+     }
+     public function view_detail(PucharsingSheet $purchasing)
+     {
+        $this->funcion="viewdetail";
+        $this->purchasing=$purchasing;
+        $this->purchasings=$purchasing->purchasing_sheet_details()->orderBy('provider_id')->get();;
+
      }
      public function backlist()
      {

@@ -1,7 +1,11 @@
 <div>
+    <button wire:click="backlist()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i>
+        Volver</button>
+</div><br>
+<div>
     <div class="card card-tabs">
         <div class="card-header">
-            <h3 class="card-title">Planillas de compra</h3>
+            <h3 class="card-title">Planilla de compra</h3>
             <div class="card-tools">
                 @if (auth()->user()->can('storeprovider', auth()->user()))
                     <div>
@@ -16,31 +20,29 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive">
-            <table class="table table-head text-nowrap">
+            <table class="table table-head table-sm">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Fecha</th>
-                        <th>N° de órdenes</th>
-                        <th>Costo total</th>
-                        <th></th>
+                    <th>Código material</th>
+                        <th>Descripción material</th>
+                        <th>Proveedor</th>
+                        <th>Presentación</th>
+                        <th>P/U U$D</th>
+                        <th>Cantidad</th>
+                        <th>Total U$D</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @forelse($purchasing_sheets as $purchasing_sheet)
+                    @forelse($purchasings as $purchasing)
                         <tr class="registros">
-                            <td>{{ $purchasing_sheet->id }}</td>
-                            <td>{{ $purchasing_sheet->date }}</td>
-                            <td>{{ count($purchasing_sheet->purchasing_sheet_orders) }}</td>
-                            @if(!empty($purchasing_sheet->usd_total_price))
-                            <td>${{ $purchasing_sheet->usd_total_price }}</td>
-                            @else
-                            <td></td>
-                            @endif
-                            <td>
-                            <button type="button" wire:click="view_detail({{$purchasing_sheet->id}})"class="btn btn-primary btn-sm">Ver</button>
-                            </td>
+                            <td>{{ $purchasing->materials->code }}</td>
+                            <td>{{ $purchasing->materials->description }}</td>
+                            <td>{{ $purchasing->providers->name }}</td>
+                            <td>{{ $purchasing->presentation }}</td>
+                            <td>{{ $purchasing->usd_price }}</td>
+                            <td>{{ $purchasing->amount }}</td>
+                            <td>{{ $purchasing->usd_price*$purchasing->amount }}</td>
                         </tr>
                     @empty
                         <tr class="text-center">

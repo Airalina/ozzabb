@@ -10,49 +10,64 @@
       </div>
       <div class="card-body">
           <form>
-              <div class="col-md-6">
+              <div class="col-md-12">
                   <div class="card-body">
-                      <div class="form-group">
-                          <label for="name">Nombre de la empresa</label>
-                          <input type="text" class="form-control" id="name" wire:model="name"
-                              placeholder="Nombre de la empresa" required readonly>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="name">Nombre de la empresa</label>
+                                    <input type="text" class="form-control" id="name" wire:model="name"
+                                        placeholder="Nombre de la empresa" required readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="address">Domicilio</label>
+                                    <input type="text" class="form-control" id="address" wire:model="address"
+                                        placeholder="Domicilio" required readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="phone">Teléfono</label>
+                                    <input type="text" class="form-control" id="phone" wire:model="phone" placeholder="Teléfono"
+                                        readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="email">Correo electrónico para ventas</label>
+                                    <input type="email" class="form-control" id="email" wire:model="email"
+                                        placeholder="Correo electrónico para ventas" required readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="contact_name">Nombre de contacto</label>
+                                    <input type="text" class="form-control" id="contact_name" pattern="[A-Za-z]"
+                                        wire:model="contact_name" placeholder="Nombre de contacto" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="point_contact">Puesto de contacto</label>
+                                    <input type="text" class="form-control" id="point_contact" wire:model="point_contact"
+                                        placeholder="Puesto de contaco" readonly>
+                                </div>
+                            </div>
                       </div>
-                      <div class="form-group">
-                          <label for="address">Domicilio</label>
-                          <input type="text" class="form-control" id="address" wire:model="address"
-                              placeholder="Domicilio" required readonly>
-                      </div>
-                      <div class="form-group">
-                          <label for="phone">Teléfono</label>
-                          <input type="text" class="form-control" id="phone" wire:model="phone" placeholder="Teléfono"
-                              readonly>
-                      </div>
-                      <div class="form-group">
-                          <label for="email">Correo electrónico para ventas</label>
-                          <input type="email" class="form-control" id="email" wire:model="email"
-                              placeholder="Correo electrónico para ventas" required readonly>
-                      </div>
-                      <div class="form-group">
-                          <label for="contact_name">Nombre de contacto</label>
-                          <input type="text" class="form-control" id="contact_name" pattern="[A-Za-z]"
-                              wire:model="contact_name" placeholder="Nombre de contacto" readonly>
-                      </div>
-                      <div class="form-group">
-                          <label for="point_contact">Puesto de contacto</label>
-                          <input type="text" class="form-control" id="point_contact" wire:model="point_contact"
-                              placeholder="Puesto de contaco" readonly>
-                      </div>
-                      <div class="form-group">
-                          <label for="site_url">Página web</label>
-                          <input type="text" class="form-control" id="site_url" wire:model="site_url"
-                              placeholder="www.paginaweb.com" readonly>
-                      </div>
-                      <div class="form-group">
-                          <input type="checkbox" wire:model="status" class="form-check-input" id="exampleCheck1"
-                              checked="" class="form-control" disabled>
-                          <label for="exampleCheck1">Activo</label>
-                      </div>
-                  </div>
+                      <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="site_url">Página web</label>
+                                <input type="text" class="form-control" id="site_url" wire:model="site_url"
+                                    placeholder="www.paginaweb.com" readonly>
+                            </div>
+                        </div>
+                     </div>
+                </div>
               </div>
           </form>
       </div>
