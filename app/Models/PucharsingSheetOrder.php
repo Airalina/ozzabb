@@ -10,4 +10,8 @@ class PucharsingSheetOrder extends Model
     use HasFactory;
 
     protected $fillable = ['pucharsing_sheet_id','clientorder_id'];
+
+    public function clientorder(){
+        return $this->belongsTo(Clientorder::class);
+    }
 }

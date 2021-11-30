@@ -15,12 +15,10 @@
         @include("pucharsing-sheet.worksheet")
         @break
 
+    @case("explora")
+        @include("pucharsing-sheet.explora")
+        @break
   @endswitch
 
-  @switch($explora)
-      @case("activo")
-          @include("pucharsing-sheet.explorar")
-          @break
-  @endswitch
   
 </div>
