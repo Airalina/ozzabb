@@ -20,6 +20,9 @@
     @case("retiros")
         @include("deposito.retiros")
         @break
+    @case("retiro_detail")
+        @include("deposito.retiro_detail")
+        @break
     @case("createassembled")
         @include("deposito.createassembled")
         @break

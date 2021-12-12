@@ -50,4 +50,13 @@ class Material extends Model
     {
         return $this->hasOne(BuyOrderDetail::class, 'material_id');
     }
+
+    public function depositmaterials()
+    {
+        return $this->hasMany(DepositMaterial::class); 
+    }
+    public function warehouses()
+    {
+        return $this->belongsToMany(Warehouse::class, 'deposit_materials', 'material_id', 'warehouse_id');
+    }
 }
