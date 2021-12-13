@@ -1,8 +1,11 @@
 /node_modules
 /public/hot
 /public/storage
+/public/vendor
 /storage/*.key
 /vendor
+/resources/views/vendor
+/config
 .env
 .env.backup
 .phpunit.result.cache
@@ -11,3 +14,9 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+*.sublime-project
+*.sublime-workspace
+composer.phar
+docker-compose.yml
+composer.json
+composer.lock
