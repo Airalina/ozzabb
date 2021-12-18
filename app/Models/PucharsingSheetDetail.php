@@ -20,4 +20,10 @@ class PucharsingSheetDetail extends Model
         return $this->belongsTo(Provider::class, 'provider_id');
     }
 
+    public function material(){
+        return $this->belongsTo(Material::class);
+    }
+    public function provider(){
+        return $this->belongsTo(Provider::class);
+    }
 }

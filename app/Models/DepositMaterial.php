@@ -18,4 +18,9 @@ class DepositMaterial extends Model
     {
         return $this->belongsTo(Assembled::class,'material_id');
     }
+
+    public function warehouse2()
+    {
+        return $this->belongsTo(Warehouse::class,'warehouse2_id');
+    }
 }

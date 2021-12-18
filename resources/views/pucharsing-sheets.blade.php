@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Planilla de compras')
+@section('title', 'Planillas de compra')
 
 @section('content_header')
-    <h1>Planilla de compras</h1>
+    <h1>Planillas de compra</h1>
 @stop
 
 @section('content')
@@ -11,6 +11,10 @@
     @livewire('purchasing-sheet')
     @livewireScripts
 @stop
+
+@section('footer')
+  <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/" target="_blank">www.codigitar.com</a></strong>
+@stop  
 
 @section('css')
 

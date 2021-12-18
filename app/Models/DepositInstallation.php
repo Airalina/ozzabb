@@ -13,4 +13,9 @@ class DepositInstallation extends Model
     {
         return $this->belongsTo(Revision::class,'installation_id');
     }
+
+    public function installation()
+    {
+        return $this->belongsTo(installation::class,'installation_id');
+    }
 }
