@@ -29,38 +29,17 @@
             <table class="table table-head  table-sm">
                 <thead>
                     <tr>
-<<<<<<< HEAD
-                        <th>Id</th>
-                        <th>Fecha</th>
-                        <th>N° de órdenes</th>
-                        <th>Costo total</th>
-=======
                         <th style="text-align: center">ID</th>
                         <th style="text-align: center">Fecha</th>
                         <th style="text-align: center">Cantidad de órdenes</th>
                         <th style="text-align: center">Costo total</th>
->>>>>>> develop
+
                         <th></th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @forelse($purchasing_sheets as $purchasing_sheet)
-<<<<<<< HEAD
-                        <tr class="registros">
-                            <td>{{ $purchasing_sheet->id }}</td>
-                            <td>{{ $purchasing_sheet->date }}</td>
-                            <td>{{ count($purchasing_sheet->purchasing_sheet_orders) }}</td>
-                            @if(!empty($purchasing_sheet->usd_total_price))
-                            <td>${{ $purchasing_sheet->usd_total_price }}</td>
-                            @else
-                            <td></td>
-                            @endif
-                            <td>
-                            <button type="button" wire:click="view_detail({{$purchasing_sheet->id}})"class="btn btn-primary btn-sm">Ver</button>
-                            </td>
-                        </tr>
-=======
                     <tr class="registros">
                         <td style="text-align: center">{{ $purchasing_sheet->id }}</td>
                         <td style="text-align: center">{{ date('d-m-Y', strtotime($purchasing_sheet->date)) }}</td>
@@ -75,7 +54,6 @@
                                 class="fas fa-file-alt"></i> Ver</button>
                         </td>
                     </tr>
->>>>>>> develop
                     @empty
                     <tr class="text-center">
                         <td colspan="4" class="py-3 italic">No hay información</td>
