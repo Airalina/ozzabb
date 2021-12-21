@@ -33,6 +33,7 @@
                         <th style="text-align: center">Fecha</th>
                         <th style="text-align: center">Cantidad de órdenes</th>
                         <th style="text-align: center">Costo total</th>
+
                         <th></th>
                     </tr>
                 </thead>

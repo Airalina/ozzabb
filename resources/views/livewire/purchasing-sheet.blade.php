@@ -11,8 +11,8 @@
         @include("pucharsing-sheet.worksheet")
         @break
 
-    @case("actualizar")
-        @include("pucharsing-sheet.worksheet")
+    @case("viewdetail")
+        @include("pucharsing-sheet.purchasingdetail")
         @break
 
     @case("explora")
