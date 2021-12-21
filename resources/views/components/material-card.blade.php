@@ -48,8 +48,8 @@
                         <label for="type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="type" id="type">
                             <option selected value="">Selecciona un tipo</option>
-                            <option value="Porta macho">Porta macho</option>
-                            <option value="Porta hembra">Porta hembra</option>
+                            <option value="Porta Macho">Porta Macho</option>
+                            <option value="Porta Hembra">Porta Hembra</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -174,8 +174,8 @@
                         <label for="term_type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="term_type" id="term_type">
                             <option selected value="">Selecciona un tipo</option>
-                            <option value="Porta macho">Porta macho</option>
-                            <option value="Porta hembra">Porta hembra</option>
+                            <option value="Macho">Macho</option>
+                            <option value="Membra">Hembra</option>
                         </select>
                     </div>
                 @break
@@ -183,10 +183,10 @@
                     <div class="form-group">
                         <label for="minimum_diameter">Diámetro mínimo de Cable</label>
                         <input type="text" class="form-control" id="minimum_diameter" wire:model="minimum_diameter"
-                            placeholder="Diámetro mínimo de Cable">
+                            placeholder="Diámetro mínimo de Sello">
                     </div>
                     <div class="form-group">
-                        <label for="maximum_diameter">Diámetro mínimo de Cable</label>
+                        <label for="maximum_diameter">Diámetro máximo de Cable</label>
                         <input type="text" class="form-control" id="maximum_diameter" wire:model="maximum_diameter"
                             placeholder="Diámetro máximo de Cable">
                     </div>
@@ -200,10 +200,10 @@
                     <div class="form-group">
                         <label for="tube_type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="tube_type" id="tube_type">
-                            <option selected value="">Selecciona un tipo</option>
-                            <option value="Corrugado">Corrugado</option>
-                            <option value="Termocontraible">Termocontraible</option>
-                            <option value="PVC">PVC</option>
+                            <option selected>Selecciona un tipo</option>
+                            <option>Corrugado</option>
+                            <option>Termocontraible</option>
+                            <option>PVC</option>
                         </select>
                     </div>
                     <div class="form-group">

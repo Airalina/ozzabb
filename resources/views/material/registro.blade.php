@@ -35,19 +35,20 @@
                 <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id"
                     :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
                     :connect="$connect" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" />
-
-                <div class="form-group">
-                    <label for="color">Color</label>
-                    <select class="form-control form-control-sm" wire:model="color" id="color">
-                        <option selected value="">Selecciona un color</option>
-                        <option value="Negro" class="text-dark">Negro</option>
-                        <option value="Blanco">Blanco</option>
-                        <option value="Rojo" class="text-danger">Rojo</option>
-                        <option value="Azul" class="text-primary">Azul</option>
-                        <option value="Amarillo" class="text-warning">Amarillo</option>
-                        <option value="Verde" class="text-success">Verde</option>
-                    </select>
-                </div>
+                @if($family!="Terminales")
+                    <div class="form-group">
+                        <label for="color">Color</label>
+                        <select class="form-control form-control-sm" wire:model="color" id="color">
+                            <option selected value="">Selecciona un color</option>
+                            <option value="Negro" class="text-dark">Negro</option>
+                            <option value="Blanco">Blanco</option>
+                            <option value="Rojo" class="text-danger">Rojo</option>
+                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Amarillo" class="text-warning">Amarillo</option>
+                            <option value="Verde" class="text-success">Verde</option>
+                        </select>
+                    </div>
+                @endif
                 <div class="form-group">
                     <label for="description">Descripción</label>
                     <textarea name="description" class="form-control" wire:model="description" id="description"
