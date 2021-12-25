@@ -13,7 +13,7 @@ class Clientes extends Component
     protected $paginationTheme = 'bootstrap';
     protected $clientes;
     public $funcion="", $idcli, $cliente, $paginas=25, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
-    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios;
+    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios, $cuit;
     protected $dates = ['deadline', 'date', 'start_date'];
     public function updatingSearch()
     {
@@ -27,6 +27,7 @@ class Clientes extends Component
         ->orWhere('phone','LIKE','%'.$this->search.'%')
         ->orWhere('contact','LIKE','%'.$this->search.'%')
         ->orWhere('post_contact','LIKE','%'.$this->search.'%')
+        ->orWhere('cuit','LIKE','%'.$this->search.'%')
         ->orWhere('email','LIKE','%'.$this->search.'%')->paginate($this->paginas);
         return view('livewire.clientes',[
             'clientes' => $this->clientes,
@@ -48,7 +49,7 @@ class Clientes extends Component
         $this->estado=null;
         $this->street=null;
         $this->number=null;
-        $this->location=null;
+        $this->cuit=null;
         $this->province=null;
         $this->country=null;
         $this->postcode=null;
@@ -81,7 +82,8 @@ class Clientes extends Component
             'location' => 'required|string|min:4',
             'province' => 'required|string|min:4',
             'country' => 'required|string|min:3',
-            'postcode' => 'required|integer|min:1'
+            'postcode' => 'required|integer|min:1',
+            'cuit' => 'required',
         ],[
             'name.required' => 'El campo "Nombre" es requerido',
             'name.min' => 'El campo "Nombre" tiene como mínimo 5(cinco) caracteres',
@@ -111,6 +113,7 @@ class Clientes extends Component
             'postcode.required' => 'El campo "Código Postal" es requerido',
             'postcode.integer' => 'El campo "Código Postal" es numérico',
             'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
+            'cuit.required' => 'El campo cuit es requerido',
         ]);
         Customer::create([
             'name' => $this->name,
@@ -119,7 +122,8 @@ class Clientes extends Component
             'domicile_admin'=>$this->domicile_admin,
             'contact'=>$this->contact,
             'post_contact'=>$this->post_contact,
-            'estado'=>$this->estado
+            'estado'=>$this->estado,
+            'cuit' => $this->cuit,
         ]);
         $this->cliente=Customer::where('domicile_admin', ''.$this->domicile_admin.'')->get();
         foreach($this->cliente as $client){
@@ -149,6 +153,7 @@ class Clientes extends Component
         $this->cliente=$cliente;
         $this->domicilios=DomicileDelivery::where('client_id', $this->cliente->id)->get();
         $this->historial=Clientorder::where('customer_id', $this->cliente->id)->get();
+        $this->cuit=$cliente->cuit;
         if($this->explora=='inactivo'){
             $this->explora='activo';
             $this->funcion="0";
@@ -165,6 +170,8 @@ class Clientes extends Component
         $this->email=$cliente->email;
         $this->domicile_admin=$cliente->domicile_admin;
         $this->estado=$cliente->estado;
+        $this->cuit=$cliente->cuit;
+        if($this->explora=='inactivo')
         $this->funcion="adaptar";
         $this->explora="inactivo";
     }
@@ -182,6 +189,7 @@ class Clientes extends Component
         'phone' => 'required|numeric|min:1000000000',
         'post_contact' => 'required|string|min:3',
         'domicile_admin' => 'required|string|min:5',
+        'cuit' => 'required'
     ],[
         'name.required' => 'El campo "Nombre" es requerido',
         'name.min' => 'El campo "Nombre" tiene como mínimo 5(cinco) caracteres',
@@ -197,6 +205,7 @@ class Clientes extends Component
         'post_contact.min' => 'El campo "Puesto/Cargo de contacto" tiene como mínimo 3(tres) caracteres',
         'domicile_admin.required' => 'El campo "Domicilio Administrativo" es requerido',
         'domicile_admin.min' => 'El campo "Domicilio Administrativo" tiene como mínimo 5(cinco) caracteres',
+        'cuit.required' => 'El campo cuit es requerido',
     ]);
         $cliente =Customer::find($this->idcli);
         $cliente->name=$this->name;
@@ -206,6 +215,7 @@ class Clientes extends Component
         $cliente->email=$this->email;
         $cliente->domicile_admin=$this->domicile_admin;
         $cliente->estado=$this->estado;
+        $cliente->cuit=$this->cuit;
         $cliente->save();
         $this->funcion="0";
         $this->explorar($cliente);

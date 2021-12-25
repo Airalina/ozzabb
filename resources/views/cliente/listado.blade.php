@@ -29,6 +29,7 @@
                       <th>Teléfono</th>
                       <th>Email</th>
                       <th>Domicilio Administración</th>
+                      <th>CUIT</th>
                       <th>Estado</th>
                       <th></th>
                     </tr>
@@ -41,6 +42,7 @@
                       <td>{{ $cliente->phone }}</td>
                       <td>{{ $cliente->email}}</td>
                       <td>{{ $cliente->domicile_admin}}</td>
+                      <td>{{ $cliente->cuit}}</td>
                       @if($cliente->estado==true)
                         <td>Activo</td>
                       @else

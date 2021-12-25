@@ -46,6 +46,11 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="term_size">Tamaño de terminal</label>
+                        <input type="text" class="form-control" id="term_size" wire:model="term_size"
+                            placeholder="Tamaño de terminal" disabled>
+                    </div>
+                    <div class="form-group">
                         <label for="seal">Sello Asociado</label>
                         <select wire:model="seal" id="seal" class="form-control form-control-sm" disabled>
                             @foreach ($info_sell as $sell)
@@ -76,6 +81,22 @@
                     <div class="form-group">
                         <label for="watertight">Estanco</label>
                         <select class="form-control form-control-sm" wire:model="watertight" id="watertight" disabled>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lock">Traba secundaria</label>
+                        <select class="form-control form-control-sm" wire:model="lock" id="lock" disabled>
+                            <option selected value="">Selecciona una opción</option>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cover">Tapa</label>
+                        <select class="form-control form-control-sm" wire:model="cover" id="cover" disabled>
+                            <option selected value="">Selecciona una opción</option>
                             <option value="1">Sí</option>
                             <option value="0">No</option>
                         </select>
@@ -210,6 +231,7 @@
                         <input type="text" class="form-control" id="wall_thickness" wire:model="wall_thickness"
                             placeholder="Grosor de la pared del tubo en mm" readonly>
                     </div>
+                    @if($tube_type == "Termocontraible")
                     <div class="form-group">
                         <label for="contracted_diameter">Diámetro Contraído</label>
                         <input type="text" class="form-control" id="contracted_diameter"
@@ -225,6 +247,7 @@
                         <input type="text" class="form-control" id="maximum_temperature"
                             wire:model="maximum_temperature" placeholder="Temperatura máxima de Servicio" readonly>
                     </div>
+                    @endif
                     @break
                     @case("Accesorios")
                     <div class="form-group">

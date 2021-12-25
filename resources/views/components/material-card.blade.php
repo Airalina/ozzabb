@@ -2,12 +2,12 @@
                 @case("Conectores")
                     <div class="form-group">
                         <label for="terminal">Terminal Asociado</label>
-                        <select wire:model="terminal" id="terminal" class="form-control form-control-sm">
+                        <select wire:model="terminal" wire:change="size" id="terminal" class="form-control form-control-sm">
 
                             @if ($terminalId != null)
                                 <option value="{{ $termi->id }}" selected>{{ $termi->material_info->name }}</option>
                             @else
-                                <option selected>Seleccione un terminal</option>
+                                <option selected value="">Seleccione un terminal</option>
                             @endif
 
                             @foreach ($infoTerm as $term)
@@ -20,6 +20,13 @@
                             @endforeach
                         </select>
                     </div>
+                
+                    <div class="form-group">
+                        <label for="term_size">Tamaño de terminal</label>
+                        <input type="text" class="form-control" id="term_size" wire:model="term_size"
+                            placeholder="Tamaño de terminal" disabled>
+                    </div>
+                
                     <div class="form-group">
                         <label for="seal">Sello Asociado</label>
 
@@ -74,7 +81,23 @@
                     <div class="form-group">
                         <label for="watertight">Estanco</label>
                         <select class="form-control form-control-sm" wire:model="watertight" id="watertight">
-                            <option selected value="">Selecciona un tipo</option>
+                            <option selected value="">Selecione una opción</option>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lock">Traba secundaria</label>
+                        <select class="form-control form-control-sm" wire:model="lock" id="lock">
+                            <option selected value="">Selecciona una opción</option>
+                            <option value="1">Sí</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cover">Tapa</label>
+                        <select class="form-control form-control-sm" wire:model="cover" id="cover">
+                            <option selected value="">Selecciona una opción</option>
                             <option value="1">Sí</option>
                             <option value="0">No</option>
                         </select>
@@ -199,7 +222,7 @@
                 @case("Tubos")
                     <div class="form-group">
                         <label for="tube_type">Tipo</label>
-                        <select class="form-control form-control-sm" wire:model="tube_type" id="tube_type">
+                        <select class="form-control form-control-sm" wire:model="tube_type" id="tube_type" wire:change="select_type">
                             <option selected value="">Selecciona un tipo</option>
                             <option value="Corrugado">Corrugado</option>
                             <option value="Termocontraible">Termocontraible</option>
@@ -216,21 +239,23 @@
                         <input type="text" class="form-control" id="wall_thickness" wire:model="wall_thickness"
                             placeholder="Grosor de la pared del tubo en mm">
                     </div>
-                    <div class="form-group">
-                        <label for="contracted_diameter">Diámetro Contraído</label>
-                        <input type="text" class="form-control" id="contracted_diameter" wire:model="contracted_diameter"
-                            placeholder="Diámetro del tubo una vez contraído">
-                    </div>
-                    <div class="form-group">
-                        <label for="minimum_temperature">Temperatura mínima de Servicio</label>
-                        <input type="text" class="form-control" id="minimum_temperature" wire:model="minimum_temperature"
-                            placeholder="Temperatura mínima de Servicio">
-                    </div>
-                    <div class="form-group">
-                        <label for="maximum_temperature">Temperatura máxima de Servicio</label>
-                        <input type="text" class="form-control" id="maximum_temperature" wire:model="maximum_temperature"
-                            placeholder="Temperatura máxima de Servicio">
-                    </div>
+                     @if ($divTube)
+                        <div class="form-group">
+                            <label for="contracted_diameter">Diámetro Contraído</label>
+                            <input type="text" class="form-control" id="contracted_diameter" wire:model="contracted_diameter"
+                                placeholder="Diámetro del tubo una vez contraído">
+                        </div>
+                        <div class="form-group">
+                            <label for="minimum_temperature">Temperatura mínima de Servicio</label>
+                            <input type="text" class="form-control" id="minimum_temperature" wire:model="minimum_temperature"
+                                placeholder="Temperatura mínima de Servicio">
+                        </div>
+                        <div class="form-group">
+                            <label for="maximum_temperature">Temperatura máxima de Servicio</label>
+                            <input type="text" class="form-control" id="maximum_temperature" wire:model="maximum_temperature"
+                                placeholder="Temperatura máxima de Servicio">
+                        </div>
+                     @endif
                 @break
                 @case("Accesorios")
                     <div class="form-group">

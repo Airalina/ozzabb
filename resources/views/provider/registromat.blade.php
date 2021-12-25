@@ -191,8 +191,8 @@
 
                         <x-material-card :div="$div" :info_term="$info_term" :info_sell="$info_sell"
                             :info_con="$info_con" :material_family="$material_family" :rplce=null :terminal_id=null
-                            :seal_id=null :connector_id=null />
-
+                            :seal_id=null :connector_id=null :div_tube="$div_tube"/>
+                       
                         <div class="form-group">
                             <label for="color">Color</label>
                             <select class="form-control form-control-sm" wire:model.defer="color" id="color">
@@ -211,7 +211,7 @@
                                 cols="30" rows="3"></textarea>
                         </div>
                         <div class="form-group">
-                            @if ($family != 'Cables')
+                            @if($family != "Cables" && $family != "Tubos")
                             <label for="line">Línea</label>
                             <select class="form-control form-control-sm" wire:model.defer="line" id="line">
                                 <option selected>Selecciona una linea</option>

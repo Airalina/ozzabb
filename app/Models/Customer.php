@@ -20,7 +20,7 @@ class Customer extends Model
         'post_contact',
         'email',
         'estado',
-        
+        'cuit'        
     ];
 
     public function domiciledeliveries()
