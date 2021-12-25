@@ -42,6 +42,10 @@
                             <label for="exampleInputEmail1">Cargo de contacto</label>
                             <input class="form-control form-control-sm" type="text" wire:model="post_contact" placeholder="Ingrese cargo del contacto">
                         </div>
+                        <div class="form-group">
+                            <label for="cuit">CUIT</label>
+                            <input type="text" class="form-control form-control-sm" id="cuit" wire:model="cuit" placeholder="CUIT">
+                        </div>
                         <div class="form-check">
                             <input type="checkbox" wire:model="estado" class="form-check-input" id="exampleCheck1"  checked="">
                             <label for="exampleInputEmail1">Estado (indica si el cliente esta activo o no)</label>
