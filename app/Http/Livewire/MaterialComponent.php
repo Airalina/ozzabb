@@ -26,7 +26,7 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price;
+    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false;
 
     public function render()
     {
@@ -68,6 +68,9 @@ class MaterialComponent extends Component
         $this->stock=null;
         $this->usage=null;
         $this->terminal=null;
+        $this->term_size=null;
+        $this->cover=null;
+        $this->lock=null;
         $this->seal=null;
         $this->line=null;
         $this->number_of_ways=null;
@@ -83,11 +86,11 @@ class MaterialComponent extends Component
         $this->connector_id=null;
         $this->term=null;
         $this->term_id=null;
-        $this->size=null;
+        $this->size=null;     
         $this->minimum_section=null;
-        $this->maximum_section=null;
+        $this->maximum_section =null;
         $this->sl=null;
-        $this->cab=null;
+        $this->cab=null; 
         $this->rplce = null;
         $this->termi = null;
         $this->seli = null;
@@ -119,7 +122,6 @@ class MaterialComponent extends Component
         $this->width=null;
         $this->hole_diameter=null;
         $this->idu=null;
-
         $this->info_line=Line::all();
         $this->info_usage=Usage::all();
         $this->info_term = Terminal::whereExists(function ($query) {
@@ -197,18 +199,24 @@ class MaterialComponent extends Component
             $this->validate([
                 'terminal' => 'nullable',
                 'seal' => 'nullable',
-                'number_of_ways' => 'numeric|integer|digits:2|required',
+                'number_of_ways' => 'numeric|integer|digits:1|required',
                 'type' => 'required',
                 'connector' =>'nullable',
-                'watertight' =>'required|boolean'
+                'watertight' =>'required|boolean',
+                'lock' =>'required|boolean',
+                'cover' =>'required|boolean'
             ], [
                 'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
                 'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
-                'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de dos cifras',
+                'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
                 'number_of_ways.required' => 'El campo cantidad de vías es requerido',
                 'type.required' => 'El campo tipo es requerido',
                 'watertight.required' => 'Seleccione una opción para el campo estanco',
+                'lock.required' => 'Seleccione una opción para el campo traba secundaria',
+                'cover.required' => 'Seleccione una opción para el campo tapa',
                 'watertight.boolean' => 'El campo estanco debe ser sí o no',
+                'lock.boolean' => 'El campo traba secundaria debe ser sí o no',
+                'cover.boolean' => 'El campo tapa debe ser sí o no',
             ]);
             $this->material=Material::create([
                 'code' => $this->code,
@@ -232,6 +240,8 @@ class MaterialComponent extends Component
                 'type' => $this->type,
                 'connector_id' => $this->connector,
                 'watertight' => $this->watertight,
+                'lock' => $this->lock,
+                'cover' => $this->cover,
             ]);
             if(!empty($this->images)){
                 foreach ($this->images as $key => $image) {
@@ -403,9 +413,9 @@ class MaterialComponent extends Component
                 'tube_diameter' => 'numeric|required|regex: '.$regex,
                 'tube_type' => 'required',
                 'wall_thickness' => 'numeric|required|regex: '.$regex,
-                'contracted_diameter' => 'numeric|required|regex: '.$regex,
-                'minimum_temperature' => 'numeric|required|regex: '.$regex,
-                'maximum_temperature' => 'numeric|required|regex: '.$regex,
+                'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
+                'minimum_temperature' => 'numeric|nullable|regex: '.$regex,
+                'maximum_temperature' => 'numeric|nullable|regex: '.$regex,
             ], [
                 'tube_diameter.numeric' => 'El campo Diámetro es numérico',
                 'tube_diameter.required' => 'El campo Diámetro es requerido',
@@ -456,9 +466,9 @@ class MaterialComponent extends Component
                 'material_id' => $this->material->id,
                 'diameter' => $this->tube_diameter,
                 'wall_thickness' => $this->wall_thickness,
-                'contracted_diameter' => $this->contracted_diameter,
-                'minimum_temperature' => $this->minimum_temperature,
-                'maximum_temperature' => $this->maximum_temperature,
+                'contracted_diameter' => ($this->tube_type == 'Termocontraible') ? $this->contracted_diameter : 0,
+                'minimum_temperature' => ($this->tube_type == 'Termocontraible') ? $this->minimum_temperature : 0,
+                'maximum_temperature' => ($this->tube_type == 'Termocontraible') ? $this->maximum_temperature : 0,
                 'type' => $this->tube_type,
             ]);
             }else{
@@ -562,7 +572,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }
         $this->div=null;
-        $this->funcion="";
+        $this->agregamat($this->material);
     }
     
     public function update(Material $material)
@@ -608,6 +618,9 @@ class MaterialComponent extends Component
             $this->number_of_ways=$this->conn->number_of_ways;
             $this->type=$this->conn->type;
             $this->terminal_id=$this->conn->terminal_id;
+            $this->term_size = (!empty($this->terminal_id)) ? Terminal::find($this->terminal_id)->size : '';
+            $this->cover=$this->conn->cover;
+            $this->lock=$this->conn->lock;
             $this->seal_id=$this->conn->seal_id;
             $this->connector_id=$this->conn->connector_id;
             $this->watertight=$this->conn->watertight;
@@ -704,18 +717,24 @@ class MaterialComponent extends Component
             $this->validate([
                 'terminal' => 'nullable',
                 'seal' => 'nullable',
-                'number_of_ways' => 'numeric|integer|digits:2|required',
+                'number_of_ways' => 'numeric|integer|digits:1|required',
                 'type' => 'required',
                 'connector' =>'nullable',
-                'watertight' =>'required|boolean'
+                'watertight' =>'required|boolean',
+                'lock' =>'required|boolean',
+                'cover' =>'required|boolean'
             ], [
                 'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
                 'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
-                'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de dos cifras',
+                'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
                 'number_of_ways.required' => 'El campo cantidad de vías es requerido',
                 'type.required' => 'El campo tipo es requerido',
                 'watertight.required' => 'Seleccione una opción para el campo estanco',
+                'lock.required' => 'Seleccione una opción para el campo traba secundaria',
+                'cover.required' => 'Seleccione una opción para el campo tapa',
                 'watertight.boolean' => 'El campo estanco debe ser sí o no',
+                'lock.boolean' => 'El campo traba secundaria debe ser sí o no',
+                'cover.boolean' => 'El campo tapa debe ser sí o no',
             ]);
 
             $connector_up =Connector::find($this->conn_id);
@@ -728,6 +747,9 @@ class MaterialComponent extends Component
                     'type' => $this->type,
                     'connector_id' => $this->connector,
                     'watertight' => $this->watertight,
+                    'lock' => $this->lock,
+                    'cover' => $this->cover,
+                    
                 ]);
             }else{
             $connector_up->material_id=$this->idu;
@@ -737,6 +759,8 @@ class MaterialComponent extends Component
             $connector_up->type=$this->type;
             $connector_up->connector_id=$this->connector;
             $connector_up->watertight=$this->watertight;
+            $connector_up->cover=$this->cover;
+            $connector_up->lock=$this->lock;
             $connector_up->save();
             }
         }elseif($this->family == 'Terminales'){
@@ -867,18 +891,18 @@ class MaterialComponent extends Component
                     'material_id' => $this->material->id,
                     'diameter' => $this->tube_diameter,
                     'wall_thickness' => $this->wall_thickness,
-                    'contracted_diameter' => $this->contracted_diameter,
-                    'minimum_temperature' => $this->minimum_temperature,
-                    'maximum_temperature' => $this->maximum_temperature,
+                    'contracted_diameter' => ($this->tube_type == 'Termocontraible') ? $this->contracted_diameter : 0,
+                    'minimum_temperature' => ($this->tube_type == 'Termocontraible') ? $this->minimum_temperature : 0,
+                    'maximum_temperature' => ($this->tube_type == 'Termocontraible') ? $this->maximum_temperature : 0,
                     'type' => $this->tube_type,
                 ]);
             }else{
             $tube_up->material_id=$this->idu;
             $tube_up->diameter=$this->tube_diameter;
             $tube_up->wall_thickness=$this->wall_thickness;
-            $tube_up->contracted_diameter=$this->contracted_diameter;
-            $tube_up->minimum_temperature=$this->minimum_temperature;
-            $tube_up->maximum_temperature=$this->maximum_temperature;
+            $tube_up->contracted_diameter=($this->tube_type == 'Termocontraible') ? $this->contracted_diameter : 0;
+            $tube_up->minimum_temperature=($this->tube_type == 'Termocontraible') ? $this->minimum_temperature : 0;
+            $tube_up->maximum_temperature=($this->tube_type == 'Termocontraible') ? $this->maximum_temperature : 0;
             $tube_up->type=$this->tube_type;
             $tube_up->save();
 
@@ -1062,7 +1086,10 @@ class MaterialComponent extends Component
             $this->number_of_ways=$this->conn->number_of_ways;
             $this->type=$this->conn->type;
             $this->terminal_id=$this->conn->terminal_id;
+            $this->term_size = (!empty($this->terminal_id)) ? Terminal::find($this->terminal_id)->size : '';
             $this->seal_id=$this->conn->seal_id;
+            $this->cover=$this->conn->cover;
+            $this->lock=$this->conn->lock;
             $this->connector_id=$this->conn->connector_id;
             $this->watertight=$this->conn->watertight;
         if($this->conn !=null){
@@ -1119,6 +1146,7 @@ class MaterialComponent extends Component
 
         $this->material=Material::where('id', $this->material_id->id)->first();
         $this->provider_prices=ProviderPrice::where('material_id', $this->material->id)->get();
+        
         #$this->prices=Price::where('provider_id', $this->provider->id)->get();
       
         if($this->explora=='inactivo'){
@@ -1162,10 +1190,47 @@ class MaterialComponent extends Component
    public function destruir(Material $material)
    {
        if (auth()->user()->cannot('delete', auth()->user())) {
-            abort(403);
-       }else{
-            $this->dispatchBrowserEvent('show-borrar');
-            $this->material=$material;
+           abort(403);
+       }else
+       {
+           if($material->family == 'Conectores'){
+            $this->conn_del = Connector::where('material_id',$material->id)->first();
+            $this->conn_del->delete();
+           }elseif($material->family == 'Terminales'){
+            $this->term_del = Terminal::where('material_id',$material->id)->first();
+            $this->term_del->delete();
+           }elseif($material->family == 'Cables'){
+            $this->cable_del = Cable::where('material_id',$material->id)->first();
+            $this->cable_del->delete();
+           }elseif($material->family == 'Tubos'){
+            $tube_del = Tube::where('material_id',$material->id)->first();
+            $tube_del->delete();
+           }elseif($material->family == 'Clips'){
+            $clip_del = Clip::where('material_id',$material->id)->first();
+            $clip_del->delete();
+           }elseif($material->family == 'Accesorios'){
+            $accesory_del = Accessory::where('material_id',$material->id)->first();
+            $accesory_del->delete();
+           }else{
+            $this->seal_del = Seal::where('material_id',$material->id)->first();
+            $this->seal_del->delete();
+           }
+           if(!empty($material->providerprices)){
+                foreach ($material->providerprices as $provider_price) {
+                    $provider_price->delete();
+                   
+                    if (!empty($provider_price->price)) {
+                        foreach ($provider_price->price as $price) {
+                            $price->delete();
+                        }
+                       
+                    }
+                }
+           }
+
+           $material->delete();
+           $this->funcion="";
+           $this->explora="inactivo";
        }
    }
 
@@ -1392,5 +1457,15 @@ public function editarmat(){
         $this->provider_name=$provider->name;
         $this->addProvider = false;
         $this->searchproviders="";
+    }
+    public function size(){
+        $this->term_size = (!empty($this->terminal)) ? Terminal::find($this->terminal)->size : '';
+    }
+    public function select_type(){
+        if ($this->tube_type == 'Termocontraible') {
+            return $this->div_tube = true;
+        }else{
+            return $this->div_tube = false;
+        }
     }
 }

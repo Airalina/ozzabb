@@ -11,7 +11,7 @@ class Provider extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','address','phone','email','contact_name','point_contact','site_url','status'];
+    protected $fillable = ['name','address','phone','email','contact_name','point_contact','site_url','status','cuit'];
 
     public function materials()
     {

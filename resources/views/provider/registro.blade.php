@@ -40,6 +40,10 @@
 						<input type="text" class="form-control" id="site_url" wire:model="site_url" placeholder="www.paginaweb.com">
 					</div>
 					<div class="form-group">
+						<label for="cuit">CUIT</label>
+						<input type="text" class="form-control" id="cuit" wire:model="cuit" placeholder="CUIT">
+					</div>
+					<div class="form-group">
                         <input type="checkbox" wire:model="status" class="form-check-input" id="exampleCheck1"  checked="" class="form-control">
 						<label for="exampleCheck1">Activo</label>
 					</div>

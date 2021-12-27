@@ -66,7 +66,15 @@
                                     placeholder="www.paginaweb.com" readonly>
                             </div>
                         </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="cuit">CUIT</label>
+                                <input type="text" class="form-control" id="cuit" wire:model="cuit"
+                                    placeholder="CUIT" readonly>
+                            </div>
+                        </div>
                      </div>
+                     
                 </div>
               </div>
           </form>
