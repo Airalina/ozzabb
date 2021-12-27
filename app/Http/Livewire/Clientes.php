@@ -13,7 +13,7 @@ class Clientes extends Component
     protected $paginationTheme = 'bootstrap';
     protected $clientes;
     public $funcion="", $idcli, $cliente, $paginas=25, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
-    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios;
+    public $street, $location, $direccion, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios;
     protected $dates = ['deadline', 'date', 'start_date'];
     public function updatingSearch()
     {
@@ -213,16 +213,26 @@ class Clientes extends Component
 
     public function destruir(Customer $cliente)
     {
-            $cliente->delete();
+            $this->dispatchBrowserEvent('show-borrar');
+            $this->cliente=$cliente;
+    }
+    public function delete()
+    {
+        if($this->funcion=="" && $this->explora=="inactivo"){
+            $this->cliente->delete();
             $this->funcion="";
             $this->explora="inactivo";
-    }
-
-    public function destruirdir(DomicileDelivery $direccion)
-    {
-            $direccion->delete();
+        }elseif($this->explora=="activo"){
+            $this->direccion->delete();
             $this->funcion="0";
             $this->explorar($this->cliente);
+        }
+        $this->dispatchBrowserEvent('hide-borrar');
+    }
+    public function destruirdir(DomicileDelivery $direccion)
+    {
+        $this->dispatchBrowserEvent('show-borrar'); 
+        $this->direccion=$direccion;
     }
 
     public function goOrder(Customer $client)

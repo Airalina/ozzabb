@@ -107,7 +107,7 @@ class MaterialComponent extends Component
         $this->minimum_diameter=null;
         $this->maximum_diameter=null;
         $this->seal_type=null;
-        $this->tube_type=null;
+        $this->tube_type="";
         $this->tube_diameter=null;
         $this->wall_thickness=null;
         $this->contracted_diameter=null;
@@ -141,35 +141,57 @@ class MaterialComponent extends Component
     }
     
     public function store(){
-        
-        $this->validate([
-            'code' => 'required',
-            'name' => 'required',
-            'family' => 'required',
-            'color' => 'required',
-            'description' => 'max:500|nullable',
-            'line' => 'nullable',
-            'usage' => 'required',
-            'replace' => 'nullable',
-            'stock_min' => 'numeric|required|digits_between:1,6',
-            'stock_max' => 'numeric|nullable|digits_between:1,6',
-            'images' => 'nullable'
-        ],[
-            'code.required' => 'El campo código es requerido',
-            'name.required' => 'El campo nombre es requerido',
-            'family.required' => 'El campo familia es requerido',
-            'color.required' => 'El campo color es requerido',
-            'description.max' => 'El campo descripción no debe superar 500 carácteres',
-            'usage.required' => 'Seleccione una opción para el campo de uso',
-            'stock_min.required' => 'El campo stock mínimo es requerido',
-            'stock_min.numeric' => 'El campo stock mínimo es numérico',
-            'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
-            'stock_max.numeric' => 'El campo stock máximo es numérico',
-            'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
-            'stock.required' => 'El campo stock es requerido',
-            'stock.numeric' => 'El campo stock es numérico',
-        ]);
-       
+        if($this->family == 'Terminales'){
+            $this->validate([
+                'code' => 'required',
+                'name' => 'required',
+                'family' => 'required',
+                'description' => 'max:500|nullable',
+                'line' => 'nullable',
+                'usage' => 'required',
+                'replace' => 'nullable',
+                'stock_min' => 'numeric|required|digits_between:1,6',
+                'stock_max' => 'numeric|nullable|digits_between:1,6',
+                'images' => 'nullable'
+            ],[
+                'code.required' => 'El campo código es requerido',
+                'name.required' => 'El campo nombre es requerido',
+                'family.required' => 'El campo familia es requerido',
+                'description.max' => 'El campo descripción no debe superar 500 carácteres',
+                'usage.required' => 'Seleccione una opción para el campo de uso',
+                'stock_min.required' => 'El campo stock mínimo es requerido',
+                'stock_min.numeric' => 'El campo stock mínimo es numérico',
+                'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
+                'stock_max.numeric' => 'El campo stock máximo es numérico',
+                'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
+            ]);
+        }else{
+            $this->validate([
+                'code' => 'required',
+                'name' => 'required',
+                'family' => 'required',
+                'color' => 'required',
+                'description' => 'max:500|nullable',
+                'line' => 'nullable',
+                'usage' => 'required',
+                'replace' => 'nullable',
+                'stock_min' => 'numeric|required|digits_between:1,6',
+                'stock_max' => 'numeric|nullable|digits_between:1,6',
+                'images' => 'nullable'
+            ],[
+                'code.required' => 'El campo código es requerido',
+                'name.required' => 'El campo nombre es requerido',
+                'family.required' => 'El campo familia es requerido',
+                'color.required' => 'El campo color es requerido',
+                'description.max' => 'El campo descripción no debe superar 500 carácteres',
+                'usage.required' => 'Seleccione una opción para el campo de uso',
+                'stock_min.required' => 'El campo stock mínimo es requerido',
+                'stock_min.numeric' => 'El campo stock mínimo es numérico',
+                'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
+                'stock_max.numeric' => 'El campo stock máximo es numérico',
+                'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
+            ]);
+        }
 
         if($this->family == 'Conectores'){
             $this->validate([
@@ -238,21 +260,20 @@ class MaterialComponent extends Component
                 'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
                 'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimal',
                 'term_material.required' => 'Seleccione una opción para el campo Material',
-                'term_type.required' => 'Seleccione una opción para el campo Material',
+                'term_type.required' => 'Seleccione una opción para el campo Tipo',
                 
             ]);
             $this->material=Material::create([
                 'code' => $this->code,
                 'name' => $this->name,
                 'family' => $this->family,
-                'color' => $this->color,
+                'color' => 'Sin color',
                 'description' => $this->description,
                 'line'=>$this->line,
                 'usage'=>$this->usage,
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock,
             ]);
             Terminal::create([
                 'material_id' => $this->material->id,
@@ -309,7 +330,6 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock,
             ]);
             Cable::create([
                 'material_id' => $this->material->id,
@@ -359,7 +379,6 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock,
             ]);
             Seal::create([
                 'material_id' => $this->material->id,
@@ -379,7 +398,7 @@ class MaterialComponent extends Component
         }elseif($this->family == 'Tubos'){
           
             $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
-
+            if($this->tube_type=="Termocontraible"){
             $this->validate([
                 'tube_diameter' => 'numeric|required|regex: '.$regex,
                 'tube_type' => 'required',
@@ -405,6 +424,21 @@ class MaterialComponent extends Component
                 'maximum_temperature.regex' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
                 'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
                           ]);
+            }else{
+                $this->validate([
+                    'tube_diameter' => 'numeric|required|regex: '.$regex,
+                    'tube_type' => 'required',
+                    'wall_thickness' => 'numeric|required|regex: '.$regex,
+                ], [
+                    'tube_diameter.numeric' => 'El campo Diámetro es numérico',
+                    'tube_diameter.required' => 'El campo Diámetro es requerido',
+                    'tube_diameter.regex' => 'El campo Diámetro es un número de máximo 4 cifras con 2 posiciones decimal',
+                    'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico',
+                    'wall_thickness.required' => 'El campo Espesor de Pared es requerido',
+                    'wall_thickness.regex' => 'El campo Espesor de Pared es un número de máximo 4 cifras con 2 posiciones decimal',
+                    'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
+                              ]);
+            }
             $this->material=Material::create([
                 'code' => $this->code,
                 'name' => $this->name,
@@ -416,8 +450,8 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock,
             ]);
+            if($this->tube_type=="Termocontraible"){
             Tube::create([
                 'material_id' => $this->material->id,
                 'diameter' => $this->tube_diameter,
@@ -427,6 +461,14 @@ class MaterialComponent extends Component
                 'maximum_temperature' => $this->maximum_temperature,
                 'type' => $this->tube_type,
             ]);
+            }else{
+                Tube::create([
+                    'material_id' => $this->material->id,
+                    'diameter' => $this->tube_diameter,
+                    'wall_thickness' => $this->wall_thickness,
+                    'type' => $this->tube_type,
+                ]);
+            }
             if(!empty($this->images)){
                 foreach ($this->images as $key => $image) {
                     $this->images[$key] = $image->store('materials','public');
@@ -468,7 +510,6 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock,
             ]);
             Clip::create([
                 'material_id' => $this->material->id,
@@ -505,7 +546,6 @@ class MaterialComponent extends Component
                 'replace_id'=>$this->replace,
                 'stock_min'=>$this->stock_min,
                 'stock_max'=>$this->stock_max,
-                'stock' => $this->stock,
             ]);
             Accessory::create([
                 'material_id' => $this->material->id,
@@ -639,7 +679,6 @@ class MaterialComponent extends Component
             'replace' => 'nullable',
             'stock_min' => 'numeric|required|digits_between:1,6',
             'stock_max' => 'numeric|nullable|digits_between:1,6',
-            'stock' => 'numeric|required',
             'images' => 'nullable'
         ],[
             'code.required' => 'El campo código es requerido',
@@ -653,8 +692,6 @@ class MaterialComponent extends Component
             'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
             'stock_max.numeric' => 'El campo stock máximo es numérico',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
-            'stock.required' => 'El campo stock es requerido',
-            'stock.numeric' => 'El campo stock es numérico',
         ]);
        
 
@@ -1125,35 +1162,41 @@ class MaterialComponent extends Component
    public function destruir(Material $material)
    {
        if (auth()->user()->cannot('delete', auth()->user())) {
-           abort(403);
-       }else
-       {
-           if($material->family == 'Conectores'){
-            $this->conn_del = Connector::where('material_id',$material->id)->first();
-            $this->conn_del->delete();
-           }elseif($material->family == 'Terminales'){
-            $this->term_del = Terminal::where('material_id',$material->id)->first();
-            $this->term_del->delete();
-           }elseif($material->family == 'Cables'){
-            $this->cable_del = Cable::where('material_id',$material->id)->first();
-            $this->cable_del->delete();
-           }elseif($material->family == 'Tubos'){
-            $tube_del = Tube::where('material_id',$material->id)->first();
-            $tube_del->delete();
-           }elseif($material->family == 'Clips'){
-            $clip_del = Clip::where('material_id',$material->id)->first();
-            $clip_del->delete();
-           }elseif($material->family == 'Accesorios'){
-            $accesory_del = Accessory::where('material_id',$material->id)->first();
-            $accesory_del->delete();
-           }else{
-            $this->seal_del = Seal::where('material_id',$material->id)->first();
-            $this->seal_del->delete();
-           }
-           $material->delete();
-           $this->funcion="";
-           $this->explora="inactivo";
+            abort(403);
+       }else{
+            $this->dispatchBrowserEvent('show-borrar');
+            $this->material=$material;
        }
+   }
+
+   public function delete()
+   {
+        if($this->material->family == 'Conectores'){
+         $this->conn_del = Connector::where('material_id',$this->material->id)->first();
+         $this->conn_del->delete();
+        }elseif($this->material->family == 'Terminales'){
+         $this->term_del = Terminal::where('material_id',$this->material->id)->first();
+         $this->term_del->delete();
+        }elseif($this->material->family == 'Cables'){
+         $this->cable_del = Cable::where('material_id',$this->material->id)->first();
+         $this->cable_del->delete();
+        }elseif($this->material->family == 'Tubos'){
+         $tube_del = Tube::where('material_id',$this->material->id)->first();
+         $tube_del->delete();
+        }elseif($this->material->family == 'Clips'){
+         $clip_del = Clip::where('material_id',$this->material->id)->first();
+         $clip_del->delete();
+        }elseif($this->material->family == 'Accesorios'){
+         $accesory_del = Accessory::where('material_id',$this->material->id)->first();
+         $accesory_del->delete();
+        }else{
+         $this->seal_del = Seal::where('material_id',$this->material->id)->first();
+         $this->seal_del->delete();
+        }
+        $this->material->delete();
+        $this->funcion="";
+        $this->explora="inactivo";
+        $this->dispatchBrowserEvent('hide-borrar');
    }
 
    public function agregamat(Material $material){

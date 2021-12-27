@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class Usuarios extends Component
 {
     
-    public $idus, $usuarios, $idu,$password,$password1, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
+    public $idus, $user, $usuarios, $idu,$password,$password1, $name, $email, $nombre_y_apellido, $telefono, $dni, $activo, $domicilio, $users, $userup,$roles,$roless, $search;
     public $funcion="", $order='id', $funcionru, $userlog;
     
     public function render()
@@ -77,12 +77,18 @@ class Usuarios extends Component
 
     public function destruir(User $user)
     {
+        $this->dispatchBrowserEvent('show-borrar');
+        $this->user=$user;
+    }
+    public function delete()
+    {
         if (auth()->user()->cannot('delete', auth()->user())) {
             abort(403);
         }else
         {
-            $user->delete();
+            $this->user->delete();
         }
+        $this->dispatchBrowserEvent('hide-borrar');
     }
 
     public function funcion()

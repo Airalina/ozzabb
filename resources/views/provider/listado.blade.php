@@ -84,7 +84,7 @@
             </table>
             {{ $providers->links() }}
         </div>
-
+        @include('borrar')
         <!-- /.card-body -->
     </div>
 </div>

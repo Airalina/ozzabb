@@ -67,4 +67,5 @@
               </div>
               <!-- /.card-body -->
             </div>
+            @include('borrar')
 </div>

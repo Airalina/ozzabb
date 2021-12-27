@@ -180,16 +180,21 @@ class Providers extends Component
     
     public function destruir(Provider $provider)
     {
+        $this->dispatchBrowserEvent('show-borrar');
+        $this->provider=$provider;
+    }
+    public function delete()
+    {
         if (auth()->user()->cannot('delete', auth()->user())) {
             abort(403);
         }else
         {
-            $provider->delete();
+            $this->provider->delete();
             $this->funcion="";
             $this->explora="inactivo";
         }
+        $this->dispatchBrowserEvent('hide-borrar');
     }
-
     public function agregamat(Provider $provider){
        
         $this->amount=null;

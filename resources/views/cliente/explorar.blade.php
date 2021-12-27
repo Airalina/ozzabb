@@ -145,5 +145,5 @@
             </div>
             <!-- /.card -->
           </div>
-          
+          @include('borrar')
 </div>
