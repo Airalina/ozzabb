@@ -198,6 +198,18 @@ class Providers extends Component
             abort(403);
         }else
         {
+           
+            if(!empty($this->provider->provider_prices)){
+                foreach ($this->provider->provider_prices as $provider_price) {
+                    $provider_price->delete();
+                    if (!empty($provider_price->price)) {
+                        foreach ($provider_price->price as $price) {
+                            $price->delete();
+                        }
+                       
+                    }
+                }
+           }
             $this->provider->delete();
             $this->funcion="";
             $this->explora="inactivo";
