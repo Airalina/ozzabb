@@ -80,11 +80,15 @@ class Roles extends Component
 
     public function destruir(Role $rol)
     {
-        if($rol->nombre!="Gerente"){
-            $rol->delete();
-        }elseif($rol->nombre!="Administrador"){
-            $rol->delete();
-        }     
+          $this->rol=$rol;
+          $this->dispatchBrowserEvent('show-borrar');
+    }
+    public function delete()
+    {
+        if($this->rol->nombre!="Gerente" && $this->rol->nombre!="Administrador"){
+            $this->rol->delete();
+        }   
+        $this->dispatchBrowserEvent('hide-borrar');
     }
 
     public function funcion()

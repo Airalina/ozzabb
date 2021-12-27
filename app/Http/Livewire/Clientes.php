@@ -223,16 +223,26 @@ class Clientes extends Component
 
     public function destruir(Customer $cliente)
     {
-            $cliente->delete();
+            $this->dispatchBrowserEvent('show-borrar');
+            $this->cliente=$cliente;
+    }
+    public function delete()
+    {
+        if($this->funcion=="" && $this->explora=="inactivo"){
+            $this->cliente->delete();
             $this->funcion="";
             $this->explora="inactivo";
-    }
-
-    public function destruirdir(DomicileDelivery $direccion)
-    {
-            $direccion->delete();
+        }elseif($this->explora=="activo"){
+            $this->direccion->delete();
             $this->funcion="0";
             $this->explorar($this->cliente);
+        }
+        $this->dispatchBrowserEvent('hide-borrar');
+    }
+    public function destruirdir(DomicileDelivery $direccion)
+    {
+        $this->dispatchBrowserEvent('show-borrar'); 
+        $this->direccion=$direccion;
     }
 
     public function goOrder(Customer $client)

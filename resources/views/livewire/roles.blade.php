@@ -4,6 +4,7 @@
     @case("")
         @if (auth()->user()->can('seerol', auth()->user()))
           @include("rol.listado")
+          @include('borrar')
         @endif
         @break
 

@@ -48,7 +48,7 @@
                           <button type="button" wire:click="updateinstallation({{ $instalacion->id }})" class="btn btn-success btn-sm">Actualizar</button>
                         @endif
                         @if (auth()->user()->can('deleteinstall', auth()->user()))
-                          <button type="button" wire:click="delete({{ $instalacion->id }})" class="btn btn-danger btn-sm">Borrar</button>
+                          <button type="button" wire:click="destruir({{ $instalacion->id }})" class="btn btn-danger btn-sm">Borrar</button>
                         @endif
                       </td>
                     </tr>
@@ -61,5 +61,6 @@
                 </table>
                 {{ $instalaciones->links() }}
               </div>
+              @include('borrar')
               <!-- /.card-body -->
             </div>

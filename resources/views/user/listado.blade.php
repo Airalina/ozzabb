@@ -76,5 +76,5 @@
           </table>
         </div>
         <!-- /.card-body -->
-      
+        @include('borrar')
 </div>

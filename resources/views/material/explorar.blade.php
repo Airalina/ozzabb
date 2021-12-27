@@ -66,8 +66,8 @@
                     <div class="form-group">
                         <label for="type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="type" id="type" disabled>
-                            <option value="Porta macho">Porta macho</option>
-                            <option value="Porta hembra">Porta hembra</option>
+                            <option value=" Porta Macho">Porta Macho</option>
+                            <option value="Porta Hembra">Porta Hembra</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -190,8 +190,8 @@
                     <div class="form-group">
                         <label for="term_type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="term_type" id="term_type" disabled>
-                            <option value="Porta macho">Porta macho</option>
-                            <option value="Porta hembra">Porta hembra</option>
+                            <option value="Macho">Macho</option>
+                            <option value="Hembra">Hembra</option>
                         </select>
                     </div>
                     @break
@@ -202,7 +202,7 @@
                             placeholder="Diámetro mínimo de Cable" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="maximum_diameter">Diámetro mínimo de Cable</label>
+                        <label for="maximum_diameter">Diámetro máximo de Cable</label>
                         <input type="text" class="form-control" id="maximum_diameter" wire:model="maximum_diameter"
                             placeholder="Diámetro máximo de Cable" readonly>
                     </div>
