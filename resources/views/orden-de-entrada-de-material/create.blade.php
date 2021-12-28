@@ -234,6 +234,7 @@
                                                     <th style="text-align: center">Cantidad enviada</th>
                                                     <th style="text-align: center">Cantidad remito</th>
                                                     <th style="text-align: center">Diferencia</th>
+                                                    <th style="text-align: center">Depósito</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -278,6 +279,15 @@
 
                                             @endif
                                         </td>
+                                        <td>
+                                            <select class="form-control select2 select2-hidden-accessible" wire:model="nombre_deposito"
+                                                style="width: 100%;">
+                                                <option selected="selected"></option>
+                                                @foreach ($depositos as $deposito)
+                                                    <option>{{ $deposito->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr class="text-center">
@@ -287,7 +297,6 @@
                                     </tr>
                                 @endforelse
                             @endif
-
                             </tbody>
                             </table>
 
@@ -368,6 +377,15 @@
     </form>
     <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form wire.submit.prevent="addmaterial">
                 <div class="modal-content">
                     <div class="modal-header">

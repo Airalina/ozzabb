@@ -39,7 +39,7 @@ class OrdenDeEntradaDeMateriales extends Component
         ->orWhere('date','LIKE','%'.$this->searchordenesem.'%')
         ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderBy('buy_order_id','desc')->paginate($this->paginas);
        
-        $this->depositos=Warehouse::all();
+        $this->depositos=Warehouse::where('type', 1)->get();
         $this->orderdetails=MaterialEntryOrderDetail::where('entry_order_id', $this->entry_order_id)->get();
         $this->materiales=Material::where('code','like','%'.$this->searchmateriales.'%')
             ->orWhere('name','LIKE','%'.$this->searchmateriales.'%')
@@ -137,10 +137,7 @@ class OrdenDeEntradaDeMateriales extends Component
                 'date.required' => 'El campo Fecha es requerido',
                 'hour.required' => 'El campo Hora es requerido',
                 'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-            ]);
-          
-               
-                 
+            ]);       
                 $this->orden=new MaterialEntryOrder;
                 $this->orden->date=$this->date;
                 $this->orden->hour=$this->hour;
@@ -151,22 +148,18 @@ class OrdenDeEntradaDeMateriales extends Component
                 $this->entry_orderbuy->buy_order_id=$this->buyorder_id;
                 $this->entry_orderbuy->entry_order_id=$this->orden->id;
                 $this->entry_orderbuy->save();
-                $this->sin_entrega = MaterialEntryOrder::where('buy_order_id', $this->buyorder_id)->get();
-                 
+                $this->sin_entrega = MaterialEntryOrder::where('buy_order_id', $this->buyorder_id)->get();             
                 if (count($this->sin_entrega)>1) {
                     foreach ($this->sin_entrega as $key => $value) {
-                 
                         $this->sin_entrega_detail[$value->id] = MaterialEntryOrderDetail::where('entry_order_id',  $value->id)->get();
                        
                         foreach ($this->sin_entrega_detail[$value->id] as $index => $material_entry_order_detail) {
         
                             $this->material_entry[$material_entry_order_detail->material_code][$this->x]=$material_entry_order_detail;
                             $this->x++;
-                        }
-                       
-                       } 
-                      
-                        foreach ($this->material_entry as $code => $entry_detail) {
+                        }                   
+                    }             
+                    foreach ($this->material_entry as $code => $entry_detail) {
                             $this->sum[$code] = array_sum(array_column($entry_detail, 'amount_received')); 
                             $this->buy_order_state=BuyOrder::find($this->buyorder_id);
                            
@@ -180,7 +173,6 @@ class OrdenDeEntradaDeMateriales extends Component
                             $this->buy_order_state->save();
                         }
                 }
-                 #dd($this->details);
                 foreach($this->details as $detail){
                     if(isset($this->material_entry[$detail[0]])){
                         if(count($this->material_entry[$detail[0]]) > 0){
@@ -192,8 +184,7 @@ class OrdenDeEntradaDeMateriales extends Component
                                 
                                  $this->buy_order_state->save();
                            }
-                    }
-                   
+                    }                   
                     $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$detail[6])->get();
                     if($this->ingreso->count()==0){
                         $this->depositm=new DepositMaterial;
@@ -210,8 +201,7 @@ class OrdenDeEntradaDeMateriales extends Component
                             $ing->date_change=$this->date;
                             $ing->save();
                         }
-                    }
-                   
+                    }         
                     $this->detailem=new MaterialEntryOrderDetail;
                     $this->detailem->entry_order_id=$this->orden->id;
                     $this->detailem->material_code=$detail[0];
@@ -226,10 +216,6 @@ class OrdenDeEntradaDeMateriales extends Component
                     $this->detailem->set=$detail[11];
                     $this->detailem->save();
                 }
-               
-               
-            
-     
         }
         $this->modo="";
         $this->funcion="";
@@ -243,7 +229,7 @@ class OrdenDeEntradaDeMateriales extends Component
             $this->validate([
                 'cant' => 'required|integer|min:1|max:1000000',
                 'present' => 'required|integer|min:1|max:1000000',
-                'nombre_deposito' => 'required|string|min:5|max:100'
+                'nombre_deposito' => 'required'
             ],[
                 'cant.required' => 'El campo "Cantidad" es requerido',
                 'cant.integer' => 'El campo "Cantidad" debe ser un entero',
@@ -287,11 +273,10 @@ class OrdenDeEntradaDeMateriales extends Component
 
         }else{
                 
-            $this->id_warehouse = Warehouse::where('type', 1)->where('state', 1)->first();
+            $this->id_warehouse = Warehouse::where('nombre_deposito', 1)->first();
             if(is_null($this->id_warehouse)){
                 $this->id_warehouse = Warehouse::find(1);
             }
-           
             $this->detail[0]=$material->code;
             $this->detail[1]=$material->description;
             $this->detail[4]=$material->id;
