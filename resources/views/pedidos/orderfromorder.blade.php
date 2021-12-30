@@ -136,7 +136,6 @@
                                 <th style="text-align: center">Cod.</th>
                                 <th style="text-align: center">Descripción</th>
                                 <th style="text-align: center">P/U U$D</th>
-                                <th style="text-align: center">Cantidad</th>
                                 <th></th>
                               </tr>
                             </thead>
