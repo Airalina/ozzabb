@@ -13,7 +13,7 @@ class AddItemsToCables extends Migration
      */
     public function up()
     {
-        Schema::table('cables', function (Blueprint $table) {
+        /*Schema::table('cables', function (Blueprint $table) {
             $table->dropColumn('size');
             $table->dropColumn('minimum_section');
             $table->dropColumn('maximum_section');
@@ -25,7 +25,7 @@ class AddItemsToCables extends Migration
             $table->integer('number_of_unipolar')->nullable();
             $table->string('mesh_type')->nullable();
             $table->float('operating_temperature', 6, 2);
-        });
+        });*/
     }
 
     /**
@@ -35,7 +35,7 @@ class AddItemsToCables extends Migration
      */
     public function down()
     {
-        Schema::table('cables', function (Blueprint $table) {
+        /*Schema::table('cables', function (Blueprint $table) {
             $table->dropColumn('section');
             $table->dropColumn('base_color');
             $table->dropColumn('line_color');
@@ -44,6 +44,6 @@ class AddItemsToCables extends Migration
             $table->dropColumn('number_of_unipolar');
             $table->dropColumn('mesh_type');
             $table->dropColumn('operating_temperature');
-        });
+        });*/
     }
 }
