@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddItemsToDepositMaterials extends Migration
+class DropColumnTypeFromTerminalsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddItemsToDepositMaterials extends Migration
      */
     public function up()
     {
-        Schema::table('deposit_materials', function (Blueprint $table) {
-            $table->unsignedBigInteger("warehouse2_id")->nullable();
-            $table->boolean('type');
+        Schema::table('terminals', function (Blueprint $table) {
+            $table->dropColumn('type');
         });
     }
 
@@ -26,7 +25,7 @@ class AddItemsToDepositMaterials extends Migration
      */
     public function down()
     {
-        Schema::table('deposit_materials', function (Blueprint $table) {
+        Schema::table('terminals', function (Blueprint $table) {
             //
         });
     }

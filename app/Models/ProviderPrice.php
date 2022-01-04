@@ -19,4 +19,7 @@ class ProviderPrice extends Model
     public function provider(){
         return $this->belongsTo(Provider::class); 
     }
+    public function price(){
+        return $this->hasMany(Price::class); 
+    }
 }

@@ -24,7 +24,7 @@ class Providers extends Component
     protected $providers;
     public $funcion="",  $paginas=25, $mat_n,$id_provider, $idu, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
     public $validar, $amount, $material, $id_material, $material_up, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex, $addMaterial;
-    public $code, $name_material, $family, $terminal, $connector, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name;
+    public $code, $name_material, $family, $terminal, $connector, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name, $cuit, $term_size, $lock, $cover, $div_tube=false;
 
     public function render()
     {
@@ -36,6 +36,7 @@ class Providers extends Component
         ->orWhere('contact_name','LIKE','%'.$this->search.'%')
         ->orWhere('point_contact','LIKE','%'.$this->search.'%')
         ->orWhere('site_url','LIKE','%'.$this->search.'%')
+        ->orWhere('cuit','LIKE','%'.$this->search.'%')
         ->orderBy($this->order)->paginate($this->paginas);
         $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
             ->orWhere('name','LIKE','%'.$this->searchmateriales.'%')
@@ -58,6 +59,7 @@ class Providers extends Component
         $this->address=null;
         $this->phone=null;
         $this->email=null;
+        $this->cuit=null;
         $this->contact_name=null;
         $this->point_contact=null;
         $this->site_url=null;
@@ -73,7 +75,8 @@ class Providers extends Component
             'email' => 'required|unique:providers,email|email',
             'phone' => 'numeric|nullable',
             'contact_name' => 'string|nullable',
-            'site_url' => 'nullable|regex: '.$regex
+            'site_url' => 'nullable|regex: '.$regex,
+            'cuit' => 'required',
         ], [
             'name.required' => 'El campo nombre es requerido',
             'name.string' => 'El campo nombre no debe tener números ni carácteres',
@@ -84,6 +87,7 @@ class Providers extends Component
             'phone.numeric' => 'El campo teléfono debe ser numérico',
             'contact_name' => 'El campo nombre de contacto no debe tener números ni carácteres',
             'site_url.regex' => 'El formato correcto para la url es: www.tupagina.com',
+            'cuit.required' => 'El campo cuit es requerido',
         ]);
         Provider::create([
             'name' => $this->name,
@@ -93,7 +97,8 @@ class Providers extends Component
             'contact_name'=>$this->contact_name,
             'point_contact'=>$this->point_contact,
             'site_url'=>$this->site_url,
-            'status'=>$this->status
+            'status'=>$this->status,
+            'cuit' => $this->cuit,
         ]);
         $this->funcion="";
     }
@@ -113,12 +118,12 @@ class Providers extends Component
         $this->point_contact=$provider_id->point_contact;
         $this->site_url=$provider_id->site_url;
         $this->status=$provider_id->status;
-    
+        $this->cuit=$provider_id->cuit;
+
         $this->provider_id=$provider_id;
         $this->provider=Provider::where('id', $this->provider_id->id)->first();
         $this->provider_prices=ProviderPrice::where('provider_id', $this->provider->id)->get();
         $this->prices=Price::where('provider_id', $this->provider->id)->get();
-        
         
         if($this->explora=='inactivo'){
             $this->explora='activo';
@@ -137,6 +142,7 @@ class Providers extends Component
         $this->point_contact=$provider->point_contact;
         $this->site_url=$provider->site_url;
         $this->status=$provider->status;
+        $this->cuit=$provider->cuit;
         $this->funcion="actualizar";
         $this->explora="inactivo";
     }
@@ -150,7 +156,8 @@ class Providers extends Component
             'address' => 'required',
             'email' => ['required', 'email', 'unique:providers,email,'.$this->idu.''],
             'phone' => 'numeric',
-            'site_url' => 'nullable|regex: '.$regex
+            'site_url' => 'nullable|regex: '.$regex,
+            'cuit' => 'required'
         ], [
             'name.required' => 'El campo nombre es requerido',
             'name.string' => 'El campo nombre no debe tener números ni carácteres',
@@ -161,6 +168,7 @@ class Providers extends Component
             'phone.numeric' => 'El campo teléfono debe ser numérico',
             'contact_name' => 'El campo nombre de contacto no debe tener números ni carácteres',
             'site_url.regex' =>  'El formato correcto para la url es: www.tupagina.com',
+            'cuit.required' => 'El campo cuit es requerido',
         ]);
 
         
@@ -172,6 +180,7 @@ class Providers extends Component
         $provider_up->contact_name=$this->contact_name;
         $provider_up->point_contact=$this->point_contact;
         $provider_up->site_url=$this->site_url;
+        $provider_up->cuit=$this->cuit;
         $provider_up->status=$this->status;
 
         $provider_up->save();
@@ -180,16 +189,33 @@ class Providers extends Component
     
     public function destruir(Provider $provider)
     {
+        $this->dispatchBrowserEvent('show-borrar');
+        $this->provider=$provider;
+    }
+    public function delete()
+    {
         if (auth()->user()->cannot('delete', auth()->user())) {
             abort(403);
         }else
         {
-            $provider->delete();
+           
+            if(!empty($this->provider->provider_prices)){
+                foreach ($this->provider->provider_prices as $provider_price) {
+                    $provider_price->delete();
+                    if (!empty($provider_price->price)) {
+                        foreach ($provider_price->price as $price) {
+                            $price->delete();
+                        }
+                       
+                    }
+                }
+           }
+            $this->provider->delete();
             $this->funcion="";
             $this->explora="inactivo";
         }
+        $this->dispatchBrowserEvent('hide-borrar');
     }
-
     public function agregamat(Provider $provider){
        
         $this->amount=null;
@@ -221,10 +247,13 @@ class Providers extends Component
         $this->maximum_section=null;
         $this->conn = null;
         $this->conn_id=null;
+        $this->lock=null;
+        $this->cover=null;
+        $this->term_size=null;
         $this->terminal_id=null;
         $this->seal_id=null;
-        $this->connector_id=null;
-        $this->term=null;
+        $this->connector_id=null ;
+        $this->term=null; 
         $this->term_id=null;
         $this->size=null;
         $this->minimum_section=null;
@@ -562,18 +591,24 @@ class Providers extends Component
                 $this->validate([
                     'terminal' => 'nullable',
                     'seal' => 'nullable',
-                    'number_of_ways' => 'numeric|integer|digits:2|required',
+                    'number_of_ways' => 'numeric|integer|digits:1|required',
                     'type' => 'required',
                     'connector' =>'nullable',
-                    'watertight' =>'required|boolean'
+                    'watertight' =>'required|boolean',
+                    'lock' =>'required|boolean',
+                    'cover' =>'required|boolean'
                 ], [
                     'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
                     'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
-                    'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de dos cifras',
+                    'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
                     'number_of_ways.required' => 'El campo cantidad de vías es requerido',
                     'type.required' => 'El campo tipo es requerido',
                     'watertight.required' => 'Seleccione una opción para el campo estanco',
+                    'lock.required' => 'Seleccione una opción para el campo traba secundaria',
+                    'cover.required' => 'Seleccione una opción para el campo tapa',
                     'watertight.boolean' => 'El campo estanco debe ser sí o no',
+                    'lock.boolean' => 'El campo traba secundaria debe ser sí o no',
+                    'cover.boolean' => 'El campo tapa debe ser sí o no',
                 ]);
                 $this->material=Material::create([
                     'code' => $this->code,
@@ -596,8 +631,9 @@ class Providers extends Component
                     'type' => $this->type,
                     'connector_id' => $this->connector,
                     'watertight' => $this->watertight,
+                    'lock' => $this->lock,
+                    'cover' => $this->cover,                 
                 ]);
-
                 $this->material = $this->material->id;
             }elseif($this->family == 'Terminales'){
                $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
@@ -737,9 +773,9 @@ class Providers extends Component
                     'tube_diameter' => 'numeric|required|regex: '.$regex,
                     'tube_type' => 'required',
                     'wall_thickness' => 'numeric|required|regex: '.$regex,
-                    'contracted_diameter' => 'numeric|required|regex: '.$regex,
-                    'minimum_temperature' => 'numeric|required|regex: '.$regex,
-                    'maximum_temperature' => 'numeric|required|regex: '.$regex,
+                    'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
+                    'minimum_temperature' => 'numeric|nullable|regex: '.$regex,
+                    'maximum_temperature' => 'numeric|nullable|regex: '.$regex,                        
                 ], [
                     'tube_diameter.numeric' => 'El campo Diámetro es numérico',
                     'tube_diameter.required' => 'El campo Diámetro es requerido',
@@ -775,9 +811,9 @@ class Providers extends Component
                     'material_id' => $this->material->id,
                     'diameter' => $this->tube_diameter,
                     'wall_thickness' => $this->wall_thickness,
-                    'contracted_diameter' => $this->contracted_diameter,
-                    'minimum_temperature' => $this->minimum_temperature,
-                    'maximum_temperature' => $this->maximum_temperature,
+                    'contracted_diameter' => ($this->tube_type == 'Termocontraible') ? $this->contracted_diameter : 0,
+                    'minimum_temperature' => ($this->tube_type == 'Termocontraible') ? $this->minimum_temperature : 0,
+                    'maximum_temperature' => ($this->tube_type == 'Termocontraible') ? $this->maximum_temperature : 0,
                     'type' => $this->tube_type,
                 ]);
                 $this->material = $this->material->id;
@@ -880,6 +916,15 @@ class Providers extends Component
         $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->get();
         
    }
-  
+   public function size(){
+    $this->term_size = (!empty($this->terminal)) ? Terminal::find($this->terminal)->size : '';
+    }
+    public function select_type(){
+        if ($this->tube_type == 'Termocontraible') {
+            return $this->div_tube = true;
+        }else{
+            return $this->div_tube = false;
+        }
+    }
 
 }

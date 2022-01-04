@@ -34,7 +34,7 @@
                 </div>
                 <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id"
                     :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
-                    :connect="$connect" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" />
+                    :connect="$connect" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" />
 
                 <div class="form-group">
                     <label for="color">Color</label>
@@ -54,7 +54,7 @@
                         cols="30" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                @if($family != "Cables")
+                @if($family != "Cables" && $family != "Tubos")
                     <label for="line">Línea</label>
                     <select class="form-control form-control-sm" wire:model="line" id="line">
                             <option selected>Selecciona una linea</option>
@@ -107,7 +107,9 @@
                         @endif
                     </div>
                 </div>
-
+                <div>
+                    
+                </div>
 
                 <div class="card-footer">
                     @if ($funcion == 'crear')

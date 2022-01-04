@@ -52,7 +52,7 @@
                             <td style="text-align: center">{{ $order->follow_number }}</td>
                             <td style="text-align: center">
                                 @if(!is_null($order->buy_order_id))
-                                      {{ $order->buy_order->provider->name }}
+                                      {{$order->buy_order->provider->name}}
                                 @else
                                     &nbsp
                                 @endif

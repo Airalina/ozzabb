@@ -205,9 +205,14 @@ class Instalaciones extends Component
         $this->upca=false;
     }
 
-    public function delete(Installation $instalacion)
+    public function destruir(Installation $instalacion){
+        $this->dispatchBrowserEvent('show-borrar');
+        $this->instalacion=$instalacion;
+    }
+    public function delete()
     {
-        $instalacion->delete();
+        $this->instalacion->delete();
+        $this->dispatchBrowserEvent('hide-borrar');
     }
 
     public function borrarevision(Revision $revi)

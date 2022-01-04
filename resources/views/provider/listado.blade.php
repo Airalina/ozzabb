@@ -46,6 +46,7 @@
                         <th style="text-align: center">Domicilio</th>
                         <th style="text-align: center">Teléfono</th>
                         <th style="text-align: center">Correo electrónico</th>
+                        <th style="text-align: center">CUIT</th>
                         <th style="text-align: center">Estado</th>
                     </tr>
                 </thead>
@@ -57,6 +58,7 @@
                         <td style="text-align: center">{{ $provider->address }}</td>
                         <td style="text-align: center">{{ $provider->phone }}</td>
                         <td style="text-align: center">{{ $provider->email }}</td>
+                        <td style="text-align: center">{{ $provider->cuit }}</td>
                         @if ($provider->status == 1)
                         <td style="text-align: center">Activo</td>
                         @else
@@ -84,7 +86,7 @@
             </table>
             {{ $providers->links() }}
         </div>
-
+        @include('borrar')
         <!-- /.card-body -->
     </div>
 </div>

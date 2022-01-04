@@ -22,6 +22,7 @@
                       <th>Domicilio Administrativo</th>
                       <th>Contacto</th>
                       <th>Cargo del contacto</th>
+                      <th>CUIT</th>
                       <th>Estado</th>
                     </tr>
                   </thead>
@@ -33,6 +34,7 @@
                       <td>{{ $cliente->domicile_admin}}</td>
                       <td>{{ $cliente->contact}}</td>
                       <td>{{ $cliente->post_contact}}</td>
+                      <td>{{ $cliente->cuit}}</td>
                       @if($cliente==true)
                         <td>Activo</td>
                       @else
@@ -145,5 +147,5 @@
             </div>
             <!-- /.card -->
           </div>
-          
+          @include('borrar')
 </div>

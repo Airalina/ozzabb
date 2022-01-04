@@ -111,5 +111,6 @@
             {{ $materials->links() }}
         </div>
         <!-- /.card-body -->
+        @include('borrar')
     </div>
 </div>

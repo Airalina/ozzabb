@@ -75,6 +75,10 @@
                             <label for="exampleInputEmail1">Codigo Postal</label>
                             <input class="form-control form-control-sm" type="text" wire:model="postcode"  placeholder="Ingrese codigo postal">
                         </div>
+                        <div class="form-group">
+                            <label for="cuit">CUIT</label>
+                            <input type="text" class="form-control form-control-sm" id="cuit" wire:model="cuit" placeholder="CUIT">
+                        </div>
                     </div>
                     <div class="card-footer">
                         <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar </button></td>
