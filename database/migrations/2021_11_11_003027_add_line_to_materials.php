@@ -13,10 +13,10 @@ class AddLineToMaterials extends Migration
      */
     public function up()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('line_id');
-            $table->enum('line', ['Superseal', 'Mini', 'Fit', 'Bulldog', 'Ecoseal', 'Eco'])->nullable();
-        });
+        //Schema::table('materials', function (Blueprint $table) {
+          //  $table->dropColumn('line_id');
+          //  $table->enum('line', ['Superseal', 'Mini', 'Fit', 'Bulldog', 'Ecoseal', 'Eco'])->nullable();
+        //});
     }
 
     /**
@@ -26,8 +26,8 @@ class AddLineToMaterials extends Migration
      */
     public function down()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('line');
-        });
+        //Schema::table('materials', function (Blueprint $table) {
+         //   $table->dropColumn('line');
+        //});
     }
 }

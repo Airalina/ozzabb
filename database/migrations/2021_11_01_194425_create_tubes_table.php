@@ -13,7 +13,7 @@ class CreateTubesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tubes', function (Blueprint $table) {
+        /*Schema::create('tubes', function (Blueprint $table) {
             $table->id(); 
             $table->unsignedBigInteger('material_id');
             $table->enum('type', ['Corrugado', 'Termocontraible', 'PVC']);
@@ -23,7 +23,7 @@ class CreateTubesTable extends Migration
             $table->float('minimum_temperature',6, 2);
             $table->float('maximum_temperature',6, 2);
             $table->timestamps();
-        });
+        });*/
     }
 
     /**

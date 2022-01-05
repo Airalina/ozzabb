@@ -13,9 +13,9 @@ class AddWatertightToConnectors extends Migration
      */
     public function up()
     {
-        Schema::table('connectors', function (Blueprint $table) {
-            $table->integer('watertight');
-        });
+        //Schema::table('connectors', function (Blueprint $table) {
+         //   $table->integer('watertight');
+        //});
     }
 
     /**
@@ -25,8 +25,8 @@ class AddWatertightToConnectors extends Migration
      */
     public function down()
     {
-        Schema::table('connectors', function (Blueprint $table) {
-            $table->dropColumn('watertight');
-        });
+        //Schema::table('connectors', function (Blueprint $table) {
+        //    $table->dropColumn('watertight');
+        //});
     }
 }

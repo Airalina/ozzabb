@@ -13,13 +13,13 @@ class AddItemsToTerminals extends Migration
      */
     public function up()
     {
-        Schema::table('terminals', function (Blueprint $table) {
+       /* Schema::table('terminals', function (Blueprint $table) {
             $table->float('size', 6, 2)->change();
             $table->float('minimum_section', 6, 2)->change();
             $table->float('maximum_section',6, 2)->change();  
             $table->enum('material', ['Latón', 'Estañado']);
             $table->enum('type', ['Porta macho', 'Porta hembra']);
-        });
+        });*/
     }
 
     /**
@@ -29,9 +29,9 @@ class AddItemsToTerminals extends Migration
      */
     public function down()
     {
-        Schema::table('terminals', function (Blueprint $table) {
+       /* Schema::table('terminals', function (Blueprint $table) {
             $table->dropColumn('material');
             $table->dropColumn('type');
-        });
+        });*/
     }
 }

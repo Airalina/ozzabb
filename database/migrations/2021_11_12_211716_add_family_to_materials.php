@@ -13,10 +13,10 @@ class AddFamilyToMaterials extends Migration
      */
     public function up()
     {
-        Schema::table('materials', function (Blueprint $table) {
+       /* Schema::table('materials', function (Blueprint $table) {
             $table->dropColumn('family');
             $table->enum('family', ['Conectores', 'Terminales', 'Cables', 'Sellos', 'Tubos', 'Accesorios', 'Clips']);
-        });
+        });*/
     }
 
     /**
