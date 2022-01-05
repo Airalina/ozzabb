@@ -13,11 +13,11 @@ class AddUsageToMaterials extends Migration
      */
     public function up()
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('usage_id');
-            $table->enum('usage', ['Motos', 'GNC', 'Electro']);
+        //Schema::table('materials', function (Blueprint $table) {
+         //   $table->dropColumn('usage_id');
+        //    $table->enum('usage', ['Motos', 'GNC', 'Electro']);
           
-        });
+        //});
     }
 
     /**
