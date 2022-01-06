@@ -53,7 +53,7 @@
                             <td style="text-align: center">
                                 @if(!is_null($order->buy_order_id))
                                     @if($order->buy_order->provider)
-                                      {{$order->buy_order->provider->name}}
+                                        {{$order->buy_order->provider->name}}
                                     @else
                                         El proveedor al que se le realizó este pedido, ya no existe.
                                     @endif
