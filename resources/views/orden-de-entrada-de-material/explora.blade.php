@@ -66,7 +66,11 @@
                                 <tr>
                                     <td style="text-align: center">{{ $order->material_code }}</td>
                                     <td style="text-align: center">{{ $order->material_description }}</td>
-                                    <td style="text-align: center">{{ $order->warehouse->name }}</td>
+                                    @if($order->warehouse)
+                                        <td style="text-align: center">{{ $order->warehouse->name }}</td>
+                                    @else
+                                        <td style="text-align: center">Entrada sin deposito</td>
+                                    @endif
                                     <td style="text-align: center">{{ $order->presentation }}</td>
                                     <td style="text-align: center">{{ $order->amount_received }}</td>
                                     <td style="text-align: center">{{ $order->amount_requested }}</td>

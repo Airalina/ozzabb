@@ -33,7 +33,7 @@ class PurchasingSheet extends Component
     public $ordenes_ingreso, $stock_transito=0, $ordenrep=false, $materialrep=false; 
     public $codem, $descriptionm, $proveedorm, $proveedormm, $proveedoresm=array(), $proveedorrep=false, $provcount=0, $presentationm,$presentationsm, $pricem, $clavem, $amountm;
     public $proveedor_name, $material_id, $precio, $subtotalxmaterial;
-    public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder;
+    public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder, $stmaterial;
     public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
     public $ordenes_de_compra, $materials, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials;
     public function render()
@@ -198,7 +198,7 @@ class PurchasingSheet extends Component
             $this->materialsinorden=false;
 
     }
-    public function buy(int $code)
+    public function buy(string $code)
     {
         $this->material=Material::where('code', $code)->first();
         $this->material_id=$this->material->id;
@@ -315,6 +315,9 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
                 $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
                 $this->ordenes_de_compra_detalle->save();
+                $this->stmaterial=Material::find($ordenes->material_id);
+                $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
+                $this->stmaterial->save();
                 
             }elseif($this->proveedor_id!=$ordenes->provider_id){
                 $this->ordenes_de_compra=new BuyOrder;
@@ -329,9 +332,12 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
                 $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
                 $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
-                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->presentacion;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
                 $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
                 $this->ordenes_de_compra_detalle->save();
+                $this->stmaterial=Material::find($ordenes->material_id);
+                $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
+                $this->stmaterial->save();
             }else{
                 $this->ordenes_de_compra_detalle=new BuyOrderDetail;
                 $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
@@ -341,6 +347,9 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
                 $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
                 $this->ordenes_de_compra_detalle->save();
+                $this->stmaterial=Material::find($ordenes->material_id);
+                $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
+                $this->stmaterial->save();
             }
         }
         $this->ordenes_de_compra->save();
