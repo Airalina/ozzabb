@@ -52,7 +52,11 @@
                             <td style="text-align: center">{{ $order->follow_number }}</td>
                             <td style="text-align: center">
                                 @if(!is_null($order->buy_order_id))
+                                    @if($order->buy_order->provider)
                                       {{$order->buy_order->provider->name}}
+                                    @else
+                                        El proveedor al que realizo este pedido ya no existe.
+                                    @endif
                                 @else
                                     &nbsp
                                 @endif
