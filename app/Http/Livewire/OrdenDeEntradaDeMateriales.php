@@ -132,11 +132,14 @@ class OrdenDeEntradaDeMateriales extends Component
             $this->validate([
                 'date' => 'required',
                 'hour' => 'required',
+                'follow' => 'required|max:100|min:1',
             ],
             [
                 'date.required' => 'El campo Fecha es requerido',
                 'hour.required' => 'El campo Hora es requerido',
-                'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
+                'follow.required' => 'El campo N° de remito es obligatorio ("S/N", en caso de no tener.)',
+                'follow.max' => 'El campo N° de remito tiene como máximo 100 caracteres',
+                'follow.max' => 'El campo N° de remito tiene como mínimo 1 caracter',
             ]);       
                 $this->orden=new MaterialEntryOrder;
                 $this->orden->date=$this->date;
@@ -158,20 +161,21 @@ class OrdenDeEntradaDeMateriales extends Component
                             $this->material_entry[$material_entry_order_detail->material_code][$this->x]=$material_entry_order_detail;
                             $this->x++;
                         }                   
-                    }             
-                    foreach ($this->material_entry as $code => $entry_detail) {
+                    }
+                    if($this->material_entry){             
+                        foreach ($this->material_entry as $code => $entry_detail) {
                             $this->sum[$code] = array_sum(array_column($entry_detail, 'amount_received')); 
                             $this->buy_order_state=BuyOrder::find($this->buyorder_id);
-                           
                                 foreach ($entry_detail as  $entry_detail_amount) {
-                                    if($this->sum[$code] < $entry_detail_amount->amount_requested){
-                                        $this->buy_order_state->state=0;                   
-                                    }else{
-                                        $this->buy_order_state->state=1;                   
+                                        if($this->sum[$code] < $entry_detail_amount->amount_requested){
+                                            $this->buy_order_state->state=0;                   
+                                        }else{
+                                            $this->buy_order_state->state=1;                   
+                                        }
                                     }
-                                }
-                            $this->buy_order_state->save();
+                                $this->buy_order_state->save();
                         }
+                    }
                 }
                 foreach($this->details as $detail){
                     if(isset($this->material_entry[$detail[0]])){
@@ -273,7 +277,7 @@ class OrdenDeEntradaDeMateriales extends Component
 
         }else{
                 
-            $this->id_warehouse = Warehouse::where('nombre_deposito', 1)->first();
+            $this->id_warehouse = Warehouse::where('id', 1)->first();
             if(is_null($this->id_warehouse)){
                 $this->id_warehouse = Warehouse::find(1);
             }
@@ -283,7 +287,11 @@ class OrdenDeEntradaDeMateriales extends Component
             $this->detail[2]=$this->received_amount[$material->id];
             $this->detail[3]=$material->count;
             $this->detail[5]=$this->requested_presentation[$material->id];
-            $this->detail[6]=$this->id_warehouse->id;
+            if($this->id_warehouse){
+                $this->detail[6]=$this->id_warehouse->id;
+            }else{
+                $this->detail[6]="";
+            }
             $this->detail[7]=$this->requested_amount[$material->id];
             $this->detail[8]=$this->refer_amount[$material->id];
        #     dd($this->close_order);

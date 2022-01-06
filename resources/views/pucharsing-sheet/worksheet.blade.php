@@ -188,7 +188,7 @@
                                         <td style="text-align: center">{{ $purchasing[8] }}</td>
                                         <td style="text-align: center">{{ $purchasing[9] }}</td>
                                         <td style="text-align: center">{{ $purchasing[11] }}</td>
-                                        <td style="text-align: center"><button type="button" wire:click="buy({{$purchasing[1]}})"class="btn btn-success btn-sm">Comprar</button></td>
+                                        <td style="text-align: center"><button type="button" wire:click="buy('{{ $purchasing[1] }}')"class="btn btn-success btn-sm">Comprar</button></td>
                                     </tr>
                                 @empty
                                     <tr class="text-center">
@@ -214,7 +214,7 @@
         </div>
         <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
-                <form wire.submit.prevent="addmaterial">
+                <form wire.submit.prevent="buy">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title">Material</h5>

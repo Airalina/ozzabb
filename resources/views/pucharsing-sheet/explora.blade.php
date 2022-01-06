@@ -26,11 +26,11 @@
                         <tbody>
                             @forelse($ordenes as $orden)
                             <tr>
-                                <td style="text-align: center">{{ $orden->id }}/{{ date('Y', strtotime($orden->date))}}
+                                <td style="text-align: center">{{ $orden['id'] }}/{{ date('Y', strtotime($orden['date']))}}
                                  </td>
-                                <td style="text-align: center">{{ $orden->customer_name }}</td>
-                                <td style="text-align: center">{{ date('d/m/Y', strtotime($orden->date))}}</td>
-                                @switch($orden->order_state)
+                                <td style="text-align: center">{{ $orden['customer_name'] }}</td>
+                                <td style="text-align: center">{{ date('d/m/Y', strtotime($orden['date']))}}</td>
+                                @switch($orden['order_state'])
                                 @case(1)
                                 <td style="text-align: center">Nuevo</td>
                                 @break
@@ -53,8 +53,8 @@
                                 <td style="text-align: center">Cancelado</td>
                                 @break
                                 @endswitch
-                                <td style="text-align: center">{{ date('d/m/Y', strtotime($orden->date))}}</td>
-                                @switch($orden->buys)
+                                <td style="text-align: center">{{ date('d/m/Y', strtotime($orden['date']))}}</td>
+                                @switch($orden['buys'])
                                 @case(null)
                                 <td style="text-align: center">No</td>
                                 @break

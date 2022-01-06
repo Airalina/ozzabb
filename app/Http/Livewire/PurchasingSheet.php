@@ -198,7 +198,7 @@ class PurchasingSheet extends Component
             $this->materialsinorden=false;
 
     }
-    public function buy(int $code)
+    public function buy(string $code)
     {
         $this->material=Material::where('code', $code)->first();
         $this->material_id=$this->material->id;
@@ -329,7 +329,7 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
                 $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
                 $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
-                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->presentacion;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
                 $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
                 $this->ordenes_de_compra_detalle->save();
             }else{
