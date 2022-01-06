@@ -171,7 +171,7 @@
                                                         </td>
                                                         <td style="text-align: center">
                                                             @if($order->provider)
-                                                                {{ $order->provider }}
+                                                                {{ $order->provider->name }}
                                                             @endif
                                                         </td>
                                                         <td style="text-align: center">
