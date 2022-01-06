@@ -675,7 +675,7 @@ class Depositos extends Component
                 }
             } 
             $this->validate([
-                'egreso' => 'required|integer|min:1|max:'.$this->materials_amount["total"],
+                'egreso' => 'required|integer|min:1|max:'.$this->materials_amount["total"].'',
                 'depo_destino' => 'required',
             ],[
                 'egreso.required' => 'El campo Egreso es requerido',
