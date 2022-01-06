@@ -55,7 +55,7 @@
                                     @if($order->buy_order->provider)
                                       {{$order->buy_order->provider->name}}
                                     @else
-                                        El proveedor al que realizo este pedido ya no existe.
+                                        El proveedor al que se le realizó este pedido, ya no existe.
                                     @endif
                                 @else
                                     &nbsp
