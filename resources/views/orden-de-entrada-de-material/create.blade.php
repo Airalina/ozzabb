@@ -170,7 +170,9 @@
                                                         <td style="text-align: center">#{{ $order->id }}/2021
                                                         </td>
                                                         <td style="text-align: center">
-                                                            {{ $order->provider->name }}
+                                                            @if($order->provider)
+                                                                {{ $order->provider->name }}
+                                                            @endif
                                                         </td>
                                                         <td style="text-align: center">
                                                             {{ $order->buy_date->format('d/m/Y') }}
@@ -241,61 +243,65 @@
                             @endif
 
                             @if (isset($buyorderinfo))
+                                @if(count($depositos)!=0)
+                                    @forelse($buyorderinfo as $nro => $buyorder)
+                                        <tr>
+                                            <td style="text-align: center">
+                                                {{ $buyorder->material->code }}
+                                            </td>
+                                            <td style="text-align: center">
+                                                {{ $buyorder->material->description }}</td>
 
-                                @forelse($buyorderinfo as $nro => $buyorder)
+                                            <td style="text-align: center">
+                                                {{ $buyorder->presentation }}
+                                            </td>
+                                            <td style="text-align: center">
+                                                {{ $buyorder->amount }}</td>
+                                            <td style="text-align: center">
+                                                <div wire:ignore>
+                                                    <input class="form-control form-control-sm" type="text"
+                                                        wire:model="received_amount.{{ $buyorder->material_id }}"
+                                                        wire:change="amount_change({{ $buyorder->id }})"
+                                                        placeholder="Cantidad" required>
+                                                </div>
+                                            </td>
+                                            <td style="text-align: center">
+                                                <div wire:ignore>
+                                                    <input class="form-control form-control-sm" type="text"
+                                                        wire:model="refer_amount.{{ $buyorder->material_id }}"
+                                                        wire:change="amount_change({{ $buyorder->id }})"
+                                                        placeholder="Cantidad" required>
+                                                </div>
+                                            </td>
+                                            <td style="text-align: center">
+                                                @if (isset($difference[$buyorder->material_id]))
+                                                    {{ $difference[$buyorder->material_id] }}
+                                                @else
 
-                                    <tr>
-                                        <td style="text-align: center">
-                                            {{ $buyorder->material->code }}
-                                        </td>
-                                        <td style="text-align: center">
-                                            {{ $buyorder->material->description }}</td>
-
-                                        <td style="text-align: center">
-                                            {{ $buyorder->presentation }}
-                                        </td>
-                                        <td style="text-align: center">
-                                            {{ $buyorder->amount }}</td>
-                                        <td style="text-align: center">
-                                            <div wire:ignore>
-                                                <input class="form-control form-control-sm" type="text"
-                                                    wire:model="received_amount.{{ $buyorder->material_id }}"
-                                                    wire:change="amount_change({{ $buyorder->id }})"
-                                                    placeholder="Cantidad" required>
-                                            </div>
-                                        </td>
-                                        <td style="text-align: center">
-                                            <div wire:ignore>
-                                                <input class="form-control form-control-sm" type="text"
-                                                    wire:model="refer_amount.{{ $buyorder->material_id }}"
-                                                    wire:change="amount_change({{ $buyorder->id }})"
-                                                    placeholder="Cantidad" required>
-                                            </div>
-                                        </td>
-                                        <td style="text-align: center">
-                                            @if (isset($difference[$buyorder->material_id]))
-                                                {{ $difference[$buyorder->material_id] }}
-                                            @else
-
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <select class="form-control select2 select2-hidden-accessible" wire:model="nombre_deposito"
-                                                style="width: 100%;">
-                                                <option selected="selected"></option>
-                                                @foreach ($depositos as $deposito)
-                                                    <option>{{ $deposito->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
-                                @empty
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <select class="form-control select2 select2-hidden-accessible" wire:model="nombre_deposito"
+                                                    style="width: 100%;">
+                                                    <option selected="selected"></option>
+                                                    @foreach ($depositos as $deposito)
+                                                        <option>{{ $deposito->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr class="text-center">
+                                            <td style="text-align: center" colspan="4" class="py-3 italic">No
+                                                hay
+                                                información</td>
+                                        </tr>
+                                    @endforelse
+                                @else
                                     <tr class="text-center">
-                                        <td style="text-align: center" colspan="4" class="py-3 italic">No
-                                            hay
-                                            información</td>
-                                    </tr>
-                                @endforelse
+                                            <td style="text-align: center" colspan="8" class="py-3 italic">No hay depósitos tipo "Almacén" disponibles.</td>
+                                        </tr>
+                                @endif
                             @endif
                             </tbody>
                             </table>
