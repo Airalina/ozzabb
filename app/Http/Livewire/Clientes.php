@@ -13,7 +13,7 @@ class Clientes extends Component
     protected $paginationTheme = 'bootstrap';
     protected $clientes;
     public $funcion="", $idcli, $cliente, $paginas=25, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
-    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios, $cuit;
+    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios, $cuit, $order="name";
     protected $dates = ['deadline', 'date', 'start_date'];
     public function updatingSearch()
     {
@@ -28,7 +28,7 @@ class Clientes extends Component
         ->orWhere('contact','LIKE','%'.$this->search.'%')
         ->orWhere('post_contact','LIKE','%'.$this->search.'%')
         ->orWhere('cuit','LIKE','%'.$this->search.'%')
-        ->orWhere('email','LIKE','%'.$this->search.'%')->paginate($this->paginas);
+        ->orWhere('email','LIKE','%'.$this->search.'%')->orderBy($this->order)->paginate($this->paginas);
         return view('livewire.clientes',[
             'clientes' => $this->clientes,
         ]);
