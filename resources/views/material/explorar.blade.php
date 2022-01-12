@@ -379,6 +379,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if($provider_prices)
                         @forelse($provider_prices as $provider_price)
                         <tr>
                             <td>{{ $provider_price->material->code }}</td>
@@ -398,7 +399,7 @@
                             <td colspan="4" class="py-3 italic">No hay información</td>
                         </tr>
                         @endforelse
-
+                        @endif
                     </tbody>
                 </table>
             </div>

@@ -780,7 +780,7 @@ class MaterialComponent extends Component
                 'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
                 'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimales',
                 'term_material.required' => 'Seleccione una opción para el campo Material',
-                'term_type.required' => 'Seleccione una opción para el campo Material',
+                'term_type.required' => 'Seleccione una opción para el campo Tipo',
                 
             ]);
 
@@ -945,8 +945,7 @@ class MaterialComponent extends Component
                 $clip_up->type=$this->clip_type;
                 $clip_up->save();
                 }
-            }
-                elseif($this->family == 'Accesorios'){
+            }elseif($this->family == 'Accesorios'){
                     $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
         
                         $this->validate([
@@ -966,8 +965,7 @@ class MaterialComponent extends Component
                     $accesory_up->type=$this->accesory_type;
                     $accesory_up->save();
                 }
-            }
-                    else{
+            }else{
                         $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
 
                         $this->validate([
@@ -984,21 +982,21 @@ class MaterialComponent extends Component
                             'seal_type.max' => 'El campo Tipo de sello debe ser inferior a 30 carácteres'
                         ]);
 
-                    $seal_up =Seal::find($this->sl_id);
-                    if($seal_up == null){
-                        Seal::create([
-                            'material_id' => $this->material->id,
-                            'minimum_diameter' => $this->minimum_diameter,
-                            'maximum_diameter' => $this->maximum_diameter,
-                            'type' => $this->seal_type,
-                        ]);
-                    }else{
-                    $seal_up->material_id=$this->idu;    
-                    $seal_up->minimum_diameter=$this->minimum_diameter;
-                    $seal_up->maximum_diameter=$this->maximum_diameter;
-                    $seal_up->type=$this->seal_type;
-                    $seal_up->save();
-                    }
+                        $seal_up =Seal::find($this->sl_id);
+                        if($seal_up == null){
+                            Seal::create([
+                                'material_id' => $this->material->id,
+                                'minimum_diameter' => $this->minimum_diameter,
+                                'maximum_diameter' => $this->maximum_diameter,
+                                'type' => $this->seal_type,
+                            ]);
+                        }else{
+                            $seal_up->material_id=$this->idu;    
+                            $seal_up->minimum_diameter=$this->minimum_diameter;
+                            $seal_up->maximum_diameter=$this->maximum_diameter;
+                            $seal_up->type=$this->seal_type;
+                            $seal_up->save();
+                        }
             
                     }
         $material_up->color=$this->color;

@@ -198,7 +198,7 @@
                         <select class="form-control form-control-sm" wire:model="term_type" id="term_type">
                             <option selected value="">Selecciona un tipo</option>
                             <option value="Macho">Macho</option>
-                            <option value="Membra">Hembra</option>
+                            <option value="Hembra">Hembra</option>
                         </select>
                     </div>
                 @break
