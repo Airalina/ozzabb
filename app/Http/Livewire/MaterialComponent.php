@@ -1283,7 +1283,7 @@ class MaterialComponent extends Component
 
 public function storemat(Material $material){
     
-    $this->validar= $this->validate([
+    $this->validate([
         'amount' => 'nullable',
         'unit' => 'required|numeric',
         'presentation' => 'required',
