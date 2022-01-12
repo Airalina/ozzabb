@@ -351,24 +351,6 @@
             </div>
         </form>
     </div>
-    <div class="col-12">
-        <div class="card card-primary">
-            <div class="card-body">
-                <div>
-                    <div class="p-0">
-                        <div class="d-flex justify-content-start">
-                            @if ($material->image != null)
-                                @foreach ($images as $mat)
-                                    <img class="img-thumbnail w-25" src="{{ $material->getUrl($mat) }}">
-                                @endforeach
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="col-md-7">
         <div class="card">
             <div class="card-header">

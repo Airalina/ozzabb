@@ -23,13 +23,23 @@
               <!-- /.card-header -->
               <div class="card-body table-responsive">
                 <table class="table table-hover table-sm">
+                <div class="form-group" data-select2-id="45">
+                    <label>Ordenar por</label>
+                    <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible"
+                        style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option data-select2-id="48" value="name">Nombre</option>
+                        <option data-select2-id="49" value="adomicile_admin">Dirección</option>
+                        <option data-select2-id="50" value="phone">Teléfono</option>
+                        <option data-select2-id="51" value="email">Email</option>
+                        <option data-select2-id="52" value="state">Estado</option>
+                    </select>
+                </div>
                   <thead>
                     <tr>
                       <th>Nombre</th>
                       <th>Teléfono</th>
                       <th>Email</th>
                       <th>Domicilio Administración</th>
-                      <th>CUIT</th>
                       <th>Estado</th>
                       <th></th>
                     </tr>
@@ -42,7 +52,6 @@
                       <td>{{ $cliente->phone }}</td>
                       <td>{{ $cliente->email}}</td>
                       <td>{{ $cliente->domicile_admin}}</td>
-                      <td>{{ $cliente->cuit}}</td>
                       @if($cliente->estado==true)
                         <td>Activo</td>
                       @else

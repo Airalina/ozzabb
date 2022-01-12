@@ -31,21 +31,19 @@
                     <label>Ordenar por</label>
                     <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible"
                         style="width: 100%;" tabindex="-1" aria-hidden="true">
-                        <option data-select2-id="47" value="id">Id</option>
+                        <option data-select2-id="47" value="code">Código</option>
                         <option data-select2-id="48" value="name">Nombre</option>
                         <option data-select2-id="49" value="family">Familia</option>
                         <option data-select2-id="50" value="color">Color</option>
                         <option data-select2-id="51" value="line">Linea</option>
                         <option data-select2-id="52" value="usage">Uso</option>
-                        <option data-select2-id="53" value="replace_id">Puesto de contacto</option>
                         <option data-select2-id="54" value="stock_min">Stock Min.</option>
-                        <option data-select2-id="55" value="stock_min">Stock Max.</option>
+                        <option data-select2-id="55" value="stock_max">Stock Max.</option>
                         <option data-select2-id="56" value="stock">Stock</option>
                     </select>
                 </div>
                 <thead>
                     <tr>
-                        <th style="text-align: center">ID</th>
                         <th style="text-align: center">Codigo</th>
                         <th style="text-align: center">Nombre</th>
                         <th style="text-align: center">Familia</th>
@@ -64,7 +62,6 @@
                     @forelse($materials as $material)
 
                         <tr class="registros">
-                            <td style="text-align: center">{{ $material->id }} </td>
                             <td style="text-align: center">{{ $material->code }} </td>
                             <td style="text-align: center">{{ $material->name }} </td>
                             <td style="text-align: center">{{ $material->family }} </td>
