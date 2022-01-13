@@ -59,4 +59,9 @@ Route::get('/ordenes-de-ingreso-de-materiales', function () {
     return view('ordenes-de-entrada-de-materiales');
 })->middleware(['auth'])->name('ordenes-de-entrada-de-materiales');
 
+Route::get('/ordenes-de-trabajo', function () {
+    return view('workorders');
+})->middleware(['auth'])->name('workorders');
+
+
 require __DIR__.'/auth.php';
