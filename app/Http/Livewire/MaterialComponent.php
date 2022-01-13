@@ -1187,30 +1187,38 @@ class MaterialComponent extends Component
 
    public function destruir(Material $material)
    {
+       $this->material=$material;
        if (auth()->user()->cannot('delete', auth()->user())) {
            abort(403);
        }else
        {
            if($material->family == 'Conectores'){
             $this->conn_del = Connector::where('material_id',$material->id)->first();
+            $this->dispatchBrowserEvent('show-borrar');
             $this->conn_del->delete();
            }elseif($material->family == 'Terminales'){
             $this->term_del = Terminal::where('material_id',$material->id)->first();
+            $this->dispatchBrowserEvent('show-borrar');
             $this->term_del->delete();
            }elseif($material->family == 'Cables'){
             $this->cable_del = Cable::where('material_id',$material->id)->first();
+            $this->dispatchBrowserEvent('show-borrar');
             $this->cable_del->delete();
            }elseif($material->family == 'Tubos'){
             $tube_del = Tube::where('material_id',$material->id)->first();
+            $this->dispatchBrowserEvent('show-borrar');
             $tube_del->delete();
            }elseif($material->family == 'Clips'){
             $clip_del = Clip::where('material_id',$material->id)->first();
+            $this->dispatchBrowserEvent('show-borrar');
             $clip_del->delete();
            }elseif($material->family == 'Accesorios'){
             $accesory_del = Accessory::where('material_id',$material->id)->first();
+            $this->dispatchBrowserEvent('show-borrar');
             $accesory_del->delete();
            }else{
             $this->seal_del = Seal::where('material_id',$material->id)->first();
+            $this->dispatchBrowserEvent('show-borrar');
             $this->seal_del->delete();
            }
            if(!empty($material->providerprices)){
@@ -1232,33 +1240,49 @@ class MaterialComponent extends Component
        }
    }
 
-   public function delete()
-   {
-        if($this->material->family == 'Conectores'){
-         $this->conn_del = Connector::where('material_id',$this->material->id)->first();
-         $this->conn_del->delete();
-        }elseif($this->material->family == 'Terminales'){
-         $this->term_del = Terminal::where('material_id',$this->material->id)->first();
-         $this->term_del->delete();
-        }elseif($this->material->family == 'Cables'){
-         $this->cable_del = Cable::where('material_id',$this->material->id)->first();
+   public function delete(Material $material){
+    if(auth()->user()->cannot('delete', auth()->user())){
+        abort(403);
+    }else{
+        if($material->family == 'Conectores'){
+            $this->conn_del = Connector::where('material_id',$material->id)->first();
+            $this->conn_del->delete();
+        }elseif($material->family == 'Terminales'){
+            $this->term_del = Terminal::where('material_id',$material->id)->first();
+            $this->term_del->delete();
+        }elseif($material->family == 'Cables'){
+         $this->cable_del = Cable::where('material_id',$material->id)->first();
          $this->cable_del->delete();
-        }elseif($this->material->family == 'Tubos'){
-         $tube_del = Tube::where('material_id',$this->material->id)->first();
+        }elseif($material->family == 'Tubos'){
+         $tube_del = Tube::where('material_id',$material->id)->first();
          $tube_del->delete();
-        }elseif($this->material->family == 'Clips'){
-         $clip_del = Clip::where('material_id',$this->material->id)->first();
+        }elseif($material->family == 'Clips'){
+         $clip_del = Clip::where('material_id',$material->id)->first();
          $clip_del->delete();
-        }elseif($this->material->family == 'Accesorios'){
-         $accesory_del = Accessory::where('material_id',$this->material->id)->first();
+        }elseif($material->family == 'Accesorios'){
+         $accesory_del = Accessory::where('material_id',$material->id)->first();
          $accesory_del->delete();
-        }else{
-         $this->seal_del = Seal::where('material_id',$this->material->id)->first();
+        }elseif($material->family == 'Sellos'){
+         $this->seal_del = Seal::where('material_id',$material->id)->first();
          $this->seal_del->delete();
         }
-        $this->material->delete();
+        if(!empty($material->providerprices)){
+            foreach ($material->providerprices as $provider_price) {
+                 $provider_price->delete();
+                
+                if (!empty($provider_price->price)) {
+                     foreach ($provider_price->price as $price) {
+                         $price->delete();
+                     }
+                    
+                }
+            }
+        }
+
+        $material->delete();
         $this->funcion="";
         $this->explora="inactivo";
+    }
         $this->dispatchBrowserEvent('hide-borrar');
    }
 
@@ -1327,6 +1351,7 @@ public function destruirmat(Material $material)
         $this->funcion="0";
         $this->explorar($this->provider);
 }
+
 public function updatemat(ProviderPrice $provider_price)
 {  
     $this->id_provider_price = $provider_price->id;
