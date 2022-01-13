@@ -55,6 +55,7 @@ class MaterialComponent extends Component
 
     public function funcion()
     {
+        $this->resetValidation();
         $this->funcion="crear";
         $this->id_provider=null;
         $this->code=null;
@@ -1255,6 +1256,7 @@ class MaterialComponent extends Component
     $this->addProvider = true;
     $this->explora='inactivo';
     $this->funcion="crearmat";    
+    $this->resetValidation();
 }
 
 public function storemat(Material $material){
