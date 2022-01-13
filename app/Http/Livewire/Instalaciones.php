@@ -17,7 +17,8 @@ class Instalaciones extends Component
     protected $instalaciones;
     protected $paginationTheme = 'bootstrap';
     public $instalacion, $installation_id, $code, $codem, $paginas=25, $description, $descriptionm, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
-    public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $photo=null, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false, $hours_man, $man;
+    public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $order="code", $photo=null, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false, $hours_man, $man;
+ 
     public function render()
     {
         $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
@@ -30,7 +31,8 @@ class Instalaciones extends Component
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
         $this->instalaciones=Installation::where('id','LIKE','%' .$this->searchinstallation. '%')
             ->orWhere('code','LIKE','%'.$this->searchinstallation.'%')
-            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->paginate($this->paginas);
+            ->orWhere('usd_price','%'.$this->searchinstallation.'%')
+            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->orderBy($this->order)->paginate($this->paginas);
         $this->revisiones=Revision::where('installation_id', $this->installation_id)->get();
         return view('livewire.instalaciones',[
             'instalaciones' => $this->instalaciones,
