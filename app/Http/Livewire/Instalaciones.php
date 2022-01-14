@@ -218,12 +218,17 @@ class Instalaciones extends Component
 
     public function borrarevision(Revision $revi)
     {
-        $details=Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
-        foreach($details as $det)
-        {
-            $det->delete();
+        if($revi->number_version!=0){
+            $details=Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
+            foreach($details as $det)
+            {
+                $det->delete();
+            }
+            $revi->delete(); 
         }
-        $revi->delete(); 
+        $install=Installation::find($revi->installation_id);
+        $this->funcion="";
+        $this->explora($install);
     }
 
     public function borradetail(Revisiondetail $detail)
