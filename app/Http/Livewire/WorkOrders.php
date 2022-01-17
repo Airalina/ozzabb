@@ -346,8 +346,9 @@ class WorkOrders extends Component
             case 'Normal':
                 $this->normal_reservation = $this->material->depositmaterials()->select('id','warehouse_id','presentation','material_id', DB::raw('SUM(amount) as
                 total'))->where('is_material',1)->groupBy('presentation','warehouse_id')->orderByDesc('total')->get();
-                $this->amount_required = $this->workorder->workorder_details()->where('material_id',$this->material_id)->first()->amount;
+                $this->amount_required = $this->workorder_materials[$this->material->id][5];
                 $rest = $this->amount_required;
+                
                 foreach ($this->normal_reservation as $deposito) {
                     $almacen += $deposito->total;
                     if ($this->amount_required >= $almacen) {
@@ -375,6 +376,7 @@ class WorkOrders extends Component
                         $this->amount_deposit[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] = $rest;
                         $this->amount_saved[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] =  $deposito->total;
                         $this->deposits[$deposito->material_id][]=$this->deposit;
+                        
                         break;
                     }  
                 }
@@ -383,7 +385,7 @@ class WorkOrders extends Component
             case 'Equilibrado':
                 $this->eq_reservation = $this->material->depositmaterials()->select('id','warehouse_id','presentation','material_id', DB::raw('SUM(amount) as
                 total'))->where('is_material',1)->groupBy('presentation','warehouse_id')->get();
-                $this->amount_required = $this->workorder->workorder_details()->where('material_id',$this->material_id)->first()->amount;
+                $this->amount_required = $this->workorder_materials[$this->material->id][5];
                 $total = (count($this->eq_reservation) > 0) ? round($this->amount_required/count($this->eq_reservation)) : 0;
                 $contador = 0;
 
@@ -413,6 +415,22 @@ class WorkOrders extends Component
                         #$this->amount_required -= $contador;
                     }
                 }
+            
+               while ($contador < $this->amount_required) {
+                    foreach ($this->deposits[$this->material->id] as $key => $deposito) {
+                        if(($deposito['amount'] - $this->amount_deposit[$this->material->id][$deposito['id']][$deposito['presentation']]) > 0 && $contador < $this->amount_required){
+                            $this->amount_deposit[$this->material->id][$deposito['id']][$deposito['presentation']]++;
+                            $contador++;
+                            $end = false;
+                            }elseif ($contador == $deposito['amount']) {
+                                $end = true;
+                            }
+                    }
+                    if($end){
+                        break;
+                    }
+                }
+                
 
                 break;
 
