@@ -292,11 +292,11 @@ class WorkOrders extends Component
         foreach ($details as $detail) {
             $this->reservations = $this->workorder->reservationmaterials()->select('presentation','material_id', DB::raw('SUM(amount) as
             total'))->where('material_id',$detail->material->id)->groupBy('presentation')->get();
-
             foreach ($this->reservations as $index => $reservation) {
-                $presentation[$detail->material->id][] = $reservation->presentation;
-                $total[$detail->material->id][]= $reservation->total;
+                $presentation[$detail->material->id][$reservation->presentation] = $reservation->presentation;
+                $total[$detail->material->id][$reservation->presentation]= $reservation->total;
             }
+         
                $this->workorder_materials[$detail->material->id]= array(
                 0 => $detail->material->id,
                 1 => $detail->material->code,
@@ -310,6 +310,7 @@ class WorkOrders extends Component
            
             
         }
+        
       #  dd($this->presentation);
        $this->funcion="explora";
      }
@@ -513,39 +514,38 @@ class WorkOrders extends Component
             //si pasa la validación, guarda
            
             foreach ($this->deposits[$this->material_id] as $deposito) {
-                
-                $this->reservation = new ReservationMaterial;
-                $this->reservation->material_id=$this->material_id;
-                $this->reservation->workorder_id=$this->workorder->id;
-                $this->reservation->presentation=$deposito['presentation'];
-                $this->reservation->amount=$this->amount_deposit[$this->material_id][$deposito['id']][$deposito['presentation']];
-                $this->reservation->save();
-
-                //borrando del stock materiales
-                $material_up = Material::find($this->material_id);
-                $material_up->stock -= $this->amount_deposit[$this->material_id][$deposito['id']][$deposito['presentation']];
-                $material_up->save();
-                //borrando del deposito
-                $depositm=new DepositMaterial;
-                $depositm->material_id=$this->material_id;
-                $depositm->warehouse_id=$deposito['id'];
-                $depositm->warehouse2_id=0;
-                $depositm->presentation=$deposito['presentation'];
-                $depositm->amount=-($this->amount_deposit[$this->material_id][$deposito['id']][$deposito['presentation']]);
-                $depositm->date_change=Carbon::now()->format('Y-m-d');
-                $depositm->hour=Carbon::now()->format('H:i:s');
-                $depositm->name_receive='';
-                $depositm->name_entry='';
-                $depositm->is_material= 1;
-                $depositm->type=0;
-                $depositm->save();
-
-                $this->reservation_deposit = new ReservationDeposit;
-                $this->reservation_deposit->reservation_material_id=$this->reservation->id;
-                $this->reservation_deposit->deposit_id=$deposito['id'];
-                $this->reservation_deposit->save();
-
-                
+                if ($this->amount_deposit[$this->material_id][$deposito['id']][$deposito['presentation']] > 0) {
+                    $this->reservation = new ReservationMaterial;
+                    $this->reservation->material_id=$this->material_id;
+                    $this->reservation->workorder_id=$this->workorder->id;
+                    $this->reservation->presentation=$deposito['presentation'];
+                    $this->reservation->amount=$this->amount_deposit[$this->material_id][$deposito['id']][$deposito['presentation']];
+                    $this->reservation->save();
+    
+                    //borrando del stock materiales
+                    $material_up = Material::find($this->material_id);
+                    $material_up->stock -= $this->amount_deposit[$this->material_id][$deposito['id']][$deposito['presentation']];
+                    $material_up->save();
+                    //borrando del deposito
+                    $depositm=new DepositMaterial;
+                    $depositm->material_id=$this->material_id;
+                    $depositm->warehouse_id=$deposito['id'];
+                    $depositm->warehouse2_id=0;
+                    $depositm->presentation=$deposito['presentation'];
+                    $depositm->amount=-($this->amount_deposit[$this->material_id][$deposito['id']][$deposito['presentation']]);
+                    $depositm->date_change=Carbon::now()->format('Y-m-d');
+                    $depositm->hour=Carbon::now()->format('H:i:s');
+                    $depositm->name_receive='';
+                    $depositm->name_entry='';
+                    $depositm->is_material= 1;
+                    $depositm->type=0;
+                    $depositm->save();
+    
+                    $this->reservation_deposit = new ReservationDeposit;
+                    $this->reservation_deposit->reservation_material_id=$this->reservation->id;
+                    $this->reservation_deposit->deposit_id=$deposito['id'];
+                    $this->reservation_deposit->save();
+                }
             }
             
         $this->resetValidation();
