@@ -40,6 +40,7 @@ class Clientes extends Component
     }
 
     public function funcion(){
+        $this->resetValidation();
         $this->name=null;
         $this->email=null;
         $this->phone=null;
@@ -83,7 +84,7 @@ class Clientes extends Component
             'province' => 'required|string|min:4',
             'country' => 'required|string|min:3',
             'postcode' => 'required|integer|min:1',
-            'cuit' => 'required',
+            'cuit' => 'required|integer|min:10000000000|max:99999999999',
         ],[
             'name.required' => 'El campo "Nombre" es requerido',
             'name.min' => 'El campo "Nombre" tiene como mínimo 5(cinco) caracteres',
@@ -113,7 +114,10 @@ class Clientes extends Component
             'postcode.required' => 'El campo "Código Postal" es requerido',
             'postcode.integer' => 'El campo "Código Postal" es numérico',
             'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
-            'cuit.required' => 'El campo cuit es requerido',
+            'cuit.required' => 'El campo "C.U.I.T." es requerido',
+            'cuit.integer' => 'El campo "C.U.I.T." debe ser entero',
+            'cuit.min'=>'El valor ingresado en el campo "C.U.I.T." es incorrecto ej.:70498765431',
+            'cuit.max'=>'El valor ingresado en el campo "C.U.I.T." es incorrecto ej.:70498765431'
         ]);
         Customer::create([
             'name' => $this->name,

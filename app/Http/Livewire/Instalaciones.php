@@ -231,12 +231,17 @@ class Instalaciones extends Component
 
     public function borrarevision(Revision $revi)
     {
-        $details=Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
-        foreach($details as $det)
-        {
-            $det->delete();
+        if($revi->number_version!=0){
+            $details=Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
+            foreach($details as $det)
+            {
+                $det->delete();
+            }
+            $revi->delete(); 
         }
-        $revi->delete(); 
+        $install=Installation::find($revi->installation_id);
+        $this->funcion="";
+        $this->explora($install);
     }
 
     public function borradetail(Revisiondetail $detail)
@@ -265,10 +270,14 @@ class Instalaciones extends Component
         $this->detail[2]=$this->amount;
         $this->detail[3]=$this->count;
         $this->detail[4]=$this->material_id;
-        $this->details[]=$this->detail;
+        $this->details[$this->count]=$this->detail;
         $this->count=$this->count+1;
         $this->amount=0;
         $this->dispatchBrowserEvent('hide-form');
+    }
+    public function downmaterial($orden)
+    {
+        unset($this->details[$orden]);
     }
     public function selectmaterial(Material $material)
     {
@@ -294,11 +303,6 @@ class Instalaciones extends Component
             $this->addmaterial();
                 }
     }
-    public function downmaterial($orden)
-    {
-        unset($this->details[$orden]);
-    }
-
     public function create()
     {
         $this->funcion="create";
