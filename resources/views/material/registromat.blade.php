@@ -1,9 +1,9 @@
 <div>
-    <button wire:click="backmat()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i>
-        Volver</button>
-</div>
-<br>
-
+    <div>
+        <button wire:click="backmat()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i>
+            Volver</button>
+    </div>
+    <br>
 <div class="col-md-6">
     <div class="card card-primary">
         <div class="card-header">
@@ -16,7 +16,7 @@
             <h5>Datos del material</h5>
             <br>
             <x-form-validation-errors :errors="$errors" />
-            <form>
+            <form method="post">
                 <div class="col">
                     <div class="card mb-3 border-dark">
                         <div class="card-header">
@@ -43,6 +43,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @if($providers)
                                         @forelse($providers as $provider)
                                         <tr>
                                             <td style="text-align: center">{{ $provider->name }}</td>
@@ -60,6 +61,7 @@
                                             </td>
                                         </tr>
                                         @endforelse
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -127,6 +129,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
+                @if(isset($provider_new))
                     @if($funcion=="crearmat")
                     <td><button wire:click="storemat({{ $material }})" type="button"
                             class="btn btn-primary">Guardar</button></td>
@@ -135,11 +138,11 @@
                     <td><button wire:click="editarmat()" type="button" class="btn btn-primary">Guardar
                             Cambios</button></td>
                     @endif
-
+                @endif
                     <td><button wire:click="backmat()" type="button" class="btn btn-primary">Cancelar</button></td>
                 </div>
             </form>
-        </div>
+        </div></div></div>
         <div wire:ignore.self class="modal" id="form" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <form wire.submit.prevent="addmaterial">
@@ -183,3 +186,4 @@
                 </form>
             </div>
         </div>
+</div>
