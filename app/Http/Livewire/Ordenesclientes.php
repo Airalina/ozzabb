@@ -70,6 +70,31 @@ class Ordenesclientes extends Component
        
         $this->usd_price=$this->total;
         $this->arp_price=$this->total*$this->usd;
+        if($this->addaddress==true){
+            $this->validate([
+                'street' => 'required|string|min:4|max:30',
+                'number' => 'required|integer|min:1|max:10000',
+                'location' => 'required|string|min:4|max:30',
+                'province' => 'required|string|min:4|max:30',
+                'country' => 'required|string|min:3|max:30',
+                'postcode' => 'required|integer|min:1|max:100000',
+            ],[
+                'street.required' => 'El campo "Calle" es requerido',
+                'street.min' => 'El campo "Calle" tiene como mínimo 4(cuatro) caracteres',
+                'location.required' => 'El campo "Localidad" es requerido',
+                'location.min' => 'El campo "Localidad" tiene como mínimo 4(cuatro) caracteres',
+                'province.required' => 'El campo "Provincia" es requerido',
+                'province.min' => 'El campo "Provincia" tiene como mínimo 4(cuatro) caracteres',
+                'country.required' => 'El campo "País" es requerido',
+                'country.min' => 'El campo "País" tiene como mínimo 3(tres) caracteres',
+                'number.required' => 'El campo "Número" es requerido',
+                'number.integer' => 'El campo "Número" es un número entero',
+                'number.min' => 'El campo "Número" es como mínimo 1(uno)',
+                'postcode.required' => 'El campo "Código Postal" es requerido',
+                'postcode.integer' => 'El campo "Código Postal" es un número entero',
+                'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
+            ]);
+        }
         $this->validate([
             'usd_price' => 'required|numeric|min:0|max:1000000000',
             'arp_price' => 'required|numeric|min:0|max:1000000000',
@@ -115,29 +140,6 @@ class Ordenesclientes extends Component
             $this->newdetail->save();
         }
         if($this->addaddress==true){
-            $this->validate([
-                'street' => 'required|string|min:4',
-                'number' => 'required|integer|min:1',
-                'location' => 'required|string|min:4',
-                'province' => 'required|string|min:4',
-                'country' => 'required|string|min:3',
-                'postcode' => 'required|integer|min:1',
-            ],[
-                'street.required' => 'El campo "Calle" es requerido',
-                'street.min' => 'El campo "Calle" tiene como mínimo 4(cuatro) caracteres',
-                'location.required' => 'El campo "Localidad" es requerido',
-                'location.min' => 'El campo "Localidad" tiene como mínimo 4(cuatro) caracteres',
-                'province.required' => 'El campo "Provincia" es requerido',
-                'province.min' => 'El campo "Provincia" tiene como mínimo 4(cuatro) caracteres',
-                'country.required' => 'El campo "País" es requerido',
-                'country.min' => 'El campo "País" tiene como mínimo 3(tres) caracteres',
-                'number.required' => 'El campo "Número" es requerido',
-                'number.integer' => 'El campo "Número" es numérico',
-                'number.min' => 'El campo "Número" es como mínimo 1(uno)',
-                'postcode.required' => 'El campo "Código Postal" es requerido',
-                'postcode.integer' => 'El campo "Código Postal" es numérico',
-                'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
-            ]);
             $this->newaddress=new Domiciledelivery;
             $this->newaddress->street=$this->street;
             $this->newaddress->number=$this->number;
