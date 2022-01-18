@@ -59,4 +59,9 @@ class Material extends Model
     {
         return $this->belongsToMany(Warehouse::class, 'deposit_materials', 'material_id', 'warehouse_id');
     }
+    public function reservationmaterials()
+    {
+        return $this->hasMany(ReservationMaterial::class); 
+    }
+    
 }

@@ -278,6 +278,11 @@ return [
             'url'  => 'ordenes-de-ingreso-de-materiales',
             'icon' => 'fas fa-book-open',
         ],
+        [
+            'text' => 'Órdenes de trabajo',
+            'url'  => 'ordenes-de-trabajo',
+            'icon' => 'fas fa-book-open',
+        ],
         ['header' => 'MATERIALES'],
         [
             'text' => 'Materiales',

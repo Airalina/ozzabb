@@ -33,6 +33,10 @@
                             <input class="form-control form-control-sm" type="text" wire:model="usd_price" placeholder="Ingrese precio en dolares (para decimales usar 'punto(.)')">
                         </div>
                         <div class="form-group">
+                          <label>Horas/hombre requeridas</label>
+                          <input class="form-control form-control-sm" type="text" wire:model="hours_man" placeholder="Ingrese horas/hombre de instalación">
+                      </div>
+                        <div class="form-group">
                             <label>Fecha de Ingreso</label>
                             <div class="row">
                                 <div class="col-4">
