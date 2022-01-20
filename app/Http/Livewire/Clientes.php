@@ -138,7 +138,29 @@ class Clientes extends Component
     }
 
     public function storedir(Customer $cliente){
-        
+        $this->validate([
+            'street' => 'required|string|min:4|max:30',
+            'number' => 'required|integer|min:1|max:10000',
+            'location' => 'required|string|min:4|max:30',
+            'province' => 'required|string|min:4|max:30',
+            'country' => 'required|string|min:3|max:30',
+            'postcode' => 'required|integer|min:1|max:100000',
+        ],[
+            'street.required' => 'El campo "Calle" es requerido',
+            'street.min' => 'El campo "Calle" tiene como mínimo 4(cuatro) caracteres',
+            'location.required' => 'El campo "Localidad" es requerido',
+            'location.min' => 'El campo "Localidad" tiene como mínimo 4(cuatro) caracteres',
+            'province.required' => 'El campo "Provincia" es requerido',
+            'province.min' => 'El campo "Provincia" tiene como mínimo 4(cuatro) caracteres',
+            'country.required' => 'El campo "País" es requerido',
+            'country.min' => 'El campo "País" tiene como mínimo 3(tres) caracteres',
+            'number.required' => 'El campo "Número" es requerido',
+            'number.integer' => 'El campo "Número" es un número entero',
+            'number.min' => 'El campo "Número" es como mínimo 1(uno)',
+            'postcode.required' => 'El campo "Código Postal" es requerido',
+            'postcode.integer' => 'El campo "Código Postal" es un número entero',
+            'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
+        ]);  
         DomicileDelivery::create([
             'street' =>$this->street,
             'number' =>$this->number,

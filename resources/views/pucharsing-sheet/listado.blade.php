@@ -33,7 +33,7 @@
                         <th style="text-align: center">Fecha</th>
                         <th style="text-align: center">Cantidad de órdenes</th>
                         <th style="text-align: center">Costo total</th>
-
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -52,6 +52,9 @@
                         <td style="text-align: center">
                             <button type="button" wire:click="explora({{ $purchasing_sheet->id }})" class="btn btn-primary btn-sm"><i
                                 class="fas fa-file-alt"></i> Ver</button>
+                       
+                            <button type="button" wire:click="buy_orders({{ $purchasing_sheet->id }})" class="btn btn-primary btn-sm"><i
+                                class="fas fa-file-alt"></i> Ordenes de compra</button>
                         </td>
                     </tr>
                     @empty

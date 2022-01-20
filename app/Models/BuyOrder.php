@@ -19,7 +19,7 @@ class BuyOrder extends Model
 
     public function buyorderdetails()
     {
-        return $this->hasMany(BuyOrderDetail::class,'id','buy_order_id');
+        return $this->hasMany(BuyOrderDetail::class);
     }
 
     public function provider()
