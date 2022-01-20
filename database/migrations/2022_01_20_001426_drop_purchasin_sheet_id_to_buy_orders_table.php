@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReservationDepositsTable extends Migration
+class DropPurchasinSheetIdToBuyOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateReservationDepositsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reservation_deposits', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('deposit_id');
-            $table->unsignedBigInteger('reservation_material_id');
-            $table->timestamps();
+        Schema::table('buy_orders', function (Blueprint $table) {
+            $table->dropColumn('purchasing_sheet_id');
         });
     }
 
@@ -28,6 +25,8 @@ class CreateReservationDepositsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reservation_deposits');
+        Schema::table('buy_orders', function (Blueprint $table) {
+            //
+        });
     }
 }
