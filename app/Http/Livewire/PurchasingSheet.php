@@ -35,7 +35,7 @@ class PurchasingSheet extends Component
     public $proveedor_name, $material_id, $precio, $subtotalxmaterial;
     public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder, $stmaterial;
     public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
-    public $ordenes_de_compra, $materials, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials;
+    public $ordenes_de_compra, $materials, $buy_orders, $buy_order_details, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials;
     public function render()
     {    $this->months = [1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre' ]; 
         foreach ($this->months as $number_month => $month) {
@@ -307,6 +307,8 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra->purchasing_sheet_id=$ordenes->id;
                 $this->ordenes_de_compra->state=1;
                 $this->ordenes_de_compra->save();
+                $this->ordenes_de_compra->order_number=$this->ordenes_de_compra->id."/".date('Y', strtotime($this->date));
+                $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra_detalle= new BuyOrderDetail;
                 $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
@@ -326,6 +328,8 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra->total_price+=$ordenes->usd_price*$ordenes->amount;
                 $this->ordenes_de_compra->purchasing_sheet_id=$ordenes->id;
                 $this->ordenes_de_compra->state=1;
+                $this->ordenes_de_compra->save();
+                $this->ordenes_de_compra->order_number=$this->ordenes_de_compra->id."/".date('Y', strtotime($this->date));
                 $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra_detalle=new BuyOrderDetail;
                 $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
@@ -392,5 +396,15 @@ class PurchasingSheet extends Component
        #dd($this->pucharsing_sheets_materials);
         $this->funcion="explora";
        #dd($this->ordenes);
+     }
+     public function buy_orders(PucharsingSheet $sheet){
+        $this->buy_orders=$sheet->buyorders;
+        $this->funcion="ordenes";
+        
+     }
+     public function exploraorder(BuyOrder $order){
+        $this->buy_order_details=$order->buyorderdetails;
+        $this->funcion="ordenes_explora";
+        
      }
 }
