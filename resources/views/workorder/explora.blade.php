@@ -214,6 +214,7 @@
                                         cancelados')
                                         <th style="text-align: center">Presentaciones reservadas</th>
                                         <th style="text-align: center">Cantidades reservadas</th>
+                                        <th style="text-align: center">Total</th>
                                         <th></th>
                                         @endif
                                     </tr>
@@ -249,6 +250,18 @@
                                             @else
                                             {{$workorder_material[7]}}
                                             @endif
+                                        </td>
+                                        <td style="text-align: center">
+                                                @if (is_array($workorder_material[8]))
+                                                @foreach ($workorder_material[8] as $amount)
+                                                <div class="row justify-content-center">
+                                                    <div class="pl-2 pr-2 border"> {{ $amount }} </div>
+                                                </div>
+                                                @endforeach
+                                                @else
+                                                {{$workorder_material[8]}}
+                                                @endif
+                                            </td>
                                         </td>
                                         <td>
                                             <div class="d-flex justify-content-center">
