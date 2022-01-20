@@ -1,5 +1,5 @@
 <div>
-    <button wire:click="backlist()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i>
+    <button wire:click="go_to_orders({{$to_order}})" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i>
         Volver</button>
 </div><br>
 <div>
