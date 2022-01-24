@@ -255,7 +255,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Terminales'){
            
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'size' => 'numeric|required',
@@ -305,7 +305,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Cables'){
           
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
 
             $this->validate([
@@ -364,7 +364,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Sellos'){
           
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'minimum_diameter' => 'numeric|required|regex: '.$regex,
@@ -415,7 +415,7 @@ class MaterialComponent extends Component
                 'tube_type' => 'required',
                 'wall_thickness' => 'numeric|required|regex: '.$regex,
                 'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
-                'minimum_temperature' => 'numeric|nullable|regex: '.$regex,
+                'minimum_temperature' => 'numeric|nullable|min:-55|max:9999',
                 'maximum_temperature' => 'numeric|nullable|regex: '.$regex,
             ], [
                 'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
@@ -429,7 +429,8 @@ class MaterialComponent extends Component
                 'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimal',
                 'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
                 'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
-                'minimum_temperature.regex' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
+                'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es como mínimo -55°C',
+                'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
                 'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
                 'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
                 'maximum_temperature.regex' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
@@ -491,7 +492,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Clips'){
           
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'long' => 'numeric|required|regex: '.$regex,
@@ -766,7 +767,7 @@ class MaterialComponent extends Component
             $connector_up->save();
             }
         }elseif($this->family == 'Terminales'){
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'size' => 'numeric|required',
@@ -807,7 +808,7 @@ class MaterialComponent extends Component
             }
             
         }elseif($this->family == 'Cables'){
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'section' => 'numeric|required|regex: '.$regex,
@@ -859,14 +860,14 @@ class MaterialComponent extends Component
             }
 
         }elseif($this->family == 'Tubos'){
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'tube_diameter' => 'numeric|required|regex: '.$regex,
                 'tube_type' => 'required',
                 'wall_thickness' => 'numeric|required|regex: '.$regex,
                 'contracted_diameter' => 'numeric|required|regex: '.$regex,
-                'minimum_temperature' => 'numeric|required|regex: '.$regex,
+                'minimum_temperature' => 'numeric|required|min:-55|max:9999',
                 'maximum_temperature' => 'numeric|required|regex: '.$regex,
             ], [
                 'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
@@ -880,7 +881,8 @@ class MaterialComponent extends Component
                 'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimales',
                 'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
                 'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
-                'minimum_temperature.regex' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
+                'minimum_temperature.min' => 'El campo Temperatura es como mínimo -55°C',
+                'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
                 'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
                 'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
                 'maximum_temperature.regex' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
@@ -910,7 +912,7 @@ class MaterialComponent extends Component
 
             }
         }elseif($this->family == 'Clips'){
-                $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+                $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
     
                 $this->validate([
                     'long' => 'numeric|required|regex: '.$regex,
@@ -948,7 +950,7 @@ class MaterialComponent extends Component
                 $clip_up->save();
                 }
             }elseif($this->family == 'Accesorios'){
-                    $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+                    $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
         
                         $this->validate([
                             'accesory_type' => 'required',
@@ -968,7 +970,7 @@ class MaterialComponent extends Component
                     $accesory_up->save();
                 }
             }else{
-                        $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+                        $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
                         $this->validate([
                             'minimum_diameter' => 'numeric|required|regex: '.$regex,

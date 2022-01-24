@@ -27,6 +27,10 @@
     @case("neworder")
         @livewire('ordenesclientes')
         @break
+
+    @case("exploraorder")
+        @include('cliente.orderdetail')
+        @break
   
   @endswitch
 
