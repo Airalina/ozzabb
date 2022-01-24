@@ -16,9 +16,11 @@ use App\Models\Cable;
 use App\Models\Provider;
 use App\Models\ProviderPrice;
 use App\Models\Price;
+use App\Models\Workorder;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use DB;
 
 class MaterialComponent extends Component
 {
@@ -26,7 +28,7 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false;
+    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array();
 
     public function render()
     {
@@ -40,6 +42,13 @@ class MaterialComponent extends Component
             ->orWhere('stock_max','LIKE','%'.$this->search.'%')
             ->orWhere('stock','LIKE','%'.$this->search.'%')
             ->orderBy($this->order)->paginate($this->paginas);
+
+            $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
+            foreach ($this->materials as $material) {
+                $this->reservations[$material->id] = $material->reservationmaterials()->select('material_id', DB::raw('SUM(amount) as
+                total'))->where('workorder_id', $workorder->id)->first();
+            }
+            
         $this->providers =Provider::where('name','LIKE','%'.$this->searchproviders.'%')
             ->orWhere('address','LIKE','%'.$this->searchproviders.'%')
             ->orWhere('phone','LIKE','%'.$this->searchproviders.'%')
@@ -1107,15 +1116,17 @@ class MaterialComponent extends Component
             $this->term_type=$this->term->type;
         }elseif($this->family == 'Cables'){
             $this->cab = Cable::where('material_id',$material_id->id)->first();
-            $this->cab_id= $this->cab->id;
-            $this->section=$this->cab->section;
-            $this->base_color=$this->cab->base_color;
-            $this->line_color=$this->cab->line_color;
-            $this->braid_configuration=$this->cab->braid_configuration;
-            $this->norm=$this->cab->norm;
-            $this->number_of_unipolar=$this->cab->number_of_unipolar;
-            $this->mesh_type=$this->cab->mesh_type;
-            $this->operating_temperature=$this->cab->operating_temperature;
+            if (!empty($this->cab)) {
+                $this->cab_id= $this->cab->id;
+                $this->section=$this->cab->section;
+                $this->base_color=$this->cab->base_color;
+                $this->line_color=$this->cab->line_color;
+                $this->braid_configuration=$this->cab->braid_configuration;
+                $this->norm=$this->cab->norm;
+                $this->number_of_unipolar=$this->cab->number_of_unipolar;
+                $this->mesh_type=$this->cab->mesh_type;
+                $this->operating_temperature=$this->cab->operating_temperature;
+            }
         }elseif($this->family == 'Tubos'){
             $this->tub = Tube::where('material_id',$material_id->id)->first();
             $this->tub_id= $this->tub->id;

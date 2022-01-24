@@ -54,13 +54,15 @@
                         <th style="text-align: center">Stock Min.</th>
                         <th style="text-align: center">Stock Max.</th>
                         <th style="text-align: center">Stock</th>
+                        <th style="text-align: center">Reservado</th>
+                        <th></th>
                     </tr>
                 </thead>
 
                 <tbody>
 
                     @forelse($materials as $material)
-
+                    @if (!empty($material))
                         <tr class="registros">
                             <td style="text-align: center">{{ $material->code }} </td>
                             <td style="text-align: center">{{ $material->name }} </td>
@@ -84,7 +86,7 @@
                             <td style="text-align: center">{{ $material->stock_min }} </td>
                             <td style="text-align: center">{{ $material->stock_max }} </td>
                             <td style="text-align: center">{{ $material->stock }} </td>
-
+                            <td style="text-align: center">{{ (!empty($reservations[$material->id]->total)) ? $reservations[$material->id]->total : '' }}</td>
                             <td style="text-align: center">
                                 <button type="button" wire:click="explorar({{ $material->id }})"
                                     class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
@@ -98,6 +100,7 @@
                                 @endif
                             </td>
                         </tr>
+                    @endif
                     @empty
                         <tr class="text-center">
                             <td colspan="11" class="py-3 italic">No hay información</td>

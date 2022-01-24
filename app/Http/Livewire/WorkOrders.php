@@ -289,12 +289,15 @@ class WorkOrders extends Component
         foreach ($orders as $order) {
             $this->ordenes[$order->clientorder_id]=$order->clientorder;
         }
+     
         foreach ($details as $detail) {
+            if(isset($detail->material)){
             $this->reservations = $this->workorder->reservationmaterials()->select('presentation','material_id', DB::raw('SUM(amount) as
             total'))->where('material_id',$detail->material->id)->groupBy('presentation')->get();
             foreach ($this->reservations as $index => $reservation) {
                 $presentation[$detail->material->id][$reservation->presentation] = $reservation->presentation;
                 $total[$detail->material->id][$reservation->presentation]= $reservation->total;
+                $total_present[$detail->material->id][$reservation->presentation]=  $reservation->presentation * $reservation->total;
             }
          
                $this->workorder_materials[$detail->material->id]= array(
@@ -306,8 +309,9 @@ class WorkOrders extends Component
                 5 => $detail->amount,
                 6 => (!empty($presentation[$detail->material->id])) ? $presentation[$detail->material->id] : 0,
                 7 => (!empty($total[$detail->material->id])) ? $total[$detail->material->id] : 0,
+                8 => (!empty($total_present[$detail->material->id])) ? $total_present[$detail->material->id] : 0,
             );
-           
+        }
             
         }
         
@@ -323,7 +327,13 @@ class WorkOrders extends Component
     public function change_state(Workorder $workorder, $state){
         $workorder->state = ''.$state.'';
         $workorder->save();
-        return $this->explora($workorder);
+        
+        if ($state == 'Actual') {
+            return $this->funcion="reserva_materiales";
+        }else{
+            return $this->explora($workorder);
+        }
+       
         #$this->emit('refreshState', $workorder);
     }
 
@@ -390,49 +400,50 @@ class WorkOrders extends Component
                 $total = (count($this->eq_reservation) > 0) ? round($this->amount_required/count($this->eq_reservation)) : 0;
                 $contador = 0;
 
-                foreach ($this->eq_reservation as $deposito) {
-                    #$almacen += $deposito->total;
-                    if ($contador < $this->amount_required) {
-                        $this->deposit = array(
-                            'deposit_material' => $deposito->id,
-                            'id' => $deposito->warehouse_id,
-                            'name' => $deposito->warehouse->name,
-                            'type' => $deposito->warehouse->type,
-                            'presentation' => $deposito->presentation,
-                            'amount' => $deposito->total 
-                        );
-                        if (($contador + $total) > $this->amount_required) {
-                            $rest = $this->amount_required-$contador;
-                            $this->amount_deposit[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] = ($deposito->total >= $rest) ? $rest : $deposito->total;
-                          
-                        }else{
-                            $this->amount_deposit[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] = ($deposito->total >= $total) ? $total : $deposito->total;
-                        }
-                        $this->amount_saved[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] = $this->deposit['amount'];
-               
-                        $this->deposits[$deposito->material_id][]=$this->deposit;
-                        #$rest -= $deposito->total;
-                        $contador += $this->amount_deposit[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']];
-                        #$this->amount_required -= $contador;
-                    }
-                }
-            
-               while ($contador < $this->amount_required) {
-                    foreach ($this->deposits[$this->material->id] as $key => $deposito) {
-                        if(($deposito['amount'] - $this->amount_deposit[$this->material->id][$deposito['id']][$deposito['presentation']]) > 0 && $contador < $this->amount_required){
-                            $this->amount_deposit[$this->material->id][$deposito['id']][$deposito['presentation']]++;
-                            $contador++;
-                            $end = false;
-                            }elseif ($contador == $deposito['amount']) {
-                                $end = true;
+                if (count($this->eq_reservation) > 0) {
+                    foreach ($this->eq_reservation as $deposito) {
+                        #$almacen += $deposito->total;
+                        if ($contador < $this->amount_required) {
+                            $this->deposit = array(
+                                'deposit_material' => $deposito->id,
+                                'id' => $deposito->warehouse_id,
+                                'name' => $deposito->warehouse->name,
+                                'type' => $deposito->warehouse->type,
+                                'presentation' => $deposito->presentation,
+                                'amount' => $deposito->total 
+                            );
+                            if (($contador + $total) > $this->amount_required) {
+                                $rest = $this->amount_required-$contador;
+                                $this->amount_deposit[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] = ($deposito->total >= $rest) ? $rest : $deposito->total;
+                              
+                            }else{
+                                $this->amount_deposit[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] = ($deposito->total >= $total) ? $total : $deposito->total;
                             }
+                            $this->amount_saved[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']] = $this->deposit['amount'];
+                   
+                            $this->deposits[$deposito->material_id][]=$this->deposit;
+                            #$rest -= $deposito->total;
+                            $contador += $this->amount_deposit[$deposito->material_id][$deposito->warehouse_id][$this->deposit['presentation']];
+                            #$this->amount_required -= $contador;
+                        }
                     }
-                    if($end){
-                        break;
+                
+                   while ($contador < $this->amount_required) {
+                        foreach ($this->deposits[$this->material->id] as $key => $deposito) {
+                            if(($deposito['amount'] - $this->amount_deposit[$this->material->id][$deposito['id']][$deposito['presentation']]) > 0 && $contador < $this->amount_required){
+                                $this->amount_deposit[$this->material->id][$deposito['id']][$deposito['presentation']]++;
+                                $contador++;
+                                $end = false;
+                                }elseif ($contador == $deposito['amount']) {
+                                    $end = true;
+                                }
+                        }
+                        if($end){
+                            break;
+                        }
                     }
                 }
                 
-
                 break;
 
             case 'Personalizado':
@@ -506,6 +517,8 @@ class WorkOrders extends Component
                         'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'' => 'integer|min:0|max:'.$this->amount_saved[$this->material_id][$depositos['id']][$presentation],
                         
                     ], [
+                        'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.max' => 'El valor del campo cantidad debe ser un número entero',
+                        'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.min' => 'El valor mínimo disponible para el depósito '.$depositos['name'].' para la presentación '.$presentation.' es de: 0',
                         'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.max' => 'El valor máximo disponible para el depósito '.$depositos['name'].' para la presentación '.$presentation.' es de: '.$this->amount_saved[$this->material_id][$depositos['id']][$presentation],
                     ]);
                 }
@@ -551,7 +564,12 @@ class WorkOrders extends Component
         $this->resetValidation();
         $this->dispatchBrowserEvent('hide-form');
             unset($this->deposits[$this->material_id]);
-            return $this->explora($this->workorder);
+            
+            if ($this->funcion == 'explora') {
+                return $this->explora($this->workorder);
+            }else{
+                return $this->reservations($this->workorder);
+            }
         }
         
         #dd($this->amount_deposit);
@@ -1046,16 +1064,17 @@ class WorkOrders extends Component
         if (!empty($ingreso)) {
             $this->workorder->state = 'Actual con pedidos cancelados';
             $this->workorder->save();
-            $this->orden->order_state = 7;
-            $this->orden->save();  
-            /* Eliminar de reservar, esta por ver 
+           /* $this->orden->order_state = 7;
+            $this->orden->save(); */  
+            // Eliminar de reservar 
             foreach($this->orden->orderdetails as $detailorder){
                 foreach($detailorder->installations as $installation){ 
                     $countrevision=$installation->revisions->count()-1;
                     $revision=$installation->revisions()->orderBy('number_version','desc')->first();
                     foreach($installation->revisiondetails as $revisiondetail){
                         $material=$revisiondetail->materials;
-                        
+                       
+
                         if (!isset($this->pucharsings[$material->id])) {
                             foreach($this->pucharsings as $order){
                                 if($order[1]==$material->code)
@@ -1064,24 +1083,32 @@ class WorkOrders extends Component
                                     #unset($this->pucharsings[$order[0]]);
                                 }
                             }
-                            $reservaciones = $material->reservationmaterials()->select('presentation','material_id', DB::raw('SUM(amount) as
+      
+                            $reservaciones = $material->reservationmaterials()->select('id','presentation','material_id', DB::raw('SUM(amount) as
                             total'))->where('workorder_id', $this->workorder->id)->groupBy('presentation')->get();
-                           
+                            $amount[$material->id] = $revisiondetail->amount*$detailorder->cantidad;
+
+                            
                             foreach ($reservaciones as $key => $reservacion) {
-                                $reservation = new ReservationMaterial;
+                                
+                                $reservation = ReservationMaterial::find($reservacion->id); 
                                 $reservation->material_id=$reservacion->material_id;
                                 $reservation->workorder_id=$this->workorder->id;
                                 $reservation->presentation=$reservacion->presentation;
-                                $reservation->amount=$reservacion->total-($revisiondetail->amount*$detailorder->cantidad);
+                                $reservation->amount = ($reservacion->total > $amount[$reservacion->material_id]) ? $reservacion->total-$amount[$reservacion->material_id] : $reservacion->total;
                                 $reservation->save();
+
+                                $material_up = Material::find($reservacion->material_id);
+                                $material_up->stock += $amount[$reservacion->material_id];
+                                $material_up->save();
                             }
-                            
+                           
                             $this->prueba=0;
                         }
                            
                     }
                 }
-            }  */
+            }  
             $this->resetValidation();
             $this->funcion = 'explora';
             return $this->ordenes[$this->orden->id]['order_state'] = 7;
@@ -1189,5 +1216,38 @@ class WorkOrders extends Component
         $this->funcion="";
     }
 
-   
+ public function reservations(Workorder $workorder){
+    $orders = $workorder->workorder_orders;
+    $details = $workorder->workorder_details;
+    $this->workorder = $workorder;
+
+    $this->disabled = ($workorder->state != 'Nueva' || isset($workorder_actual)) ? 'disabled' : '';
+
+    foreach ($details as $detail) {
+        $this->reservations = $this->workorder->reservationmaterials()->select('presentation','material_id', DB::raw('SUM(amount) as
+        total'))->where('material_id',$detail->material->id)->groupBy('presentation')->get();
+        foreach ($this->reservations as $index => $reservation) {
+            $presentation[$detail->material->id][$reservation->presentation] = $reservation->presentation;
+            $total[$detail->material->id][$reservation->presentation]= $reservation->total;
+            $total_present[$detail->material->id][$reservation->presentation]=  $reservation->presentation * $reservation->total;
+        }
+     
+           $this->workorder_materials[$detail->material->id]= array(
+            0 => $detail->material->id,
+            1 => $detail->material->code,
+            2 => $detail->material->description,
+            3 => $detail->material->stock,
+            4 => $detail->material->stock_transit,
+            5 => $detail->amount,
+            6 => (!empty($presentation[$detail->material->id])) ? $presentation[$detail->material->id] : 0,
+            7 => (!empty($total[$detail->material->id])) ? $total[$detail->material->id] : 0,
+            8 => (!empty($total_present[$detail->material->id])) ? $total_present[$detail->material->id] : 0,
+        );
+       
+        
+    }
+    
+  #  dd($this->presentation);
+   $this->funcion="reserva_materiales";
+ }
 }
