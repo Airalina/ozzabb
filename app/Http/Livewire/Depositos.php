@@ -42,7 +42,7 @@ class Depositos extends Component
         $this->buyorders=BuyOrder::where('id','LIKE','%'.$this->searchorderbuy.'%')
             ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('purchasing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('pucharsing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderByDesc('state')->get();
         $this->ensamblados=Assembled::where('id','like','%'.$this->searchensamblados.'%')
