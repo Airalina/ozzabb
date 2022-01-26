@@ -23,4 +23,10 @@ class MaterialEntryOrder extends Model
     {
         return $this->belongsTo(BuyOrder::class, 'buy_order_id');
     }
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class);
+    }
+   
+    
 }

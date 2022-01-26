@@ -31,6 +31,19 @@
         </div>
         <div class="card-body table-responsive">
             <table class="table table-head  table-sm">
+                <div class="form-group" data-select2-id="45">
+                    <label>Ordenar por</label>
+                    <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible"
+                        style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option data-select2-id="47" value="buy_order_id">Orden de compra</option>
+                        <option data-select2-id="48" value="follow_number">N° de remito</option>
+                        <option data-select2-id="49" value="provider">Proveedor</option>
+                        <option data-select2-id="49" value="origin">Origen</option>
+                        <option data-select2-id="49" value="reason">Causa</option>
+                        <option data-select2-id="49" value="date">Fecha</option>
+                        <option data-select2-id="49" value="hour">Hora</option>
+                    </select>
+                </div>
                 <thead>
                     <tr>
                         <th style="text-align: center">Orden de ingreso #</th>

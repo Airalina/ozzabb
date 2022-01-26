@@ -32,22 +32,28 @@ class MaterialComponent extends Component
 
     public function render()
     {
-        $this->materials = Material::where('code','like','%'.$this->search.'%')
-            ->orWhere('name','LIKE','%'.$this->search.'%')
-            ->orWhere('family','LIKE','%'.$this->search.'%')
-            ->orWhere('color','LIKE','%'.$this->search.'%')
-            ->orWhere('description','LIKE','%'.$this->search.'%')
-            ->orWhere('replace_id','LIKE','%'.$this->search.'%')
-            ->orWhere('stock_min','LIKE','%'.$this->search.'%')
-            ->orWhere('stock_max','LIKE','%'.$this->search.'%')
-            ->orWhere('stock','LIKE','%'.$this->search.'%')
-            ->orderBy($this->order)->paginate($this->paginas);
+        $mats = Material::where('code','like','%'.$this->search.'%')
+        ->orWhere('name','LIKE','%'.$this->search.'%')
+        ->orWhere('family','LIKE','%'.$this->search.'%')
+        ->orWhere('color','LIKE','%'.$this->search.'%')
+        ->orWhere('description','LIKE','%'.$this->search.'%')
+        ->orWhere('replace_id','LIKE','%'.$this->search.'%')
+        ->orWhere('stock_min','LIKE','%'.$this->search.'%')
+        ->orWhere('stock_max','LIKE','%'.$this->search.'%')
+        ->orWhere('stock','LIKE','%'.$this->search.'%')
+        ->orderBy($this->order);
 
-            $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
-            foreach ($this->materials as $material) {
-                $this->reservations[$material->id] = $material->reservationmaterials()->select('material_id', DB::raw('SUM(amount) as
-                total'))->where('workorder_id', $workorder->id)->first();
-            }
+        $this->materials = $mats->paginate($this->paginas);
+        
+        $reservations_materials = $mats->get();
+        $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
+               
+            if (!empty($reservations_materials) && !empty($workorder)) {
+                foreach ($reservations_materials as $material) {
+                    $this->reservations[$material->id] = $material->reservationmaterials()->select('material_id', DB::raw('SUM(amount) as
+                    total'))->where('workorder_id', $workorder->id)->first();
+                }
+            }            
             
         $this->providers =Provider::where('name','LIKE','%'.$this->searchproviders.'%')
             ->orWhere('address','LIKE','%'.$this->searchproviders.'%')
