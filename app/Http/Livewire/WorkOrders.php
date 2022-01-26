@@ -689,7 +689,7 @@ class WorkOrders extends Component
                 $ordenes_de_compra->buy_date=$date;
                 $ordenes_de_compra->provider_id=$ordenes->provider_id;
                 $ordenes_de_compra->total_price+=$ordenes->usd_price*$ordenes->amount;
-                $ordenes_de_compra->purchasing_sheet_id=$ordenes->id;
+                $ordenes_de_compra->pucharsing_sheet_id=$ordenes->id;
                 $ordenes_de_compra->state=1;
                 $ordenes_de_compra->save();
                 $ordenes_de_compra_detalle= new BuyOrderDetail;

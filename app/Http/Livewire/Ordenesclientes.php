@@ -54,6 +54,8 @@ class Ordenesclientes extends Component
         ->orWhere('customer_id','LIKE','%'.$this->search.'%')
         ->orWhere('customer_name','LIKE','%'.$this->search.'%')
         ->orWhere('date','LIKE','%'.$this->search.'%')
+        ->orWhere('usd_price','LIKE','%'.$this->search.'%')
+        ->orWhere('arp_price','LIKE','%'.$this->search.'%')
         ->orWhere('deadline','LIKE','%'.$this->search.'%')
         ->orWhere('start_date','LIKE','%'.$this->search.'%')
         ->orWhere('buys','LIKE','%'.$this->search.'%')
@@ -67,7 +69,6 @@ class Ordenesclientes extends Component
 
     public function storepedido()
     {
-       
         $this->usd_price=$this->total;
         $this->arp_price=$this->total*$this->usd;
         if($this->addaddress==true){
@@ -94,6 +95,15 @@ class Ordenesclientes extends Component
                 'postcode.integer' => 'El campo "Código Postal" es un número entero',
                 'postcode.min' => 'El campo "Código Postal" es como mínimo 1(uno)', 
             ]);
+            $this->newaddress=new Domiciledelivery;
+            $this->newaddress->street=$this->street;
+            $this->newaddress->number=$this->number;
+            $this->newaddress->location=$this->location;
+            $this->newaddress->province=$this->province;
+            $this->newaddress->country=$this->country;
+            $this->newaddress->postcode=$this->postcode;
+            $this->newaddress->client_id=$this->customer_id;
+            $this->newaddress->save();
         }
         $this->validate([
             'usd_price' => 'required|numeric|min:0|max:1000000000',
@@ -121,37 +131,10 @@ class Ordenesclientes extends Component
         $this->order->buys=1;
         $this->order->usd_price = $this->usd_price;
         $this->order->arp_price = $this->arp_price;
-        $this->order->save();
-        foreach($this->details as $detail){
-            $this->cantidad=$detail[2];
-            $this->validate([
-                'cantidad' => 'required|integer|min:0',
-            ],[
-                'cantidad.required' => 'El campo "Cantidad" es requerido',
-                'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
-                'cantidad.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
-                'cantidad.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
-            ]);
-            $this->newdetail=new Orderdetail;
-            $this->newdetail->clientorder_id=$this->order->id;
-            $this->newdetail->installation_id=$detail[0];
-            $this->newdetail->unit_price_usd=$detail[1];
-            $this->newdetail->cantidad=$this->cantidad;
-            $this->newdetail->save();
-        }
         if($this->addaddress==true){
-            $this->newaddress=new Domiciledelivery;
-            $this->newaddress->street=$this->street;
-            $this->newaddress->number=$this->number;
-            $this->newaddress->location=$this->location;
-            $this->newaddress->province=$this->province;
-            $this->newaddress->country=$this->country;
-            $this->newaddress->postcode=$this->postcode;
-            $this->newaddress->client_id=$this->customer_id;
-            $this->newaddress->save();
-            $this->addadress=false;
             $this->order->deliverydomicile_id=$this->newaddress->id;
             $this->order->save();
+            $this->addadress=false;
         }else{
             if($this->address_id==null){
             $this->order->deliverydomicile_id=$this->address->first()->id;
@@ -161,9 +144,27 @@ class Ordenesclientes extends Component
             $this->order->save();
             }
         }
+        if($this->details){
+            foreach($this->details as $detail){
+                $this->cantidad=$detail[2];
+                $this->validate([
+                    'cantidad' => 'required|integer|min:0',
+                ],[
+                    'cantidad.required' => 'El campo "Cantidad" es requerido',
+                    'cantidad.integer' => 'El campo "Cantidad" debe ser un entero',
+                    'cantidad.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
+                    'cantidad.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millon)',
+                ]);
+                $this->newdetail=new Orderdetail;
+                $this->newdetail->clientorder_id=$this->order->id;
+                $this->newdetail->installation_id=$detail[0];
+                $this->newdetail->unit_price_usd=$detail[1];
+                $this->newdetail->cantidad=$this->cantidad;
+                $this->newdetail->save();
+            }
+        }
         $this->cantidad=0;
-        $this->explora($this->order);
-
+        $this->funcion="list";
     }
     public function selectinstallation(Installation $install)
     {
@@ -295,10 +296,14 @@ class Ordenesclientes extends Component
     {
         $this->addaddress=true;
     }
-
-    public function deleteorder(Clientorder $order)
+    public function destruir(Clientorder $order)
     {
-        $order->delete();
+            $this->dispatchBrowserEvent('show-borrar');
+            $this->order=$order;
+    }
+    public function delete()
+    {
+        $this->order->delete();
         return redirect()->to('pedidos');
     }
 

@@ -32,4 +32,12 @@
             $('#form').modal('hide');
         })
     </script>
+    <script>
+        window.addEventListener('show-borrar', event => {
+            $('#borrar').modal('show');
+        })
+        window.addEventListener('hide-borrar', event => {
+            $('#borrar').modal('hide');
+        })
+    </script>
  @stop
