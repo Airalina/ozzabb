@@ -74,7 +74,7 @@
                           <button type="button" wire:click="update({{ $order->id }})" class="btn btn-success btn-sm"> Actualizar</button>
                         @endif
                         @if (auth()->user()->can('deletepedidos', auth()->user()))
-                        <button wire:click="deleteorder({{ $order->id }})" type="button" class="btn btn-danger btn-sm">Borrar</button>
+                        <button wire:click="destruir({{ $order->id }})" type="button" class="btn btn-danger btn-sm">Borrar</button>
                         @endif
                       @endif
                       </td>      
@@ -90,4 +90,5 @@
               </div>
               <!-- /.card-body -->
             </div>
+            @include('borrar')
 </div>

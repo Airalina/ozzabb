@@ -542,13 +542,23 @@
         <div class="modal-dialog" role="document">
             <form wire.submit.prevent="addmaterial">
                 <div class="modal-content">
+                    
                     <div class="modal-header">
                         <h5 class="modal-title">Ingreso material</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
-                        </button>
+                        </button>    
                     </div>
                     <div class="modal-body">
+                    @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                        @endif
                         @if($type==3 || $selection != 'Materiales')
                         <div class="form-group">
                             <p><label>Codigo: </label> {{$material_id}}</p>

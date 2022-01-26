@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Clientorder;
 use App\Models\Orderdetail;
 use App\Models\Installation;
+use App\Models\Revision;
 use App\Models\Revisiondetail;
 use App\Models\Material;
 use App\Models\DepositMaterial;

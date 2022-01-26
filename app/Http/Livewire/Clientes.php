@@ -186,6 +186,12 @@ class Clientes extends Component
         }
     }
 
+    public function orderdetail(Clientorder $order){
+        $this->historial=$order->orderdetails;
+        $this->explora='inactivo';
+        $this->funcion="exploraorder";
+    }
+
     public function update(Customer $cliente)
     { 
         $this->idcli=$cliente->id;
