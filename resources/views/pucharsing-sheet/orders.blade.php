@@ -23,7 +23,7 @@
                                     <tr>
                                         <td style="text-align: center">{{ $order->order_number }}</td>
                                         <td style="text-align: center">{{ $order->provider->name }}</td>
-                                        <td style="text-align: center">{{ $order->buy_date }}</td>
+                                        <td style="text-align: center">{{ date('d-m-Y H:i', strtotime($order->buy_date))  }}</td>
                                         <td style="text-align: center">{{ count($order->buyorderdetails) }}</td>
                                         <td style="text-align: center">{{ $order->total_price }}</td>
                                         <td style="text-align: center">

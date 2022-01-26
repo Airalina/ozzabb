@@ -27,6 +27,15 @@
         <!-- /.card-header -->
         <div class="card-body table-responsive">
             <table class="table table-head  table-sm">
+                <div class="form-group" data-select2-id="45">
+                    <label>Ordenar por</label>
+                    <select wire:model="order_list" class="form-control select2bs4 select2-hidden-accessible"
+                        style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option data-select2-id="47" value="id">ID</option>
+                        <option data-select2-id="48" value="date">Fecha</option>
+                        <option data-select2-id="49" value="usd_total_price">Costo total</option>
+                    </select>
+                </div>
                 <thead>
                     <tr>
                         <th style="text-align: center">ID</th>
