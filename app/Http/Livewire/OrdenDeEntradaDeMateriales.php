@@ -11,6 +11,7 @@ use App\Models\DepositMaterial;
 use App\Models\BuyOrder;
 use App\Models\BuyOrderDetail;
 use App\Models\BuyOrderMaterialEntryOrder;
+use App\Models\Provider;
 use Livewire\WithPagination;
 use Carbon\Carbon;
 
@@ -20,7 +21,7 @@ class OrdenDeEntradaDeMateriales extends Component
     protected $paginationTheme = 'bootstrap';
     protected $orders, $buyorders;
     public  $material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy="", $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false, $code_m, $description_m, $presentation_m, $id_m, $deposit_m;
-    public $orderdetails,$entry_orderbuy, $smaterial, $entry_order_id, $entry_order_type , $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present;
+    public $orderdetails,$entry_orderbuy, $smaterial, $entry_order_id, $entry_order_type , $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present, $select_depo = array(), $filtro = '';
   
 
     public function updatingSearch()
@@ -31,14 +32,25 @@ class OrdenDeEntradaDeMateriales extends Component
     
     public function render()
     {
-        $this->orders=MaterialEntryOrder::where('id','LIKE','%' . $this->searchordenesem . '%')
-        ->orWhere('buy_order_id','LIKE','%'.$this->searchordenesem.'%')
-        ->orWhere('follow_number','LIKE','%'.$this->searchordenesem.'%')
-        ->orWhere('origin','LIKE','%'.$this->searchordenesem.'%')
-        ->orWhere('reason','LIKE','%'.$this->searchordenesem.'%')
-        ->orWhere('date','LIKE','%'.$this->searchordenesem.'%')
-        ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderBy('buy_order_id','desc')->paginate($this->paginas);
-       
+        $fecha = date('Y-m-d', strtotime($this->searchordenesem));
+
+        if ($this->filtro == 'Proveedor') {
+            #dd($a[0]->buyorders[0]->entry);
+            $this->orders=Provider::has('buyorders')->where('name','LIKE','%'.$this->searchordenesem.'%')->paginate($this->paginas);
+        }else{
+            $this->orders=MaterialEntryOrder::where('id','LIKE','%' . $this->searchordenesem . '%')
+            ->orWhere('buy_order_id','LIKE','%'.$this->searchordenesem.'%')
+            ->orWhere('follow_number','LIKE','%'.$this->searchordenesem.'%')
+            ->orWhere('origin','LIKE','%'.$this->searchordenesem.'%')
+            ->orWhere('reason','LIKE','%'.$this->searchordenesem.'%')
+            ->orWhere('date','LIKE','%'.$fecha.'%')
+            ->orWhereDay('date','LIKE','%'.$this->searchordenesem.'%')
+            ->orWhereMonth('date','LIKE','%'.$this->searchordenesem.'%')
+            ->orWhereYear('date','LIKE','%'.$this->searchordenesem.'%')
+            ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderBy('buy_order_id','desc')->paginate($this->paginas);
+    
+        }
+
         $this->depositos=Warehouse::where('type', 1)->get();
         $this->orderdetails=MaterialEntryOrderDetail::where('entry_order_id', $this->entry_order_id)->get();
         $this->materiales=Material::where('code','like','%'.$this->searchmateriales.'%')
@@ -52,7 +64,7 @@ class OrdenDeEntradaDeMateriales extends Component
         $this->buyorders=BuyOrder::where('id','LIKE','%' . $this->searchorderbuy . '%')
             ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('purchasing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('pucharsing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderBy('state','desc')->paginate($this->paginas1);
         return view('livewire.orden-de-entrada-de-materiales',[
             'orders' => $this->orders,
@@ -284,18 +296,15 @@ class OrdenDeEntradaDeMateriales extends Component
 
         }else{
                 
-            $this->id_warehouse = Warehouse::where('id', 1)->first();
-            if(is_null($this->id_warehouse)){
-                $this->id_warehouse = Warehouse::find(1);
-            }
+            #$this->id_warehouse = Warehouse::where('id', 1)->first();
             $this->detail[0]=$material->code;
             $this->detail[1]=$material->description;
             $this->detail[4]=$material->id;
             $this->detail[2]=$this->received_amount[$material->id];
             $this->detail[3]=$material->count;
             $this->detail[5]=$this->requested_presentation[$material->id];
-            if($this->id_warehouse){
-                $this->detail[6]=$this->id_warehouse->id;
+            if(!empty($this->select_depo[$material->id])){
+                $this->detail[6]=$this->select_depo[$material->id];
             }else{
                 $this->detail[6]="";
             }
@@ -390,7 +399,7 @@ class OrdenDeEntradaDeMateriales extends Component
             $this->requested_presentation[$orderDetail->material_id] = $orderDetail->presentation;
             $this->difference[$orderDetail->material_id] = $this->received_amount[$orderDetail->material_id]-$orderDetail->amount;
         }
-        if(isset($this->received_amount[$orderDetail->material_id]) && isset($this->refer_amount[$orderDetail->material_id])){
+        if(isset($this->received_amount[$orderDetail->material_id]) && isset($this->refer_amount[$orderDetail->material_id]) && isset($this->select_depo[$orderDetail->material_id])){
             $this->addmaterial($this->material_order);
         }
        
