@@ -42,7 +42,7 @@ class Depositos extends Component
         $this->buyorders=BuyOrder::where('id','LIKE','%'.$this->searchorderbuy.'%')
             ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('purchasing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('pucharsing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderByDesc('state')->get();
         $this->ensamblados=Assembled::where('id','like','%'.$this->searchensamblados.'%')
@@ -172,6 +172,7 @@ class Depositos extends Component
                 'name' => 'required|string|min:4|max:100',
                 'location' => 'required|string|min:4|max:300',
                 'descriptionw' => 'required|string|min:4|max:300',
+                'create_date'=>'required',
             ],
             [
                 'name.required' => 'El campo Nombre es requerido',
@@ -180,8 +181,10 @@ class Depositos extends Component
                 'location.required' => 'El campo Ubicación es requerido',
                 'location.min' => 'El campo Ubicación tiene como minimo 4 caracteres',
                 'location.max' => 'El campo Ubicación tiene como maximo 300 caracteres',
+                'descriptionw.required'=>"El campo Descripción es requerido",
                 'descriptionw.min' => 'El campo Descripción tiene como minimo 4 caracteres',
                 'descriptionw.max' => 'El campo Descripción tiene como maximo 300 caracteres',
+                'create_date.required'=>'El campo Fecha es requerido',
             ]);
             $this->deposito=new Warehouse;
             $this->deposito->name=$this->name;
@@ -878,8 +881,8 @@ class Depositos extends Component
         $this->deposito_id=$deposito->id;
         $this->materialesdepo=DepositMaterial::where('is_material', true)->where('warehouse_id', $this->deposito_id)->get();
         $this->ensambladosdepo=DepositMaterial::where('is_material', false)->where('warehouse_id', $this->deposito_id)->get();
-        if( ($this->materialesdepo->count()==0) && ($this->ensambladosdepo->count()==0)  && ($this->instalacionesdepo->count()==0)){
-            $this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->get();
+        $this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->get();
+        if( ($this->materialesdepo==null && $this->ensambladosdepo==null) && count($this->instalacionesdepo)==0){
             $deposito->delete();
         }
     }

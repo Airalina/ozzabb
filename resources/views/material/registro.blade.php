@@ -40,6 +40,7 @@
                     <label for="color">Color</label>
                     <select class="form-control form-control-sm" wire:model="color" id="color">
                         <option selected value="">Selecciona un color</option>
+                        <option value="Transparente">Transparente</option>
                         <option value="Negro" class="text-dark">Negro</option>
                         <option value="Blanco">Blanco</option>
                         <option value="Rojo" class="text-danger">Rojo</option>
@@ -72,6 +73,7 @@
                     <select wire:model="usage" id="usage" class="form-control form-control-sm">
                             <option selected>Selecciona un uso</option>
                             <option value="Motos">Motos</option>
+                            <option value="GNC">General</option>
                             <option value="GNC">GNC</option>
                             <option value="Electro">Electro</option>
                     </select>

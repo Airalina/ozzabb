@@ -109,12 +109,13 @@
                       <th>Fecha de Inicio</th>
                       <th>Estado</th>
                       <th>Precio Total U$D</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
                   @forelse($historial as $historia)
                 <tr class="registros">
-                      <td style="text-align: center">{{ $historia->id }}/2021</td>
+                      <td style="text-align: center">{{ $historia->id }}/{{Carbon\Carbon::parse($historia->date)->format('Y')}}</td>
                       <td style="text-align: center">{{ Carbon\Carbon::parse($historia->date)->format('d/m/Y') }}</td>
                       <td style="text-align: center">{{ $historia->deadline->format('d/m/Y') }}</td>
                       <td style="text-aling: center">{{ Carbon\Carbon::parse($historia->start_date)->format('d/m/Y') }}</td>
@@ -132,6 +133,7 @@
                         <td style="text-align: center"> En Depósito</td> 
                       @endif
                       <td style="text-align: center">{{ $historia->usd_price }} U$D</td>
+                      <td style="text-align: center"><button wire:click="orderdetail({{ $historia->id }})" type="button" class="btn btn-primary btn-sm">Ver detalle</button></td>
                 </tr>
               @empty
                 <tr class="text-center">

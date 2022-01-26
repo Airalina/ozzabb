@@ -52,7 +52,7 @@ class OrdenDeEntradaDeMateriales extends Component
         $this->buyorders=BuyOrder::where('id','LIKE','%' . $this->searchorderbuy . '%')
             ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('purchasing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('pucharsing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderBy('state','desc')->paginate($this->paginas1);
         return view('livewire.orden-de-entrada-de-materiales',[
             'orders' => $this->orders,
