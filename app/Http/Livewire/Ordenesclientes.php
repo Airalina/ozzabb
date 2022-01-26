@@ -69,9 +69,7 @@ class Ordenesclientes extends Component
 
     public function storepedido()
     {
-        $this->usd_price=$this->total;
-        $this->arp_price=$this->total*$this->usd;
-        if($this->addaddress==true){
+        if($this->addaddress){
             $this->validate([
                 'street' => 'required|string|min:4|max:30',
                 'number' => 'required|integer|min:1|max:10000',
@@ -106,21 +104,12 @@ class Ordenesclientes extends Component
             $this->newaddress->save();
         }
         $this->validate([
-            'usd_price' => 'required|numeric|min:0|max:1000000000',
-            'arp_price' => 'required|numeric|min:0|max:1000000000',
-            'customer_id' => 'required',
+            'deadline' => 'required',
         ],[
-            'customer_id.required' => 'Es Necesario que se seleccione un cliente y su dirección',
-            'usd_price.required' => 'El campo "Precio U$D" es requerido',
-            'arp_price.required' => 'El campo "Precio AR$" es requerido',
-            'usd_price.numeric' => 'El campo "Precio U$D" es numérico',
-            'arp_price.numeric' => 'El campo "Precio AR$" es numérico',
-            'usd_price.min' => 'El campo "Precio U$D" es como mínimo 0(cero)',
-            'arp_price.min' => 'El campo "Precio AR$" es como mínimo 0(cero)',
-            'usd_price.max' => 'El campo "Precio U$D" es como máximo 100000000(cien millones)',
-            'arp_price.max' => 'El campo "Precio AR$" es como máximo 100000000(cien millones)',
-
+            'deadline.required' => 'El campo "Fecha estimada de entrega" es requerido',
         ]);
+        $this->usd_price=$this->total;
+        $this->arp_price=$this->total*$this->usd;
         $this->date=Carbon::now();
         $this->order=new Clientorder;
         $this->order->customer_id = $this->customer_id;
