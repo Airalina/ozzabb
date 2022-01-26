@@ -48,53 +48,57 @@
                         <th style="text-align: center">Descripción</th>
                         <th style="text-align: center">Presentación</th>
                         <th style="text-align: center">Cantidad</th>
-                        <th style="text-align: center">Total
-                        <th>
+                        <th style="text-align: center">Total</th>
+                        <th style="text-align: center">Reservado</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($materials_assembleds as $product)
                     <tr>
-                        @if ($product->is_material == 1)
+                        @if ($product->is_material == 1 && !empty($product->materials))
                         <td style="text-align: center">{{ $product->id }}</td>
-                        <td style="text-align: center">{{ (!empty($product->materials)) ? $product->materials->code : '' }}</td>
-                        <td style="text-align: center">{{ (!empty($product->materials)) ? $product->materials->description : '' }}</td>
+                        <td style="text-align: center">{{  $product->materials->code }}</td>
+                        <td style="text-align: center">{{  $product->materials->description }}</td>
                         <td style="text-align: center">
-                            @if (!empty($product->materials))
                             @foreach ($presentations[$product->materials->id] as $presentation)
                             <div class="row justify-content-center">
                                 <div class="col-6 border"> {{ $presentation->presentation }} </div>
                             </div>
                             @endforeach
-                            @endif
                         </td>
                         <td style="text-align: center">
-                            @if (!empty($product->materials))
                             @foreach ($amounts[$product->materials->id] as $amount)
                             <div class="row justify-content-center">
                                 <div class="col-6 border"> {{ $amount->total }} </div>
                             </div>
                             @endforeach
-                            @endif
                         </td>
                         <td style="text-align: center">
-                            @if (!empty($product->materials))
                             @foreach ($totals[$product->materials->id] as $total)
                             <div class="row justify-content-center">
                                 <div class="col-6 border"> {{ $total }} </div>
                             </div>
                             @endforeach
-                            @endif
                         </td>
-                        @else
-                            <td style="text-align: center">{{ $product->id }}</td>
-                            <td style="text-align: center">{{ $product->assembleds->id }}</td>
-                            <td style="text-align: center">{{ $product->assembleds->description }}</td>
-                            <td style="text-align: center">Ensamblado</td>
+                        <td style="text-align: center">
+                            @foreach ($reservations[$product->materials->id] as $reservation)
+                            <div class="row justify-content-center">
+                                <div class="col-6 border"> {{ (!empty($reservation->id)) ? $reservation->total * $reservation->presentation : '-' }} </div>
+                            </div>
+                            @endforeach
+                        </td>
+                        @elseif (!empty($product->assembleds) && $product->is_material == 0)
+                        <td style="text-align: center">{{ $product->id }}</td>
+                        <td style="text-align: center">{{ $product->assembleds->id }}</td>
+                        <td style="text-align: center">{{ $product->assembleds->description }}</td>
+                        <td style="text-align: center">Ensamblado</td>
+                        @if (!empty($total[$product->assembleds->id]))
                             @foreach ($total[$product->assembleds->id] as $cant)
                             <td style="text-align: center">{{ $cant['total'] }}</td>
                             <td style="text-align: center">{{ $cant['total'] }}</td>
-                            @endforeach
+                            @endforeach 
+                        @endif
                         @endif
                     </tr>
                     @empty

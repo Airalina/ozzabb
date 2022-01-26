@@ -30,7 +30,11 @@
       @case("createproduct")
           @include("workorder.createproduct")
           @break
-          
+    
+      @case("reserva_materiales")
+          @include("workorder.reservar")
+          @break
+
     @endswitch
   
     
