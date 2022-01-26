@@ -123,7 +123,7 @@
                 <p>{{ $subtotal }}</p>
                 <label>IVA(%)</label>
                 <input class="form-control form-control-sm" type="number" wire:model="iva" 
-                    placeholder="IVA" style="width: 60px;">
+                    placeholder="IVA" style="width: 60px;" disabled>
                 <label>Precio total</label>
 
                 <p>{{$total_price}}</p>

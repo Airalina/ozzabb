@@ -35,7 +35,7 @@ class PurchasingSheet extends Component
     public $proveedor_name, $material_id, $precio, $subtotalxmaterial;
     public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder, $stmaterial;
     public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
-    public $ordenes_de_compra, $materials, $buy_orders, $buy_order_details,$to_order, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials;
+    public $ordenes_de_compra, $materials, $buy_orders, $buy_order_details,$to_order, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials, $order_list = 'id';
     public function render()
     {    $this->months = [1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre' ]; 
         foreach ($this->months as $number_month => $month) {
@@ -43,7 +43,16 @@ class PurchasingSheet extends Component
             $this->searchMounth =  $number_month;
            } 
         }
-        $this->orders = Clientorder::where('id','LIKE','%'.$this->search.'%')
+
+        $array = explode('-',$this->searchP);
+        $year = (!empty($array[2])) ? $array[2] : '';
+        $month =  (!empty($array[1])) ? $array[1] : '';
+        $day =  (!empty($array[0])) ? $array[0] : '';
+        $fecha = $year.'-'.$month.'-'.$day;
+
+        $code = explode('/',$this->search);
+
+        $this->orders = Clientorder::where('id','LIKE','%'.$code[0].'%')
         ->orWhere('customer_name','LIKE','%'.$this->search.'%')
         ->orWhereMonth('date', $this->searchMounth)
         ->orWhereDay('date',  $this->search)
@@ -55,11 +64,17 @@ class PurchasingSheet extends Component
         ->orWhere('description','LIKE','%'.$this->search.'%')
         ->orWhere('replace_id','LIKE','%'.$this->search.'%')->get();
         $this->purchasing_sheets = PucharsingSheet::where('id','LIKE','%'.$this->searchP.'%')
-        ->orWhere('date','LIKE','%'.$this->searchP.'%')
+        ->orWhere('date','LIKE','%'.$fecha.'%')
+        ->orWhereDay('date','LIKE','%'.$this->searchP.'%')
+        ->orWhereMonth('date','LIKE','%'.$this->searchP.'%')
+        ->orWhereYear('date','LIKE','%'.$this->searchP.'%')
+        ->orWhere('usd_total_price','LIKE','%'.$this->searchP.'%')
+        ->orderBy($this->order_list)
         ->paginate($this->paginas);
         $this->proveedorm=Provider::where('name', $this->proveedor_name)->first();
+     
         if(!empty($this->proveedorm)){
-            $this->presentationsm=ProviderPrice::where('provider_id', $this->proveedorm->id)->where('material_id',$this->material_id)->get();
+            $this->presentationsm=ProviderPrice::where('provider_id', $this->proveedorm->id)->where('material_id',$this->material_id)->groupBy('unit')->get();
         } 
         if(!empty($this->presentationm))
         {
@@ -200,20 +215,21 @@ class PurchasingSheet extends Component
     }
     public function buy(string $code)
     {
+        $this->proveedoresm = array();
         $this->material=Material::where('code', $code)->first();
         $this->material_id=$this->material->id;
         $this->codem=$this->material->code;
         $this->descriptionm=$this->material->description;
         foreach($this->material->provider_prices as $mat){
             if(count($this->proveedoresm)==0){
-            $this->proveedoresm[$this->provcount]=Provider::find($mat->provider_id);
+            $this->proveedoresm[$mat->provider_id]=Provider::find($mat->provider_id);
             $this->provcount+=1;
             }else{
                 foreach($this->proveedoresm as $prov){
                     if($prov['id']==$mat->provider_id){
                         
                     }else{
-                        $this->proveedoresm[$this->provcount]=Provider::find($mat->provider_id);
+                        $this->proveedoresm[$mat->provider_id]=Provider::find($mat->provider_id);
                         $this->provcount+=1;
                     }
                 }
@@ -223,6 +239,17 @@ class PurchasingSheet extends Component
     }
     public function buy_confirm()
     {
+        $this->validate([
+            'presentationm'=>'required',
+            'amount'=>'required|numeric|min:1',
+            'proveedor_name'=>'required',
+        ], [
+            'presentationm.required'=>'Debe seleccionar una presentación',
+            'amount.required'=>'Debe ingresar una cantidad',
+            'amount.numeric'=>'El campo cantidad debe ser numérico',
+            'amount.min'=>'El campo cantidad debe ser mayor a cero',
+            'proveedor_name.required'=>'Debe seleccionar un proveedor',
+        ]);
         foreach($this->purchasings as $purchasing){
             if($purchasing[1]==$this->codem){
                 $this->purchasing[0]=$purchasing[0];
@@ -251,6 +278,7 @@ class PurchasingSheet extends Component
         $this->proveedor_name=null;
         $this->presentationm=null;
         $this->amount=null;
+        $this->resetValidation();
     }
     public function funcion()
     {
@@ -267,6 +295,27 @@ class PurchasingSheet extends Component
         $this->dispatchBrowserEvent('hide-formmaterial');
     }
     public function save(){
+        $this->validate([
+            'ordenes'=>'required',
+            'iva'=>'required|numeric|min:1',
+            'purchasings.*.7'=>'required|numeric|min:1',
+            'purchasings.*.6'=>'required|numeric|min:1',
+            'purchasings.*.10'=>'required',
+        ], [
+            'ordenes.required'=>'Debe seleccionar al menos un pedido',
+            'iva.required'=>'El campo IVA es requerido',
+            'iva.numeric'=>'El campo IVA es numérico',
+            'iva.min'=>'El campo IVA es mayor a 0',
+            'purchasings.*.7.required'=>'Debe rellenar el campo cantidad para el material ',
+            'purchasings.*.6.required'=>'Debe seleccionar el campo presentación para el material ',
+            'purchasings.*.7.numeric'=>'El campo cantidad debe ser numérico ',
+            'purchasings.*.6.numeric'=>'El campo presentación debe ser numérico ',
+            'purchasings.*.7.min'=>'El campo cantidad debe ser mayor a cero ',
+            'purchasings.*.6.min'=>'El campo presentación debe ser mayor a cero',
+            'purchasings.*.10.required'=>'Debe rellenar el campo proveedor, presentación y cantidad para los materiales ',
+    
+        ]);
+ 
         $this->date=Carbon::now();
         $this->plantilla= new PucharsingSheet;
         $this->plantilla->date=$this->date;
@@ -410,5 +459,14 @@ class PurchasingSheet extends Component
      public function exploraorder(BuyOrder $order){
         $this->buy_order_details=$order->buyorderdetails;
         $this->funcion="ordenes_explora";   
+     }
+     public function change_provider(){
+         unset($this->presentationm);
+         unset($this->amount);
+     }
+     public function backmodal(){
+        $this->proveedor_name = '';
+        $this->presentationm = null;
+        $this->amount = null;
      }
 }
