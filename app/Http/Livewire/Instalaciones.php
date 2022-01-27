@@ -17,7 +17,8 @@ class Instalaciones extends Component
     protected $instalaciones;
     protected $paginationTheme = 'bootstrap';
     public $instalacion, $installation_id, $code, $codem, $paginas=25, $description, $descriptionm, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
-    public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $photo=null, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false;
+    public $details=array(), $detail=array(), $nombrefile, $seeimg=false, $detailslist, $order="code", $photo=null, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false, $hours_man, $man;
+ 
     public function render()
     {
         $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
@@ -30,7 +31,8 @@ class Instalaciones extends Component
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
         $this->instalaciones=Installation::where('id','LIKE','%' .$this->searchinstallation. '%')
             ->orWhere('code','LIKE','%'.$this->searchinstallation.'%')
-            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->paginate($this->paginas);
+            ->orWhere('usd_price','%'.$this->searchinstallation.'%')
+            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->orderBy($this->order)->paginate($this->paginas);
         $this->revisiones=Revision::where('installation_id', $this->installation_id)->get();
         return view('livewire.instalaciones',[
             'instalaciones' => $this->instalaciones,
@@ -45,6 +47,7 @@ class Instalaciones extends Component
                 'description'=>'required|string|min:5|max:300',
                 'date_admission'=>'required|date',
                 'usd_price'=>'required|numeric|min:0|max:1000000',
+                'hours_man'=>'required|numeric|min:0|max:1000000',
             ],[
                 'date_admission.required' => 'El campo Fecha es requerido',
                 'code.required' => 'El campo Código es requerido',
@@ -58,13 +61,16 @@ class Instalaciones extends Component
                 'usd_price.required' => 'El campo Precio U$D es requerido',
                 'usd_price.numeric' => 'El campo Precio U$D es numérico',
                 'usd_price.max' => 'El campo precio U$D tiene como maximo 1000000(un millon)',
-    
-            ]);
+                'hours_man.required' => 'El campo Horas/Hombre es requerido',
+                'hours_man.numeric' => 'El campo Horas/Hombre es numérico',
+                'hours_man.max' => 'El campo Horas/Hombre tiene como maximo 1000000(un millon)',
+           ]);
             $this->instalacion= new Installation;
             $this->instalacion->code=$this->code;
             $this->instalacion->description=$this->description;
             $this->instalacion->date_admission=$this->date_admission;
             $this->instalacion->usd_price=$this->usd_price;
+            $this->instalacion->hours_man=$this->hours_man;
             $this->instalacion->save();
             $this->revision=new Revision;
             $this->revision->installation_id=$this->instalacion->id;
@@ -142,6 +148,7 @@ class Instalaciones extends Component
         $this->description=$instalacion->description;
         $this->date_admission=$instalacion->date_admission;
         $this->usd_price=$instalacion->usd_price;
+        $this->hours_man=$instalacion->hours_man;
     }
     public function update(Installation $instalacion)
     {   
@@ -151,14 +158,18 @@ class Instalaciones extends Component
         $this->description=$instalacion->description;
         $this->date_admission=$instalacion->date_admission;
         $this->usd_price=$instalacion->usd_price;
+        $this->hours_man=$instalacion->hours_man;
     }
     
     public function edit(){
         $this->validate([
             'code'=>'required|integer|min:1|max:100000000',
             'description'=>'required|string|min:5|max:300',
+            'date_admission'=>'required|date',
             'usd_price'=>'required|numeric|min:0|max:1000000',
+            'hours_man'=>'required|numeric|min:0|max:1000000',
         ],[
+            'date_admission.required' => 'El campo Fecha es requerido',
             'code.required' => 'El campo Código es requerido',
             'code.integer' => 'El camppo Código debe ser un número entero',
             'code.min' => 'El campo Código debe ser igual o mayor a 1(uno)',
@@ -170,12 +181,15 @@ class Instalaciones extends Component
             'usd_price.required' => 'El campo Precio U$D es requerido',
             'usd_price.numeric' => 'El campo Precio U$D es numérico',
             'usd_price.max' => 'El campo precio U$D tiene como maximo 1000000(un millon)',
-
-        ]);
+            'hours_man.required' => 'El campo Hora es requerido',
+            'hours_man.numeric' => 'El campo Hora es numérico',
+            'hours_man.max' => 'El campo Hora tiene como maximo 1000000(un millon)',
+      ]);
         $this->instalacion=Installation::find($this->installation_id);
         $this->instalacion->code=$this->code;
         $this->instalacion->description=$this->description;
         $this->instalacion->usd_price=$this->usd_price;
+        $this->instalacion->hours_man=$this->hours_man;
         $this->instalacion->save();
         $this->volver();
     }
@@ -217,12 +231,17 @@ class Instalaciones extends Component
 
     public function borrarevision(Revision $revi)
     {
-        $details=Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
-        foreach($details as $det)
-        {
-            $det->delete();
+        if($revi->number_version!=0){
+            $details=Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
+            foreach($details as $det)
+            {
+                $det->delete();
+            }
+            $revi->delete(); 
         }
-        $revi->delete(); 
+        $install=Installation::find($revi->installation_id);
+        $this->funcion="";
+        $this->explora($install);
     }
 
     public function borradetail(Revisiondetail $detail)
@@ -251,10 +270,14 @@ class Instalaciones extends Component
         $this->detail[2]=$this->amount;
         $this->detail[3]=$this->count;
         $this->detail[4]=$this->material_id;
-        $this->details[]=$this->detail;
+        $this->details[$this->count]=$this->detail;
         $this->count=$this->count+1;
         $this->amount=0;
         $this->dispatchBrowserEvent('hide-form');
+    }
+    public function downmaterial($orden)
+    {
+        unset($this->details[$orden]);
     }
     public function selectmaterial(Material $material)
     {
@@ -280,11 +303,6 @@ class Instalaciones extends Component
             $this->addmaterial();
                 }
     }
-    public function downmaterial($orden)
-    {
-        unset($this->details[$orden]);
-    }
-
     public function create()
     {
         $this->funcion="create";

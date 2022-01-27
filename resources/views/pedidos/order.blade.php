@@ -19,6 +19,15 @@
               <!-- /.card-header -->
               <!-- form start -->
               <form>
+              @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+              @endif
                 <div class="card-body">
                   <div class="form-group">
                     @if($update==true)
@@ -83,12 +92,12 @@
 
                       @else
                       <tr>
-                        <td style="text-align: center"><input wire:model="street" type="text" class="form-control form-control-sm"></td>
-                        <td style="text-align: center"><input wire:model="number" type="number" class="form-control form-control-sm"></td>
-                        <td style="text-align: center"><input wire:model="location" type="text" class="form-control form-control-sm"></td>
-                        <td style="text-align: center"><input wire:model="province" type="text" class="form-control form-control-sm"></td>
-                        <td style="text-align: center"><input wire:model="country" type="text" class="form-control form-control-sm"></td>
-                        <td style="text-align: center"><input wire:model="postcode" type="text" class="form-control form-control-sm"></td>
+                        <td style="text-align: center"><input wire:model="street" maxlength="30" type="text" class="form-control form-control-sm"></td>
+                        <td style="text-align: center"><input wire:model="number" type="text" maxlength="5"class="form-control form-control-sm"></td>
+                        <td style="text-align: center"><input wire:model="location" type="text" maxlength="30" class="form-control form-control-sm"></td>
+                        <td style="text-align: center"><input wire:model="province" type="text" maxlength="30" class="form-control form-control-sm"></td>
+                        <td style="text-align: center"><input wire:model="country" type="text" maxlength="30" class="form-control form-control-sm"></td>
+                        <td style="text-align: center"><input wire:model="postcode" type="text" maxlength="6" class="form-control form-control-sm"></td>
                         <td style="text-align: center"><button type="button" wire:click="cancelarnewadd()" class="btn btn-danger btn-sm">Cancelar</button></td>
                       </tr>
                       @endif
@@ -264,6 +273,5 @@
                 </form>
                 </div>
               </div>
-            </div>
-            
+            </div>          
 </div>

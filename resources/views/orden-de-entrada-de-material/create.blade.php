@@ -161,6 +161,7 @@
                                                     <th style="text-align: center">Código</th>
                                                     <th style="text-align: center">Nombre del proveedor</th>
                                                     <th style="text-align: center">Fecha</th>
+                                                    <th style="text-align: center">Estado</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -176,6 +177,15 @@
                                                         </td>
                                                         <td style="text-align: center">
                                                             {{ $order->buy_date->format('d/m/Y') }}
+                                                        </td>
+                                                        <td style="text-align: center">
+                                                            @if ($order->state == 2)
+                                                                Completa
+                                                            @elseif($order->state == 0)
+                                                                Parcialmente Recibido
+                                                            @else
+                                                                En tránsito
+                                                            @endif
                                                         </td>
                                                         <td>
                                                             <div>
@@ -281,11 +291,12 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <select class="form-control select2 select2-hidden-accessible" wire:model="nombre_deposito"
-                                                    style="width: 100%;">
+                                                <select class="form-control select2 select2-hidden-accessible" wire:model="select_depo.{{ $buyorder->material_id }}"
+                                                    style="width: 100%;"
+                                                    wire:change="amount_change({{ $buyorder->id }})">
                                                     <option selected="selected"></option>
                                                     @foreach ($depositos as $deposito)
-                                                        <option>{{ $deposito->name }}</option>
+                                                        <option value="{{ $deposito->id }}">{{ $deposito->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>

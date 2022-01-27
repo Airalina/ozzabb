@@ -9,6 +9,15 @@
               <!-- /.card-header -->
               <!-- form start -->
               <form>
+              @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+              @endif
                 <div class="card-body">
                   <div class="form-group">
                     <br>
@@ -202,7 +211,7 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit"  wire:click="storepedido()" class="btn btn-primary">Crear Compra</button>
+                  <button type="button"  wire:click="storepedido()" class="btn btn-primary">Crear Compra</button>
                 </div>
               </form>
             </div>
@@ -217,6 +226,15 @@
                       </button>
                     </div>
                     <div class="modal-body">
+                      @if ($errors->any())
+                              <div class="alert alert-danger">
+                                  <ul>
+                                      @foreach ($errors->all() as $error)
+                                          <li>{{ $error }}</li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+                      @endif
                         <div class="form-group">
                           <p><label>Codigo: </label> {{$codei}}</p>
                         </div>

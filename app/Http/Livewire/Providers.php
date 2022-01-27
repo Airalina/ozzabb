@@ -105,7 +105,8 @@ class Providers extends Component
 
     public function back(){
         $this->funcion="";
-        $this->explora='inactivo';   
+        $this->explora='inactivo';
+        $this->resetValidation();   
     }
 
     public function explorar(Provider $provider_id){

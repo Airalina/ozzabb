@@ -19,7 +19,7 @@ class BuyOrder extends Model
 
     public function buyorderdetails()
     {
-        return $this->hasMany(BuyOrderDetail::class,'id','buy_order_id');
+        return $this->hasMany(BuyOrderDetail::class);
     }
 
     public function provider()
@@ -30,5 +30,9 @@ class BuyOrder extends Model
     public function material()
     {
         return $this->belongsTo(Material::class, 'material_id');
+    }
+    public function entry()
+    {
+        return $this->hasMany(MaterialEntryOrder::class, 'buy_order_id');
     }
 }

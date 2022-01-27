@@ -69,7 +69,7 @@
                     @forelse($details as $det)
                       <tr>
                         <td style="text-align: center">{{$det->cantidad}}</td>
-                        <td style="text-align: center">{{$det->material_id}}</td>
+                        <td style="text-align: center">{{$det->installation_id}}</td>
                         <td style="text-align: center">{{$det->unit_price_usd}}</td>
                         <td style="text-align: center">{{$det->unit_price_usd*$det->cantidad}}</td>
                         <td></td>

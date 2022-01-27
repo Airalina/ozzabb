@@ -16,9 +16,11 @@ use App\Models\Cable;
 use App\Models\Provider;
 use App\Models\ProviderPrice;
 use App\Models\Price;
+use App\Models\Workorder;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use DB;
 
 class MaterialComponent extends Component
 {
@@ -26,20 +28,33 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false;
+    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array();
 
     public function render()
     {
-        $this->materials = Material::where('code','like','%'.$this->search.'%')
-            ->orWhere('name','LIKE','%'.$this->search.'%')
-            ->orWhere('family','LIKE','%'.$this->search.'%')
-            ->orWhere('color','LIKE','%'.$this->search.'%')
-            ->orWhere('description','LIKE','%'.$this->search.'%')
-            ->orWhere('replace_id','LIKE','%'.$this->search.'%')
-            ->orWhere('stock_min','LIKE','%'.$this->search.'%')
-            ->orWhere('stock_max','LIKE','%'.$this->search.'%')
-            ->orWhere('stock','LIKE','%'.$this->search.'%')
-            ->orderBy($this->order)->paginate($this->paginas);
+        $mats = Material::where('code','like','%'.$this->search.'%')
+        ->orWhere('name','LIKE','%'.$this->search.'%')
+        ->orWhere('family','LIKE','%'.$this->search.'%')
+        ->orWhere('color','LIKE','%'.$this->search.'%')
+        ->orWhere('description','LIKE','%'.$this->search.'%')
+        ->orWhere('replace_id','LIKE','%'.$this->search.'%')
+        ->orWhere('stock_min','LIKE','%'.$this->search.'%')
+        ->orWhere('stock_max','LIKE','%'.$this->search.'%')
+        ->orWhere('stock','LIKE','%'.$this->search.'%')
+        ->orderBy($this->order);
+
+        $this->materials = $mats->paginate($this->paginas);
+        
+        $reservations_materials = $mats->get();
+        $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
+               
+            if (!empty($reservations_materials) && !empty($workorder)) {
+                foreach ($reservations_materials as $material) {
+                    $this->reservations[$material->id] = $material->reservationmaterials()->select('material_id', DB::raw('SUM(amount) as
+                    total'))->where('workorder_id', $workorder->id)->first();
+                }
+            }            
+            
         $this->providers =Provider::where('name','LIKE','%'.$this->searchproviders.'%')
             ->orWhere('address','LIKE','%'.$this->searchproviders.'%')
             ->orWhere('phone','LIKE','%'.$this->searchproviders.'%')
@@ -55,6 +70,7 @@ class MaterialComponent extends Component
 
     public function funcion()
     {
+        $this->resetValidation();
         $this->funcion="crear";
         $this->id_provider=null;
         $this->code=null;
@@ -152,8 +168,8 @@ class MaterialComponent extends Component
                 'line' => 'nullable',
                 'usage' => 'required',
                 'replace' => 'nullable',
-                'stock_min' => 'numeric|required|digits_between:1,6',
-                'stock_max' => 'numeric|nullable|digits_between:1,6',
+                'stock_min' => 'numeric|required|digits_between:1,8',
+                'stock_max' => 'numeric|nullable|digits_between:1,8',
                 'images' => 'nullable'
             ],[
                 'code.required' => 'El campo código es requerido',
@@ -162,10 +178,10 @@ class MaterialComponent extends Component
                 'description.max' => 'El campo descripción no debe superar 500 carácteres',
                 'usage.required' => 'Seleccione una opción para el campo de uso',
                 'stock_min.required' => 'El campo stock mínimo es requerido',
-                'stock_min.numeric' => 'El campo stock mínimo es numérico',
-                'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
-                'stock_max.numeric' => 'El campo stock máximo es numérico',
-                'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
+                'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
+                'stock_min.max' => 'El campo stock mínimo es inferior a 8 digitos',
+                'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
+                'stock_max.max' => 'El campo stock máximo es inferior a 8 digitos',
             ]);
         }else{
             $this->validate([
@@ -188,9 +204,9 @@ class MaterialComponent extends Component
                 'description.max' => 'El campo descripción no debe superar 500 carácteres',
                 'usage.required' => 'Seleccione una opción para el campo de uso',
                 'stock_min.required' => 'El campo stock mínimo es requerido',
-                'stock_min.numeric' => 'El campo stock mínimo es numérico',
+                'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
                 'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
-                'stock_max.numeric' => 'El campo stock máximo es numérico',
+                'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
                 'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
             ]);
         }
@@ -206,7 +222,7 @@ class MaterialComponent extends Component
                 'lock' =>'required|boolean',
                 'cover' =>'required|boolean'
             ], [
-                'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
+                'number_of_ways.numeric' => 'El campo cantidad de vías es numérico (decimales separados por punto)',
                 'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
                 'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
                 'number_of_ways.required' => 'El campo cantidad de vías es requerido',
@@ -254,7 +270,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Terminales'){
            
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'size' => 'numeric|required',
@@ -263,10 +279,10 @@ class MaterialComponent extends Component
                 'term_material' => 'required',
                 'term_type' => 'required'
             ], [
-                'size.numeric' => 'El campo tamaño es numérico',
+                'size.numeric' => 'El campo tamaño es numérico(decimales separados por púnto)',
                 'size.required' => 'El campo tamaño es requerido',
-                'minimum_section.numeric' => 'El campo sección mínima es numérico',
-                'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                'minimum_section.numeric' => 'El campo sección mínima es numérico (decimales separados por punto)',
+                'maximum_section.numeric' => 'El campo sección máxima es numérico (decimales separados por punto)',
                 'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
                 'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimal',
                 'term_material.required' => 'Seleccione una opción para el campo Material',
@@ -304,7 +320,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Cables'){
           
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
 
             $this->validate([
@@ -317,14 +333,14 @@ class MaterialComponent extends Component
                 'mesh_type' => 'string|nullable',
                 'operating_temperature' => 'numeric|required|regex: '.$regex,
             ], [
-                'section.numeric' => 'El campo sección es numérico',
+                'section.numeric' => 'El campo sección es numérico (decimales separados por punto)',
                 'section.required' => 'El campo sección es requerido',
                 'section.regex' => 'El campo sección es un número de máximo 4 cifras con 2 posiciones decimales',
                 'base_color.required' => 'Seleccione una opción del campo color base',
                 'braid_configuration.required' => 'Seleccione una opción del campo Configuración de Trenza',
                 'norm.required' => 'Seleccione una opción del campo Norma',
-                'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico',
-                'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico',
+                'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico (decimales separados por punto)',
+                'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico (decimales separados por punto)',
                 'operating_temperature.required' => 'El campo Temperatura de Servicio es requerido',
                 'operating_temperature.regex' => 'El campo Temperatura de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
 
@@ -363,17 +379,17 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Sellos'){
           
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'minimum_diameter' => 'numeric|required|regex: '.$regex,
                 'maximum_diameter' => 'numeric|required|regex: '.$regex,
                 'seal_type' => 'nullable|max:30',
                 ], [
-                'minimum_diameter.numeric' => 'El campo Diámetro mínimo de Cable es numérico',
+                'minimum_diameter.numeric' => 'El campo Diámetro mínimo de Cable es numérico (decimales separados por punto)',
                 'minimum_diameter.required' => 'El campo Diámetro mínimo de Cable es requerido',
                 'minimum_diameter.regex' => 'El campo Diámetro mínimo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
-                'maximum_diameter.numeric' => 'El campo Diámetro máximo de Cable es numérico',
+                'maximum_diameter.numeric' => 'El campo Diámetro máximo de Cable es numérico (decimales separados por punto)',
                 'maximum_diameter.required' => 'El campo Diámetro máximo de Cable es requerido',
                 'maximum_diameter.regex' => 'El campo Diámetro máximo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
                 'seal_type.max' => 'El campo Tipo de sello debe ser inferior a 30 carácteres'
@@ -414,22 +430,23 @@ class MaterialComponent extends Component
                 'tube_type' => 'required',
                 'wall_thickness' => 'numeric|required|regex: '.$regex,
                 'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
-                'minimum_temperature' => 'numeric|nullable|regex: '.$regex,
+                'minimum_temperature' => 'numeric|nullable|min:-55|max:9999',
                 'maximum_temperature' => 'numeric|nullable|regex: '.$regex,
             ], [
-                'tube_diameter.numeric' => 'El campo Diámetro es numérico',
+                'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
                 'tube_diameter.required' => 'El campo Diámetro es requerido',
                 'tube_diameter.regex' => 'El campo Diámetro es un número de máximo 4 cifras con 2 posiciones decimal',
-                'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico',
+                'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico (decimales separados por punto)',
                 'wall_thickness.required' => 'El campo Espesor de Pared es requerido',
                 'wall_thickness.regex' => 'El campo Espesor de Pared es un número de máximo 4 cifras con 2 posiciones decimal',
-                'contracted_diameter.numeric' => 'El campo Diámetro Contraído es numérico',
+                'contracted_diameter.numeric' => 'El campo Diámetro Contraído es numérico (decimales separados por punto)',
                 'contracted_diameter.required' => 'El campo Diámetro Contraído es requerido',
                 'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimal',
-                'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico',
+                'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
                 'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
-                'minimum_temperature.regex' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
-                'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico',
+                'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es como mínimo -55°C',
+                'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
+                'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
                 'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
                 'maximum_temperature.regex' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
                 'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
@@ -440,10 +457,10 @@ class MaterialComponent extends Component
                     'tube_type' => 'required',
                     'wall_thickness' => 'numeric|required|regex: '.$regex,
                 ], [
-                    'tube_diameter.numeric' => 'El campo Diámetro es numérico',
+                    'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
                     'tube_diameter.required' => 'El campo Diámetro es requerido',
                     'tube_diameter.regex' => 'El campo Diámetro es un número de máximo 4 cifras con 2 posiciones decimal',
-                    'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico',
+                    'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico (decimales separados por punto)',
                     'wall_thickness.required' => 'El campo Espesor de Pared es requerido',
                     'wall_thickness.regex' => 'El campo Espesor de Pared es un número de máximo 4 cifras con 2 posiciones decimal',
                     'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
@@ -490,7 +507,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }elseif($this->family == 'Clips'){
           
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'long' => 'numeric|required|regex: '.$regex,
@@ -498,13 +515,13 @@ class MaterialComponent extends Component
                 'hole_diameter' => 'numeric|required|regex: '.$regex,
                 'clip_type' => 'required',
      ], [
-                'long.numeric' => 'El campo Largo es numérico',
+                'long.numeric' => 'El campo Largo es numérico (decimales separados por punto)',
                 'long.required' => 'El campo Largo es requerido',
                 'long.regex' => 'El campo Largo es un número de máximo 4 cifras con 2 posiciones decimales',
-                'width.numeric' => 'El campo Ancho es numérico',
+                'width.numeric' => 'El campo Ancho es numérico (decimales separados por punto)',
                 'width.required' => 'El campo Ancho es requerido',
                 'width.regex' => 'El campo Ancho es un número de máximo 4 cifras con 2 posiciones decimales',
-                'hole_diameter.numeric' => 'El campo Diámetro del Orificio es numérico',
+                'hole_diameter.numeric' => 'El campo Diámetro del Orificio es numérico (decimales separados por punto)',
                 'hole_diameter.required' => 'El campo Diámetro del Orificio es requerido',
                 'hole_diameter.regex' => 'El campo Diámetro del Orificio es un número de máximo 4 cifras con 2 posiciones decimales',
                 'clip_type.required' => 'Seleccione una opción del campo tipo de Clip',
@@ -577,6 +594,7 @@ class MaterialComponent extends Component
     
     public function update(Material $material)
     {   
+        $this->resetValidation();
         $this->idu=$material->id;
         $this->material =Material::find($this->idu);
         $this->name=$material->name; 
@@ -701,9 +719,9 @@ class MaterialComponent extends Component
             'description.max' => 'El campo descripción no debe superar 500 carácteres',
             'usage.required' => 'Seleccione una opción para el campo de uso',
             'stock_min.required' => 'El campo stock mínimo es requerido',
-            'stock_min.numeric' => 'El campo stock mínimo es numérico',
+            'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
             'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
-            'stock_max.numeric' => 'El campo stock máximo es numérico',
+            'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
         ]);
        
@@ -724,7 +742,7 @@ class MaterialComponent extends Component
                 'lock' =>'required|boolean',
                 'cover' =>'required|boolean'
             ], [
-                'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
+                'number_of_ways.numeric' => 'El campo cantidad de vías es numérico (decimales separados por punto)',
                 'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
                 'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
                 'number_of_ways.required' => 'El campo cantidad de vías es requerido',
@@ -764,7 +782,7 @@ class MaterialComponent extends Component
             $connector_up->save();
             }
         }elseif($this->family == 'Terminales'){
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'size' => 'numeric|required',
@@ -775,12 +793,12 @@ class MaterialComponent extends Component
             ], [
                 'size.numeric' => 'El campo tamaño es numérico',
                 'size.required' => 'El campo tamaño es requerido',
-                'minimum_section.numeric' => 'El campo sección mínima es numérico',
-                'maximum_section.numeric' => 'El campo sección máxima es numérico',
+                'minimum_section.numeric' => 'El campo sección mínima es numérico (decimales separados por punto)',
+                'maximum_section.numeric' => 'El campo sección máxima es numérico (decimales separados por punto)',
                 'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
                 'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimales',
                 'term_material.required' => 'Seleccione una opción para el campo Material',
-                'term_type.required' => 'Seleccione una opción para el campo Material',
+                'term_type.required' => 'Seleccione una opción para el campo Tipo',
                 
             ]);
 
@@ -805,7 +823,7 @@ class MaterialComponent extends Component
             }
             
         }elseif($this->family == 'Cables'){
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'section' => 'numeric|required|regex: '.$regex,
@@ -817,14 +835,14 @@ class MaterialComponent extends Component
                 'mesh_type' => 'string|nullable',
                 'operating_temperature' => 'numeric|required|regex: '.$regex,
             ], [
-                'section.numeric' => 'El campo sección es numérico',
+                'section.numeric' => 'El campo sección es numérico (decimales separados por punto)',
                 'section.required' => 'El campo sección es requerido',
                 'section.regex' => 'El campo sección es un número de máximo 4 cifras con 2 posiciones decimales',
                 'base_color.required' => 'Seleccione una opción del campo color base',
                 'braid_configuration.required' => 'Seleccione una opción del campo Configuración de Trenza',
                 'norm.required' => 'Seleccione una opción del campo Norma',
-                'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico',
-                'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico',
+                'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico (decimales separados por punto)',
+                'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico (decimales separados por punto)',
                 'operating_temperature.required' => 'El campo Temperatura de Servicio es requerido',
                 'operating_temperature.regex' => 'El campo Temperatura de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
 
@@ -857,29 +875,30 @@ class MaterialComponent extends Component
             }
 
         }elseif($this->family == 'Tubos'){
-            $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
                 'tube_diameter' => 'numeric|required|regex: '.$regex,
                 'tube_type' => 'required',
                 'wall_thickness' => 'numeric|required|regex: '.$regex,
                 'contracted_diameter' => 'numeric|required|regex: '.$regex,
-                'minimum_temperature' => 'numeric|required|regex: '.$regex,
+                'minimum_temperature' => 'numeric|required|min:-55|max:9999',
                 'maximum_temperature' => 'numeric|required|regex: '.$regex,
             ], [
-                'tube_diameter.numeric' => 'El campo Diámetro es numérico',
+                'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
                 'tube_diameter.required' => 'El campo Diámetro es requerido',
                 'tube_diameter.regex' => 'El campo Diámetro es un número de máximo 4 cifras con 2 posiciones decimales',
-                'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico',
+                'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico (decimales separados por punto)',
                 'wall_thickness.required' => 'El campo Espesor de Pared es requerido',
                 'wall_thickness.regex' => 'El campo Espesor de Pared es un número de máximo 4 cifras con 2 posiciones decimales',
-                'contracted_diameter.numeric' => 'El campo Diámetro Contraído es numérico',
+                'contracted_diameter.numeric' => 'El campo Diámetro Contraído es numérico (decimales separados por punto)',
                 'contracted_diameter.required' => 'El campo Diámetro Contraído es requerido',
                 'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimales',
-                'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico',
+                'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
                 'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
-                'minimum_temperature.regex' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
-                'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico',
+                'minimum_temperature.min' => 'El campo Temperatura es como mínimo -55°C',
+                'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
+                'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
                 'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
                 'maximum_temperature.regex' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
                 'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
@@ -908,7 +927,7 @@ class MaterialComponent extends Component
 
             }
         }elseif($this->family == 'Clips'){
-                $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+                $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
     
                 $this->validate([
                     'long' => 'numeric|required|regex: '.$regex,
@@ -916,13 +935,13 @@ class MaterialComponent extends Component
                     'hole_diameter' => 'numeric|required|regex: '.$regex,
                     'clip_type' => 'required',
          ], [
-                    'long.numeric' => 'El campo Largo es numérico',
+                    'long.numeric' => 'El campo Largo es numérico (decimales separados por punto)',
                     'long.required' => 'El campo Largo es requerido',
                     'long.regex' => 'El campo Largo es un número de máximo 4 cifras con 2 posiciones decimales',
-                    'width.numeric' => 'El campo Ancho es numérico',
+                    'width.numeric' => 'El campo Ancho es numérico (decimales separados por punto)',
                     'width.required' => 'El campo Ancho es requerido',
                     'width.regex' => 'El campo Ancho es un número de máximo 4 cifras con 2 posiciones decimales',
-                    'hole_diameter.numeric' => 'El campo Diámetro del Orificio es numérico',
+                    'hole_diameter.numeric' => 'El campo Diámetro del Orificio es numérico (decimales separados por punto)',
                     'hole_diameter.required' => 'El campo Diámetro del Orificio es requerido',
                     'hole_diameter.regex' => 'El campo Diámetro del Orificio es un número de máximo 4 cifras con 2 posiciones decimales',
                     'clip_type.required' => 'Seleccione una opción del campo tipo de Clip',
@@ -945,9 +964,8 @@ class MaterialComponent extends Component
                 $clip_up->type=$this->clip_type;
                 $clip_up->save();
                 }
-            }
-                elseif($this->family == 'Accesorios'){
-                    $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            }elseif($this->family == 'Accesorios'){
+                    $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
         
                         $this->validate([
                             'accesory_type' => 'required',
@@ -966,39 +984,38 @@ class MaterialComponent extends Component
                     $accesory_up->type=$this->accesory_type;
                     $accesory_up->save();
                 }
-            }
-                    else{
-                        $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
+            }else{
+                        $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
                         $this->validate([
                             'minimum_diameter' => 'numeric|required|regex: '.$regex,
                             'maximum_diameter' => 'numeric|required|regex: '.$regex,
                             'seal_type' => 'nullable|max:30',
                             ], [
-                            'minimum_diameter.numeric' => 'El campo Diámetro mínimo de Cable es numérico',
+                            'minimum_diameter.numeric' => 'El campo Diámetro mínimo de Cable es numérico (decimales separados por punto)',
                             'minimum_diameter.required' => 'El campo Diámetro mínimo de Cable es requerido',
                             'minimum_diameter.regex' => 'El campo Diámetro mínimo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
-                            'maximum_diameter.numeric' => 'El campo Diámetro máximo de Cable es numérico',
+                            'maximum_diameter.numeric' => 'El campo Diámetro máximo de Cable es numérico (decimales separados por punto)',
                             'maximum_diameter.required' => 'El campo Diámetro máximo de Cable es requerido',
                             'maximum_diameter.regex' => 'El campo Diámetro máximo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
                             'seal_type.max' => 'El campo Tipo de sello debe ser inferior a 30 carácteres'
                         ]);
 
-                    $seal_up =Seal::find($this->sl_id);
-                    if($seal_up == null){
-                        Seal::create([
-                            'material_id' => $this->material->id,
-                            'minimum_diameter' => $this->minimum_diameter,
-                            'maximum_diameter' => $this->maximum_diameter,
-                            'type' => $this->seal_type,
-                        ]);
-                    }else{
-                    $seal_up->material_id=$this->idu;    
-                    $seal_up->minimum_diameter=$this->minimum_diameter;
-                    $seal_up->maximum_diameter=$this->maximum_diameter;
-                    $seal_up->type=$this->seal_type;
-                    $seal_up->save();
-                    }
+                        $seal_up =Seal::find($this->sl_id);
+                        if($seal_up == null){
+                            Seal::create([
+                                'material_id' => $this->material->id,
+                                'minimum_diameter' => $this->minimum_diameter,
+                                'maximum_diameter' => $this->maximum_diameter,
+                                'type' => $this->seal_type,
+                            ]);
+                        }else{
+                            $seal_up->material_id=$this->idu;    
+                            $seal_up->minimum_diameter=$this->minimum_diameter;
+                            $seal_up->maximum_diameter=$this->maximum_diameter;
+                            $seal_up->type=$this->seal_type;
+                            $seal_up->save();
+                        }
             
                     }
         $material_up->color=$this->color;
@@ -1107,15 +1124,17 @@ class MaterialComponent extends Component
             $this->term_type=$this->term->type;
         }elseif($this->family == 'Cables'){
             $this->cab = Cable::where('material_id',$material_id->id)->first();
-            $this->cab_id= $this->cab->id;
-            $this->section=$this->cab->section;
-            $this->base_color=$this->cab->base_color;
-            $this->line_color=$this->cab->line_color;
-            $this->braid_configuration=$this->cab->braid_configuration;
-            $this->norm=$this->cab->norm;
-            $this->number_of_unipolar=$this->cab->number_of_unipolar;
-            $this->mesh_type=$this->cab->mesh_type;
-            $this->operating_temperature=$this->cab->operating_temperature;
+            if (!empty($this->cab)) {
+                $this->cab_id= $this->cab->id;
+                $this->section=$this->cab->section;
+                $this->base_color=$this->cab->base_color;
+                $this->line_color=$this->cab->line_color;
+                $this->braid_configuration=$this->cab->braid_configuration;
+                $this->norm=$this->cab->norm;
+                $this->number_of_unipolar=$this->cab->number_of_unipolar;
+                $this->mesh_type=$this->cab->mesh_type;
+                $this->operating_temperature=$this->cab->operating_temperature;
+            }
         }elseif($this->family == 'Tubos'){
             $this->tub = Tube::where('material_id',$material_id->id)->first();
             $this->tub_id= $this->tub->id;
@@ -1189,60 +1208,21 @@ class MaterialComponent extends Component
 
    public function destruir(Material $material)
    {
-       if (auth()->user()->cannot('delete', auth()->user())) {
-           abort(403);
-       }else
-       {
-           if($material->family == 'Conectores'){
-            $this->conn_del = Connector::where('material_id',$material->id)->first();
-            $this->conn_del->delete();
-           }elseif($material->family == 'Terminales'){
-            $this->term_del = Terminal::where('material_id',$material->id)->first();
-            $this->term_del->delete();
-           }elseif($material->family == 'Cables'){
-            $this->cable_del = Cable::where('material_id',$material->id)->first();
-            $this->cable_del->delete();
-           }elseif($material->family == 'Tubos'){
-            $tube_del = Tube::where('material_id',$material->id)->first();
-            $tube_del->delete();
-           }elseif($material->family == 'Clips'){
-            $clip_del = Clip::where('material_id',$material->id)->first();
-            $clip_del->delete();
-           }elseif($material->family == 'Accesorios'){
-            $accesory_del = Accessory::where('material_id',$material->id)->first();
-            $accesory_del->delete();
-           }else{
-            $this->seal_del = Seal::where('material_id',$material->id)->first();
-            $this->seal_del->delete();
-           }
-           if(!empty($material->providerprices)){
-                foreach ($material->providerprices as $provider_price) {
-                    $provider_price->delete();
-                   
-                    if (!empty($provider_price->price)) {
-                        foreach ($provider_price->price as $price) {
-                            $price->delete();
-                        }
-                       
-                    }
-                }
-           }
-
-           $material->delete();
-           $this->funcion="";
-           $this->explora="inactivo";
-       }
+       $this->material=$material;
+       $this->dispatchBrowserEvent('show-borrar');
    }
 
-   public function delete()
-   {
+   public function delete(Material $material){
+    if(auth()->user()->cannot('delete', auth()->user())){
+        abort(403);
+    }else{
         if($this->material->family == 'Conectores'){
-         $this->conn_del = Connector::where('material_id',$this->material->id)->first();
-         $this->conn_del->delete();
+            $this->conn_del = Connector::where('material_id',$this->material->id)->first();
+            $this->conn_del->delete();
         }elseif($this->material->family == 'Terminales'){
-         $this->term_del = Terminal::where('material_id',$this->material->id)->first();
-         $this->term_del->delete();
-        }elseif($this->material->family == 'Cables'){
+            $this->term_del = Terminal::where('material_id',$this->material->id)->first();
+            $this->term_del->delete();
+        }elseif($material->family == 'Cables'){
          $this->cable_del = Cable::where('material_id',$this->material->id)->first();
          $this->cable_del->delete();
         }elseif($this->material->family == 'Tubos'){
@@ -1254,13 +1234,28 @@ class MaterialComponent extends Component
         }elseif($this->material->family == 'Accesorios'){
          $accesory_del = Accessory::where('material_id',$this->material->id)->first();
          $accesory_del->delete();
-        }else{
+        }elseif($this->material->family == 'Sellos'){
          $this->seal_del = Seal::where('material_id',$this->material->id)->first();
          $this->seal_del->delete();
         }
+        if(!empty($this->material->providerprices)){
+            foreach ($this->material->providerprices as $provider_price) {
+                 $provider_price->delete();
+                
+                if (!empty($provider_price->price)) {
+                     foreach ($provider_price->price as $price) {
+                         $price->delete();
+                     }
+                    
+                }
+            }
+        }
+
         $this->material->delete();
         $this->funcion="";
         $this->explora="inactivo";
+        $this->material=null;
+    }
         $this->dispatchBrowserEvent('hide-borrar');
    }
 
@@ -1281,11 +1276,12 @@ class MaterialComponent extends Component
     $this->addProvider = true;
     $this->explora='inactivo';
     $this->funcion="crearmat";    
+    $this->resetValidation();
 }
 
 public function storemat(Material $material){
     
-    $this->validar= $this->validate([
+    $this->validate([
         'amount' => 'nullable',
         'unit' => 'required|numeric',
         'presentation' => 'required',
@@ -1293,12 +1289,12 @@ public function storemat(Material $material){
         'ars_price' => 'required|numeric',
       ], [
         'unit.required' => 'El campo unidad es requerido',
-        'unit.numeric' => 'El campo unidad debe ser numérico',
+        'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
         'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
         'usd_price.required' => 'El campo precio U$D es requerido',
-        'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
+        'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
         'ars_price.required' => 'El campo precio AR$ es requerido',
-        'ars_price.numeric' => 'El campo precio AR$ es numérico',
+        'ars_price.numeric' => 'El campo precio AR$ es numérico (decimales separados por punto)',
     ]);
     
    $provider_price= ProviderPrice::create([
@@ -1329,6 +1325,7 @@ public function destruirmat(Material $material)
         $this->funcion="0";
         $this->explorar($this->provider);
 }
+
 public function updatemat(ProviderPrice $provider_price)
 {  
     $this->id_provider_price = $provider_price->id;
@@ -1360,15 +1357,15 @@ public function editarmat(){
             'ars_price' => 'required|numeric',
         ], [
             'amount.required' => 'El campo cantidad es requerido',
-            'amount.numeric' => 'El campo cantidad debe ser numérico',
+            'amount.numeric' => 'El campo cantidad debe ser numérico (decimales separados por punto)',
             'amount.integer' => 'El campo cantidad debe ser un número entero',
             'unit.required' => 'El campo unidad es requerido',
-            'unit.numeric' => 'El campo unidad debe ser numérico',
+            'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
             'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
             'usd_price.required' => 'El campo precio U$D es requerido',
-            'usd_price.numeric' => 'El campo precio U$D debe ser numérico',
+            'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
             'ars_price.required' => 'El campo precio AR$ es requerido',
-            'ars_price.numeric' => 'El campo precio AR$ es numérico',
+            'ars_price.numeric' => 'El campo precio AR$ es numérico (decimales separados por punto)',
         ]);
         
         $pro =Material::find($this->material_price);

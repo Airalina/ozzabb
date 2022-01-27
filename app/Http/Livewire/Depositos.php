@@ -19,6 +19,7 @@ use App\Models\Revision;
 use App\Models\BuyOrder;
 use App\Models\BuyOrderDetail;
 use App\Models\BuyOrderMaterialEntryOrder;
+use App\Models\Workorder;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use DB;
@@ -30,8 +31,8 @@ class Depositos extends Component
     public $deposito, $origen,$paginas=25, $paginasinternas=10, $causa, $modo, $deposito_id, $name, $location, $state, $create_date, $amount, $searchensamblados="", $searchdeposito="", $searchmateriales="", $searchinstallation="", $searchorderbuy, $funcion="", $selector;
     protected $depositos, $materialesdepo, $ensambladosdepo, $instalacionesdepo, $deposit_material;
     public $seleccion, $ingreso, $codem, $descriptionm, $presentationm=[], $material_id, $type, $materiales, $name_receive, $name_entry, $code, $descriptionw, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id;
-    public $searchmaterialsdepo, $entry_order_id, $buy_order_id, $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
-    public $material_description,$amount_requested,$nombre_deposito,$amount_follow,$amount_undelivered,$set, $buyorders, $ingresa=false, $buyorderdetails, $follow, $material_code, $temporary, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation, $deposits, $depo, $materials_deposit, $materials_deposits, $materials_presentation, $materials_amount, $depo_destino, $name_egress, $explora_depo, $presentations, $amounts, $total, $totals, $retiros, $ingresos, $retiro, $ensamblados_deposits, $searchensambladodepo="", $descriptiona, $assembled_id, $assembled_amount, $selection = '', $materials_assembleds, $depo_id=0, $disabled='';
+    public $searchmaterialsdepo, $entry_order_id, $buy_order_id, $order="type", $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
+    public $material_description,$amount_requested,$nombre_deposito,$amount_follow,$amount_undelivered,$set, $buyorders, $ingresa=false, $buyorderdetails, $follow, $material_code, $temporary, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation, $deposits, $depo, $materials_deposit, $materials_deposits, $materials_presentation, $materials_amount, $depo_destino, $name_egress, $explora_depo, $presentations, $amounts, $total, $totals, $retiros, $ingresos, $retiro, $ensamblados_deposits, $searchensambladodepo="", $descriptiona, $assembled_id, $assembled_amount, $selection = '', $materials_assembleds, $depo_id=0, $disabled='', $reservations = array();
     public function updatingSearch()
     {
         $this->resetPage();
@@ -41,7 +42,7 @@ class Depositos extends Component
         $this->buyorders=BuyOrder::where('id','LIKE','%'.$this->searchorderbuy.'%')
             ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('purchasing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
+            ->orWhere('pucharsing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
             ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderByDesc('state')->get();
         $this->ensamblados=Assembled::where('id','like','%'.$this->searchensamblados.'%')
@@ -62,7 +63,7 @@ class Depositos extends Component
             ->orWhere('location','LIKE','%'.$this->searchdeposito.'%')
             ->orWhere('description','Like','%'.$this->searchdeposito.'%')
             ->orWhere('create_date', 'LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('temporary','LIKE','%'.$this->searchdeposito.'%')->orderBy('type')->paginate($this->paginas);
+            ->orWhere('temporary','LIKE','%'.$this->searchdeposito.'%')->orderBy($this->order)->paginate($this->paginas);
         $this->deposits = Warehouse::where('id','!=', $this->deposito_id)->where(function ($query) {
             $query->where('id','LIKE','%'.$this->searchdeposito.'%')
             ->orWhere('name','LIKE','%'.$this->searchdeposito.'%')
@@ -127,9 +128,17 @@ class Depositos extends Component
                 $this->deposito_id)->where('is_material',1)->select('presentation','material_id', DB::raw('SUM(amount) as
                 total'))->groupBy('presentation')->get(); 
 
+                $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
+                
+                foreach ($this->presentations[$material->id] as $key => $presentation) {
+                    $this->reservations[$material->id][$key] = $material->reservationmaterials()->select('id', 'amount' ,'material_id', 'presentation' ,DB::raw('SUM(amount) as
+                total'))->where('workorder_id', $workorder->id)->where('presentation',$presentation->presentation)->first();
+                }
+
                 foreach ($this->amounts[$material->id] as $index => $amount) {
                     $this->totals[$amount->material_id][$index] = $amount->presentation * $amount->total;
                 }
+                
             }
 
             $this->ensambladosdepo=$this->explora_depo->assembleds()->groupBy('id')->paginate($this->paginasinternas);
@@ -163,6 +172,7 @@ class Depositos extends Component
                 'name' => 'required|string|min:4|max:100',
                 'location' => 'required|string|min:4|max:300',
                 'descriptionw' => 'required|string|min:4|max:300',
+                'create_date'=>'required',
             ],
             [
                 'name.required' => 'El campo Nombre es requerido',
@@ -171,8 +181,10 @@ class Depositos extends Component
                 'location.required' => 'El campo Ubicación es requerido',
                 'location.min' => 'El campo Ubicación tiene como minimo 4 caracteres',
                 'location.max' => 'El campo Ubicación tiene como maximo 300 caracteres',
+                'descriptionw.required'=>"El campo Descripción es requerido",
                 'descriptionw.min' => 'El campo Descripción tiene como minimo 4 caracteres',
                 'descriptionw.max' => 'El campo Descripción tiene como maximo 300 caracteres',
+                'create_date.required'=>'El campo Fecha es requerido',
             ]);
             $this->deposito=new Warehouse;
             $this->deposito->name=$this->name;
@@ -869,8 +881,8 @@ class Depositos extends Component
         $this->deposito_id=$deposito->id;
         $this->materialesdepo=DepositMaterial::where('is_material', true)->where('warehouse_id', $this->deposito_id)->get();
         $this->ensambladosdepo=DepositMaterial::where('is_material', false)->where('warehouse_id', $this->deposito_id)->get();
-        if( ($this->materialesdepo->count()==0) && ($this->ensambladosdepo->count()==0)  && ($this->instalacionesdepo->count()==0)){
-            $this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->get();
+        $this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->get();
+        if( ($this->materialesdepo==null && $this->ensambladosdepo==null) && count($this->instalacionesdepo)==0){
             $deposito->delete();
         }
     }

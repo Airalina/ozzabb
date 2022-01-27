@@ -9,6 +9,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive">
+            <x-form-validation-errors :errors="$errors" />
             <form>
                 <div class="card-header">
                     <h3 class="card-title">Seleccione pedido a ser agregado:</h3>
@@ -81,7 +82,7 @@
                                     <th style="text-align: center">Nombre del cliente</th>
                                     <th style="text-align: center">Fecha estimada de entrega</th>
                                     <th style="text-align: center">Estado</th>
-                                    <th style="text-align: center">Fecha de pedido</th>
+                                    <th style="text-align: center">Fecha y hora de pedido</th>
                                     <th style="text-align: center">Tiene compras</th>
                                     <th></th>
                                 </tr>
@@ -91,39 +92,39 @@
                                     <tr>
                                         <td style="text-align: center">{{ $orden['id'] }}/{{ date('Y', strtotime($orden['date']))}}</td>
                                         <td style="text-align: center">{{ $orden['customer_name'] }}</td>
-                                        <td style="text-align: center">{{ date('d/m/Y', strtotime($orden['date']))}}</td>
+                                        <td style="text-align: center">{{ date('d/m/Y', strtotime($orden['deadline']))}}</td>
                                         @switch($orden['order_state'])
-                                                @case(1):
+                                                @case(1)
                                                     <td style="text-align: center">Nuevo</td>
                                                     @break
-                                                @case(2):
+                                                @case(2)
                                                     <td style="text-align: center">Confirmado</td>
                                                     @break
-                                                @case(3):
+                                                @case(3)
                                                     <td style="text-align: center">Rechazado</td>
                                                     @break
-                                                @case(4):
+                                                @case(4)
                                                     <td style="text-align: center">Demorado</td>
                                                     @break
-                                                @case(5):
+                                                @case(5)
                                                     <td style="text-align: center">En producción</td>
                                                     @break
-                                                @case(6):
+                                                @case(6)
                                                     <td style="text-align: center">En depósito</td>
                                                     @break
-                                                @case(7):
+                                                @case(7)
                                                     <td style="text-align: center">Cancelado</td>
                                                     @break           
                                         @endswitch
-                                        <td style="text-align: center">{{ date('d/m/Y', strtotime($orden['date']))}}</td>
+                                        <td style="text-align: center">{{ date('d/m/Y H:i', strtotime($orden['date']))}}</td>
                                         @switch($orden['buys'])
-                                                @case(null):
+                                                @case(null)
                                                     <td style="text-align: center">No</td>
                                                     @break
-                                                @case(1):
+                                                @case(1)
                                                     <td style="text-align: center">No</td>
                                                     @break
-                                                @case(2):
+                                                @case(2)
                                                     <td style="text-align: center">Si</td>
                                                     @break           
                                         @endswitch
@@ -223,6 +224,7 @@
                       </button>
                     </div>
                     <div class="modal-body">
+                        <x-form-validation-errors :errors="$errors" />
                         <div class="form-group">
                           <p><label>Codigo: </label>{{$codem}}</p>
                         </div>
@@ -231,7 +233,7 @@
                         </div>
                         <div class="form-group">
                             <label>Seleccione un proveedor, para ver las presentaciones disponibles.</label>
-                            <select class="form-control form-control-sm select2 select2-hidden-accessible" wire:model="proveedor_name" style="width: auto">
+                            <select class="form-control form-control-sm select2 select2-hidden-accessible" wire:model="proveedor_name" style="width: auto" wire:change='change_provider'>
                                 <option selected="selected"></option>
                                 @foreach($proveedoresm as $proveedor)
                                     <option>{{$proveedor['name']}}</option>
@@ -263,7 +265,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="submit" wire:click.prevent="buy_confirm()" class="btn btn-primary btn-sm" >Agregar</button>
-                      <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-danger btn-sm" wire:click.prevent="backmodal()" data-dismiss="modal">Cancelar</button>
                     </div>
                   </div>
                 </form>

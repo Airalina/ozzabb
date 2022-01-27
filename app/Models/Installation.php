@@ -13,10 +13,15 @@ class Installation extends Model
         'code',
         'date',
         'date_admission',
-        'usd_price'
+        'usd_price',
+        'hours_man',
     ];
     public function revisions()
     {
         return $this->hasMany(Revision::class);
+    }
+    public function revisiondetails()
+    {
+        return $this->hasMany(Revisiondetail::class);
     }
 }
