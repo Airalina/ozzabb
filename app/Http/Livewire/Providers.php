@@ -193,30 +193,20 @@ class Providers extends Component
         $this->dispatchBrowserEvent('show-borrar');
         $this->provider=$provider;
     }
+
     public function delete()
     {
-        if (auth()->user()->cannot('delete', auth()->user())) {
-            abort(403);
-        }else
+        if (auth()->user()->cannot('delete', auth()->user()))
         {
-           
-            if(!empty($this->provider->provider_prices)){
-                foreach ($this->provider->provider_prices as $provider_price) {
-                    $provider_price->delete();
-                    if (!empty($provider_price->price)) {
-                        foreach ($provider_price->price as $price) {
-                            $price->delete();
-                        }
-                       
-                    }
-                }
-           }
+            abort(403);
+        } else {
             $this->provider->delete();
             $this->funcion="";
             $this->explora="inactivo";
         }
         $this->dispatchBrowserEvent('hide-borrar');
     }
+
     public function agregamat(Provider $provider){
        
         $this->amount=null;
