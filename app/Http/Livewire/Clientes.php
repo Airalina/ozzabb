@@ -14,6 +14,9 @@ class Clientes extends Component
     protected $clientes;
     public $funcion="", $idcli, $cliente, $paginas=25, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado=true;
     public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora='inactivo',$domicilios, $cuit, $order="name";
+    protected $listeners =[
+        'explorar'
+        ];
     protected $dates = ['deadline', 'date', 'start_date'];
     public function updatingSearch()
     {
