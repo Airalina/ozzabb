@@ -69,6 +69,10 @@ class Ordenesclientes extends Component
 
     public function storepedido()
     {
+        $this->validate([
+            'details'=>'required'],[
+            'details.required' =>'Es necesario agregar al menos un producto'
+            ]);
         if($this->addaddress){
             $this->validate([
                 'street' => 'required|string|min:4|max:30',
@@ -153,7 +157,7 @@ class Ordenesclientes extends Component
             }
         }
         $this->cantidad=0;
-        $this->funcion="list";
+        $this->emit('explorar', $this->customer_id);
     }
     public function selectinstallation(Installation $install)
     {
