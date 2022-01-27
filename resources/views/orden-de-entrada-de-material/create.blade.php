@@ -255,6 +255,7 @@
                             @if (isset($buyorderinfo))
                                 @if(count($depositos)!=0)
                                     @forelse($buyorderinfo as $nro => $buyorder)
+                                        @if(isset($buyorder->material))
                                         <tr>
                                             <td style="text-align: center">
                                                 {{ $buyorder->material->code }}
@@ -301,6 +302,7 @@
                                                 </select>
                                             </td>
                                         </tr>
+                                        @endif
                                     @empty
                                         <tr class="text-center">
                                             <td style="text-align: center" colspan="4" class="py-3 italic">No
