@@ -216,11 +216,11 @@
                 <!-- /.card-body -->
                 @if($update==true)
                   <div class="card-footer">
-                    <button type="submit"  wire:click="editar({{ $order_id }})" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="button"  wire:click="editar({{ $order_id }})" class="btn btn-primary">Guardar Cambios</button>
                   </div>
                 @else
                   <div class="card-footer">
-                    <button type="submit"  wire:click="storepedido()" class="btn btn-primary">Crear Compra</button>
+                    <button type="button"  wire:click="storepedido()" class="btn btn-primary">Crear Compra</button>
                   </div>
                 @endif
               </form>
