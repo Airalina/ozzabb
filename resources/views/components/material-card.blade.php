@@ -215,6 +215,7 @@
                             <option selected value="">Selecciona un tipo</option>
                             <option value="Macho">Macho</option>
                             <option value="Hembra">Hembra</option>
+                            <option value="Ojal">Ojal</option>
                         </select>
                     </div>
                 @break
