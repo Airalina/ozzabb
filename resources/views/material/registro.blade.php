@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label for="family">Familia</label>
-                    <select class="form-control form-control-sm" wire:model="family" wire:change="con" id="family">
+                    <select class="form-control form-control-sm" wire:model="family" wire:change="con" id="family" {{ $disabled }}>
                         <option selected value="">Selecciona una familia</option>
                         <option value="Conectores">conectores</option>
                         <option value="Cables">cables</option>
@@ -36,6 +36,7 @@
                     :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
                     :connect="$connect" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" />
 
+                @if ($family != 'Cables')
                 <div class="form-group">
                     <label for="color">Color</label>
                     <select class="form-control form-control-sm" wire:model="color" id="color">
@@ -49,6 +50,7 @@
                         <option value="Verde" class="text-success">Verde</option>
                     </select>
                 </div>
+                @endif
                 <div class="form-group">
                     <label for="description">Descripción</label>
                     <textarea name="description" class="form-control" wire:model="description" id="description"
@@ -58,13 +60,16 @@
                 @if($family != "Cables" && $family != "Tubos")
                     <label for="line">Línea</label>
                     <select class="form-control form-control-sm" wire:model="line" id="line">
-                            <option selected>Selecciona una linea</option>
-                            <option value="Superseal">Superseal</option>
-                            <option value="Mini">Mini</option>
-                            <option value="Fit">Fit</option>
-                            <option value="Bulldog">Bulldog</option>
-                            <option value="Econoseal">Econoseal</option>
-                            <option value="Eco">Eco</option>
+                        <option selected>Selecciona una linea</option> 
+                        <option value="Bulldog">Bulldog</option>
+                        <option value="Ecoseal">Ecoseal</option>
+                        <option value="Ecu">Ecu</option>
+                        <option value="Fit">Fit</option>
+                        <option value="Fastin Faston">Fastin Faston</option>    
+                        <option value="Mini">Mini</option>
+                        <option value="Sicma">Sicma</option>
+                        <option value="Superseal">Superseal</option>
+           
                     </select>
                 @endif
                 </div>
@@ -73,7 +78,7 @@
                     <select wire:model="usage" id="usage" class="form-control form-control-sm">
                             <option selected>Selecciona un uso</option>
                             <option value="Motos">Motos</option>
-                            <option value="GNC">General</option>
+                            <option value="General">General</option>
                             <option value="GNC">GNC</option>
                             <option value="Electro">Electro</option>
                     </select>
