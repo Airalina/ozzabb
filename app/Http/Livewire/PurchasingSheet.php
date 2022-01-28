@@ -360,7 +360,7 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra=new BuyOrder;
                 $this->ordenes_de_compra->buy_date=$this->date;
                 $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
-                $this->ordenes_de_compra->total_price+=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
                 $this->ordenes_de_compra->pucharsing_sheet_id=$this->plantilla->id;
                 $this->ordenes_de_compra->state=1;
                 $this->ordenes_de_compra->save();
@@ -371,8 +371,8 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
                 $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
                 $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
-                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
-                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price/$ordenes->amount; //Revisar codigo (Los valores no son traidos de forma correcta)
+                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price;//Revisar codigo (Los valores no son traidos de forma correcta)
                 $this->ordenes_de_compra_detalle->save();
                 $this->stmaterial=Material::find($ordenes->material_id);
                 $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
@@ -383,7 +383,7 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra=new BuyOrder;
                 $this->ordenes_de_compra->buy_date=$this->date;
                 $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
-                $this->ordenes_de_compra->total_price+=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
                 $this->ordenes_de_compra->pucharsing_sheet_id=$this->plantilla->id;
                 $this->ordenes_de_compra->state=1;
                 $this->ordenes_de_compra->save();
@@ -394,20 +394,22 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
                 $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
                 $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
-                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
-                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price/$ordenes->amount; //Revisar codigo (Los valores no son traidos de forma correcta)
+                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price;//Revisar codigo (Los valores no son traidos de forma correcta)
                 $this->ordenes_de_compra_detalle->save();
                 $this->stmaterial=Material::find($ordenes->material_id);
                 $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
                 $this->stmaterial->save();
             }else{
+                $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
+                $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra_detalle=new BuyOrderDetail;
                 $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
                 $this->ordenes_de_compra_detalle->buy_order_id=$this->ordenes_de_compra->id;
                 $this->ordenes_de_compra_detalle->amount=$ordenes->amount;
-                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price;
-                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price*$ordenes->amount;
+                $this->ordenes_de_compra_detalle->presentation_price=$ordenes->usd_price/$ordenes->amount; //Revisar codigo (Los valores no son traidos de forma correcta)
+                $this->ordenes_de_compra_detalle->total_price=$ordenes->usd_price;//Revisar codigo (Los valores no son traidos de forma correcta)
                 $this->ordenes_de_compra_detalle->save();
                 $this->stmaterial=Material::find($ordenes->material_id);
                 $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
