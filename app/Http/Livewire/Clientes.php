@@ -181,12 +181,7 @@ class Clientes extends Component
     public function explorar(Customer $cliente){
         $this->cliente=$cliente;
         $this->domicilios=DomicileDelivery::where('client_id', $this->cliente->id)->get();
-<<<<<<< HEAD
         $this->historial=Clientorder::where('customer_id', $this->cliente->id)->latest()->take(10)->get();
-=======
-        $this->historial=Clientorder::where('customer_id', $this->cliente->id)->latest()
-        ->take(10)->get();
->>>>>>> 719b046bac93c05d305284322bdc0afa75f5c99d
         $this->cuit=$cliente->cuit;
         if($this->explora=='inactivo'){
             $this->explora='activo';
