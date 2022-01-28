@@ -391,6 +391,8 @@ class PurchasingSheet extends Component
                 $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
                 $this->stmaterial->save();
             }else{
+                $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
+                $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra_detalle=new BuyOrderDetail;
                 $this->ordenes_de_compra_detalle->material_id=$ordenes->material_id;
                 $this->ordenes_de_compra_detalle->presentation=$ordenes->presentation;
