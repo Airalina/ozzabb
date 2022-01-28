@@ -47,7 +47,7 @@ class MaterialComponent extends Component
         
         $reservations_materials = $mats->get();
         $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
-               
+         
             if (!empty($reservations_materials) && !empty($workorder)) {
                 foreach ($reservations_materials as $material) {
                     $this->reservations[$material->id] = $material->reservationmaterials()->select('material_id', DB::raw('SUM(amount) as

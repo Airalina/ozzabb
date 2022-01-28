@@ -129,6 +129,7 @@
                     <div class="form-group">
                         <label for="line_color">Color Línea</label>
                         <select class="form-control form-control-sm" wire:model="line_color" id="line_color" disabled>
+                            <option selected value="">Selecciona un color</option>
                             <option value="Negro" class="text-dark">Negro</option>
                             <option value="Blanco">Blanco</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
