@@ -66,6 +66,47 @@ class Roles extends Component
                 'delete' => 0,
                 'role_id' => $ro->id,
             ]);
+            
+    
+            Permission::Create([
+                
+                'name' => 'Administracion de Proveedores',
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' =>0,
+                'role_id' => $ro->id,
+            ]);    
+            
+            Permission::Create([
+                
+                'name' => 'Administración de Instalaciones',
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' =>0,
+                'role_id' => $ro->id,
+            ]);
+    
+            Permission::Create([
+                
+                'name' => 'Administración de Depósitos',
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' =>0,
+                'role_id' => $ro->id,
+            ]);
+    
+            Permission::Create([
+                
+                'name' => 'Administracion de Materiales',
+                'see' => 0,
+                'create' => 0,
+                'update' => 0,
+                'delete' =>0,
+                'role_id' => $ro->id,
+            ]);
         }
         
         $this->funcion="";

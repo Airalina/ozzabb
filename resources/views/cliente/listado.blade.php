@@ -28,7 +28,7 @@
                     <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible"
                         style="width: 100%;" tabindex="-1" aria-hidden="true">
                         <option data-select2-id="48" value="name">Nombre</option>
-                        <option data-select2-id="49" value="adomicile_admin">Dirección</option>
+                        <option data-select2-id="49" value="domicile_admin">Dirección</option>
                         <option data-select2-id="50" value="phone">Teléfono</option>
                         <option data-select2-id="51" value="email">Email</option>
                         <option data-select2-id="52" value="state">Estado</option>
