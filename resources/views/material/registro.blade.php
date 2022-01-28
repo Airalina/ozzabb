@@ -64,9 +64,8 @@
                         <option value="Bulldog">Bulldog</option>
                         <option value="Ecoseal">Ecoseal</option>
                         <option value="Ecu">Ecu</option>
-                        <option value="Fit">Fit</option>
                         <option value="Fastin Faston">Fastin Faston</option>    
-                        <option value="Mini">Mini</option>
+                        <option value="Mini Fit">Mini Fit</option>
                         <option value="Sicma">Sicma</option>
                         <option value="Superseal">Superseal</option>
            
