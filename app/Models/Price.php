@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\ProviderPrice;
 use  App\Models\Provider;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Price extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['provider_price_id','price_id','provider_id','date','code','name', 'price'];
     

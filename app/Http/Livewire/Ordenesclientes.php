@@ -157,7 +157,13 @@ class Ordenesclientes extends Component
             }
         }
         $this->cantidad=0;
-        $this->emit('explorar', $this->customer_id);
+        if($this->funcion=="ordernew"){
+            $this->emit('explorar', $this->customer_id);
+        }else{
+            $this->funcion="list";
+            $this->reset();
+        }
+        
     }
     public function selectinstallation(Installation $install)
     {

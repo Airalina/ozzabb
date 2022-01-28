@@ -29,6 +29,7 @@
                                     <th style="text-align: center">Código</th>
                                     <th style="text-align: center">Nombre del cliente</th>
                                      <th style="text-align: center">Fecha estimada</th>
+                                    <th style="text-align: center">¿Se realizo compra para este pedido?</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -42,6 +43,17 @@
                                         <td style="text-align: center">
                                             {{ $orderr->deadline->format('d/m/Y') }}
                                         </td>
+                                        @switch($orderr->buys)
+                                            @case(null)
+                                                <td style="text-align: center">No</td>
+                                                @break
+                                            @case(1)
+                                                <td style="text-align: center">No</td>
+                                                @break
+                                            @case(2)
+                                                <td style="text-align: center">Si</td>
+                                                @break           
+                                        @endswitch
                                         <td>
                                             <div>
                                                 <button type="button" wire:click="addorder({{ $orderr->id }})"
@@ -183,12 +195,12 @@
                                         <td style="text-align: center">{{ $purchasing[3] }}</td>
                                         <td style="text-align: center">{{ $purchasing[4] }}</td>
                                         <td style="text-align: center">{{ $purchasing[5] }}</td>
-                                        <td style="text-align: center">{{ $purchasing[10] }}</td>
-                                        <td style="text-align: center">{{ $purchasing[6] }}</td>
-                                        <td style="text-align: center">{{ $purchasing[7] }}</td>
-                                        <td style="text-align: center">{{ $purchasing[8] }}</td>
-                                        <td style="text-align: center">{{ $purchasing[9] }}</td>
-                                        <td style="text-align: center">{{ $purchasing[11] }}</td>
+                                        <td style="text-align: center">{{ (isset($compras[$purchasing[12]][10])) ? $compras[$purchasing[12]][10] : '' }}</td>
+                                        <td style="text-align: center">{{ (isset($compras[$purchasing[12]][6])) ? $compras[$purchasing[12]][6] : '' }}</td>
+                                        <td style="text-align: center">{{ (isset($compras[$purchasing[12]][7])) ? $compras[$purchasing[12]][7] : '' }}</td>
+                                        <td style="text-align: center">{{ (isset($compras[$purchasing[12]][8])) ? $compras[$purchasing[12]][8] : '' }}</td>
+                                        <td style="text-align: center">{{ (isset($compras[$purchasing[12]][9])) ? $compras[$purchasing[12]][9] : '' }}</td>
+                                        <td style="text-align: center">{{ (isset($compras[$purchasing[12]][11])) ? $compras[$purchasing[12]][11] : '' }}</td>
                                         <td style="text-align: center"><button type="button" wire:click="buy('{{ $purchasing[1] }}')"class="btn btn-success btn-sm">Comprar</button></td>
                                     </tr>
                                 @empty

@@ -26,7 +26,7 @@ class PurchasingSheet extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     protected $purchasing_sheets;
-    public $prueba=0, $paginas=25;
+    public $prueba=0, $paginas=25 ,$compras = array();
     public $funcion="", $sheet, $ord, $searchMounth='', $explora, $pedidos = false, $detail = array(), $count=0,$date, $provider_price_unit, $provider_price_price, $provider_id, $i = 0, $x = 0, $orderC, $total = [], $mats = [], $material = [], $present = [], $orders, $ottPlatform = '', $search = '', $clientOrders, $clientorders = [], $order = [], $order_detail = [], $installations, $installation, $installation_code = [[]], $revision_detail = [], $total_amount = [], $buys = [], $deposit_material = [], $total_material = [], $div = false, $select = false, $presentation = [], $stock, $suma = [], $block = true, $selection = false, $providers = [], $provider, $in_transit = [], $transit = [], $transits, $requirements = [], $requirement = [], $req = [], $amount, $provider_price = [], $provider_presentation = [], $comprar = [], $iva, $subtotal, $total_price, $select_present, $m_comprar = [], $searchP, $searchmateriales, $months, $cantidad, $msg, $msg_error, $selection_provider, $provider_selected, $mate, $orders_amount;
     private $select_presentation = [], $select_provider = [];
     public  $providerprice=array(),$providerprices=array(), $purchasing=array(), $purchasings=array(), $materialcount=0;
@@ -95,36 +95,39 @@ class PurchasingSheet extends Component
                 $this->ordenes[$this->ordercount]=$order;
                 $this->ordercount+=1;
                 foreach($order->orderdetails as $detailorder){
-                    foreach($detailorder->installations as $installation){
-                        $countrevision=$installation->revisions->count()-1;
-                        $revision=$installation->revisions()->orderBy('number_version','desc')->first();
+                        $countrevision=$detailorder->installations->revisions->count()-1;
+                        $revision=$detailorder->installations->revisions()->orderBy('number_version','desc')->first();
                         foreach($revision->revisiondetails->where('number_version',$countrevision) as $revisiondetail){
                                 $material=$revisiondetail->materials;
-                                foreach( $this->purchasings as $purchasing){
-                                    if($purchasing[1]==$material->code)
-                                    {
-                                        $this->prueba=$purchasing[5];
-                                        unset($this->purchasings[$purchasing[0]]);
+                                
+                                if (!empty($material->code)) {
+                                    foreach( $this->purchasings as $purchasing){
+                                        if($purchasing[1]==$material->code)
+                                        {
+                                            $this->prueba=$purchasing[5];
+                                            unset($this->purchasings[$purchasing[0]]);
+                                        }
                                     }
+                                    $this->purchasing[0]=$this->materialcount;
+                                    $this->purchasing[1]=$material->code;
+                                    $this->purchasing[2]=$material->description;
+                                    $this->purchasing[3]=$material->stock;
+                                    $this->purchasing[4]=$material->stock_transit;
+                                    $this->purchasing[5]=$this->prueba+$revisiondetail->amount*$detailorder->cantidad;
+                                    $this->purchasing[6]=0;
+                                    $this->purchasing[7]=0;
+                                    $this->purchasing[8]=0;
+                                    $this->purchasing[9]=0;
+                                    $this->purchasing[10]="";
+                                    $this->purchasing[11]=0;
+                                    $this->purchasing[12]=$material->id;
+                                    $this->purchasings[$this->materialcount]=$this->purchasing;
+                                    $this->materialcount+=1;
+                                    $this->prueba=0;
                                 }
-                                $this->purchasing[0]=$this->materialcount;
-                                $this->purchasing[1]=$material->code;
-                                $this->purchasing[2]=$material->description;
-                                $this->purchasing[3]=$material->stock;
-                                $this->purchasing[4]=$material->stock_transit;
-                                $this->purchasing[5]=$this->prueba+$revisiondetail->amount*$detailorder->cantidad;
-                                $this->purchasing[6]=0;
-                                $this->purchasing[7]=0;
-                                $this->purchasing[8]=0;
-                                $this->purchasing[9]=0;
-                                $this->purchasing[10]="";
-                                $this->purchasing[11]=0;
-                                $this->purchasing[12]=$material->id;
-                                $this->purchasings[$this->materialcount]=$this->purchasing;
-                                $this->materialcount+=1;
-                                $this->prueba=0;
+                                
                         }
-                    }
+                    
                 }  
         }else{
             foreach($this->ordenes as $orden){
@@ -136,11 +139,11 @@ class PurchasingSheet extends Component
                 $this->ordenes[$this->ordercount]=$order;
                 $this->ordercount+=1;
                 foreach($order->orderdetails as $detailorder){
-                    foreach($detailorder->installations as $installation){
-                        $countrevision=$installation->revisions->count()-1;
-                        $revision=$installation->revisions()->orderBy('number_version','desc')->first();
+                        $countrevision=$detailorder->installations->revisions->count()-1;
+                        $revision=$detailorder->installations->revisions()->orderBy('number_version','desc')->first();
                         foreach($revision->revisiondetails->where('number_version',$countrevision) as $revisiondetail){
                                 $material=$revisiondetail->materials;
+                            if(!empty($material->id)){
                                 foreach( $this->purchasings as $purchasing){
                                     if($purchasing[1]==$material->code)
                                     {
@@ -183,9 +186,9 @@ class PurchasingSheet extends Component
                                     $this->purchasings[$this->prueba]=$this->purchasing; 
                                     $this->materialrep=false;
 
-                                }                          
+                                }   
+                            }                       
                         }
-                    }
                 }   
             }
         }
@@ -251,27 +254,28 @@ class PurchasingSheet extends Component
             'amount.min'=>'El campo cantidad debe ser mayor a cero',
             'proveedor_name.required'=>'Debe seleccionar un proveedor',
         ]);
+      
         foreach($this->purchasings as $purchasing){
             if($purchasing[1]==$this->codem){
-                $this->purchasing[0]=$purchasing[0];
-                $this->purchasing[1]=$purchasing[1];
-                $this->purchasing[2]=$purchasing[2];
-                $this->purchasing[3]=$purchasing[3];
-                $this->purchasing[4]=$purchasing[4];
-                $this->purchasing[5]=$purchasing[5];
-                $this->purchasing[6]=$this->presentationm;
-                $this->purchasing[7]=$this->amount;
-                $this->purchasing[8]=$this->presentationm*$this->amount;
-                $this->purchasing[9]=$this->precio->usd_price;
-                $this->purchasing[10]=$this->proveedor_name;
-                $this->purchasing[11]=$this->precio->usd_price*$this->amount;
-                $this->purchasing[12]=$purchasing[12];
-                $this->purchasings[$purchasing[0]]=$this->purchasing;             
+                $compra[0]=$purchasing[0];
+                $compra[1]=$purchasing[1];
+                $compra[2]=$purchasing[2];
+                $compra[3]=$purchasing[3];
+                $compra[4]=$purchasing[4];
+                $compra[5]=$purchasing[5];
+                $compra[6]=$this->presentationm;
+                $compra[7]=$this->amount;
+                $compra[8]=$this->presentationm*$this->amount;
+                $compra[9]=$this->precio->usd_price;
+                $compra[10]=$this->proveedor_name;
+                $compra[11]=$this->precio->usd_price*$this->amount;
+                $compra[12]=$purchasing[12];
+                $this->compras[$this->material_id]=$compra;           
             }
         }
         $this->subtotal=0;
-        foreach($this->purchasings as $purchasing){
-            $this->subtotal+=$purchasing[11];
+        foreach($this->compras as $compra){
+            $this->subtotal+=$compra[11];
         }
         $this->dispatchBrowserEvent('hide-form');
         $this->provcount=0;
@@ -296,17 +300,20 @@ class PurchasingSheet extends Component
         $this->dispatchBrowserEvent('hide-formmaterial');
     }
     public function save(){
+
         $this->validate([
             'ordenes'=>'required',
-            'iva'=>'required|numeric|min:1',
-            'purchasings.*.7'=>'required|numeric|min:1',
-            'purchasings.*.6'=>'required|numeric|min:1',
-            'purchasings.*.10'=>'required',
+            'iva'=>'numeric|min:0',
+            'compras'=>'min:1',
+            'purchasings.*.7'=>'numeric|min:0',
+            'purchasings.*.6'=>'numeric|min:0',
+            
         ], [
             'ordenes.required'=>'Debe seleccionar al menos un pedido',
             'iva.required'=>'El campo IVA es requerido',
             'iva.numeric'=>'El campo IVA es numérico',
             'iva.min'=>'El campo IVA es mayor a 0',
+            'compras.min'=>'Debe comprar al menos un material',
             'purchasings.*.7.required'=>'Debe rellenar el campo cantidad para el material ',
             'purchasings.*.6.required'=>'Debe seleccionar el campo presentación para el material ',
             'purchasings.*.7.numeric'=>'El campo cantidad debe ser numérico ',
@@ -320,9 +327,9 @@ class PurchasingSheet extends Component
         $this->date=Carbon::now();
         $this->plantilla= new PucharsingSheet;
         $this->plantilla->date=$this->date;
-        $this->plantilla->usd_subtotal_price=$this->subtotal;
+        $this->plantilla->usd_subtotal_price=(!empty($this->subtotal)) ? $this->subtotal : 0;
         $this->plantilla->iva=$this->iva;
-        $this->plantilla->usd_total_price=$this->total_price;
+        $this->plantilla->usd_total_price=(!empty($this->total_price)) ? $this->total_price : 0; 
         $this->plantilla->save();
         foreach($this->ordenes as $orden){
             $this->plantilla_orden= new PucharsingSheetOrder;
@@ -333,15 +340,15 @@ class PurchasingSheet extends Component
             $this->clientorder->buys=2;
             $this->clientorder->save();
         }
-        foreach($this->purchasings as $purchasing){
-            if($purchasing[7]>0){
+        foreach($this->compras as $compra){
+            if($compra[7]>0){
                 $this->plantilla_detail=new PucharsingSheetDetail;
                 $this->plantilla_detail->pucharsing_sheet_id=$this->plantilla->id;
-                $this->plantilla_detail->material_id=$purchasing[12];
-                $this->plantilla_detail->amount=$purchasing[7];
-                $this->plantilla_detail->presentation=$purchasing[6];
-                $this->plantilla_detail->usd_price=$purchasing[11];
-                $this->plantilla_detail->provider_id=Provider::where('name',$purchasing[10])->first()->id;
+                $this->plantilla_detail->material_id=$compra[12];
+                $this->plantilla_detail->amount=$compra[7];
+                $this->plantilla_detail->presentation=$compra[6];
+                $this->plantilla_detail->usd_price=$compra[11];
+                $this->plantilla_detail->provider_id=Provider::where('name',$compra[10])->first()->id;
                 $this->plantilla_detail->save();
             }
         }
@@ -407,7 +414,9 @@ class PurchasingSheet extends Component
                 $this->stmaterial->save();
             }
         }
-        $this->ordenes_de_compra->save();
+        if (!empty($this->ordenes_de_compra)) {
+            $this->ordenes_de_compra->save();
+        }
         $this->reset();
      }
      public function view_detail(PucharsingSheet $purchasing)
