@@ -29,6 +29,7 @@
                                     <th style="text-align: center">Código</th>
                                     <th style="text-align: center">Nombre del cliente</th>
                                      <th style="text-align: center">Fecha estimada</th>
+                                    <th style="text-align: center">¿Se realizo compra para este pedido?</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -42,6 +43,17 @@
                                         <td style="text-align: center">
                                             {{ $orderr->deadline->format('d/m/Y') }}
                                         </td>
+                                        @switch($orderr->buys)
+                                            @case(null)
+                                                <td style="text-align: center">No</td>
+                                                @break
+                                            @case(1)
+                                                <td style="text-align: center">No</td>
+                                                @break
+                                            @case(2)
+                                                <td style="text-align: center">Si</td>
+                                                @break           
+                                        @endswitch
                                         <td>
                                             <div>
                                                 <button type="button" wire:click="addorder({{ $orderr->id }})"
