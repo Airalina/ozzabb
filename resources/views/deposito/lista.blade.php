@@ -90,7 +90,7 @@
                           <button type="button" wire:click="update({{$deposito}})" class="btn btn-success btn-sm">Actualizar</button>
                         @endif
                         @if (auth()->user()->can('deletedepo', auth()->user()))
-                          <button type="button" wire:click="delete({{$deposito}})" class="btn btn-danger btn-sm">Borrar</button>
+                          <button type="button" wire:click=" destruirdepo({{$deposito}})" class="btn btn-danger btn-sm">Borrar</button>
                         @endif
                       </td>
                     </tr>
@@ -103,5 +103,6 @@
                 </table>
                 {{ $depositos->links() }}
               </div>
+              @include('borrar')
               <!-- /.card-body -->
             </div>
