@@ -176,8 +176,8 @@ class Depositos extends Component
                 'create_date'=>'required',
             ],
             [
-                'type.required'=>'El tipo de depósito es requerido',
-                'type.min'=>'El tipo de depósito es requerido',
+                'type.required'=>'El campo Tipo de depósito es requerido',
+                'type.min'=>'El campo Tipo de depósito es requerido',
                 'name.required' => 'El campo Nombre es requerido',
                 'name.min' => 'El campo Nombre tiene por lo menos 4 caracteres',
                 'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
