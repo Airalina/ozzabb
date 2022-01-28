@@ -109,8 +109,10 @@ class Ordenesclientes extends Component
         }
         $this->validate([
             'deadline' => 'required',
+            'customer_id' => 'required',
         ],[
             'deadline.required' => 'El campo "Fecha estimada de entrega" es requerido',
+            'customer_id.required' => 'Por favor seleccione un cliente'
         ]);
         $this->usd_price=$this->total;
         $this->arp_price=$this->total*$this->usd;
