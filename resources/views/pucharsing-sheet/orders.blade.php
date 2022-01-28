@@ -14,7 +14,7 @@
                                     <th style="text-align: center">Proveedor</th>
                                     <th style="text-align: center">Fecha de orden</th>
                                     <th style="text-align: center">Cantidad de materiales pedidos</th>
-                                    <th style="text-align: center">Total</th>
+                                    <th style="text-align: center">Total U$D</th>
                                     <th></th>
                                 </tr>
                             </thead>
