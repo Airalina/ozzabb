@@ -95,9 +95,8 @@ class PurchasingSheet extends Component
                 $this->ordenes[$this->ordercount]=$order;
                 $this->ordercount+=1;
                 foreach($order->orderdetails as $detailorder){
-                    foreach($detailorder->installations as $installation){
-                        $countrevision=$installation->revisions->count()-1;
-                        $revision=$installation->revisions()->orderBy('number_version','desc')->first();
+                        $countrevision=$detailorder->installations->revisions->count()-1;
+                        $revision=$detailorder->installations->revisions()->orderBy('number_version','desc')->first();
                         foreach($revision->revisiondetails->where('number_version',$countrevision) as $revisiondetail){
                                 $material=$revisiondetail->materials;
                                 foreach( $this->purchasings as $purchasing){
@@ -124,7 +123,7 @@ class PurchasingSheet extends Component
                                 $this->materialcount+=1;
                                 $this->prueba=0;
                         }
-                    }
+                    
                 }  
         }else{
             foreach($this->ordenes as $orden){
@@ -136,9 +135,8 @@ class PurchasingSheet extends Component
                 $this->ordenes[$this->ordercount]=$order;
                 $this->ordercount+=1;
                 foreach($order->orderdetails as $detailorder){
-                    foreach($detailorder->installations as $installation){
-                        $countrevision=$installation->revisions->count()-1;
-                        $revision=$installation->revisions()->orderBy('number_version','desc')->first();
+                        $countrevision=$detailorder->installations->revisions->count()-1;
+                        $revision=$detailorder->installations->revisions()->orderBy('number_version','desc')->first();
                         foreach($revision->revisiondetails->where('number_version',$countrevision) as $revisiondetail){
                                 $material=$revisiondetail->materials;
                                 foreach( $this->purchasings as $purchasing){
@@ -185,7 +183,6 @@ class PurchasingSheet extends Component
 
                                 }                          
                         }
-                    }
                 }   
             }
         }
