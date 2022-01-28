@@ -30,7 +30,7 @@
               <br>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover table-sm">
+                <table class="table table-hover table-sm" >
                 <div class="form-group" data-select2-id="45">
                     <label>Ordenar por</label>
                     <select wire:model="order" class="form-control select2bs4 select2-hidden-accessible"
@@ -43,7 +43,7 @@
                 </div>
                   <thead>
                     <tr>
-                      <th style="text-align: center">Nombre</th>
+                      <th  style="text-align: center">Nombre</th>
                       <th style="text-align: center">Tipo</th> 
                       <th style="text-align: center">Ubicación</th>
                       <th style="text-align: center">Propósito</th>
