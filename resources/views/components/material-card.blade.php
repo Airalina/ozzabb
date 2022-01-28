@@ -107,7 +107,7 @@
                     <div class="form-group">
                         <label for="section">Sección</label>
                         <input type="text" class="form-control" id="section" wire:model="section"
-                            placeholder="Grosor del cable en mm">
+                            placeholder="Grosor del cable en mm (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="base_color">Color base</label>
@@ -119,6 +119,13 @@
                             <option value="Azul" class="text-primary">Azul</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Violeta" style="color:violet">Violeta</option>
+                            <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Rosado" style="color:palevioletred">Rosado</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
+                            <option value="Verde claro" style="color:lightgreen">Verde claro</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -131,6 +138,13 @@
                             <option value="Azul" class="text-primary">Azul</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Violeta" style="color:violet">Violeta</option>
+                            <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Rosado" style="color:palevioletred">Rosado</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
+                            <option value="Verde claro" style="color:lightgreen">Verde claro</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -138,8 +152,10 @@
                         <select class="form-control form-control-sm" wire:model="braid_configuration"
                             id="braid_configuration">
                             <option selected value="">Selecciona una configuración</option>
-                            <option value="16 x 30mm">16 x 30mm</option>
-                            <option value="34 x 20mm">34 x 20mm</option>
+                            <option value="16 x 30 mm">16 x 30 mm</option>
+                            <option value="34 x 20 mm">34 x 20 mm</option>
+                            <option value="7 x 0.25 mm">7 x 0.25 mm</option>
+                            <option value="16 x 0.20 mm">16 x 0.20 mm</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -167,23 +183,23 @@
                     <div class="form-group">
                         <label for="operating_temperature">Temperatura de Servicio</label>
                         <input type="text" class="form-control" id="operating_temperature" wire:model="operating_temperature"
-                            placeholder="Temperatura en grados Celsius">
+                            placeholder="Temperatura en grados Celsius (para decimales usar 'punto(.)')">
                     </div>
                 @break
                 @case("Terminales")
                     <div class="form-group">
                         <label for="size">Tamaño</label>
-                        <input type="text" class="form-control" id="size" wire:model="size" placeholder="Tamaño en mm">
+                        <input type="text" class="form-control" id="size" wire:model="size" placeholder="Tamaño en mm (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="minimum_section">Sección mínima agrafado</label>
                         <input type="text" class="form-control" id="minimum_section" wire:model="minimum_section"
-                            placeholder="Sección mínima">
+                            placeholder="Sección mínima (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="maximum_section">Sección máxima agrafado</label>
                         <input type="text" class="form-control" id="maximum_section" wire:model="maximum_section"
-                            placeholder="Sección máxima">
+                            placeholder="Sección máxima (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="term_material">Material</label>
@@ -206,12 +222,12 @@
                     <div class="form-group">
                         <label for="minimum_diameter">Diámetro mínimo de Cable</label>
                         <input type="text" class="form-control" id="minimum_diameter" wire:model="minimum_diameter"
-                            placeholder="Diámetro mínimo de Sello">
+                            placeholder="Diámetro mínimo de Sello (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="maximum_diameter">Diámetro máximo de Cable</label>
                         <input type="text" class="form-control" id="maximum_diameter" wire:model="maximum_diameter"
-                            placeholder="Diámetro máximo de Cable">
+                            placeholder="Diámetro máximo de Cable (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="seal_type">Tipo</label>
@@ -224,6 +240,7 @@
                         <label for="tube_type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="tube_type" id="tube_type" wire:change="select_type">
                             <option selected value="">Selecciona un tipo</option>
+                            <option value="Barnizado">Barnizado</option>
                             <option value="Corrugado">Corrugado</option>
                             <option value="Termocontraible">Termocontraible</option>
                             <option value="PVC">PVC</option>
@@ -232,28 +249,28 @@
                     <div class="form-group">
                         <label for="tube_diameter">Diámetro</label>
                         <input type="text" class="form-control" id="tube_diameter" wire:model="tube_diameter"
-                            placeholder="Diámetro del tubo en milímetros">
+                            placeholder="Diámetro del tubo en milímetros (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="wall_thickness">Espesor de pared</label>
                         <input type="text" class="form-control" id="wall_thickness" wire:model="wall_thickness"
-                            placeholder="Grosor de la pared del tubo en mm">
+                            placeholder="Grosor de la pared del tubo en mm (para decimales usar 'punto(.)')">
                     </div>
                      @if ($divTube)
                         <div class="form-group">
                             <label for="contracted_diameter">Diámetro Contraído</label>
                             <input type="text" class="form-control" id="contracted_diameter" wire:model="contracted_diameter"
-                                placeholder="Diámetro del tubo una vez contraído">
+                                placeholder="Diámetro del tubo una vez contraído (para decimales usar 'punto(.)')">
                         </div>
                         <div class="form-group">
                             <label for="minimum_temperature">Temperatura mínima de Servicio</label>
                             <input type="text" class="form-control" id="minimum_temperature" wire:model="minimum_temperature"
-                                placeholder="Temperatura mínima de Servicio">
+                                placeholder="Temperatura mínima de Servicio (para decimales usar 'punto(.)')">
                         </div>
                         <div class="form-group">
                             <label for="maximum_temperature">Temperatura máxima de Servicio</label>
                             <input type="text" class="form-control" id="maximum_temperature" wire:model="maximum_temperature"
-                                placeholder="Temperatura máxima de Servicio">
+                                placeholder="Temperatura máxima de Servicio (para decimales usar 'punto(.)')">
                         </div>
                      @endif
                 @break
@@ -265,6 +282,7 @@
                             <option value="Tapa de conector">Tapa de conector</option>
                             <option value="Fusible">Fusible</option>
                             <option value="Relay">Relay</option>
+                            <option value="Tapón ciego">Tapón ciego</option>
                             <option value="Pasante de Goma">Pasante de Goma</option>
                         </select>
                     </div>
@@ -281,17 +299,17 @@
                     <div class="form-group">
                         <label for="long">Largo</label>
                         <input type="text" class="form-control" id="long" wire:model="long"
-                            placeholder="Largo en mm">
+                            placeholder="Largo en mm (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="width">Ancho</label>
                         <input type="text" class="form-control" id="width" wire:model="width"
-                            placeholder="Ancho en mm">
+                            placeholder="Ancho en mm (para decimales usar 'punto(.)')">
                     </div>
                     <div class="form-group">
                         <label for="hole_diameter">Diámetro del Orificio</label>
                         <input type="text" class="form-control" id="hole_diameter" wire:model="hole_diameter"
-                            placeholder="Diámetro del Orificio">
+                            placeholder="Diámetro del Orificio (para decimales usar 'punto(.)')">
                     </div>
                 @break
                 

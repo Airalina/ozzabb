@@ -117,6 +117,13 @@
                             <option value="Azul" class="text-primary">Azul</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Violeta" style="color:violet">Violeta</option>
+                            <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Rosado" style="color:palevioletred">Rosado</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
+                            <option value="Verde claro" style="color:lightgreen">Verde claro</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -128,14 +135,23 @@
                             <option value="Azul" class="text-primary">Azul</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Violeta" style="color:violet">Violeta</option>
+                            <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Rosado" style="color:palevioletred">Rosado</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
+                            <option value="Verde claro" style="color:lightgreen">Verde claro</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="braid_configuration">Configuración de Trenza</label>
                         <select class="form-control form-control-sm" wire:model="braid_configuration"
                             id="braid_configuration" disabled>
-                            <option value="16 x 30mm">16 x 30mm</option>
-                            <option value="34 x 20mm">34 x 20mm</option>
+                            <option value="16 x 30 mm">16 x 30 mm</option>
+                            <option value="34 x 20 mm">34 x 20 mm</option>
+                            <option value="7 x 0.25 mm">7 x 0.25 mm</option>
+                            <option value="16 x 0.20 mm">16 x 0.20 mm</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -216,6 +232,7 @@
                     <div class="form-group">
                         <label for="tube_type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="tube_type" id="tube_type" disabled>
+                            <option value="Barnizado">Barnizado</option>
                             <option value="Corrugado">Corrugado</option>
                             <option value="Termocontraible">Termocontraible</option>
                             <option value="PVC">PVC</option>
@@ -257,6 +274,7 @@
                             <option value="Fusible">Fusible</option>
                             <option value="Relay">Relay</option>
                             <option value="Pasante de Goma">Pasante de Goma</option>
+                            <option value="Tapón ciego">Tapón ciego</option>
                         </select>
                     </div>
                     @break
@@ -294,18 +312,21 @@
                         </select>
                     </div>
                     @endif
-
-                    <div class="form-group">
-                        <label for="color">Color</label>
-                        <select class="form-control form-control-sm" wire:model="color" id="color" disabled>
-                            <option value="Negro" class="text-dark">Negro</option>
-                            <option value="Blanco">Blanco</option>
-                            <option value="Rojo" class="text-danger">Rojo</option>
-                            <option value="Azul" class="text-primary">Azul</option>
-                            <option value="Amarillo" class="text-warning">Amarillo</option>
-                            <option value="Verde" class="text-success">Verde</option>
-                        </select>
-                    </div>
+                    @if ($family != 'Cables')
+                        <div class="form-group">
+                            <label for="color">Color</label>
+                            <select class="form-control form-control-sm" wire:model="color" id="color" disabled>
+                                <option selected value="">Selecciona un color</option>
+                                <option value="Transparente">Transparente</option>
+                                <option value="Negro" class="text-dark">Negro</option>
+                                <option value="Blanco">Blanco</option>
+                                <option value="Rojo" class="text-danger">Rojo</option>
+                                <option value="Azul" class="text-primary">Azul</option>
+                                <option value="Amarillo" class="text-warning">Amarillo</option>
+                                <option value="Verde" class="text-success">Verde</option>
+                            </select>
+                        </div>
+                    @endif
                     <div class="form-group">
                         <label for="description">Descripción</label>
                         <textarea name="description" class="form-control" wire:model="description" id="description"
@@ -315,12 +336,15 @@
                         @if($family != "Cables" && $family != "Tubos")
                         <label for="line">Línea</label>
                         <select class="form-control form-control-sm" wire:model="line" id="line" disabled>
+                            <option selected>Selecciona una linea</option>
                             <option value="Superseal">Superseal</option>
                             <option value="Mini">Mini</option>
                             <option value="Fit">Fit</option>
                             <option value="Bulldog">Bulldog</option>
-                            <option value="Econoseal">Econoseal</option>
-                            <option value="Eco">Eco</option>
+                            <option value="Ecoseal">Ecoseal</option>
+                            <option value="Ecu">Ecu</option>
+                            <option value="Sicma">Sicma</option>
+                            <option value="Fastin Faston">Fastin Faston</option>
                         </select>
                         @endif
                     </div>
@@ -329,6 +353,7 @@
                         <select wire:model="usage" id="usage" class="form-control form-control-sm" disabled>
                             <option value="Motos">Motos</option>
                             <option value="GNC">GNC</option>
+                            <option value="General">General</option>
                             <option value="Electro">Electro</option>
                         </select>
                     </div>
