@@ -169,12 +169,15 @@ class Depositos extends Component
         # code...
         if($this->funcion=="create"){
             $this->validate([
+                'type'=>'required|min:4',
                 'name' => 'required|string|min:4|max:100',
                 'location' => 'required|string|min:4|max:300',
                 'descriptionw' => 'required|string|min:4|max:300',
                 'create_date'=>'required',
             ],
             [
+                'type.required'=>'El tipo de depósito es requerido',
+                'type.min'=>'El tipo de depósito es requerido',
                 'name.required' => 'El campo Nombre es requerido',
                 'name.min' => 'El campo Nombre tiene por lo menos 4 caracteres',
                 'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
