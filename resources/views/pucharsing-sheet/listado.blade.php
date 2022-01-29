@@ -52,7 +52,7 @@
                     <tr class="registros">
                         <td style="text-align: center">{{ $purchasing_sheet->id }}</td>
                         <td style="text-align: center">{{ date('d-m-Y', strtotime($purchasing_sheet->date)) }}</td>
-                        <td style="text-align: center">{{ count($purchasing_sheet->purchasing_sheet_orders) }}</td>
+                        <td style="text-align: center">{{ count($purchasing_sheet->buyorders) }}</td>
                         @if(!empty($purchasing_sheet->usd_total_price))
                         <td style="text-align: center">${{ $purchasing_sheet->usd_total_price }}</td>
                         @else
