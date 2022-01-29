@@ -33,7 +33,8 @@ class OrdenDeEntradaDeMateriales extends Component
     public function render()
     {
         $fecha = date('Y-m-d', strtotime($this->searchordenesem));
-       
+        $type = ($this->order == 'date') ? 'desc' : 'asc';
+
          $this->orders=MaterialEntryOrder::where('id','LIKE','%' . $this->searchordenesem . '%')
             ->orWhere('buy_order_id','LIKE','%'.$this->searchordenesem.'%')
             ->orWhere('follow_number','LIKE','%'.$this->searchordenesem.'%')
@@ -44,7 +45,7 @@ class OrdenDeEntradaDeMateriales extends Component
             ->orWhereDay('date','LIKE','%'.$this->searchordenesem.'%')
             ->orWhereMonth('date','LIKE','%'.$this->searchordenesem.'%')
             ->orWhereYear('date','LIKE','%'.$this->searchordenesem.'%')
-            ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderBy($this->order, 'desc')->paginate($this->paginas);
+            ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderBy($this->order, $type)->paginate($this->paginas);
 
 
 
