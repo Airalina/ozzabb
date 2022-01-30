@@ -129,7 +129,7 @@
                                                     <td style="text-align: center">{{ $detail[2] }}</td>
                                                     <td style="text-align: center">{{ $detail[6] }}</td>
                                                     <td style="text-align: center"><button type="button"
-                                                            wire:click="downmaterial({{ $detail[3] }})"
+                                                            wire:click="downmaterial({{ $detail[4] }})"
                                                             class="btn btn-danger btn-sm">-</button></td>
                                                 </tr>
                                             @endforeach
@@ -207,11 +207,53 @@
                                         </table>
                                     </div>
                                 @endif
+                                @if (isset($order_selected))
+                                <div class="card-body table-responsive">
+                                    <form>
+                                        <div class="card-header">
+                                            <h3 class="card-title">Orden de compra seleccionada:</h3>
+                                            <br>
+                                        </div>
+                                        <div class="card-body table-responsive p-0">
+                                                <table class="table table-hover table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="text-align: center">Código</th>
+                                                            <th style="text-align: center">Proveedor</th>
+                                                            <th style="text-align: center">Precio total</th>
+                                                            <th style="text-align: center">Fecha de compra</th>
+                                                            <th style="text-align: center">Estado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr>
+                                                                <td style="text-align: center">{{ $order_selected->order_number }}</td>
+                                                                <td style="text-align: center">{{ $order_selected->provider->name }}</td>
+                                                                <td style="text-align: center">{{ $order_selected->total_price }}</td>
+                                                                <td style="text-align: center">{{ date('d/m/Y', strtotime($order_selected->buy_date))}}</td>
+                                                                <td style="text-align: center">
+                                                                    @if ($order_selected->state == 2)
+                                                                        Completa
+                                                                    @elseif($order_selected->state == 0)
+                                                                        Parcialmente Recibido
+                                                                    @else
+                                                                        En tránsito
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </form>
+                                </div>
+                                @endif
+                                @if (!$close_order)
                                 <div class="form-group">
                                     <button type="button" class="btn btn-danger" wire:click="close"> Cerrar orden de
                                         ingreso
                                     </button>
                                 </div>
+                                @endif
                                 <div class="form-group">
                                     <label>N° de remito:</label>
                                     <input class="form-control form-control-sm" type="text" wire:model="follow"
@@ -230,7 +272,7 @@
 
                                 <!-- /.card-body -->
                                 <div class="card">
-                                    <div id="alert">
+                                    <div id="alert" wire:ignore>
                                     </div>
                                     <div class="card-header">
                                         <h3 class="card-title">Detalle de orden de ingreso</h3>
@@ -247,62 +289,43 @@
                                                     <th style="text-align: center">Cantidad remito</th>
                                                     <th style="text-align: center">Diferencia</th>
                                                     <th style="text-align: center">Depósito</th>
+                                                    <td></td>
                                                 </tr>
                                             </thead>
                                             <tbody>
                             @endif
 
-                            @if (isset($buyorderinfo))
-                                @if(count($depositos)!=0)
-                                    @forelse($buyorderinfo as $nro => $buyorder)
-                                        @if(isset($buyorder->material))
+                            @if (isset($materials))
+                                    @forelse($materials as $material)
                                         <tr>
                                             <td style="text-align: center">
-                                                {{ $buyorder->material->code }}
+                                                {{ $material['code'] }}
                                             </td>
                                             <td style="text-align: center">
-                                                {{ $buyorder->material->description }}</td>
+                                                {{ $material['description'] }}</td>
 
                                             <td style="text-align: center">
-                                                {{ $buyorder->presentation }}
+                                                {{ $material['presentation'] }}
                                             </td>
                                             <td style="text-align: center">
-                                                {{ $buyorder->amount }}</td>
-                                            <td style="text-align: center">
-                                                <div wire:ignore>
-                                                    <input class="form-control form-control-sm" type="text"
-                                                        wire:model="received_amount.{{ $buyorder->material_id }}"
-                                                        wire:change="amount_change({{ $buyorder->id }})"
-                                                        placeholder="Cantidad" required>
-                                                </div>
+                                                {{ $material['amount'] }}
                                             </td>
                                             <td style="text-align: center">
-                                                <div wire:ignore>
-                                                    <input class="form-control form-control-sm" type="text"
-                                                        wire:model="refer_amount.{{ $buyorder->material_id }}"
-                                                        wire:change="amount_change({{ $buyorder->id }})"
-                                                        placeholder="Cantidad" required>
-                                                </div>
+                                                {{ $material['received_amount'] }}
                                             </td>
                                             <td style="text-align: center">
-                                                @if (isset($difference[$buyorder->material_id]))
-                                                    {{ $difference[$buyorder->material_id] }}
-                                                @else
-
-                                                @endif
+                                                {{ $material['refer_amount'] }}
                                             </td>
-                                            <td>
-                                                <select class="form-control select2 select2-hidden-accessible" wire:model="select_depo.{{ $buyorder->material_id }}"
-                                                    style="width: 100%;"
-                                                    wire:change="amount_change({{ $buyorder->id }})">
-                                                    <option selected="selected"></option>
-                                                    @foreach ($depositos as $deposito)
-                                                        <option value="{{ $deposito->id }}">{{ $deposito->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <td style="text-align: center">
+                                                {{ $material['difference'] }}
+                                            </td>
+                                            <td style="text-align: center">
+                                                {{ $material['warehouse'] }}
+                                            </td>
+                                            <td style="text-align: center">
+                                                <button type="button" wire:click="selectmaterial('{{ $material['id'] }}')"class="btn btn-success btn-sm">Ingresar</button>
                                             </td>
                                         </tr>
-                                        @endif
                                     @empty
                                         <tr class="text-center">
                                             <td style="text-align: center" colspan="4" class="py-3 italic">No
@@ -310,11 +333,6 @@
                                                 información</td>
                                         </tr>
                                     @endforelse
-                                @else
-                                    <tr class="text-center">
-                                            <td style="text-align: center" colspan="8" class="py-3 italic">No hay depósitos tipo "Almacén" disponibles.</td>
-                                        </tr>
-                                @endif
                             @endif
                             </tbody>
                             </table>
@@ -420,21 +438,34 @@
                         <div class="form-group">
                             <p><label>Descripción: </label> {{ $description_m }}</p>
                         </div>
-                        <div class="form-group">
-                            <label>Presentación:</label>
-                            <input wire:model.defer="present" type="number">
-                        </div>
-                        <div class="form-group">
-                            <label>Cantidad:</label>
-                            <input wire:model.defer="cant" type="number">
-                        </div>
+                        @if ($campos_modo=="Con orden de compra")
+                        <p><label>Presentacion requerida: </label> {{ $requested_presentation }}</p>
+                            <div class="form-group">
+                                <label>Cantidad enviada:</label>
+                                <input wire:model.defer="received_amount" type="number">
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad remito:</label>
+                                <input wire:model.defer="refer_amount" type="number">
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label>Presentación:</label>
+                                <input wire:model.defer="present" type="number">
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad:</label>
+                                <input wire:model.defer="cant" type="number">
+                            </div>
+                        @endif
+                       
                         <div class="form-group">
                             <label>Deposito:</label>
-                            <select class="form-control select2 select2-hidden-accessible" wire:model="nombre_deposito"
+                            <select class="form-control select2 select2-hidden-accessible" wire:model="deposito_id"
                                 style="width: 100%;">
                                 <option selected="selected"></option>
                                 @foreach ($depositos as $deposito)
-                                    <option>{{ $deposito->name }}</option>
+                                    <option value="{{ $deposito->id }}">{{ $deposito->name }}</option>
                                 @endforeach
                             </select>
                         </div>
