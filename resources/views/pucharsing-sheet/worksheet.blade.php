@@ -35,6 +35,7 @@
                             </thead>
                             <tbody>
                                 @forelse($orders as $orderr)
+                                    @if($orderr->buys==1)
                                     <tr>
                                         <td style="text-align: center">{{ $orderr->id }}/2021</td>
                                         <td style="text-align: center">
@@ -63,6 +64,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @endif
                                 @empty
                                     <tr class="text-center">
                                         <td colspan="4" class="py-3 italic">No hay información</td>
