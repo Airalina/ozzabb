@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeletesToPricesTable extends Migration
+class AddLineToMaterials2Table extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddSoftDeletesToPricesTable extends Migration
      */
     public function up()
     {
-        Schema::table('prices', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('materials', function (Blueprint $table) {
+            $table->enum('line', ['Bulldog',  'Ecu', 'Ecoseal', 'Fit', 'Mini', 'Superseal', 'Fastin Faston', 'Sicma'])->after('usage')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddSoftDeletesToPricesTable extends Migration
      */
     public function down()
     {
-        Schema::table('prices', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('materials', function (Blueprint $table) {
+            $table->dropColumn('line');
         });
     }
 }

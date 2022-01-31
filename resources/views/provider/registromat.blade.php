@@ -112,7 +112,7 @@
                                     <select class="form-control form-control-sm" wire:model="presentation"
                                         id="presentation">
                                         <option selected value="">Selecciona una medida</option>
-                                        <option value="mm">Milímetros</option>
+                                        <option value="m">Metros</option>
                                         <option value="und">Unidades</option>
                                         <option value="cajas">Cajas</option>
                                     </select>
@@ -125,7 +125,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="ars_price">Precio AR$</label>
-                                <input class="form-control form-control-sm" type="text" id="ars_price"
+                                <input class="form-control form-control-sm" type="text" id="ars_price" disabled
                                     wire:model="ars_price" placeholder="Ingrese el precio AR$">
                             </div>
                             <!-- /.card-body -->
@@ -192,19 +192,22 @@
                         <x-material-card :div="$div" :info_term="$info_term" :info_sell="$info_sell"
                             :info_con="$info_con" :material_family="$material_family" :rplce=null :terminal_id=null
                             :seal_id=null :connector_id=null :div_tube="$div_tube"/>
-                       
-                        <div class="form-group">
-                            <label for="color">Color</label>
-                            <select class="form-control form-control-sm" wire:model.defer="color" id="color">
-                                <option selected value="">Selecciona un color</option>
-                                <option value="Negro" class="text-dark">Negro</option>
-                                <option value="Blanco">Blanco</option>
-                                <option value="Rojo" class="text-danger">Rojo</option>
-                                <option value="Azul" class="text-primary">Azul</option>
-                                <option value="Amarillo" class="text-warning">Amarillo</option>
-                                <option value="Verde" class="text-success">Verde</option>
-                            </select>
-                        </div>
+                            
+                            @if ($family != 'Cables')
+                            <div class="form-group">
+                                <label for="color">Color</label>
+                                <select class="form-control form-control-sm" wire:model="color" id="color">
+                                    <option selected value="">Selecciona un color</option>
+                                    <option value="Transparente">Transparente</option>
+                                    <option value="Negro" class="text-dark">Negro</option>
+                                    <option value="Blanco">Blanco</option>
+                                    <option value="Rojo" class="text-danger">Rojo</option>
+                                    <option value="Azul" class="text-primary">Azul</option>
+                                    <option value="Amarillo" class="text-warning">Amarillo</option>
+                                    <option value="Verde" class="text-success">Verde</option>
+                                </select>
+                            </div>
+                            @endif
                         <div class="form-group">
                             <label for="description">Descripción</label>
                             <textarea name="description" class="form-control" wire:model.defer="description" id="description"
@@ -215,12 +218,14 @@
                             <label for="line">Línea</label>
                             <select class="form-control form-control-sm" wire:model.defer="line" id="line">
                                 <option selected>Selecciona una linea</option>
-                                <option value="Superseal">Superseal</option>
-                                <option value="Mini">Mini</option>
-                                <option value="Fit">Fit</option>
                                 <option value="Bulldog">Bulldog</option>
-                                <option value="Econoseal">Econoseal</option>
-                                <option value="Eco">Eco</option>
+                                <option value="Ecoseal">Ecoseal</option>
+                                <option value="Ecu">Ecu</option>
+                                <option value="Fit"></option>
+                                <option value="Fastin Faston">Fastin Faston</option>    
+                                <option value="Mini Fit">Mini Fit</option>
+                                <option value="Sicma">Sicma</option>
+                                <option value="Superseal">Superseal</option>
                             </select>
                             @endif
                         </div>
@@ -229,6 +234,7 @@
                             <select wire:model.defer="usage" id="usage" class="form-control form-control-sm">
                                 <option selected>Selecciona un uso</option>
                                 <option value="Motos">Motos</option>
+                                <option value="General">General</option>
                                 <option value="GNC">GNC</option>
                                 <option value="Electro">Electro</option>
                             </select>

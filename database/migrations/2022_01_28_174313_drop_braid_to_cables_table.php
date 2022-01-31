@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeletesToPricesTable extends Migration
+class DropBraidToCablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddSoftDeletesToPricesTable extends Migration
      */
     public function up()
     {
-        Schema::table('prices', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('cables', function (Blueprint $table) {
+            $table->dropColumn('braid_configuration');
         });
     }
 
@@ -25,8 +25,8 @@ class AddSoftDeletesToPricesTable extends Migration
      */
     public function down()
     {
-        Schema::table('prices', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('cables', function (Blueprint $table) {
+            //
         });
     }
 }

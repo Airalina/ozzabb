@@ -36,7 +36,7 @@ class PurchasingSheet extends Component
     public $proveedor_name, $material_id, $precio, $subtotalxmaterial;
     public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder, $stmaterial;
     public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
-    public $ordenes_de_compra, $materials, $buy_orders, $buy_order_details,$to_order, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials, $order_list = 'id';
+    public $order1, $ordenes_de_compra, $materials, $buy_orders, $buy_order_details,$to_order, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials, $order_list = 'id';
     public function render()
     {    $this->months = [1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre' ]; 
         foreach ($this->months as $number_month => $month) {
@@ -121,7 +121,7 @@ class PurchasingSheet extends Component
                                     $this->purchasing[10]="";
                                     $this->purchasing[11]=0;
                                     $this->purchasing[12]=$material->id;
-                                    $this->purchasings[$this->materialcount]=$this->purchasing;
+                                    $this->purchasings[$material->id]=$this->purchasing;
                                     $this->materialcount+=1;
                                     $this->prueba=0;
                                 }
@@ -166,7 +166,7 @@ class PurchasingSheet extends Component
                                     $this->purchasing[10]="";
                                     $this->purchasing[11]=0;
                                     $this->purchasing[12]=$material->id;
-                                    $this->purchasings[$this->materialcount]=$this->purchasing;
+                                    $this->purchasings[$material->id]=$this->purchasing;
                                     $this->materialcount+=1; 
                                     $this->prueba=0;
                                 }else{
@@ -197,7 +197,7 @@ class PurchasingSheet extends Component
         $this->search="";   
     }
     public function addmaterial(Material $material)
-    {
+    {     
             $this->purchasing[0]=$this->materialcount;
             $this->purchasing[1]=$material->code;
             $this->purchasing[2]=$material->description;
@@ -211,7 +211,7 @@ class PurchasingSheet extends Component
             $this->purchasing[10]="";
             $this->purchasing[11]=0;
             $this->purchasing[12]=$material->id;
-            $this->purchasings[$this->materialcount]=$this->purchasing;
+            $this->purchasings[$material->id]=$this->purchasing;
             $this->materialcount+=1;
             $this->prueba=0;
             $this->materialsinorden=false;
@@ -469,6 +469,7 @@ class PurchasingSheet extends Component
         $this->funcion="ordenes";
      }
      public function exploraorder(BuyOrder $order){
+        $this->order1=$order;
         $this->buy_order_details=$order->buyorderdetails;
         $this->funcion="ordenes_explora";   
      }

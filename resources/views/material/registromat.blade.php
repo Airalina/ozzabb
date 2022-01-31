@@ -37,6 +37,7 @@
                                 <table class="table table-hover table-sm">
                                     <thead>
                                         <tr>
+                                            <th style="text-align: center">Código</th>
                                             <th style="text-align: center">Nombre y Apellido</th>
                                             <th style="text-align: center">Email</th>
                                             <th style="text-align: center">&nbsp;</th>
@@ -46,6 +47,7 @@
                                         @if($providers)
                                         @forelse($providers as $provider)
                                         <tr>
+                                            <td style="text-align: center">{{ $provider->id }}</td>
                                             <td style="text-align: center">{{ $provider->name }}</td>
                                             <td style="text-align: center">
                                                 {{ $provider->email }}</td>
@@ -77,6 +79,7 @@
                                     <table class="table table-hover table-sm">
                                         <thead>
                                             <tr>
+                                                <th style="text-align: center">Código</th>
                                                 <th style="text-align: center">Nombre y Apellido</th>
                                                 <th style="text-align: center">Email</th>
                                                 <th style="text-align: center">Acción</th>
@@ -84,6 +87,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td style="text-align: center">{{ $provider_new->id }}</td>
                                                 <td style="text-align: center">{{ $provider_new->name }}</td>
                                                 <td style="text-align: center">{{ $provider_new->email }}</td>
                                                 <td style="text-align: center"><button type="button"
@@ -109,7 +113,7 @@
                                     <select class="form-control form-control-sm" wire:model="presentation"
                                         id="presentation">
                                         <option selected value="">Selecciona una medida</option>
-                                        <option value="mm">Milímetros</option>
+                                        <option value="m">Metros</option>
                                         <option value="und">Unidades</option>
                                         <option value="cajas">Cajas</option>
                                     </select>
@@ -123,7 +127,7 @@
                             <div class="form-group">
                                 <label for="ars_price">Precio AR$</label>
                                 <input class="form-control form-control-sm" type="text" id="ars_price"
-                                    wire:model="ars_price" placeholder="Ingrese el precio AR$">
+                                    wire:model="ars_price" placeholder="Ingrese el precio AR$" disabled>
                             </div>
                         </div>
                     </div>

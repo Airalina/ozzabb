@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeletesToPricesTable extends Migration
+class ModifyArspriceToProviderpricesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddSoftDeletesToPricesTable extends Migration
      */
     public function up()
     {
-        Schema::table('prices', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('provider_prices', function (Blueprint $table) {
+            $table->float('ars_price',20,10)->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddSoftDeletesToPricesTable extends Migration
      */
     public function down()
     {
-        Schema::table('prices', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('provider_prices', function (Blueprint $table) {
+            $table->dropColumn('ars_price');
         });
     }
 }

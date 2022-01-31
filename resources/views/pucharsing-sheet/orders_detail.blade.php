@@ -3,6 +3,12 @@
         Volver</button>
 </div><br>
 <div>
+    <div class="card-header">
+        <h6 class="card-title">Proveedor: {{  $order1->provider->name }} </h6><br>
+        <h6 class="card-title">Número de orden: {{ $order1->order_number }} </h6><br>
+        <h6 class="card-title">Cantidad de materiales pedidos: {{ count($order1->buyorderdetails) }} </h6><br>
+        <h6 class="card-title">Total U$D: {{ $order1->total_price }}</h6><br>
+    </div>
     <div class="card card-tabs">                    
         <div class="card-body table-responsive">
             <form>
@@ -37,5 +43,13 @@
                 </div>
             </form>
         </div>
+    </div>
+    <div class="row no-print">
+                <div class="col-12">
+                  <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Imprimir</a>
+                  <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
+                    <i class="fas fa-download"></i> Generar PDF
+                  </button>
+                </div>
     </div>
 </div>

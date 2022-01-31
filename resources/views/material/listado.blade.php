@@ -67,7 +67,18 @@
                             <td style="text-align: center">{{ $material->code }} </td>
                             <td style="text-align: center">{{ $material->name }} </td>
                             <td style="text-align: center">{{ $material->family }} </td>
-                            <td style="text-align: center">{{ $material->color }} </td>
+                            <td style="text-align: center">
+                                @if ($material->family != 'Cables')
+                                    {{ $material->color }}
+                                    
+                                @else
+                                <ul class="list-unstyled">
+                                    <li>Base: {{ $material->cable->base_color }} </li>
+                                    <li> {{ (!empty($material->cable->line_color)) ? 'Linea: ' . $material->cable->line_color : '' }} </li>
+                                </ul>
+                                   
+                                @endif
+                            </td>
                             <td style="text-align: center">
                                 @if ($material->line != null)
                                     {{ $material->line }}
