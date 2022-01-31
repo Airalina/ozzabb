@@ -121,7 +121,7 @@ class PurchasingSheet extends Component
                                     $this->purchasing[10]="";
                                     $this->purchasing[11]=0;
                                     $this->purchasing[12]=$material->id;
-                                    $this->purchasings[$this->materialcount]=$this->purchasing;
+                                    $this->purchasings[$material->id]=$this->purchasing;
                                     $this->materialcount+=1;
                                     $this->prueba=0;
                                 }
@@ -166,7 +166,7 @@ class PurchasingSheet extends Component
                                     $this->purchasing[10]="";
                                     $this->purchasing[11]=0;
                                     $this->purchasing[12]=$material->id;
-                                    $this->purchasings[$this->materialcount]=$this->purchasing;
+                                    $this->purchasings[$material->id]=$this->purchasing;
                                     $this->materialcount+=1; 
                                     $this->prueba=0;
                                 }else{
@@ -197,7 +197,7 @@ class PurchasingSheet extends Component
         $this->search="";   
     }
     public function addmaterial(Material $material)
-    {
+    {     
             $this->purchasing[0]=$this->materialcount;
             $this->purchasing[1]=$material->code;
             $this->purchasing[2]=$material->description;
@@ -211,7 +211,7 @@ class PurchasingSheet extends Component
             $this->purchasing[10]="";
             $this->purchasing[11]=0;
             $this->purchasing[12]=$material->id;
-            $this->purchasings[$this->materialcount]=$this->purchasing;
+            $this->purchasings[$material->id]=$this->purchasing;
             $this->materialcount+=1;
             $this->prueba=0;
             $this->materialsinorden=false;
