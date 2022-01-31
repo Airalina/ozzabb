@@ -113,7 +113,11 @@ class PurchasingSheet extends Component
                                     $this->purchasing[2]=$material->description;
                                     $this->purchasing[3]=$material->stock;
                                     $this->purchasing[4]=$material->stock_transit;
-                                    $this->purchasing[5]=$this->prueba+$revisiondetail->amount*$detailorder->cantidad;
+                                    if($material->family=='Cables' || $material->family=='Tubos'){
+                                        $this->purchasing[5]=($this->prueba+$revisiondetail->amount*$detailorder->cantidad)/1000;
+                                    }else{
+                                        $this->purchasing[5]=$this->prueba+$revisiondetail->amount*$detailorder->cantidad;
+                                    }
                                     $this->purchasing[6]=0;
                                     $this->purchasing[7]=0;
                                     $this->purchasing[8]=0;
