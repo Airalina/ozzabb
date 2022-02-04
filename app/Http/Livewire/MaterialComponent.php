@@ -187,7 +187,6 @@ class MaterialComponent extends Component
             'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
         ]);
-    
         if($this->family == 'Cables'){
             $this->validate([
                 'color' => 'nullable',
@@ -1167,7 +1166,7 @@ class MaterialComponent extends Component
         }
 
         $this->material=Material::where('id', $this->material_id->id)->first();
-        $this->provider_prices=ProviderPrice::where('material_id', $this->material->id)->get();
+        $this->provider_prices=ProviderPrice::where('material_id', $this->material->id)->orderBy('created_at','desc')->get();
         
         #$this->prices=Price::where('provider_id', $this->provider->id)->get();
       
@@ -1260,6 +1259,7 @@ class MaterialComponent extends Component
         $this->material=null;
     }
         $this->dispatchBrowserEvent('hide-borrar');
+        $this->dispatchBrowserEvent('deleted');
    }
 
    public function agregamat(Material $material){
@@ -1407,8 +1407,8 @@ public function editarmat(){
     public function backmat(){
         $this->funcion="0";
         $this->addProvider = false;
-        $this->explora='activo';   
-        
+        #$this->explora='activo';   
+        $this->explorar($this->material);
     }
     public function deleteImg($img){
     

@@ -108,10 +108,12 @@ class Ordenesclientes extends Component
             $this->newaddress->save();
         }
         $this->validate([
-            'deadline' => 'required',
+            'deadline' => 'required|date|after:today',
             'customer_id' => 'required',
         ],[
             'deadline.required' => 'El campo "Fecha estimada de entrega" es requerido',
+            'deadline.date' => 'El campo "Fecha estimada de entrega" debe ser una fecha',
+            'deadline.after' => 'El campo "Fecha estimada de entrega" debe ser una fecha después de hoy',
             'customer_id.required' => 'Por favor seleccione un cliente'
         ]);
         $this->usd_price=$this->total;
@@ -305,6 +307,7 @@ class Ordenesclientes extends Component
     public function delete()
     {
         $this->order->delete();
+        $this->dispatchBrowserEvent('deleted');
         return redirect()->to('pedidos');
     }
 
@@ -470,7 +473,8 @@ class Ordenesclientes extends Component
             $this->newdetail->cantidad=$this->cantidad;
             $this->newdetail->save();
         }
-
+            $this->funcion="list";
+            $this->reset();
     }
 
     public function cancelarfecha(){

@@ -227,6 +227,7 @@ class Instalaciones extends Component
     {
         $this->instalacion->delete();
         $this->dispatchBrowserEvent('hide-borrar');
+        $this->dispatchBrowserEvent('deleted');
     }
 
     public function borrarevision(Revision $revi)
