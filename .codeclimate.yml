@@ -1,0 +1,9 @@
+plugins:
+  phpcodesniffer:
+    enabled: true
+    config:
+        standard: "PSR1,PSR2"
+  sonar-php:
+    enabled: true
+    config:
+      minimum_severity: critical
