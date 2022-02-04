@@ -304,16 +304,17 @@
                     @break
 
                     @endswitch
-                    @if ($material_family)
                     <div class="form-group">
                         <label for="replace">Reemplazo</label>
                         <select class="form-control form-control-sm" wire:model="replace" id="replace" disabled>
-                            @foreach ($material_family as $rep)
-                            <option value="{{ $rep->id }}"> {{ $rep->name }}</option>
-                            @endforeach
+                            @if (!empty($rplce))
+                            <option value="{{ $rplce->id }}"> {{ $rplce->name }}</option>
+                            @else 
+                            <option value="">Sin reemplazo</option>
+                            @endif
+                            
                         </select>
                     </div>
-                    @endif
                     @if ($family != 'Cables')
                         <div class="form-group">
                             <label for="color">Color</label>
