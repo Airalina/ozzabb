@@ -19,7 +19,7 @@ class Ordenesclientes extends Component
     public $codinstall, $upusd, $installid=false, $cant, $cantidad=0, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
     public  $customer, $customers, $usd=180, $count=0, $address, $address_id, $countaddress, $selectcustomer=false, $update=false, $addaddress=false, $selectaddress=false, $newaddress;
     Public $street, $number, $newtotal=0, $location, $province, $country, $postcode, $detailcollect, $order_id, $detail_id, $nuevafecha=false;
-    public $detail=array(), $detailup;
+    public $detail=array(), $detailup, $estado;
     public $details=array();
     protected $listeners =[
         'newOrder'
@@ -50,16 +50,46 @@ class Ordenesclientes extends Component
         ->orWhere('contact','LIKE','%'.$this->searchclient.'%')
         ->orWhere('post_contact','LIKE','%'.$this->searchclient.'%')
         ->orWhere('email','LIKE','%'.$this->searchclient.'%')->get();
+
+        $array = explode('/',$this->search);
+        $year = (!empty($array[2])) ? $array[2] : '';
+        $month =  (!empty($array[1])) ? $array[1] : '';
+        $day =  (!empty($array[0])) ? $array[0] : '';
+        $fecha = $year.'-'.$month.'-'.$day;
+        $busqueda =  strtolower($this->search);
+      
+        switch ($busqueda) {
+            case 'nuevo':
+                $this->estado = 1;
+                break;
+            case 'confirmado':
+                $this->estado = 2;
+                break;
+            case 'rechazado':
+                $this->estado = 3;
+                break;
+            case 'demorado':
+                $this->estado = 4;
+                break; 
+            case 'produccion':
+                $this->estado = 5;
+                break; 
+            case 'deposito':
+                $this->estado = 6;
+                break;                 
+        }
+
         $this->orders=Clientorder::where('id','LIKE','%' . $this->search . '%')
         ->orWhere('customer_id','LIKE','%'.$this->search.'%')
         ->orWhere('customer_name','LIKE','%'.$this->search.'%')
-        ->orWhere('date','LIKE','%'.$this->search.'%')
+        ->orWhere('date','LIKE','%'.$fecha.'%')
         ->orWhere('usd_price','LIKE','%'.$this->search.'%')
         ->orWhere('arp_price','LIKE','%'.$this->search.'%')
-        ->orWhere('deadline','LIKE','%'.$this->search.'%')
-        ->orWhere('start_date','LIKE','%'.$this->search.'%')
+        ->orWhere('deadline','LIKE','%'.$fecha.'%')
+        ->orWhere('order_state','LIKE','%'.$this->estado.'%')
+        ->orWhere('start_date','LIKE','%'.$fecha.'%')
         ->orWhere('buys','LIKE','%'.$this->search.'%')
-        ->orWhere('order_job','LIKE','%'.$this->search.'%')->orderBy('order_state')->paginate($this->paginas);
+        ->orWhere('order_job','LIKE','%'.$this->search.'%')->paginate($this->paginas);
         return view('livewire.ordenesclientes',[
             'orders' => $this->orders,
         ]);
