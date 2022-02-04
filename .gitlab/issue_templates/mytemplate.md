@@ -1,10 +1,13 @@
-# Prerequisites
+# Tipo
 
 Por favor responda la siguiente pregunta antes de crear un nuevo issue.
 
 - [ ] Encontre un bug
 - [ ] Nueva funcionalidad
 - [ ] Otro
+
+# Detalle
+Explique de forma clara que es lo que esta necesitando.
 
 # Resultado Esperado
 
