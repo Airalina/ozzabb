@@ -31,7 +31,7 @@ class Depositos extends Component
     public $deposito, $origen,$paginas=25, $paginasinternas=10, $causa, $modo, $deposito_id, $name, $location, $state, $create_date, $amount, $searchensamblados="", $searchdeposito="", $searchmateriales="", $searchinstallation="", $searchorderbuy, $funcion="", $selector;
     protected $depositos, $materialesdepo, $ensambladosdepo, $instalacionesdepo, $deposit_material;
     public $seleccion, $ingreso, $codem, $descriptionm, $presentationm=[], $material_id, $type, $materiales, $name_receive, $name_entry, $code, $descriptionw, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id;
-    public $searchmaterialsdepo, $entry_order_id, $buy_order_id, $order="type", $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
+    public $searchmaterialsdepo="", $entry_order_id, $buy_order_id, $order="type", $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
     public $material_description,$deposito_delete,$amount_requested,$nombre_deposito,$amount_follow,$amount_undelivered,$set, $buyorders, $ingresa=false, $buyorderdetails, $follow, $material_code, $temporary, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation, $deposits, $depo, $materials_deposit, $materials_deposits, $materials_presentation, $materials_amount, $depo_destino, $name_egress, $explora_depo, $presentations, $amounts, $total, $totals, $retiros, $ingresos, $retiro, $ensamblados_deposits, $searchensambladodepo="", $descriptiona, $assembled_id, $assembled_amount, $selection = '', $materials_assembleds, $depo_id=0, $disabled='', $reservations = array();
     public function updatingSearch()
     {
@@ -130,10 +130,11 @@ class Depositos extends Component
 
                 $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
                 
-                foreach ($this->presentations[$material->id] as $key => $presentation) {
-                    $this->reservations[$material->id][$key] = $material->reservationmaterials()->select('id', 'amount' ,'material_id', 'presentation' ,DB::raw('SUM(amount) as
-                total'))->where('workorder_id', $workorder->id)->where('presentation',$presentation->presentation)->first();
-                }
+               
+                    foreach ($this->presentations[$material->id] as $key => $presentation) {
+                        $this->reservations[$material->id][$key] = (!empty($workorder)) ? $material->reservationmaterials()->select('id', 'amount' ,'material_id', 'presentation' ,DB::raw('SUM(amount) as
+                    total'))->where('workorder_id', $workorder->id)->where('presentation',$presentation->presentation)->first() : '-';
+                    }
 
                 foreach ($this->amounts[$material->id] as $index => $amount) {
                     $this->totals[$amount->material_id][$index] = $amount->presentation * $amount->total;
@@ -221,6 +222,10 @@ class Depositos extends Component
             $this->deposito->location=$this->location;
             $this->deposito->state=1;
             $this->deposito->description=$this->descriptionw;
+            if($this->temporary==null){
+                $this->temporary=false;
+            }
+            $this->deposito->temporary=$this->temporary;
             $this->deposito->save();
             $this->explora($this->deposito);
         }
@@ -328,7 +333,7 @@ class Depositos extends Component
                     'name_entry.required' => 'El campo "Responsable de ingresar" es requerido',
                     'selection.required' => 'Debe seleccionar una opción del tipo de producto a ingresar'
                 ]);
-                if ($this->depo->type == 2 && ($this->explora_depo->type != 2)) {
+                if ($this->explora_depo->type == 2 && ($this->depo->type != 2)) {
                     $this->addError('depo', 'El depósito origen debe ser tipo producción');
                 }elseif(($this->explora_depo->type == 1) && ($this->depo->type !=2 && $this->depo->type !=1 && $this->depo->id != 0)){
                     $this->addError('depo', 'El depósito origen debe ser tipo producción o almacen');
@@ -580,6 +585,7 @@ class Depositos extends Component
         $this->state=$deposito->state;
         $this->create_date=$deposito->create_date;
         $this->descriptionw=$deposito->description;
+        $this->temporary=$deposito->temporary;
     }
 
     public function explora(Warehouse $deposito)
@@ -592,6 +598,7 @@ class Depositos extends Component
         $this->state=$deposito->state;
         $this->create_date=$deposito->create_date;
         $this->descriptionw=$deposito->description;
+        $this->temporary = $deposito->temporary;
         $this->explora_depo = $deposito;
         if ($deposito->type == 3) {
             $this->selection = 'Ensamblados';
@@ -888,6 +895,7 @@ class Depositos extends Component
     {
         $this->deposito_delete->delete();
         $this->dispatchBrowserEvent('hide-borrar');
+        $this->dispatchBrowserEvent('deleted');
     }
 
     public function createassembled()

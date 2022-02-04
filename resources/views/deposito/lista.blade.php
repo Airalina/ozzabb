@@ -47,7 +47,8 @@
                       <th style="text-align: center">Tipo</th> 
                       <th style="text-align: center">Ubicación</th>
                       <th style="text-align: center">Propósito</th>
-                      <th style="text-aling: center">Fecha de Creación</th>
+                      <th style="text-align: center">Fecha de Creación</th>
+                      <th style="text-aling: center">Temporal</th>
                       <th style="text-align: center; width:70px">Estado</th>
                       <th></th>
                     </tr>
@@ -72,7 +73,8 @@
                       @endswitch
                       <td style="text-align: center">{{ $deposito->location }}</td>
                       <td style="text-align: center">{{ $deposito->description }}</td>
-                      <td >{{ date('d-m-Y', strtotime($deposito->create_date)) }}</td>
+                      <td style="text-align: center">{{ date('d-m-Y', strtotime($deposito->create_date)) }}</td>
+                      <td style="text-align: center">{{ ($deposito->temporary == 1) ? 'Sí' : 'No'  }}</td>
                       @switch($deposito->state)
                             @case(1)
                                 <td style="text-align: center">Habilitado</td>

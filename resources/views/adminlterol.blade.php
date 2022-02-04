@@ -47,13 +47,26 @@
 @stop
 
 @section('js')
-    <script>
-        window.addEventListener('show-borrar', event => {
-            $('#borrar').modal('show');
-        })
-        window.addEventListener('hide-borrar', event => {
-            $('#borrar').modal('hide');
-        })
-    </script>
-    <script> console.log('Hi!'); </script>
+      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>|
+      <script> console.log('Hi!'); </script>
+      <script>
+          window.addEventListener('show-borrar', event => {
+              $('#borrar').modal('show');
+          })
+          window.addEventListener('hide-borrar', event => {
+              $('#borrar').modal('hide');
+          })
+      </script>
+      <script>
+          window.addEventListener('deleted', event => {
+              Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Registro eliminado correctamente',
+                  showConfirmButton: false,
+                  timer: 1300
+              })
+          })
+  
+      </script>
 @stop
