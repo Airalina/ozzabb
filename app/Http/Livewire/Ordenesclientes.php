@@ -56,9 +56,8 @@ class Ordenesclientes extends Component
         $month =  (!empty($array[1])) ? $array[1] : '';
         $day =  (!empty($array[0])) ? $array[0] : '';
         $fecha = $year.'-'.$month.'-'.$day;
-        $busqueda =  strtolower($this->search);
       
-        switch ($busqueda) {
+        switch (strtolower($this->search)) {
             case 'nuevo':
                 $this->estado = 1;
                 break;
@@ -76,6 +75,9 @@ class Ordenesclientes extends Component
                 break; 
             case 'deposito':
                 $this->estado = 6;
+                break; 
+            default:
+                    $this->estado = $this->search;
                 break;                 
         }
 
