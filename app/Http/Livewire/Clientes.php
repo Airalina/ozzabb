@@ -267,12 +267,15 @@ class Clientes extends Component
             $this->cliente->delete();
             $this->funcion="";
             $this->explora="inactivo";
+            $this->dispatchBrowserEvent('deleted');
         }elseif($this->explora=="activo"){
             $this->direccion->delete();
             $this->funcion="0";
+            $this->dispatchBrowserEvent('deleted');
             $this->explorar($this->cliente);
         }
         $this->dispatchBrowserEvent('hide-borrar');
+        $this->dispatchBrowserEvent('deleted');
     }
     public function destruirdir(DomicileDelivery $direccion)
     {

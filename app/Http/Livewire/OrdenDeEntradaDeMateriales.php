@@ -112,7 +112,7 @@ class OrdenDeEntradaDeMateriales extends Component
             $this->orden->reason=$this->causa;
             $this->orden->save();
             foreach($this->details as $detail){
-                $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$detail[6])->get();
+              /*  $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$detail[6])->get();
                 if($this->ingreso->count()==0){
                     $this->depositm=new DepositMaterial;
                     $this->depositm->material_id=$detail[4];
@@ -130,7 +130,21 @@ class OrdenDeEntradaDeMateriales extends Component
                         $this->modo="";
                         $this->funcion="";
                     }
-                }
+                }*/
+                $this->depositm=new DepositMaterial;
+                $this->depositm->material_id= $detail[4]; 
+                $this->depositm->warehouse_id=$detail[6]; 
+                $this->depositm->warehouse2_id=0; 
+                $this->depositm->presentation=$detail[5]; 
+                $this->depositm->amount=$detail[2]; 
+                $this->depositm->date_change=$this->date;
+                $this->depositm->hour=$this->hour;
+                $this->depositm->name_receive='orden de entrada';
+                $this->depositm->name_entry=$this->origen;
+                $this->depositm->is_material=1;
+                $this->depositm->type=1;
+                $this->depositm->save();
+
                 $this->detailem=new MaterialEntryOrderDetail;
                 $this->detailem->entry_order_id=$this->orden->id;
                 $this->detailem->material_code=$detail[0];
@@ -142,6 +156,7 @@ class OrdenDeEntradaDeMateriales extends Component
                 $this->smaterial=Material::where('code', $this->detailem->material_code )->first();
                 $this->smaterial->stock+=$this->detailem->amount_received*$this->detailem->presentation;
                 $this->smaterial->save();
+               
             }      
         }elseif($this->modo=="Con orden de compra"){
           
@@ -217,7 +232,7 @@ class OrdenDeEntradaDeMateriales extends Component
                                  $this->buy_order_state->save();
                            }
                     }                   
-                    $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$detail[6])->get();
+                   /* $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$detail[6])->get();
                     if($this->ingreso->count()==0){
                         $this->depositm=new DepositMaterial;
                         $this->depositm->material_id=$detail[4];
@@ -233,7 +248,21 @@ class OrdenDeEntradaDeMateriales extends Component
                             $ing->date_change=$this->date;
                             $ing->save();
                         }
-                    }         
+                    }      */
+                    $this->depositm=new DepositMaterial;
+                    $this->depositm->material_id= $detail[4]; 
+                    $this->depositm->warehouse_id=$detail[6]; 
+                    $this->depositm->warehouse2_id=0; 
+                    $this->depositm->presentation=$detail[5]; 
+                    $this->depositm->amount=$detail[2]; 
+                    $this->depositm->date_change=$this->date;
+                    $this->depositm->hour=$this->hour;
+                    $this->depositm->name_receive='orden de entrada';
+                    $this->depositm->name_entry=$this->provider;
+                    $this->depositm->is_material=1;
+                    $this->depositm->type=1;
+                    $this->depositm->save();
+
                     $this->detailem=new MaterialEntryOrderDetail;
                     $this->detailem->entry_order_id=$this->orden->id;
                     $this->detailem->material_code=$detail[0];

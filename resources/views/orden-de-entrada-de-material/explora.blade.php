@@ -53,10 +53,12 @@
                                 <th style="text-aling: center">N° Deposito</th>
                                 <th style="text-align: center">Presentación</th>
                                 <th style="text-align: center">Cantidad enviada</th>
-                                <th style="text-align: center">Cantidad pedida</th>
-                                <th style="text-align: center">Cantidad remito</th>
-                                <th style="text-align: center">Diferencia</th>
-                                <th style="text-align: center">Sin Entregar</th>
+                                @if (empty($entry_order_type))
+                                    <th style="text-align: center">Cantidad pedida</th>
+                                    <th style="text-align: center">Cantidad remito</th>
+                                    <th style="text-align: center">Diferencia</th>
+                                    <th style="text-align: center">Sin Entregar</th>
+                                @endif
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -73,10 +75,12 @@
                                     @endif
                                     <td style="text-align: center">{{ $order->presentation }}</td>
                                     <td style="text-align: center">{{ $order->amount_received }}</td>
-                                    <td style="text-align: center">{{ $order->amount_requested }}</td>
-                                    <td style="text-align: center">{{ $order->amount_follow }}</td>
-                                    <td style="text-align: center">{{ $order->difference }}</td>
-                                    <td style="text-align: center">{{ $order->amount_undelivered }}</td>
+                                    @if (empty($entry_order_type))
+                                        <td style="text-align: center">{{ $order->amount_requested }}</td>
+                                        <td style="text-align: center">{{ $order->amount_follow }}</td>
+                                        <td style="text-align: center">{{ $order->difference }}</td>
+                                        <td style="text-align: center">{{ $order->amount_undelivered }}</td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr class="text-center">
