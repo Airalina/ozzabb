@@ -13,4 +13,8 @@ class Assembled extends Model
     {
         return $this->hasMany(DepositMaterial::class,'material_id'); 
     }
+        public function warehouses()
+    {
+        return $this->belongsToMany(Warehouse::class, 'deposit_materials', 'material_id', 'warehouse_id');
+    }
 }

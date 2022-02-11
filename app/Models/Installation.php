@@ -24,4 +24,12 @@ class Installation extends Model
     {
         return $this->hasMany(Revisiondetail::class);
     }
+    public function warehouses()
+    {
+        return $this->belongsToMany(Warehouse::class, 'deposit_installations', 'installation_id', 'warehouse_id');
+    }
+    public function depositinstallations()
+    {
+        return $this->hasMany(DepositInstallation::class); 
+    }
 }

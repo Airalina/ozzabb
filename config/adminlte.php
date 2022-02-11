@@ -283,6 +283,11 @@ return [
             'url'  => 'ordenes-de-trabajo',
             'icon' => 'fas fa-book-open',
         ],
+        [
+            'text' => 'Órdenes de egreso de materiales',
+            'url'  => 'ordenes-de-egreso-de-materiales',
+            'icon' => 'fas fa-book-open',
+        ],
         ['header' => 'MATERIALES'],
         [
             'text' => 'Materiales',

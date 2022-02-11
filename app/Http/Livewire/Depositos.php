@@ -333,7 +333,7 @@ class Depositos extends Component
                     'name_entry.required' => 'El campo "Responsable de ingresar" es requerido',
                     'selection.required' => 'Debe seleccionar una opción del tipo de producto a ingresar'
                 ]);
-                if ($this->explora_depo->type == 2 && ($this->depo->type != 2)) {
+                if ($this->explora_depo->type == 2 && ($this->depo->type != 2 && $this->depo->id != 0)) {
                     $this->addError('depo', 'El depósito origen debe ser tipo producción');
                 }elseif(($this->explora_depo->type == 1) && ($this->depo->type !=2 && $this->depo->type !=1 && $this->depo->id != 0)){
                     $this->addError('depo', 'El depósito origen debe ser tipo producción o almacen');
@@ -472,6 +472,7 @@ class Depositos extends Component
                     $this->ingreso->name_receive=$this->name_receive;
                     $this->ingreso->name_entry=$this->name_entry;
                     $this->ingreso->warehouse2_id=$this->depo->id;
+                    $this->ingreso->amount+=1;
                     $this->ingreso->save();
 
                     $this->description=null;
