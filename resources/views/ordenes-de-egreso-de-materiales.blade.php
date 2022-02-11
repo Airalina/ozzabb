@@ -35,25 +35,23 @@
         })
     </script>
     <script>
-        window.addEventListener('cancel', event => {
-            Swal.fire({
-            title: '¿Está seguro de cancelar la orden?',
-            text: "No podrás revertir esto.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '¡Sí, cancelar!'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                '¡Cancelada!',
-                'Su orden ha sido cancelada.',
-                'success'
-                )
-            }
+            window.addEventListener('show-cancel', event => {
+                $('#cancel').modal('show');
             })
-        })
-
-    </script>
+            window.addEventListener('hide-cancel', event => {
+                $('#cancel').modal('hide');
+            })
+        </script>
+        <script>
+            window.addEventListener('cancel', event => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Orden cancelada correctamente',
+                    showConfirmButton: false,
+                    timer: 1300
+                })
+            })
+    
+        </script>
 @stop

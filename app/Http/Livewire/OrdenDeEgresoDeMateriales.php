@@ -24,7 +24,7 @@ class OrdenDeEgresoDeMateriales extends Component
     protected $orders;
     public $funcion = '', $paginas=25, $search='', $order='code', $modo = 'Sin pedido', $searchdeposito = '', $depo, $depo_id, $selection, $disabled='', $deposits, $searchensamblados = '', $searchinstalaciones = '', $installation;
     public $date, $hour, $destination, $responsible, $materials = array(), $details = array(), $detail = array(), $product, $searchmateriales = '', $searchassembleds = '', $searchinstallations = '', $amount, $amounts = array(), $presentations = array(); 
-    public $id_m, $code_m, $description_m, $presentation_m, $material, $depositmaterials, $material_count = 0, $assembled_count = 0, $installation_count = 0, $amount_units = 0, $products = array(), $product_select, $product_type, $material_release_order_id;
+    public $id_m, $code_m, $description_m, $presentation_m, $material, $depositmaterials, $material_count = 0, $assembled_count = 0, $installation_count = 0, $amount_units = 0, $products = array(), $product_select, $product_type, $material_release_order_id, $material_release_order;
 
     public function render()
     {
@@ -410,39 +410,47 @@ class OrdenDeEgresoDeMateriales extends Component
         
         foreach ($order->materialreleaseorderdetails as $productdetail) {
 
-            if ($productdetail->type == 'materiales') {
+            if ($productdetail->type == 'Material') {
                 $type = 'material';
                 $prod = 'Material';
-            } elseif($productdetail->type == 'ensamblados') {
+            } elseif($productdetail->type == 'Ensamblado') {
                 $type = 'assembled';
                 $prod = 'Ensamblado';
             }else{
                 $type = 'installation';
                 $prod = 'Insalación';
             }
+            if (isset($productdetail->$type->id) && isset($productdetail->warehouse->id)) {
+                $this->detail['id']=$productdetail->product_id;
+                $this->detail['warehouse_id']=$productdetail->warehouse_id;
+                $this->detail['amount']=$productdetail->amount;
+                $this->detail['presentation']=(empty($productdetail->presentation)) ? null : $productdetail->presentation;
+                $this->detail['code']=($productdetail->type == 'Ensamblado') ? $productdetail->product_id : $productdetail->$type->code;
+                $this->detail['description']=$productdetail->$type->description;
+                $this->detail['warehouse_name']=$productdetail->warehouse->name;
+                $this->detail['type']=$prod;
+    
+                $this->details[$productdetail->type][$productdetail->product_id]=$this->detail;
+            }
 
-            $this->detail['id']=$productdetail->product_id;
-            $this->detail['warehouse_id']=$productdetail->warehouse_id;
-            $this->detail['amount']=$productdetail->amount;
-            $this->detail['presentation']=(empty($productdetail->presentation)) ? null : $productdetail->presentation;
-            $this->detail['code']=($productdetail->type == 'ensamblados') ? $productdetail->product_id : $productdetail->$type->code;
-            $this->detail['description']=$productdetail->$type->description;
-            $this->detail['warehouse_name']=$productdetail->warehouse->name;
-            $this->detail['type']=$prod;
-
-            $this->details[$productdetail->type][$productdetail->product_id]=$this->detail;
         }
 
         $this->funcion="explora";
     }
 
-    public function cancelar(MaterialReleaseOrder $order){
-       
-            $order->status=0;
-            $order->save();
+    public function aviso(MaterialReleaseOrder $order){
+        $this->material_release_order=$order;
+        $this->dispatchBrowserEvent('show-cancel');
+    }
 
-        foreach($order->materialreleaseorderdetails as $detail){            
-                if ($detail->type == 'instalaciones') {
+    public function cancelar(){
+      
+            $this->material_release_order->status=0;
+            $this->material_release_order->save();
+
+        foreach($this->material_release_order->materialreleaseorderdetails as $detail){        
+                
+                if ($detail->type == 'Instalación') {
                     $depositm=DepositInstallation::find($detail->product_id);
                     $depositm->amount+=1;
                     $depositm->save();
@@ -451,18 +459,21 @@ class OrdenDeEgresoDeMateriales extends Component
                     $depositm->material_id= $detail->product_id; 
                     $depositm->warehouse_id=$detail->warehouse_id; 
                     $depositm->warehouse2_id=0; 
-                    $depositm->presentation= ($detail->type == 'materiales') ? $detail->presentation : 1; 
+                    $depositm->presentation= ($detail->type == 'Material') ? $detail->presentation : 1; 
                     $depositm->amount=$detail->amount; 
                     $depositm->date_change=Carbon::now()->format('Y-m-d');
                     $depositm->hour=Carbon::now()->format('H:i:s');
-                    $depositm->name_receive=$order->responsible;
+                    $depositm->name_receive=$this->material_release_order->responsible;
                     $depositm->name_entry='orden de egreso';
-                    $depositm->is_material=($detail->type == 'materiales') ? 1 : 0; 
+                    $depositm->is_material=($detail->type == 'Material') ? 1 : 0; 
                     $depositm->type=1;
                     $depositm->save();
                 }
             }
+
+            $this->dispatchBrowserEvent('hide-cancel');
             $this->dispatchBrowserEvent('cancel');
+          
         }
 
 }

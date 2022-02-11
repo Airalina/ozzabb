@@ -71,7 +71,7 @@
                             <button type="button" wire:click="explora({{ $order->id }})"
                                 class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> ver</button>
                             @if ($order->status != 0)
-                                <button type="button" wire:click="cancelar({{ $order->id }})"
+                                <button type="button" wire:click="aviso({{ $order->id }})"
                                 class="btn btn-danger btn-sm"><i class="fas fa-ban"></i> Cancelar</button>
                              
                             @endif
@@ -86,6 +86,7 @@
             </table>
          
         </div>
+        @include('cancelar')
     </div>
 
 </div>
