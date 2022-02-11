@@ -1,0 +1,5 @@
+variables:
+  TIMEOUT_SECONDS: 1
+
+include:
+  - template: Code-Quality.gitlab-ci.yml

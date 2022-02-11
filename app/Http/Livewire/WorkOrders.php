@@ -174,47 +174,55 @@ class WorkOrders extends Component
                 if (!isset($this->ordenes[$order->id]) || $this->funcion == "sheet") {
                     $this->ordenes[$order->id] = $order;
                     foreach($order->orderdetails as $detailorder){
-                        foreach($detailorder->installations as $installation){
-                            $this->instalaciones[$installation->id]['hours_man'] = (empty($this->instalaciones[$installation->id])) ? 0 : $this->instalaciones[$installation->id]['hours_man'];  
-                            $this->instalaciones[$installation->id]['hours_man']+=$installation->hours_man*$detailorder->cantidad;
-                           
-                            $countrevision=$installation->revisions->count()-1;
-                            $revision=$installation->revisions()->orderBy('number_version','desc')->first();
-                            foreach($installation->revisiondetails as $revisiondetail){
-                                $material=$revisiondetail->materials;
+                        if (!empty($detailorder->instalaciones)) {
+                            foreach($detailorder->instalaciones as $installation){
                                 
-                                if (!isset($this->clientorders[$material->id])) {
-                                    foreach($this->clientorders as $order){
-                                        if($order[1]==$material->code)
-                                        {
-                                            $this->prueba=$order[5];
-                                            #unset($this->clientorders[$order[0]]);
+                                    $this->instalaciones[$installation->id]['hours_man'] = (empty($this->instalaciones[$installation->id])) ? 0 : $this->instalaciones[$installation->id]['hours_man'];  
+                                    $this->instalaciones[$installation->id]['hours_man']+=$installation->hours_man*$detailorder->cantidad;
+                                
+                                    $countrevision=$installation->revisions->count()-1;
+                                    $revision=$installation->revisions()->orderBy('number_version','desc')->first();
+                                    foreach($installation->revisiondetails as $revisiondetail){
+                                        $material=$revisiondetail->materials;
+                                        if(!empty($material->id)){
+                                        if (!isset($this->clientorders[$material->id])) {
+                                            foreach($this->clientorders as $order){
+                                                if($order[1]==$material->code)
+                                                {
+                                                    $this->prueba=$order[5];
+                                                    #unset($this->clientorders[$order[0]]);
+                                                }
+                                            }
+                                            $this->clientorder[0]=$this->materialcount;
+                                            $this->clientorder[1]=$material->code;
+                                            $this->clientorder[2]=$material->description;
+                                            $this->clientorder[3]=$material->stock;
+                                            $this->clientorder[4]=$material->stock_transit;
+                                            $this->clientorder[5]=$this->prueba+$revisiondetail->amount*$detailorder->cantidad;
+                                            $this->clientorder[6]=0;
+                                            $this->clientorder[7]=0;
+                                            $this->clientorder[8]=0;
+                                            $this->clientorder[9]=0;
+                                            $this->clientorder[10]="";
+                                            $this->clientorder[11]=0;
+                                            $this->clientorder[12]=$material->id;
+                                            $this->clientorders[$material->id]=$this->clientorder;
+                                            
+                                            $this->materialcount++;
+                                            $this->prueba=0;
                                         }
+                                    }else{
+                                        #  dd($this->clientorders);
+                                        if(!empty($material->id)){
+                                            $this->clientorders[$material->id][5]+=$revisiondetail->amount*$detailorder->cantidad;
                                     }
-                                    $this->clientorder[0]=$this->materialcount;
-                                    $this->clientorder[1]=$material->code;
-                                    $this->clientorder[2]=$material->description;
-                                    $this->clientorder[3]=$material->stock;
-                                    $this->clientorder[4]=$material->stock_transit;
-                                    $this->clientorder[5]=$this->prueba+$revisiondetail->amount*$detailorder->cantidad;
-                                    $this->clientorder[6]=0;
-                                    $this->clientorder[7]=0;
-                                    $this->clientorder[8]=0;
-                                    $this->clientorder[9]=0;
-                                    $this->clientorder[10]="";
-                                    $this->clientorder[11]=0;
-                                    $this->clientorder[12]=$material->id;
-                                    $this->clientorders[$material->id]=$this->clientorder;
-                                    
-                                    $this->materialcount++;
-                                    $this->prueba=0;
-                                }else{
-                                  #  dd($this->clientorders);
-                                    $this->clientorders[$material->id][5]+=$revisiondetail->amount*$detailorder->cantidad;
                                 }
-                                   
+                                    
+                                }
+                               
                             }
                         }
+                       
                     }  
                    $this->hours_man = array_sum(array_column($this->instalaciones, 'hours_man'));
                    
@@ -1057,6 +1065,7 @@ class WorkOrders extends Component
                 $ingreso->name_receive = 'Orden de trabajo';
                 $ingreso->name_entry = 'Orden de trabajo';
                 $ingreso->warehouse2_id = 0;
+                $ingreso->amount+=1;
                 $ingreso->save();
                 }
          

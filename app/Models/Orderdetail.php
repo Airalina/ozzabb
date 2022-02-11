@@ -13,4 +13,9 @@ class Orderdetail extends Model
     {
         return $this->hasOne(Installation::class,'code','installation_id');
     }
+
+    public function instalaciones()
+    {
+        return $this->hasMany(Installation::class,'code','installation_id');
+    }
 }
