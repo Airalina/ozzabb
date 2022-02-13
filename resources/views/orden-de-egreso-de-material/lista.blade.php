@@ -84,7 +84,7 @@
                 @endforelse
                 </tbody>
             </table>
-         
+            {{ $orders->links() }}
         </div>
         @include('cancelar')
     </div>
