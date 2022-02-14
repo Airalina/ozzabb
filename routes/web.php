@@ -63,5 +63,9 @@ Route::get('/ordenes-de-trabajo', function () {
     return view('workorders');
 })->middleware(['auth'])->name('workorders');
 
+Route::get('/ordenes-de-egreso-de-materiales', function () {
+    return view('ordenes-de-egreso-de-materiales');
+})->middleware(['auth'])->name('ordenes-de-egreso-de-materiales');
+
 
 require __DIR__.'/auth.php';
