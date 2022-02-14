@@ -21,9 +21,9 @@ class OrdenDeEgresoDeMateriales extends Component
     use WithPagination;
    
     protected $paginationTheme = 'bootstrap';
-    protected $orders, $products, $paginas_internas=10;
+    protected $orders, $paginas_internas=10;
     public $funcion = '', $paginas=25, $search='', $order='code', $modo = 'Sin pedido', $searchdeposito = '', $depo, $depo_id, $selection, $disabled='', $deposits, $searchensamblados = '', $searchinstalaciones = '', $installation;
-    public $date, $hour, $destination, $responsible, $materials = array(), $details = array(), $detail = array(), $product, $searchmateriales = '', $searchassembleds = '', $searchinstallations = '', $amount, $amounts = array(), $presentations = array(); 
+    public $date, $hour, $destination, $products, $responsible, $materials = array(), $details = array(), $detail = array(), $product, $searchmateriales = '', $searchassembleds = '', $searchinstallations = '', $amount, $amounts = array(), $presentations = array(); 
     public $id_m, $code_m, $description_m, $presentation_m, $material, $depositmaterials, $material_count = 0, $assembled_count = 0, $installation_count = 0, $amount_units = 0, $product_select, $product_type, $material_release_order_id, $material_release_order;
 
     public function render()
@@ -59,18 +59,18 @@ class OrdenDeEgresoDeMateriales extends Component
                 ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
                 ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
                 ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
-                ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->paginate($this->paginas_internas);
+                ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
                 break;
             case 'Ensamblados':
                 $this->product = 'ensamblados';
                 $this->products =Assembled::where('id','like','%'.$this->searchensamblados.'%')
-                ->orWhere('description','LIKE','%'.$this->searchensamblados.'%')->paginate($this->paginas_internas);
+                ->orWhere('description','LIKE','%'.$this->searchensamblados.'%')->get();
                 break;
             case 'Instalaciones':
                 $this->product = 'instalaciones';
                 $this->products =Installation::where('id','LIKE','%' .$this->searchinstalaciones. '%')
                 ->orWhere('code','LIKE','%'.$this->searchinstalaciones.'%')
-                ->orWhere('description','LIKE','%'.$this->searchinstalaciones.'%')->paginate($this->paginas_internas);
+                ->orWhere('description','LIKE','%'.$this->searchinstalaciones.'%')->get();
                 break;
         }
 
@@ -110,7 +110,6 @@ class OrdenDeEgresoDeMateriales extends Component
 
         return view('livewire.orden-de-egreso-de-materiales',[
             'orders' => $this->orders,
-            'products' => $this->products,
         ]);
     }
 
