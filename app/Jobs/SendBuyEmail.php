@@ -26,6 +26,7 @@ class SendBuyEmail implements ShouldQueue
     public function __construct($ordenes)
     {
         $this->ordenes=$ordenes;
+        $this->email=$ordenes->provider->email;
     }
 
     /**

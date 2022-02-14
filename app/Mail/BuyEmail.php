@@ -33,6 +33,6 @@ class BuyEmail extends Mailable
     {
         return $this->from('emiliano@phpgroup.com.ar','Emiliano Muñoz')
                     ->subject('Orden de Compra')
-                    ->view('emial.buymail');
+                    ->view('email.buymail');
     }
 }
