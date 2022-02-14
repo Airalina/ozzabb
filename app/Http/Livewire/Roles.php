@@ -130,6 +130,7 @@ class Roles extends Component
             $this->rol->delete();
         }   
         $this->dispatchBrowserEvent('hide-borrar');
+        $this->dispatchBrowserEvent('deleted');
     }
 
     public function funcion()

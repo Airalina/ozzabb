@@ -17,6 +17,7 @@
         <h6 class="card-title">Tipo: Expedición </h6><br>
         @endif
         <h6 class="card-title">Descripción: {{ $descriptionw}} </h6><br>
+        <h6 class="card-title">Temporal: {{ ($temporary == 1) ? 'Sí' : 'No' }} </h6><br>
         <h6 class="card-title">Fecha de creación: {{ date('d-m-Y', strtotime($create_date)) }} </h6><br>
         @if (auth()->user()->can('updatedepo', auth()->user()))
         @if ($type!=4)

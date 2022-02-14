@@ -89,6 +89,7 @@ class Usuarios extends Component
             $this->user->delete();
         }
         $this->dispatchBrowserEvent('hide-borrar');
+        $this->dispatchBrowserEvent('deleted');
     }
 
     public function funcion()

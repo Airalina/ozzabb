@@ -220,6 +220,7 @@ class Providers extends Component
             $this->explora="inactivo";
         }
         $this->dispatchBrowserEvent('hide-borrar');
+        $this->dispatchBrowserEvent('deleted');
     }
 
     public function agregamat(Provider $provider){
