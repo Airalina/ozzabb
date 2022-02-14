@@ -22,7 +22,7 @@
                     Telefono: (804) 123-5432<br>
                     Email: info@almasaeedstudio.com
                   </address>
-                </div><b><b>
+                </div><br><br>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
                   Para:
@@ -41,7 +41,7 @@
                   <b>Fecha y hora de pedido :</b> {{ date('d-m-Y H:i', strtotime($ordenes->created_at)) }}<br>
                 </div>
                 <!-- /.col -->
-              </div>
+              </div><br><br>
               <!-- /.row -->
 
               <!-- Table row -->
@@ -96,8 +96,6 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-6">
-                  <p class="lead">Monto adeudado:</p>
-
                   <div class="table-responsive">
                     <table class="table">
                       <tbody><tr>
