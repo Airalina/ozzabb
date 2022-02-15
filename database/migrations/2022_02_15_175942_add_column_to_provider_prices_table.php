@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ModifyCodeIntoMaterialEntryOrderDetailsTable extends Migration
+class AddColumnToProviderPricesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class ModifyCodeIntoMaterialEntryOrderDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::table('material_entry_order_details', function (Blueprint $table) {
-            $table->string('material_code')->change();
+        Schema::table('provider_prices', function (Blueprint $table) {
+            $table->string('provider_code')->after('provider_id');
         });
     }
 
@@ -25,8 +25,8 @@ class ModifyCodeIntoMaterialEntryOrderDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::table('material_entry_order_details', function (Blueprint $table) {
-            $table->dropColumn('material_code');
+        Schema::table('provider_prices', function (Blueprint $table) {
+            //
         });
     }
 }

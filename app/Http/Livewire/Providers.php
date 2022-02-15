@@ -24,7 +24,7 @@ class Providers extends Component
     protected $providers;
     public $funcion="",  $paginas=25, $mat_n,$id_provider, $idu, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
     public $validar, $amount, $material, $id_material, $material_up, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex, $addMaterial;
-    public $code, $name_material, $family, $terminal, $connector, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name, $cuit, $term_size, $lock, $cover, $div_tube=false;
+    public $code, $name_material, $family, $terminal, $connector, $provider_material_code, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name, $cuit, $term_size, $lock, $cover, $div_tube=false;
 
     public function render()
     {
@@ -326,6 +326,7 @@ class Providers extends Component
             'amount' => 'nullable|numeric|min:0',
             'unit' => 'required|numeric|min:0',
             'presentation' => 'required',
+            'provider_material_code' => 'required|string|min:1|max:50',
             'usd_price' => 'required|numeric|min:0',
             'ars_price' => 'required|numeric|min:0',
           ], [
@@ -335,6 +336,10 @@ class Providers extends Component
             'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
             'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
             'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+            'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
+            'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
             'usd_price.required' => 'El campo precio U$D es requerido',
             'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
             'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
@@ -349,6 +354,7 @@ class Providers extends Component
             'amount' =>$this->amount,
             'unit' =>$this->unit,
             'presentation' =>$this->presentation,
+            'provider_code' => $this->provider_material_code,
             'usd_price' =>$this->usd_price,
             'ars_price' =>$this->ars_price,
             
@@ -361,6 +367,7 @@ class Providers extends Component
         ]);
         $this->div=null;
         $this->addMaterial = false;
+        $this->provider_material_code=null;
         $this->funcion="0";
         $this->explorar($provider);
 
@@ -373,7 +380,6 @@ class Providers extends Component
     }
     public function updatemat(ProviderPrice $provider_price)
     {   
-       
         $this->id_provider_price = $provider_price->id;
         $this->material=$provider_price->material_id;
         $this->material_name=$provider_price->material->name;
@@ -444,6 +450,7 @@ class Providers extends Component
             'amount' => 'nullable|numeric|min:0',
             'unit' => 'required|numeric|min:0',
             'presentation' => 'required',
+            'provider_material_code' => 'required|string|min:1|max:50',
             'usd_price' => 'required|numeric|min:0',
             'ars_price' => 'required|numeric|min:0',
           ], [
@@ -453,6 +460,10 @@ class Providers extends Component
             'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
             'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
             'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+            'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
+            'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
             'usd_price.required' => 'El campo precio U$D es requerido',
             'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
             'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
@@ -468,6 +479,7 @@ class Providers extends Component
         $material_up->provider_id=$this->id_provider;
         $material_up->unit=$this->unit;
         $material_up->presentation=$this->presentation;
+        $material_up->provider_code=$this->provider_material_code;
         $material_up->ars_price=$this->ars_price;
        if($material_up->usd_price != $this->usd_price){
             $price= Price::create([
@@ -480,6 +492,7 @@ class Providers extends Component
        $material_up->usd_price = $this->usd_price;
         $material_up->save();
         $this->funcion="0";
+        $this->provider_material_code=null;
         $this->explorar($provider);
     }
     public function backmat(){

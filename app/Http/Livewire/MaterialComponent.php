@@ -28,7 +28,7 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $ma, $search, $termi, $seli, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled;
+    public  $paginas=25, $ma, $search, $termi, $seli, $provider_material_code, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled;
 
     public function render()
     {
@@ -1288,6 +1288,7 @@ public function storemat(Material $material){
         'amount' => 'nullable|numeric|min:0',
         'unit' => 'required|numeric|min:0',
         'presentation' => 'required',
+        'provider_material_code' => 'required|string|min:1|max:50',
         'usd_price' => 'required|numeric|min:0',
         'ars_price' => 'required|numeric|min:0',
       ], [
@@ -1297,6 +1298,10 @@ public function storemat(Material $material){
         'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
         'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
         'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+        'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
+        'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
+        'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
+        'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
         'usd_price.required' => 'El campo precio U$D es requerido',
         'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
         'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
@@ -1310,6 +1315,7 @@ public function storemat(Material $material){
         'material_id' =>$material->id,
         'amount' =>$this->amount,
         'unit' =>$this->unit,
+        'provider_code'=>$this->provider_material_code,
         'presentation' =>$this->presentation,
         'usd_price' =>$this->usd_price,
         'ars_price' =>$this->ars_price,
@@ -1323,6 +1329,7 @@ public function storemat(Material $material){
     ]);
     $this->div=null;
     $this->addProvider = false;
+    $this->provider_material_code=null;
     $this->funcion="0";
     $this->explorar($material);
 
@@ -1361,6 +1368,7 @@ public function editarmat(){
         'amount' => 'nullable|numeric|min:0',
         'unit' => 'required|numeric|min:0',
         'presentation' => 'required',
+        'provider_material_code' => 'required|string|min:1|max:50',
         'usd_price' => 'required|numeric|min:0',
         'ars_price' => 'required|numeric|min:0',
       ], [
@@ -1370,6 +1378,10 @@ public function editarmat(){
         'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
         'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
         'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+        'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
+        'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
+        'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
+        'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
         'usd_price.required' => 'El campo precio U$D es requerido',
         'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
         'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
@@ -1385,6 +1397,7 @@ public function editarmat(){
         $material_up->provider_id=$this->provider_new->id;
         $material_up->unit=$this->unit;
         $material_up->presentation=$this->presentation;
+        $material_up->provider_code=$this->provider_material_code;
         $material_up->ars_price=$this->ars_price;
     if($material_up->usd_price != $this->usd_price){
             $price= Price::create([
@@ -1397,6 +1410,7 @@ public function editarmat(){
     $material_up->usd_price = $this->usd_price;
         $material_up->save();
         $this->funcion="0";
+        $this->provider_material_code=null;
         $this->explorar($pro);
     }
     public function downprovider()

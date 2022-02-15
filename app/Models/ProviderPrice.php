@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProviderPrice extends Model
 {
     use SoftDeletes, HasFactory;
-    protected $fillable = ['material_id','provider_id','amount','unit','presentation','usd_price','ars_price','code','name'];
+    protected $fillable = ['material_id','provider_id','amount','unit','presentation','provider_code','usd_price','ars_price','code','name'];
    
     public function material(){
         return $this->belongsTo(Material::class); 
