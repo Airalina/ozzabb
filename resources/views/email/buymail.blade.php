@@ -61,7 +61,7 @@
                     @forelse($ordenes->buyorderdetails as $det)
                       <tr>
                         <td style="text-align: center">{{$det->amount}}</td>
-                        <td style="text-align: center">{{$det->materials->code}}</td>
+                        <td style="text-align: center">{{$det->buyorders->provider->provider_prices->where('material_id',$det->material_id)->where('unit',$det->presentation)->first()->provider_code}}</td>
                         <td style="text-align: center">{{$det->presentation}}</td>
                         <td style="text-align: center">{{$det->presentation_price}}</td>
                         <td></td>
