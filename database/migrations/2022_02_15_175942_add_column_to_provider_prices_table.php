@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAmountToDepositInstallationsTable extends Migration
+class AddColumnToProviderPricesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddAmountToDepositInstallationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('deposit_installations', function (Blueprint $table) {
-            $table->integer('amount')->nullable();
+        Schema::table('provider_prices', function (Blueprint $table) {
+            $table->string('provider_code')->after('provider_id');
         });
     }
 
@@ -25,7 +25,7 @@ class AddAmountToDepositInstallationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('deposit_installations', function (Blueprint $table) {
+        Schema::table('provider_prices', function (Blueprint $table) {
             //
         });
     }
