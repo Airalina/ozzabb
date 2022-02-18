@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\Material;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Connector extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
     protected $fillable = ['material_id', 'terminal_id', 'seal_id', 'number_of_ways', 'type', 'connector_id', 'watertight', 'cover', 'lock'];
 
     public function material()

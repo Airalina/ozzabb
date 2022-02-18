@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\Material;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BuyOrderDetail extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['material_id', 'presentation','buy_order_id','amount','presentation_price','total_price'];
     
