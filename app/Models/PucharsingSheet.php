@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use  App\Models\PucharsingSheetOrder;
 use  App\Models\PucharsingSheetDetail;
 use  App\Models\BuyOrder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PucharsingSheet extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['date', 'count_orders', 'total_price'];
     public function purchasing_sheet_orders(){

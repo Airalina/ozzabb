@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Workorder extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['code', 'start_date', 'end_date', 'hours', 'man','hours_man_required'];
     
