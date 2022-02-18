@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\Material;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Revisiondetail extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     public function materials()
     {

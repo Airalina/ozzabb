@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\Provider;
 use  App\Models\Material;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BuyOrder extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
     protected $dates = ['buy_date'];
 
     public function materialentryorders()
