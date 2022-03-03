@@ -8,11 +8,12 @@ use  App\Models\ProviderPrice;
 use  App\Models\Line;
 use  App\Models\Usage;
 use  App\Models\Revisiondetail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Material extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['code','name', 'stock', 'family','color','description','line','usage','replace_id','stock_min','stock_max','stock','image'], $photo;
     

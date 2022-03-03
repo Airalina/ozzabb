@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\BuyOrder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MaterialEntryOrder extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     public function materialentryorderdetails()
     {

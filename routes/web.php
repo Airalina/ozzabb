@@ -66,6 +66,9 @@ Route::get('/ordenes-de-trabajo', function () {
 Route::get('/ordenes-de-egreso-de-materiales', function () {
     return view('ordenes-de-egreso-de-materiales');
 })->middleware(['auth'])->name('ordenes-de-egreso-de-materiales');
+Route::get('/cotizacion', function () {
+    return view('dollar');
+})->middleware(['auth'])->name('dollar');
 
 
 require __DIR__.'/auth.php';
