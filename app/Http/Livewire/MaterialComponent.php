@@ -318,7 +318,7 @@ class MaterialComponent extends Component
                 'line_color' => 'nullable',
                 'braid_configuration' => 'required',
                 'norm' =>  'required',
-                'number_of_unipolar' => 'numeric|nullable',
+                'number_of_unipolar' => 'numeric|nullable|min:1',
                 'mesh_type' => 'string|nullable',
                 'operating_temperature' => 'numeric|required|regex: '.$regex,
             ], [
@@ -329,6 +329,7 @@ class MaterialComponent extends Component
                 'braid_configuration.required' => 'Seleccione una opción del campo Configuración de Trenza',
                 'norm.required' => 'Seleccione una opción del campo Norma',
                 'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico (decimales separados por punto)',
+                'number_of_unipolar.min' => 'El campo Cantidad de unipolares debe ser un número mayor a cero (0) ',
                 'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico (decimales separados por punto)',
                 'operating_temperature.required' => 'El campo Temperatura de Servicio es requerido',
                 'operating_temperature.regex' => 'El campo Temperatura de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
@@ -832,7 +833,7 @@ class MaterialComponent extends Component
                 'line_color' => 'nullable',
                 'braid_configuration' => 'required',
                 'norm' =>  'required',
-                'number_of_unipolar' => 'numeric|nullable',
+                'number_of_unipolar' => 'numeric|nullable|min:1',
                 'mesh_type' => 'string|nullable',
                 'operating_temperature' => 'numeric|required|regex: '.$regex,
             ], [
@@ -843,6 +844,7 @@ class MaterialComponent extends Component
                 'braid_configuration.required' => 'Seleccione una opción del campo Configuración de Trenza',
                 'norm.required' => 'Seleccione una opción del campo Norma',
                 'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico (decimales separados por punto)',
+                'number_of_unipolar.min' => 'El campo Cantidad de unipolares debe ser un número mayor a cero (0) ',
                 'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico (decimales separados por punto)',
                 'operating_temperature.required' => 'El campo Temperatura de Servicio es requerido',
                 'operating_temperature.regex' => 'El campo Temperatura de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
