@@ -9,6 +9,7 @@ use App\Models\Customer;
 use Livewire\Component;
 use Carbon\Carbon;
 use Livewire\WithPagination;
+use App\Models\Dollar;
 
 class Ordenesclientes extends Component
 {
@@ -19,7 +20,7 @@ class Ordenesclientes extends Component
     public $codinstall, $upusd, $installid=false, $cant, $cantidad=0, $total=0, $newdetail, $explora="inactivo", $searchclient="", $custormers, $searchinstallation="", $installations;
     public  $customer, $customers, $usd=180, $count=0, $address, $address_id, $countaddress, $selectcustomer=false, $update=false, $addaddress=false, $selectaddress=false, $newaddress;
     Public $street, $number, $newtotal=0, $location, $province, $country, $postcode, $detailcollect, $order_id, $detail_id, $nuevafecha=false;
-    public $detail=array(), $detailup, $estado;
+    public $detail=array(), $detailup, $estado,$dolar,$ar_price;
     public $details=array();
     protected $listeners =[
         'newOrder'
@@ -40,6 +41,8 @@ class Ordenesclientes extends Component
 
     public function render()
     {
+        $this->dolar=Dollar::where('id',1)->first();
+        $this->ar_price=$this->dolar->arp_price;
         $this->installations=Installation::where('id','LIKE','%' .$this->searchinstallation. '%')
         ->orWhere('code','LIKE','%'.$this->searchinstallation.'%')
         ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->get();
@@ -149,7 +152,7 @@ class Ordenesclientes extends Component
             'customer_id.required' => 'Por favor seleccione un cliente'
         ]);
         $this->usd_price=$this->total;
-        $this->arp_price=$this->total*$this->usd;
+        $this->arp_price=$this->total*$this->ar_price;
         $this->date=Carbon::now();
         $this->order=new Clientorder;
         $this->order->customer_id = $this->customer_id;
@@ -405,7 +408,7 @@ class Ordenesclientes extends Component
             $this->newtotal=$this->newtotal+$detail->unit_price_usd*$detail->cantidad;
         }
         $this->usd_price=$this->newtotal;
-        $this->arp_price=$this->newtotal*$this->usd;
+        $this->arp_price=$this->newtotal*$this->ar_price;
         $this->validate([
             'usd_price' => 'required|numeric|min:0|max:100000000',
             'arp_price' => 'required|numeric|min:0|max:100000000',
@@ -471,7 +474,7 @@ class Ordenesclientes extends Component
         $this->order->deliverydomicile_id=$this->address->id;
         }
         $this->usd_price= $this->total;
-        $this->arp_price= $this->total*$this->usd;
+        $this->arp_price= $this->total*$this->ar_price;
         $this->validate([
             'usd_price' => 'required|numeric|min:0|max:100000000',
             'arp_price' => 'required|numeric|min:0|max:100000000',
