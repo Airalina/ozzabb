@@ -16,6 +16,7 @@ use App\Models\Clip;
 use App\Models\ProviderPrice;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Dollar;
 
 class Providers extends Component
 {  
@@ -24,11 +25,12 @@ class Providers extends Component
     protected $providers;
     public $funcion="",  $paginas=25, $mat_n,$id_provider, $idu, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
     public $validar, $amount, $material, $id_material, $material_up, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex, $addMaterial;
-    public $code, $name_material, $family, $terminal, $connector, $provider_material_code, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name, $cuit, $term_size, $lock, $cover, $div_tube=false;
+    public $code, $dolar, $ar_rpice, $name_material, $family, $terminal, $connector, $provider_material_code, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name, $cuit, $term_size, $lock, $cover, $div_tube=false;
 
     public function render()
     {
-         
+        $this->dolar=Dollar::where('id',1)->first();
+        $this->ar_price=$this->dolar->arp_price;
         $this->providers = Provider::where('name','LIKE','%'.$this->search.'%')
         ->orWhere('address','LIKE','%'.$this->search.'%')
         ->orWhere('phone','LIKE','%'.$this->search.'%')
@@ -48,7 +50,7 @@ class Providers extends Component
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
 
             if(isset($this->usd_price) && $this->usd_price > 0){
-                $this->ars_price = $this->usd_price*180;
+                $this->ars_price = $this->usd_price*$this->ar_price;
             }
 
         return view('livewire.providers', [
