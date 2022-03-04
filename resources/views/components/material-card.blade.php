@@ -9,7 +9,9 @@
                             @else
                                 <option selected value="">Seleccione un terminal</option>
                             @endif
-
+                            @if ($terminalId != null)
+                                <option value="">Seleccione un terminal</option>
+                            @endif
                             @foreach ($infoTerm as $term)
                                 @if ($terminalId != null)
                                     @if ($terminalId === $term->id)
@@ -35,6 +37,9 @@
                                 <option value="{{ $seli->id }}" selected>{{ $seli->material_info->name }}</option>
                             @else
                                 <option selected>Seleccione un sello</option>
+                            @endif
+                            @if ($sealId != null)
+                                <option>Seleccione un sello</option>
                             @endif
                             @foreach ($infoSell as $sell)
                                 @if ($sealId != null)
@@ -67,6 +72,9 @@
                                 <option value="{{ $connect->id }}" selected>{{ $connect->material->name }}</option>
                             @else
                                 <option selected>Seleccione una contraparte</option>
+                            @endif
+                            @if ($connectorId != null)
+                                <option>Seleccione una contraparte</option>
                             @endif
                             @foreach ($infoCon as $con)
                                 @if ($connectorId != null)
