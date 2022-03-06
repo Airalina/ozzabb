@@ -596,8 +596,8 @@ class Providers extends Component
             'line' => 'nullable',
             'usage' => 'required',
             'replace' => 'nullable',
-            'stock_min' => 'numeric|required|digits_between:1,6',
-            'stock_max' => 'numeric|nullable|digits_between:1,6',
+            'stock_min' => 'numeric|required|min:1|max:999999',
+            'stock_max' => 'numeric|nullable|min:1|max:999999',
         ],[
             'code.required' => 'El campo código es requerido',
             'name_material.required' => 'El campo nombre es requerido',
@@ -606,9 +606,11 @@ class Providers extends Component
             'usage.required' => 'Seleccione una opción para el campo de uso',
             'stock_min.required' => 'El campo stock mínimo es requerido',
             'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
-            'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
+            'stock_min.min' => 'El campo stock mínimo debe ser un número mayor a 0(cero).',
+            'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos.',
             'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
-            'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
+            'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
+            'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
     
         if($this->family == 'Cables'){
@@ -675,14 +677,16 @@ class Providers extends Component
                $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
 
                 $this->validate([
-                    'size' => 'numeric|required',
+                    'size' => 'numeric|required|min:1|max:99999',
                     'minimum_section' => 'numeric|nullable|regex: '.$regex,
                     'maximum_section' => 'numeric|nullable|regex: '.$regex,
                     'term_material' => 'required',
                     'term_type' => 'required'
                 ], [
-                    'size.numeric' => 'El campo tamaño es numérico',
+                    'size.numeric' => 'El campo tamaño es numérico(decimales separados por púnto)',
                     'size.required' => 'El campo tamaño es requerido',
+                    'size.min' => 'El campo tamaño debe ser un número mayor a 0(cero)',
+                    'size.max' => 'El campo tamaño debe ser un número de 5 cifras como máximo',
                     'minimum_section.numeric' => 'El campo sección mínima es numérico',
                     'maximum_section.numeric' => 'El campo sección máxima es numérico',
                     'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
@@ -812,8 +816,8 @@ class Providers extends Component
                         'tube_type' => 'required',
                         'wall_thickness' => 'numeric|required|regex: '.$regex,
                         'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
-                        'minimum_temperature' => 'numeric|nullable|min:-55|max:9999',
-                        'maximum_temperature' => 'numeric|nullable|min:-55|max:9999',
+                        'minimum_temperature' => 'numeric|nullable|min:0|max:9999',
+                        'maximum_temperature' => 'numeric|nullable|min:0|max:9999',
                     ], [
                         'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
                         'tube_diameter.required' => 'El campo Diámetro es requerido',
@@ -826,13 +830,13 @@ class Providers extends Component
                         'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimal',
                         'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
                         'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
-                        'minimum_temperature.min' => 'El campo Temperatura mínima de Servicio es como mínimo -55°C',
+                        'minimum_temperature.min' => 'El campo Temperatura mínima de Servicio es como mínimo 0°C',
                         'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
                         'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
                         'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
-                        'maximum_temperature.min' => 'El campo Temperatura máxima de Servicio es como mínimo -55°C',
+                        'maximum_temperature.min' => 'El campo Temperatura máxima de Servicio es como mínimo 0°C',
                         'maximum_temperature.max' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
-                         'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
+                        'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
                                   ]);
                     }else{
                         $this->validate([
