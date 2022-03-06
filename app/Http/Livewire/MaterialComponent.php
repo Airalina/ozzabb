@@ -267,7 +267,7 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'size' => 'numeric|required|min:0|max:99999',
+                'size' => 'numeric|required|min:1|max:99999',
                 'minimum_section' => 'numeric|nullable|regex: '.$regex,
                 'maximum_section' => 'numeric|nullable|regex: '.$regex,
                 'term_material' => 'required',
@@ -706,8 +706,8 @@ class MaterialComponent extends Component
             'line' => 'nullable',
             'usage' => 'required',
             'replace' => 'nullable',
-            'stock_min' => 'numeric|required|digits_between:1,6',
-            'stock_max' => 'numeric|nullable|digits_between:1,6',
+            'stock_min' => 'numeric|required|min:1|max:999999',
+            'stock_max' => 'numeric|nullable|min:1|max:999999',
             'images' => 'nullable'
         ],[
             'code.required' => 'El campo código es requerido',
@@ -717,9 +717,11 @@ class MaterialComponent extends Component
             'usage.required' => 'Seleccione una opción para el campo de uso',
             'stock_min.required' => 'El campo stock mínimo es requerido',
             'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
-            'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
+            'stock_min.min' => 'El campo stock mínimo debe ser un número mayor a 0(cero).',
+            'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos.',
             'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
-            'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
+            'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
+            'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
     
         if($this->family == 'Cables'){
@@ -794,7 +796,7 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'size' => 'numeric|required|min:0|max:99999',
+                'size' => 'numeric|required|min:1|max:99999',
                 'minimum_section' => 'numeric|nullable|regex: '.$regex,
                 'maximum_section' => 'numeric|nullable|regex: '.$regex,
                 'term_material' => 'required',
