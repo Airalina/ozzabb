@@ -24,6 +24,14 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>|
     <script> console.log('Hi!'); </script>
     <script>
+        window.addEventListener('show-revision', event => {
+            $('#revision').modal('show');
+        })
+        window.addEventListener('hide-revision', event => {
+            $('#revision').modal('hide');
+        })
+    </script>
+    <script>
         window.addEventListener('show-form', event => {
             $('#form').modal('show');
         })
