@@ -239,6 +239,8 @@ class Instalaciones extends Component
                 $det->delete();
             }
             $revi->delete(); 
+        }else{
+            $this->dispatchBrowserEvent('show-revision');
         }
         $install=Installation::find($revi->installation_id);
         $this->funcion="";
