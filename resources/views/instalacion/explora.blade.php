@@ -15,7 +15,6 @@
         @endif
       </div>
     </div>
-  <div class="row">
     <table class="table table-hover table-sm">
       <thead>        
         <tr>
@@ -45,5 +44,4 @@
       </tbody>
     </table>
     @include('revisiones')
-  </div>
 <div>
