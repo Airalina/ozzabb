@@ -182,11 +182,13 @@ class Instalaciones extends Component
             'date_admission.requred' => 'El campo Fecha es requerido',
             'usd_price.required' => 'El campo Precio U$D es requerido',
             'usd_price.numeric' => 'El campo Precio U$D es numérico',
+            'usd_price.min' => 'El campo precio U$D debe ser un número mayor a 0(cero)',
             'usd_price.max' => 'El campo precio U$D tiene como maximo 1000000(un millon)',
-            'hours_man.required' => 'El campo Hora es requerido',
-            'hours_man.numeric' => 'El campo Hora es numérico',
-            'hours_man.max' => 'El campo Hora tiene como maximo 1000000(un millon)',
-      ]);
+            'hours_man.required' => 'El campo Horas/Hombre es requerido',
+            'hours_man.numeric' => 'El campo Horas/Hombre es numérico',
+            'hours_man.max' => 'El campo Horas/Hombre tiene como maximo 1000000(un millon)',
+            'hours_man.min' => 'El campo Horas/Hombre debe ser un número mayor a 0(cero)',
+       ]);
         $this->instalacion=Installation::find($this->installation_id);
         $this->instalacion->code=$this->code;
         $this->instalacion->description=$this->description;
