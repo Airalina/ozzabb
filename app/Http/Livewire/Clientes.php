@@ -179,6 +179,7 @@ class Clientes extends Component
     }
 
     public function explorar(Customer $cliente){
+        $this->resetValidation();
         $this->cliente=$cliente;
         $this->domicilios=DomicileDelivery::where('client_id', $this->cliente->id)->get();
         $this->historial=Clientorder::where('customer_id', $this->cliente->id)->latest()->take(10)->get();
@@ -197,6 +198,7 @@ class Clientes extends Component
 
     public function update(Customer $cliente)
     { 
+        $this->resetValidation();
         $this->idcli=$cliente->id;
         $this->name=$cliente->name;
         $this->phone=$cliente->phone;
