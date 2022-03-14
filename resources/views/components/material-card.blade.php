@@ -292,7 +292,7 @@
                             <option value="Fusible">Fusible</option>
                             <option value="Relay">Relay</option>
                             <option value="Tapón ciego">Tapón ciego</option>
-                            <option value="Pasante de Goma">Pasante de Goma</option>
+                            <option value="Pasante de goma">Pasante de Goma</option>
                         </select>
                     </div>
                 @break
