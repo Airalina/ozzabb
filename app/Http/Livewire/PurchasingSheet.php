@@ -37,7 +37,7 @@ class PurchasingSheet extends Component
     public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder, $stmaterial;
     public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
     public $order1, $ordenes_de_compra, $materials, $buy_orders, $buy_order_details,$to_order, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials, $order_list = 'id';
-    public $index_array=0;
+    public $index_array=0, $type;
     public function render()
     {    $this->months = [1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre' ]; 
         foreach ($this->months as $number_month => $month) {
@@ -59,12 +59,12 @@ class PurchasingSheet extends Component
         ->orWhereMonth('date', $this->searchMounth)
         ->orWhereDay('date',  $this->search)
         ->get();
-        $this->materials = Material::where('code','like','%'.$this->search.'%')
-        ->orWhere('name','LIKE','%'.$this->search.'%')
-        ->orWhere('family','LIKE','%'.$this->search.'%')
-        ->orWhere('color','LIKE','%'.$this->search.'%')
-        ->orWhere('description','LIKE','%'.$this->search.'%')
-        ->orWhere('replace_id','LIKE','%'.$this->search.'%')->get();
+        $this->materials = Material::where('code','like','%'.$this->searchmaterial.'%')
+        ->orWhere('name','LIKE','%'.$this->searchmaterial.'%')
+        ->orWhere('family','LIKE','%'.$this->searchmaterial.'%')
+        ->orWhere('color','LIKE','%'.$this->searchmaterial.'%')
+        ->orWhere('description','LIKE','%'.$this->searchmaterial.'%')
+        ->orWhere('replace_id','LIKE','%'.$this->searchmaterial.'%')->get();
         $this->purchasing_sheets = PucharsingSheet::where('id','LIKE','%'.$this->searchP.'%')
         ->orWhere('date','LIKE','%'.$fecha.'%')
         ->orWhereDay('date','LIKE','%'.$this->searchP.'%')

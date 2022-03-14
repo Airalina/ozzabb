@@ -145,15 +145,15 @@
                                 <div>
                                     <h3 class="card-title">Seleccione orden de compra:</h3>
                                     <br />
-                                    <div wire:ignore class="input-group input-group-sm" style="width: 130px">
-                                        <input wire:model="searchorderbuy" type="text"
+                                    <div  class="input-group input-group-sm" style="width: 130px">
+                                        <input wire:model="searchorderbuy" type="text" wire:click="search_order"
                                             class="form-control form-control-xs float-right"
                                             placeholder="Buscar orden..." />
                                     </div>
                                 </div>
                                 <br>
 
-                                @if ($searchorderbuy != '')
+                                @if ($buy_card)
                                     <div class="card-body table-responsive p-0">
                                         <table class="table table-hover text-nowrap">
                                             <thead>

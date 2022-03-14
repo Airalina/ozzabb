@@ -553,7 +553,6 @@ class MaterialComponent extends Component
             }
             $this->material->save();
         }else{
-          
             $this->validate([
                 'accesory_type' => 'required',
      ], [
