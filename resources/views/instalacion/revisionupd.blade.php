@@ -5,7 +5,7 @@
 <div class="card card-primary">
                 <div class="card-body">
                   <div class="form-group">
-                    <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Matereriales registradas en la revisión:</font></font></label>
+                    <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Materiales registradas en la revisión:</font></font></label>
                     
                           <table class="table table-hover table-sm">
                                 <thead>
