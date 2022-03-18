@@ -16,6 +16,7 @@ use App\Models\Clip;
 use App\Models\ProviderPrice;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Dollar;
 
 class Providers extends Component
 {  
@@ -24,11 +25,12 @@ class Providers extends Component
     protected $providers;
     public $funcion="",  $paginas=25, $mat_n,$id_provider, $idu, $provider, $search, $name, $address, $phone, $email, $contact_name, $point_contact, $site_url, $status=1, $explora='inactivo',  $order='name', $materials;
     public $validar, $amount, $material, $id_material, $material_up, $unit, $presentation, $usd_price, $ars_price, $prices, $price, $info_mat, $provider_prices, $id_provider_price, $regex, $addMaterial;
-    public $code, $name_material, $family, $terminal, $connector, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name, $cuit, $term_size, $lock, $cover, $div_tube=false;
+    public $code, $dolar, $ar_rpice, $name_material, $family, $terminal, $connector, $provider_material_code, $seal ,$color, $line, $usage, $replace_id, $stock_min, $stock_max, $stock, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idexplora, $searchmateriales, $materiales, $material_id, $description, $codem, $detail, $details, $watertight, $section, $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $material_new, $material_name, $cuit, $term_size, $lock, $cover, $div_tube=false;
 
     public function render()
     {
-         
+        $this->dolar=Dollar::where('id',1)->first();
+        $this->ar_price=$this->dolar->arp_price;
         $this->providers = Provider::where('name','LIKE','%'.$this->search.'%')
         ->orWhere('address','LIKE','%'.$this->search.'%')
         ->orWhere('phone','LIKE','%'.$this->search.'%')
@@ -48,7 +50,7 @@ class Providers extends Component
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
 
             if(isset($this->usd_price) && $this->usd_price > 0){
-                $this->ars_price = $this->usd_price*180;
+                $this->ars_price = $this->usd_price*$this->ar_price;
             }
 
         return view('livewire.providers', [
@@ -326,6 +328,7 @@ class Providers extends Component
             'amount' => 'nullable|numeric|min:0',
             'unit' => 'required|numeric|min:0',
             'presentation' => 'required',
+            'provider_material_code' => 'required|string|min:1|max:50',
             'usd_price' => 'required|numeric|min:0',
             'ars_price' => 'required|numeric|min:0',
           ], [
@@ -335,6 +338,10 @@ class Providers extends Component
             'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
             'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
             'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+            'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
+            'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
             'usd_price.required' => 'El campo precio U$D es requerido',
             'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
             'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
@@ -349,6 +356,7 @@ class Providers extends Component
             'amount' =>$this->amount,
             'unit' =>$this->unit,
             'presentation' =>$this->presentation,
+            'provider_code' => $this->provider_material_code,
             'usd_price' =>$this->usd_price,
             'ars_price' =>$this->ars_price,
             
@@ -361,6 +369,7 @@ class Providers extends Component
         ]);
         $this->div=null;
         $this->addMaterial = false;
+        $this->provider_material_code=null;
         $this->funcion="0";
         $this->explorar($provider);
 
@@ -373,7 +382,6 @@ class Providers extends Component
     }
     public function updatemat(ProviderPrice $provider_price)
     {   
-       
         $this->id_provider_price = $provider_price->id;
         $this->material=$provider_price->material_id;
         $this->material_name=$provider_price->material->name;
@@ -444,6 +452,7 @@ class Providers extends Component
             'amount' => 'nullable|numeric|min:0',
             'unit' => 'required|numeric|min:0',
             'presentation' => 'required',
+            'provider_material_code' => 'required|string|min:1|max:50',
             'usd_price' => 'required|numeric|min:0',
             'ars_price' => 'required|numeric|min:0',
           ], [
@@ -453,6 +462,10 @@ class Providers extends Component
             'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
             'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
             'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+            'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
+            'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
+            'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
             'usd_price.required' => 'El campo precio U$D es requerido',
             'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
             'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
@@ -468,6 +481,7 @@ class Providers extends Component
         $material_up->provider_id=$this->id_provider;
         $material_up->unit=$this->unit;
         $material_up->presentation=$this->presentation;
+        $material_up->provider_code=$this->provider_material_code;
         $material_up->ars_price=$this->ars_price;
        if($material_up->usd_price != $this->usd_price){
             $price= Price::create([
@@ -480,6 +494,7 @@ class Providers extends Component
        $material_up->usd_price = $this->usd_price;
         $material_up->save();
         $this->funcion="0";
+        $this->provider_material_code=null;
         $this->explorar($provider);
     }
     public function backmat(){
@@ -581,8 +596,8 @@ class Providers extends Component
             'line' => 'nullable',
             'usage' => 'required',
             'replace' => 'nullable',
-            'stock_min' => 'numeric|required|digits_between:1,6',
-            'stock_max' => 'numeric|nullable|digits_between:1,6',
+            'stock_min' => 'numeric|required|min:1|max:999999',
+            'stock_max' => 'numeric|nullable|min:1|max:999999',
         ],[
             'code.required' => 'El campo código es requerido',
             'name_material.required' => 'El campo nombre es requerido',
@@ -591,9 +606,11 @@ class Providers extends Component
             'usage.required' => 'Seleccione una opción para el campo de uso',
             'stock_min.required' => 'El campo stock mínimo es requerido',
             'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
-            'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos',
+            'stock_min.min' => 'El campo stock mínimo debe ser un número mayor a 0(cero).',
+            'stock_min.max' => 'El campo stock mínimo es inferior a 6 digitos.',
             'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
-            'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos',
+            'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
+            'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
     
         if($this->family == 'Cables'){
@@ -660,14 +677,16 @@ class Providers extends Component
                $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
 
                 $this->validate([
-                    'size' => 'numeric|required',
+                    'size' => 'numeric|required|min:1|max:99999',
                     'minimum_section' => 'numeric|nullable|regex: '.$regex,
                     'maximum_section' => 'numeric|nullable|regex: '.$regex,
                     'term_material' => 'required',
                     'term_type' => 'required'
                 ], [
-                    'size.numeric' => 'El campo tamaño es numérico',
+                    'size.numeric' => 'El campo tamaño es numérico(decimales separados por púnto)',
                     'size.required' => 'El campo tamaño es requerido',
+                    'size.min' => 'El campo tamaño debe ser un número mayor a 0(cero)',
+                    'size.max' => 'El campo tamaño debe ser un número de 5 cifras como máximo',
                     'minimum_section.numeric' => 'El campo sección mínima es numérico',
                     'maximum_section.numeric' => 'El campo sección máxima es numérico',
                     'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
@@ -707,7 +726,7 @@ class Providers extends Component
                     'line_color' => 'nullable',
                     'braid_configuration' => 'required',
                     'norm' =>  'required',
-                    'number_of_unipolar' => 'numeric|nullable',
+                    'number_of_unipolar' => 'numeric|nullable|min:1',
                     'mesh_type' => 'string|nullable',
                     'operating_temperature' => 'numeric|required|regex: '.$regex,
                 ], [
@@ -718,6 +737,7 @@ class Providers extends Component
                     'braid_configuration.required' => 'Seleccione una opción del campo Configuración de Trenza',
                     'norm.required' => 'Seleccione una opción del campo Norma',
                     'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico',
+                    'number_of_unipolar.min' => 'El campo Cantidad de unipolares debe ser un número mayor a cero (0) ',
                     'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico',
                     'operating_temperature.required' => 'El campo Temperatura de Servicio es requerido',
                     'operating_temperature.regex' => 'El campo Temperatura de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
@@ -796,8 +816,8 @@ class Providers extends Component
                         'tube_type' => 'required',
                         'wall_thickness' => 'numeric|required|regex: '.$regex,
                         'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
-                        'minimum_temperature' => 'numeric|nullable|min:-55|max:9999',
-                        'maximum_temperature' => 'numeric|nullable|min:-55|max:9999',
+                        'minimum_temperature' => 'numeric|nullable|min:0|max:9999',
+                        'maximum_temperature' => 'numeric|nullable|min:0|max:9999',
                     ], [
                         'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
                         'tube_diameter.required' => 'El campo Diámetro es requerido',
@@ -810,13 +830,13 @@ class Providers extends Component
                         'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimal',
                         'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
                         'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
-                        'minimum_temperature.min' => 'El campo Temperatura mínima de Servicio es como mínimo -55°C',
+                        'minimum_temperature.min' => 'El campo Temperatura mínima de Servicio es como mínimo 0°C',
                         'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
                         'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
                         'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
-                        'maximum_temperature.min' => 'El campo Temperatura máxima de Servicio es como mínimo -55°C',
+                        'maximum_temperature.min' => 'El campo Temperatura máxima de Servicio es como mínimo 0°C',
                         'maximum_temperature.max' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
-                         'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
+                        'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
                                   ]);
                     }else{
                         $this->validate([

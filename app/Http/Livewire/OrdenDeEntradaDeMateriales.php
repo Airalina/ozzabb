@@ -19,9 +19,9 @@ class OrdenDeEntradaDeMateriales extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    protected $orders, $buyorders;
-    public  $order= 'date',$material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy="", $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false, $code_m, $description_m, $presentation_m, $id_m, $deposit_m;
-    public $orderdetails,$entry_orderbuy, $smaterial, $entry_order_id, $entry_order_type , $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present, $select_depo = array(), $provider, $materials = array(), $deposito_id, $order_selected;
+    protected $orders;
+    public  $buyorders, $order= 'date', $material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy='', $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false, $code_m, $description_m, $presentation_m, $id_m, $deposit_m;
+    public $orderdetails,$entry_orderbuy, $smaterial, $entry_order_id, $entry_order_type , $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present, $select_depo = array(), $provider, $materials = array(), $deposito_id, $order_selected, $type, $buy_card = true;
 
     public function updatingSearch()
     {
@@ -46,9 +46,6 @@ class OrdenDeEntradaDeMateriales extends Component
             ->orWhereYear('date','LIKE','%'.$this->searchordenesem.'%')
             ->orWhere('hour','LIKE','%'.$this->searchordenesem.'%')->orderBy($this->order, $type)->paginate($this->paginas);
 
-
-
-
         $this->depositos=Warehouse::where('type', 1)->get();
         $this->orderdetails=MaterialEntryOrderDetail::where('entry_order_id', $this->entry_order_id)->get();
         $this->materiales=Material::where('code','like','%'.$this->searchmateriales.'%')
@@ -59,14 +56,34 @@ class OrdenDeEntradaDeMateriales extends Component
             ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
             ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
-        $this->buyorders=BuyOrder::where('id','LIKE','%' . $this->searchorderbuy . '%')
-            ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('pucharsing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderBy('state','desc')->paginate($this->paginas1);
+        
+        switch (strtolower($this->searchorderbuy)) {
+                case 'completa':
+                    $this->type = 2;
+                    break;
+                case 'parcialmente recibido':
+                    $this->type = 0;
+                    break;     
+                case 'transito':
+                    $this->type = 1;
+                    break;  
+                default:
+                        $this->type = $this->searchorderbuy;
+                break;  
+        }
+        $array = explode('/',$this->searchorderbuy);
+        $year = (!empty($array[2])) ? $array[2] : '';
+        $month =  (!empty($array[1])) ? $array[1] : '';
+        $day =  (!empty($array[0])) ? $array[0] : '';
+        $fecha_orderbuy = $year.'-'.$month.'-'.$day;
+
+        $this->buyorders=BuyOrder::where('id','LIKE','%'.$this->searchorderbuy.'%')
+        ->orWhere('order_number','LIKE','%'.$this->searchorderbuy.'%')
+        ->orWhere('buy_date','LIKE','%'.$fecha_orderbuy.'%')
+        ->orWhere('state','LIKE','%'.$this->type.'%')->get();
+       
         return view('livewire.orden-de-entrada-de-materiales',[
             'orders' => $this->orders,
-            'buyorders' => $this->buyorders,
         ]);
     }
     public function modo_select(){
@@ -318,7 +335,7 @@ class OrdenDeEntradaDeMateriales extends Component
             } 
             
             $this->detail[0]=$material->code;
-            $this->detail[1]=$material->description;
+            $this->detail[1]=(!empty($material->description)) ? $material->description : '';
             $this->detail[4]=$material->id;
             $this->detail[2]=$this->cant;
             /*$material->stock += $this->cant;
@@ -356,7 +373,7 @@ class OrdenDeEntradaDeMateriales extends Component
 
             $warehouse=Warehouse::where('id',$this->deposito_id)->first();
             $this->detail[0]=$material->code;
-            $this->detail[1]=$material->description;
+            $this->detail[1]=(!empty($material->description)) ? $material->description : '';
             $this->detail[4]=$material->id;
             $this->detail[2]=$this->received_amount;
             $this->detail[3]=$material->count;
@@ -457,7 +474,7 @@ class OrdenDeEntradaDeMateriales extends Component
                                 if (!empty($material->id)) {
                                     $material['id']=$material->id;
                                     $material['code']=$material->code;
-                                    $material['description']=$material->description;
+                                    $material['description']=(!empty($material->description)) ? $material->description : ' ';
                                     $material['stock']=$material->stock;
                                     $material['stock_transit']=$material->stock_transit;
                                     $material['presentation']=$detailorder->presentation;
@@ -472,14 +489,16 @@ class OrdenDeEntradaDeMateriales extends Component
                                 }
                                 
                         }
-                    
+        $this->buy_card = false;
     }  
-
+public function search_order(){
+    $this->buy_card = true;
+}
 
     public function selectmaterial(Material $material){
         $this->id_m = $material->id;
         $this->code_m=$material->code;
-        $this->description_m=$material->description;
+        $this->description_m=(!empty($material->description)) ? $material->description : ' ';
         $this->requested_presentation = (isset($this->materials[$material->id]['presentation'])) ? $this->materials[$material->id]['presentation'] : '';
         $this->requested_amount = (isset($this->materials[$material->id]['amount'])) ? $this->materials[$material->id]['amount'] : '';
 
@@ -509,7 +528,7 @@ class OrdenDeEntradaDeMateriales extends Component
     public function ingresar(Material $material){
         $this->material_id=$material->id;
         $this->code_m=$this->material->code;
-        $this->description_m=$this->material->description;
+        $this->description_m=(!empty($material->description)) ? $material->description : ' ';
         
         $this->dispatchBrowserEvent('show-form-mat');
     }

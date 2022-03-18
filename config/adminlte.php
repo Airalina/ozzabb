@@ -304,6 +304,13 @@ return [
             'url'  => 'depositos',
             'icon' => 'fas fa-industry',  
         ],
+        ['header' => 'PRECIO DOLAR'],
+        [
+            'text' => 'Cotización',
+            'url'  => 'cotizacion',
+            'icon' => 'fas fa-money-bill',
+        ],
+
     ],
 
     /*

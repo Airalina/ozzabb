@@ -40,6 +40,7 @@
                     <div class="form-group">
                         <label for="terminal">Terminal Asociado</label>
                         <select wire:model="terminal" id="terminal" class="form-control form-control-sm" disabled>
+                            <option></option>
                             @foreach ($info_term as $term)
                             <option value="{{ $term->id }}"> {{ $term->material_info->name }}</option>
                             @endforeach
@@ -53,6 +54,7 @@
                     <div class="form-group">
                         <label for="seal">Sello Asociado</label>
                         <select wire:model="seal" id="seal" class="form-control form-control-sm" disabled>
+                            <option></option>
                             @foreach ($info_sell as $sell)
                             <option value="{{ $sell->id }}"> {{ $sell->material_info->name }}</option>
                             @endforeach
@@ -73,6 +75,7 @@
                     <div class="form-group">
                         <label for="connector">Contraparte</label>
                         <select wire:model="connector" id="connector" class="form-control form-control-sm" disabled>
+                            <option></option>
                             @foreach ($info_con as $con)
                             <option value="{{ $con->id }}"> {{ $con->material->name }}</option>
                             @endforeach
@@ -275,7 +278,7 @@
                             <option value="Tapa de conector">Tapa de conector</option>
                             <option value="Fusible">Fusible</option>
                             <option value="Relay">Relay</option>
-                            <option value="Pasante de Goma">Pasante de Goma</option>
+                            <option value="Pasante de goma">Pasante de Goma</option>
                             <option value="Tapón ciego">Tapón ciego</option>
                         </select>
                     </div>
