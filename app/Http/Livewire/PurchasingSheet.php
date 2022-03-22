@@ -20,7 +20,7 @@ use App\Models\BuyOrder;
 use App\Jobs\SendBuyEmail;
 use Carbon\Carbon;
 use Livewire\WithPagination;
-
+use PDF;
 class PurchasingSheet extends Component
 {
     use WithPagination;
@@ -480,7 +480,7 @@ class PurchasingSheet extends Component
      }
      public function exploraorder(BuyOrder $order){
         $this->order1=$order;
-        $this->buy_order_details=$order->buyorderdetails;
+        $this->buy_order_details=$order->buyorderdetails()->get();
         $this->funcion="ordenes_explora";   
      }
      public function change_provider(){
@@ -492,4 +492,11 @@ class PurchasingSheet extends Component
         $this->presentationm = null;
         $this->amount = null;
      }
+     public function createPDF(){
+        $order=$this->order1;
+        $pdf = PDF::loadView('orders_detail',compact('order'));
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, 'orden-de-compra-de-'.$this->order1->provider->name.'.pdf'); 
+    }
 }
