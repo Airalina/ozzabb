@@ -15,6 +15,7 @@
                                     <th style="text-align: center">Fecha de orden</th>
                                     <th style="text-align: center">Cantidad de materiales pedidos</th>
                                     <th style="text-align: center">Total U$D</th>
+                                    <th style="text-align: center">Estado</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -26,6 +27,11 @@
                                         <td style="text-align: center">{{ date('d-m-Y H:i', strtotime($order->buy_date))  }}</td>
                                         <td style="text-align: center">{{ count($order->buyorderdetails) }}</td>
                                         <td style="text-align: center">{{ $order->total_price }}</td>
+                                        @if($order->state==1)
+                                            <td style="text-align: center">Mail enviado</td>
+                                        @else
+                                            <td style="text-align: center">Mail no enviado</td>
+                                        @endif
                                         <td style="text-align: center">
                                             <button type="button" wire:click="exploraorder({{ $order->id }})" class="btn btn-primary btn-sm"><i
                                             class="fas fa-file-alt"></i>Ver</button>

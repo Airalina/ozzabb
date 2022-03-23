@@ -38,5 +38,7 @@ class SendBuyEmail implements ShouldQueue
     {
         $email=new BuyEmail($this->ordenes);
         Mail::to($this->email)->send($email);
+        $this->ordenes->state=1;
+        $this->ordenes->save();
     }
 }
