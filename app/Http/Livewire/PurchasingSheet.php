@@ -367,7 +367,6 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
                 $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
                 $this->ordenes_de_compra->pucharsing_sheet_id=$this->plantilla->id;
-                $this->ordenes_de_compra->state=1;
                 $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra->order_number=$this->ordenes_de_compra->id."/".date('Y', strtotime($this->date));
                 $this->ordenes_de_compra->save();
@@ -391,7 +390,7 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
                 $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
                 $this->ordenes_de_compra->pucharsing_sheet_id=$this->plantilla->id;
-                $this->ordenes_de_compra->state=1;
+                
                 $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra->order_number=$this->ordenes_de_compra->id."/".date('Y', strtotime($this->date));
                 $this->ordenes_de_compra->save();
