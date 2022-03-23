@@ -168,7 +168,7 @@
                                             <tbody>
                                                 @forelse($buyorders as $ord => $order)
                                                     <tr>
-                                                        <td style="text-align: center">#{{ $order->id }}/2021
+                                                        <td style="text-align: center">#{{ $order->order_number }}
                                                         </td>
                                                         <td style="text-align: center">
                                                             @if($order->provider)
