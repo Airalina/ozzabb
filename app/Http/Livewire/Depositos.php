@@ -32,7 +32,7 @@ class Depositos extends Component
     protected $depositos, $materialesdepo, $ensambladosdepo, $instalacionesdepo, $deposit_material;
     public $seleccion, $ingreso, $codem, $descriptionm, $presentationm=[], $material_id, $type, $materiales, $name_receive, $name_entry, $code, $descriptionw, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id;
     public $searchmaterialsdepo="", $entry_order_id, $buy_order_id, $order="type", $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
-    public $material_description,$deposito_delete,$amount_requested,$nombre_deposito,$amount_follow,$amount_undelivered,$set, $buyorders, $ingresa=false, $buyorderdetails, $follow, $material_code, $temporary, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation, $deposits, $depo, $materials_deposit, $materials_deposits, $materials_presentation, $materials_amount, $depo_destino, $name_egress, $explora_depo, $presentations, $amounts, $total, $totals, $retiros, $ingresos, $retiro, $ensamblados_deposits, $searchensambladodepo="", $descriptiona, $assembled_id, $assembled_amount, $selection = '', $materials_assembleds, $depo_id=0, $disabled='', $reservations = array();
+    public $material_description,$deposito_delete,$amount_requested,$nombre_deposito,$amount_follow,$amount_undelivered,$set, $buyorders, $ingresa=false, $buyorderdetails, $follow, $material_code, $temporary,$permanent, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation, $deposits, $depo, $materials_deposit, $materials_deposits, $materials_presentation, $materials_amount, $depo_destino, $name_egress, $explora_depo, $presentations, $amounts, $total, $totals, $retiros, $ingresos, $retiro, $ensamblados_deposits, $searchensambladodepo="", $descriptiona, $assembled_id, $assembled_amount, $selection = '', $materials_assembleds, $depo_id=0, $disabled='', $reservations = array();
     public function updatingSearch()
     {
         $this->resetPage();
@@ -210,10 +210,13 @@ class Depositos extends Component
             }
             $this->deposito->create_date=$this->create_date;
             $this->deposito->description=$this->descriptionw;
-            if($this->temporary==null){
-                $this->temporary=false;
+            if($this->temporary==null && $this->permanent==null){
+                $this->deposito->temporary=0;
+            }elseif($this->temporary){
+                $this->deposito->temporary=1;
+            }elseif($this->permanent){
+                $this->deposito->temporary=0;
             }
-            $this->deposito->temporary=$this->temporary;
             $this->deposito->save();
             $this->volver();
         }elseif($this->funcion=="update"){
