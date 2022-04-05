@@ -347,7 +347,7 @@
                             <option value="Mini">Mini</option>
                             <option value="Fit">Fit</option>
                             <option value="Bulldog">Bulldog</option>
-                            <option value="Ecoseal">Ecoseal</option>
+                            <option value="Ecoseal">Econoseal</option>
                             <option value="Ecu">Ecu</option>
                             <option value="Sicma">Sicma</option>
                             <option value="Fastin Faston">Fastin Faston</option>
