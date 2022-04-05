@@ -115,37 +115,36 @@
                         <label for="base_color">Color base</label>
                         <select class="form-control form-control-sm" wire:model="base_color" id="base_color" disabled>
                             <option value="Negro" class="text-dark">Negro</option>
-                            <option value="Blanco">Blanco</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
-                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
-                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
-                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Azul" class="text-primary">Azul</option>
                             <option value="Violeta" style="color:violet">Violeta</option>
                             <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Blanco">Blanco</option>
                             <option value="Rosado" style="color:palevioletred">Rosado</option>
-                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                             <option value="Verde claro" style="color:lightgreen">Verde claro</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="line_color">Color Línea</label>
                         <select class="form-control form-control-sm" wire:model="line_color" id="line_color" disabled>
-                            <option selected value="">Selecciona un color</option>
                             <option value="Negro" class="text-dark">Negro</option>
-                            <option value="Blanco">Blanco</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
-                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
-                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
-                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Azul" class="text-primary">Azul</option>
                             <option value="Violeta" style="color:violet">Violeta</option>
                             <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Blanco">Blanco</option>
                             <option value="Rosado" style="color:palevioletred">Rosado</option>
-                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                             <option value="Verde claro" style="color:lightgreen">Verde claro</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                         </select>
                     </div>
                     <div class="form-group">
