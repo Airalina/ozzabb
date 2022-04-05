@@ -32,12 +32,20 @@
                   Para:
                   <address>
                     <strong>{{ $order->customer_name }}</strong><br>
-                    {{ $address->street }}, {{ $address->number }} <br>
-                    {{ $address->location }}, {{ $address->province }}<br>
-                    {{ $address->country }}<br>
-                    CO: {{ $address->postcode }}<br>
-                    Telefono: {{ $customer->phone }}<br>
-                    Email: {{ $customer->email }}
+                    @if($address)
+                      {{ $address->street }}, {{ $address->number }} <br>
+                      {{ $address->location }}, {{ $address->province }}<br>
+                      {{ $address->country }}<br>
+                      CO: {{ $address->postcode }}<br>
+                    @else
+                      La dirección del cliente ha sido borrado del sistema.<br>
+                    @endif
+                    @if($customer)
+                      Telefono: {{ $customer->phone }}<br>
+                      Email: {{ $customer->email }}
+                    @else
+                      El cliente ha sido borrado del sistema.<br>
+                    @endif
                   </address>
                 </div>
                 <!-- /.col -->
