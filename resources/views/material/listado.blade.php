@@ -81,7 +81,11 @@
                             </td>
                             <td style="text-align: center">
                                 @if ($material->line != null)
-                                    {{ $material->line }}
+                                    @if($material->line=="Ecoseal")
+                                        Econoseal
+                                    @else
+                                        {{ $material->line }}
+                                    @endif
                                 @endif
                             </td>
                             <td style="text-align: center">
