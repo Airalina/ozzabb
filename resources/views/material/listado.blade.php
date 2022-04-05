@@ -73,8 +73,8 @@
                                     
                                 @else
                                 <ul class="list-unstyled">
-                                    <li>Base: {{ $material->cable->base_color }} </li>
-                                    <li> {{ (!empty($material->cable->line_color)) ? 'Linea: ' . $material->cable->line_color : '' }} </li>
+                                    <li>{{ $material->cable->base_color }} </li>
+                                    <li> {{ (!empty($material->cable->line_color)) ? '' . $material->cable->line_color : '' }} </li>
                                 </ul>
                                    
                                 @endif
