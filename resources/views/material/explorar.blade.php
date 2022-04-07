@@ -75,10 +75,11 @@
                     <div class="form-group">
                         <label for="connector">Contraparte</label>
                         <select wire:model="connector" id="connector" class="form-control form-control-sm" disabled>
-                            <option></option>
-                            @foreach ($info_con as $con)
-                            <option value="{{ $con->id }}"> {{ $con->material->name }}</option>
-                            @endforeach
+                            @if(empty($connect))              
+                                <option></option>             
+                            @else
+                                <option> {{ $connect->material->name }}</option>
+                            @endif
                         </select>
                     </div>
                     <div class="form-group">
