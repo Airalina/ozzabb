@@ -281,6 +281,8 @@
                             <option value="Relay">Relay</option>
                             <option value="Pasante de goma">Pasante de Goma</option>
                             <option value="Tapón ciego">Tapón ciego</option>
+                            <option value="Portafusible">Portafusible</option>
+                            <option value="Moldeado">Moldeado</option>
                         </select>
                     </div>
                     @break
