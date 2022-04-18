@@ -43,7 +43,7 @@
             <tbody>
               @forelse($orders as $order)
                 <tr class="registros">
-                      <td style="text-align: center">{{ $order->id }}/2021</td>
+                      <td style="text-align: center">{{ $order->id }}/{{$order->deadline->format('Y')}}</td>
                       <td style="text-align: center">{{ $order->customer_id }}</td>
                       <td style="text-align: center">{{ $order->customer_name}}</td>
                       <td style="text-align: center">{{ $order->deadline->format('d/m/Y') }}</td>
