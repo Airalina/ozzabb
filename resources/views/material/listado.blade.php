@@ -73,15 +73,19 @@
                                     
                                 @else
                                 <ul class="list-unstyled">
-                                    <li>Base: {{ $material->cable->base_color }} </li>
-                                    <li> {{ (!empty($material->cable->line_color)) ? 'Linea: ' . $material->cable->line_color : '' }} </li>
+                                    <li>{{ $material->cable->base_color }} </li>
+                                    <li> {{ (!empty($material->cable->line_color)) ? '' . $material->cable->line_color : '' }} </li>
                                 </ul>
                                    
                                 @endif
                             </td>
                             <td style="text-align: center">
                                 @if ($material->line != null)
-                                    {{ $material->line }}
+                                    @if($material->line=="Ecoseal")
+                                        Econoseal
+                                    @else
+                                        {{ $material->line }}
+                                    @endif
                                 @endif
                             </td>
                             <td style="text-align: center">
