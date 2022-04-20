@@ -380,6 +380,14 @@
                         <input type="text" class="form-control" id="stock" wire:model="stock"
                             placeholder="Stock en planta" readonly>
                     </div>
+                    <div class="form-group">
+                        <label for="stock">Imagenes</label>
+                        @if ($funcion == 'crear')
+                            <x-img-create-card :images="$images" />
+                        @else
+                            <x-img-update-card :images="$images" :material="$material" />
+                        @endif
+                    </div>
                 </div>
             </div>
         </form>
