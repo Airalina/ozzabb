@@ -8,30 +8,26 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-    <div>
-        <button wire:click="go_to_orders({{$to_order}})" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i>Volver</button>
-    </div><br>
     <div class="container mt-4">
         <div class="card-header">
             <div class="row">
-                <h6 class="card-title">Proveedor: {{  $order1->provider->name }} </h6>
+                <h6 class="card-title">Proveedor: {{$order->provider->name}} </h6>
             </div>
             <div class="row">
-                <h6 class="card-title">Número de orden: {{ $order1->order_number }} </h6>
+                <h6 class="card-title">Número de orden: {{ $order->order_number }} </h6>
             </div>
             <div class="row">
-                <h6 class="card-title">Cantidad de materiales pedidos: {{ count($order1->buyorderdetails) }} </h6>
+                <h6 class="card-title">Cantidad de materiales pedidos: {{ count($order->buyorderdetails) }} </h6>
             </div>
             <div class="row">
-                <h6 class="card-title">Total U$D: {{ $order1->total_price }}</h6>
+                <h6 class="card-title">Total U$D: {{ $order->total_price }}</h6>
             </div>
         </div>
         <div class="row">
             <div class="col-md-8">
                 <h2>Lista de productos</h2>
             </div>
-        </div>
-        <div class="row">
+            <div class="row">
             <div class="col-md-12">
                 <table class="table table-hover table-sm">
                     <thead>
@@ -45,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($buy_order_details as $detail)
+                        @forelse($order->buyorderdetails()->get() as $detail)
                             <tr>
                                 <td style="text-align: center">{{ $detail->material->name }}</td>
                                 <td style="text-align: center">{{ $detail->presentation }}</td>
@@ -62,11 +58,10 @@
                 </table>
             </div>
         </div>
+        </div>
+        
     </div>
     <div class="row no-print">
-        <div class="col-12">
-            <button type="button"  wire:click="createPDF()" class="btn btn-primary float-right" style="margin-right: 5px;"><i class="fas fa-download"></i> Generar PDF</button>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

@@ -20,7 +20,7 @@ use App\Models\BuyOrder;
 use App\Jobs\SendBuyEmail;
 use Carbon\Carbon;
 use Livewire\WithPagination;
-
+use PDF;
 class PurchasingSheet extends Component
 {
     use WithPagination;
@@ -367,7 +367,6 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
                 $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
                 $this->ordenes_de_compra->pucharsing_sheet_id=$this->plantilla->id;
-                $this->ordenes_de_compra->state=1;
                 $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra->order_number=$this->ordenes_de_compra->id."/".date('Y', strtotime($this->date));
                 $this->ordenes_de_compra->save();
@@ -391,7 +390,7 @@ class PurchasingSheet extends Component
                 $this->ordenes_de_compra->provider_id=$ordenes->provider_id;
                 $this->ordenes_de_compra->total_price+=$ordenes->usd_price;
                 $this->ordenes_de_compra->pucharsing_sheet_id=$this->plantilla->id;
-                $this->ordenes_de_compra->state=1;
+                
                 $this->ordenes_de_compra->save();
                 $this->ordenes_de_compra->order_number=$this->ordenes_de_compra->id."/".date('Y', strtotime($this->date));
                 $this->ordenes_de_compra->save();
@@ -480,7 +479,7 @@ class PurchasingSheet extends Component
      }
      public function exploraorder(BuyOrder $order){
         $this->order1=$order;
-        $this->buy_order_details=$order->buyorderdetails;
+        $this->buy_order_details=$order->buyorderdetails()->get();
         $this->funcion="ordenes_explora";   
      }
      public function change_provider(){
@@ -492,4 +491,11 @@ class PurchasingSheet extends Component
         $this->presentationm = null;
         $this->amount = null;
      }
+     public function createPDF(){
+        $order=$this->order1;
+        $pdf = PDF::loadView('orders_detail',compact('order'));
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, 'orden-de-compra-de-'.$this->order1->provider->name.'.pdf'); 
+    }
 }
