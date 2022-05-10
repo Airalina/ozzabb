@@ -47,6 +47,7 @@
                               <input type="date" wire:model="deadline" class="form-control form-control-sm" style="width: auto" placeholder="dd/mm/AAAA" >
                     @endif
                     <br>
+              @if($customer)
                 <label>Domicilio administrativo del cliente: {{$customer->domicile_admin}}</label>
                 <br>
                 <label>Domicilio de entrega:</label>
@@ -104,6 +105,7 @@
                     </tbody>
                   </table>
                 </div>
+                @endif
                     @if($update==true)
                     <label><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Instalaciones registradas en el pedido:</font></font></label>
                           <table class="table table-hover table-sm">
