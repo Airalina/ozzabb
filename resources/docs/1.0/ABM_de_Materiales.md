@@ -52,7 +52,7 @@ Como usuario del sistema debo poder llevar registro de los materiales que utiliz
 | :---- | :---- | :----------- | :--------: |
 | Código | Texto   | Es el código de material interno para la empresa.  |     Sí     |
 | Nombre    | Texto  | Es el nombre por el que se conoce al material coloquialmente.  |     Sí     |
-| Familia   | Selector | Conectores, Terminales, Cables, Sellos     |     Sí     |
+| Familia   | Selector | Conectores, Terminales, Cables, Sellos, Tubos, Accesorios,CLips;     |     Sí     |
 | Color     | Selector de Color | Muestra una paleta de colores, ej. amarillo, Rojo y Negro. |     Sí     |
 | Descripción | Texto multilínea | Permite escribir una pequeña descripción del material. tamaño máximo de 500 caracteres. |     No     |
 | Línea     | Enumerado: Superseal, Mini Fit, Bulldog, Econoseal, Eco |Muestra la lista de Líneas de productos en la que se usa este material. | Sí          |
@@ -93,7 +93,7 @@ Como usuario del sistema debo poder llevar registro de los materiales que utiliz
 |Dato|Tipo|Descripción|Requerido|
 |:--|:---|:--------|:--:|
 |Sección | Numérico , 2 decimales | Es el grosor del cable en milímetros. | Sí |
-|Color Base | Color | Es el color general de la cobertura. | Sí |
+|Color Base | Color | Es el color general de la cobertura. Estos son: Negro, blanco, rojo, azul, amarillo, verde, marrón, naranja, violeta, gris, rosado, celeste, verde claro (Actualizado según lo desarrollado)| Sí |
 |Color línea | Color | Es el color de la línea. | No |
 |Configuración de Trenza | Enumerado: 16 x 20mm; 34 x 20mm | Describe cómo está construido el cable | Sí |
 |Norma | Enumerado: Iram 247-5, Iram 247-3, IR, ID, Blindado, Multifilar | Norma de construcción del cable | Sí |
