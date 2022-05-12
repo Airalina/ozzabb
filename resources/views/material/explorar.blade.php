@@ -38,13 +38,22 @@
                     @switch($div)
                     @case("Conectores")
                     <div class="form-group">
-                        <label for="terminal">Terminal Asociado</label>
-                        <select wire:model="terminal" id="terminal" class="form-control form-control-sm" disabled>
-                            <option></option>
-                            @foreach ($info_term as $term)
-                            <option value="{{ $term->id }}"> {{ $term->material_info->name }}</option>
+                        <label for="terminal">Terminales Asociado Seleccionados:</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($terminales as $terminal)
+                                <tbody>
+                                    <td>{{$terminal[2]}}</td>
+                                    <td>{{$terminal[1]}}</td>
+                                </tbody>
                             @endforeach
-                        </select>
+                        </table>
                     </div>
                     <div class="form-group">
                         <label for="term_size">Tamaño de terminal</label>

@@ -16,4 +16,8 @@ class Terminal extends Model
     {
         return $this->belongsTo(Material::class, 'material_id');
     }
+    public function connectors()
+    {
+        return $this->belongsToMany(Connector::class);
+    }
 }

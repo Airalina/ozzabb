@@ -10,11 +10,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Connector extends Model
 {
     use SoftDeletes, HasFactory;
-    protected $fillable = ['material_id', 'terminal_id', 'seal_id', 'number_of_ways', 'type', 'connector_id', 'watertight', 'cover', 'lock'];
+    protected $fillable = ['id','material_id', 'terminal_id', 'seal_id', 'number_of_ways', 'type', 'connector_id', 'watertight', 'cover', 'lock'];
 
     public function material()
     {
         return $this->belongsTo(Material::class, 'material_id');
+    }
+
+    public function terminals()
+    {
+        return $this->belongsToMany(Terminal::class);
     }
 
 }

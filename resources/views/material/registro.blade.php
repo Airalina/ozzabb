@@ -32,7 +32,7 @@
                         <option value="Clips">clips</option>
                     </select>
                 </div>
-                <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id"
+                <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id" :search="$search" :terminales="$terminales"
                     :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
                     :connect="$connect" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" />
 
