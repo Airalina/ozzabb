@@ -38,7 +38,7 @@
                     @switch($div)
                     @case("Conectores")
                     <div class="form-group">
-                        <label for="terminal">Terminales Asociado Seleccionados:</label>
+                        <label for="terminal">Terminales Asociados Seleccionados:</label>
                         <table>
                             <thead>
                                 <tr>
@@ -56,18 +56,22 @@
                         </table>
                     </div>
                     <div class="form-group">
-                        <label for="term_size">Tamaño de terminal</label>
-                        <input type="text" class="form-control" id="term_size" wire:model="term_size"
-                            placeholder="Tamaño de terminal" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="seal">Sello Asociado</label>
-                        <select wire:model="seal" id="seal" class="form-control form-control-sm" disabled>
-                            <option></option>
-                            @foreach ($info_sell as $sell)
-                            <option value="{{ $sell->id }}"> {{ $sell->material_info->name }}</option>
+                        <label for="sello">Sellos Asociados Seleccionados:</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($sellos as $sello)
+                                <tbody>
+                                    <td>{{$sello[2]}}</td>
+                                    <td>{{$sello[1]}}</td>
+                                </tbody>
                             @endforeach
-                        </select>
+                        </table>
                     </div>
                     <div class="form-group">
                         <label for="number_of_ways">Cantidad de vías</label>

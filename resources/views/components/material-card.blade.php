@@ -24,7 +24,7 @@
                             @endforeach
                         </table>
                         @endif
-                        <label for="terminal">Terminales Asociado Seleccionados:</label>
+                        <label for="terminal">Terminales Asociados Seleccionados:</label>
                         <table>
                             <thead>
                                 <tr>
@@ -44,26 +44,46 @@
                     </div>
                 
                     <div class="form-group">
-                        <label for="seal">Sello Asociado</label>
-
-                        <select wire:model="seal" id="seal" class="form-control form-control-sm">
-                            @if ($sealId != null)
-                                <option value="{{ $seli->id }}" selected>{{ $seli->material_info->name }}</option>
-                            @else
-                                <option selected>Seleccione un sello</option>
+                        <label for="sello">Sellos Asociados</label>
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input wire:model="searchs" type="text" class="form-control float-right"
+                                    placeholder="Buscar Material...">
+                            </div>
+                            @if($searchs!=null)
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($infoSell as $sello)
+                                    <tbody>
+                                        <td>{{$sello->code}}</td>
+                                        <td>{{$sello->name}}</td>
+                                        <td><button wire:click="addsello({{ $sello->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                    </tbody>
+                                @endforeach
+                            </table>
                             @endif
-                            @if ($sealId != null)
-                                <option>Seleccione un sello</option>
-                            @endif
-                            @foreach ($infoSell as $sell)
-                                @if ($sealId != null)
-                                    @if ($sealId === $sell->id)
-                                        @php continue;  @endphp
-                                    @endif
-                                @endif
-                                <option value="{{ $sell->id }}"> {{ $sell->material_info->name }}</option>
-                            @endforeach
-                        </select>
+                            <label for="sello">Sellos Asociados Seleccionados:</label>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($sellos as $sello)
+                                    <tbody>
+                                        <td>{{$sello[2]}}</td>
+                                        <td>{{$sello[1]}}</td>
+                                        <td><button wire:click="dropsello({{ $sello[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                    </tbody>
+                                @endforeach
+                            </table>
                     </div>
                     <div class="form-group">
                         <label for="number_of_ways">Cantidad de vías</label>

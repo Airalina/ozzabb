@@ -22,4 +22,9 @@ class Connector extends Model
         return $this->belongsToMany(Terminal::class);
     }
 
+    public function seals()
+    {
+        return $this->belongsToMany(Seal::class);
+    }
+
 }
