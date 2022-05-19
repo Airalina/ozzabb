@@ -357,8 +357,7 @@
                         <select class="form-control form-control-sm" wire:model="line" id="line" disabled>
                             <option selected>Selecciona una linea</option>
                             <option value="Superseal">Superseal</option>
-                            <option value="Mini">Mini</option>
-                            <option value="Fit">Fit</option>
+                            <option value="Mini Fit">Mini Fit</option>
                             <option value="Bulldog">Bulldog</option>
                             <option value="Ecoseal">Ecoseal</option>
                             <option value="Ecu">Ecu</option>
