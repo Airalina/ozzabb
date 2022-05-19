@@ -32,10 +32,18 @@
                             <label for="exampleInputEmail1">Descripción</label>
                             <textarea class="form-control form-control-sm" rows="3" wire:model="descriptionw" placeholder="Descripción ..."></textarea>
                         </div>
-                        <div class="form-check">
-                            <input type="checkbox" wire:model="temporary" class="form-check-input" id="exampleCheck1"  checked="">
-                            <label for="exampleInputEmail1">Temporal ( Indica si el depósito es temporal "tildado" )</label>
-                        </div>
+                        @if(!$temporary)
+                            <div class="form-check">
+                                <input type="checkbox" wire:model="permanent" class="form-check-input" id="exampleCheck2"  checked="">
+                                <label for="exampleInputEmail1">Permanente ( Indica si el depósito es permanente "tildado" )</label>
+                            </div>
+                        @endif
+                        @if(!$permanent)
+                            <div class="form-check">
+                                <input type="checkbox" wire:model="temporary" class="form-check-input" id="exampleCheck1"  checked="">
+                                <label for="exampleInputEmail1">Temporal ( Indica si el depósito es temporal "tildado" )</label>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tipo de depósito</label>
                             <select class="form-control form-control-sm select2 select2-hidden-accessible" wire:model="type" style="width: auto">
