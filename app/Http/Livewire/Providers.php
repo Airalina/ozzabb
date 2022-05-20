@@ -629,7 +629,7 @@ class Providers extends Component
                 $this->validate([
                     'terminal' => 'nullable',
                     'seal' => 'nullable',
-                    'number_of_ways' => 'numeric|integer|digits:1|required',
+                    'number_of_ways' => 'numeric|integer|min:1|max:999|required',
                     'type' => 'required',
                     'connector' =>'nullable',
                     'watertight' =>'required|boolean',
@@ -638,7 +638,8 @@ class Providers extends Component
                 ], [
                     'number_of_ways.numeric' => 'El campo cantidad de vías es numérico',
                     'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
-                    'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
+                    'number_of_ways.min' => 'El campo cantidad de vías debe ser un número entero de 1 a 999',
+                    'number_of_ways.max' => 'El campo cantidad de vías debe ser un número entero de 1 a 999',
                     'number_of_ways.required' => 'El campo cantidad de vías es requerido',
                     'type.required' => 'El campo tipo es requerido',
                     'watertight.required' => 'Seleccione una opción para el campo estanco',
