@@ -1414,6 +1414,7 @@ class MaterialComponent extends Component
     $this->addres_provider = null;
     $this->email_provider = null;
     $this->provider_new=null;
+    $this->provider_material_code=null;
     $this->addProvider = true;
     $this->explora='inactivo';
     $this->funcion="crearmat";    
@@ -1481,11 +1482,13 @@ public function destruirmat(Material $material)
 
 public function updatemat(ProviderPrice $provider_price)
 {  
+    $this->resetValidation();
     $this->id_provider_price = $provider_price->id;
     $this->material_price=$provider_price->material_id;
     $this->id_provider=$provider_price->provider_id;
     $this->amount=$provider_price->amount;
     $this->unit=$provider_price->unit;
+    $this->provider_material_code=$provider_price->provider_code;
     $this->presentation=$provider_price->presentation;
     $this->usd_price=$provider_price->usd_price;
     $this->ars_price=$provider_price->ars_price;;
