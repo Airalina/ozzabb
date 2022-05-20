@@ -1,32 +1,46 @@
             @switch($div)
                 @case("Conectores")
                     <div class="form-group">
-                        <label for="terminal">Terminal Asociado</label>
-                        <select wire:model="terminal" wire:change="size" id="terminal" class="form-control form-control-sm">
-
-                            @if ($terminalId != null)
-                                <option value="{{ $termi->id }}" selected>{{ $termi->material_info->name }}</option>
-                            @else
-                                <option selected value="">Seleccione un terminal</option>
-                            @endif
-                            @if ($terminalId != null)
-                                <option value="">Seleccione un terminal</option>
-                            @endif
-                            @foreach ($infoTerm as $term)
-                                @if ($terminalId != null)
-                                    @if ($terminalId === $term->id)
-                                        @php continue;  @endphp
-                                    @endif
-                                @endif
-                                <option value="{{ $term->id }}"> {{ $term->material_info->name }}</option>
+                        <label for="terminal">Terminales Asociado</label>
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input wire:model="search" type="text" class="form-control float-right"
+                                placeholder="Buscar Material...">
+                        </div>
+                        @if($search!=null)
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($infoTerm as $terminal)
+                                <tbody>
+                                    <td>{{$terminal->code}}</td>
+                                    <td>{{$terminal->name}}</td>
+                                    <td><button wire:click="addterminal({{ $terminal->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                </tbody>
                             @endforeach
-                        </select>
-                    </div>
-                
-                    <div class="form-group">
-                        <label for="term_size">Tamaño de terminal</label>
-                        <input type="text" class="form-control" id="term_size" wire:model="term_size"
-                            placeholder="Tamaño de terminal" disabled>
+                        </table>
+                        @endif
+                        <label for="terminal">Terminales Asociado Seleccionados:</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($terminales as $terminal)
+                                <tbody>
+                                    <td>{{$terminal[2]}}</td>
+                                    <td>{{$terminal[1]}}</td>
+                                    <td><button wire:click="dropterminal({{ $terminal[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                </tbody>
+                            @endforeach
+                        </table>
                     </div>
                 
                     <div class="form-group">
