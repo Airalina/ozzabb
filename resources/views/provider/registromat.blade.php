@@ -223,7 +223,7 @@
                             <select class="form-control form-control-sm" wire:model.defer="line" id="line">
                                 <option selected>Selecciona una linea</option>
                                 <option value="Bulldog">Bulldog</option>
-                                <option value="Ecoseal">Ecoseal</option>
+                                <option value="Ecoseal">Econoseal</option>
                                 <option value="Ecu">Ecu</option>
                                 <option value="Fit"></option>
                                 <option value="Fastin Faston">Fastin Faston</option>    

@@ -40,7 +40,11 @@
                       <td>{{ $material->name }}
                       <td>{{ $material->family }}
                       <td>{{ $material->color }}
-                      <td>{{ $material->line_id }}
+                      @if($material->line_id=="Ecoseal")
+                        <td>Econoseal
+                      @else
+                        <td>{{ $material->line_id }}
+                      @endif
                       <td>{{ $material->usage_id }}
                       <td>{{ $material->replace }}
                       <td>{{ $material->stock_min }}

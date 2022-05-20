@@ -62,7 +62,7 @@
                     <select class="form-control form-control-sm" wire:model="line" id="line">
                         <option selected>Selecciona una linea</option> 
                         <option value="Bulldog">Bulldog</option>
-                        <option value="Ecoseal">Ecoseal</option>
+                        <option value="Ecoseal">Econoseal</option>
                         <option value="Ecu">Ecu</option>
                         <option value="Fastin Faston">Fastin Faston</option>    
                         <option value="Mini Fit">Mini Fit</option>
