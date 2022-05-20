@@ -192,7 +192,7 @@ class MaterialComponent extends Component
             'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
-        if($this->family == 'Cables'){
+        if($this->family == 'Cables' || $this->family == 'Terminales' || $this->family == 'Tubos' || $this->family == 'Clips'){
             $this->validate([
                 'color' => 'nullable',
             ]);
@@ -723,7 +723,7 @@ class MaterialComponent extends Component
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
     
-        if($this->family == 'Cables'){
+        if($this->family == 'Cables' ||$this->family == 'Terminales' ||$this->family == 'Tubos' || $this->family == 'Clips'){
             $this->validate([
                 'color' => 'nullable',
             ]);
