@@ -66,7 +66,7 @@
                                     <tr>
                                       <th style="text-align: center">Codigo</th>
                                       <th style="text-align: center">Descripción</th>
-                                      <th style="text-align: center">Presentación</th>
+                                      <th style="text-align: center">Packaging</th>
                                       <th style="text-align: center">Cantidad</th>
                                       <th style="text-align: center">Deposito</th>
                                       <th></th>
@@ -115,7 +115,7 @@
                                   <tr>
                                       <th style="text-align: center">Codigo</th>
                                       <th style="text-align: center">Descripción</th>
-                                      <th style="text-align: center">Presentación</th>
+                                      <th style="text-align: center">Packaging</th>
                                       <th style="text-align: center">Cantidad</th>
                                       <th style="text-align: center">Deposito Id</th>
                                       <th></th>
@@ -151,7 +151,7 @@
                                       <th style="text-align: center">Código material</th>
                                       <th style="text-align: center">Descripción</th>
                                       <th style="text-aling: center">N° orden de compra</th>
-                                      <th style="text-align: center">Presentación</th>
+                                      <th style="text-align: center">Packaging</th>
                                       <th style="text-align: center">Cantidad requerida</th>>
                                       <th></th>
                                       <th></th>
@@ -186,7 +186,7 @@
                                       <tr>
                                         <th style="text-align: center">Código Material</th>
                                         <th style="text-align: center">Descripción</th>
-                                        <th style="text-align: center">Presentación</th>
+                                        <th style="text-align: center">Packaging</th>
                                         <th style="text-align: center">Cantidad requerida</th>
                                         <th style="text-align: center">Cantidad remito</th>
                                         <th style="text-align: center">Cantidad recibida</th>
@@ -226,7 +226,7 @@
                                     <tr>
                                       <th style="text-align: center">Código Material</th>
                                       <th style="text-align: center">Descripción</th>
-                                      <th style="text-align: center">Presentación</th>
+                                      <th style="text-align: center">Packaging</th>
                                       <th style="text-align: center">Cantidad recibida</th>
                                       <th style="text-align: center">Cantidad requerida</th>
                                       <th style="text-align: center">Cantidad remito</th>

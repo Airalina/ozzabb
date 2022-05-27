@@ -51,7 +51,7 @@
                                 <th style="text-align: center">Código Material</th>
                                 <th style="text-align: center">Descripción</th>
                                 <th style="text-aling: center">N° Deposito</th>
-                                <th style="text-align: center">Presentación</th>
+                                <th style="text-align: center">Packaging</th>
                                 <th style="text-align: center">Cantidad enviada</th>
                                 @if (empty($entry_order_type))
                                     <th style="text-align: center">Cantidad pedida</th>

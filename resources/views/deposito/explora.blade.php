@@ -47,7 +47,7 @@
                         <th style="text-align: center">Id</th>
                         <th style="text-align: center">Codigo</th>
                         <th style="text-align: center">Descripción</th>
-                        <th style="text-align: center">Presentación</th>
+                        <th style="text-align: center">Packaging</th>
                         <th style="text-align: center">Cantidad</th>
                         <th style="text-align: center">Total</th>
                         <th style="text-align: center">Reservado</th>

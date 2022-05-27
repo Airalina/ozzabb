@@ -108,7 +108,7 @@
                                 <th style="text-align: center">Stock en tránsito</th>
                                 <th style="text-align: center">Stock requerido</th>
                                 <th style="text-align: center">Proveedor</th>
-                                <th style="text-align: center">Presentación</th>
+                                <th style="text-align: center">Packaging</th>
                                 <th style="text-align: center">Cantidad</th>
                                 <th style="text-align: center">Cantidad total</th>
                                 <th style="text-align: center">P/U U$D</th>
@@ -181,9 +181,9 @@
                           </div>
                           @if(!empty($proveedor_selected))
                           <div class="form-group">
-                              <label>Presentación:</label>
+                              <label>Packaging:</label>
                               <select class="form-control form-control-sm select2 select2-hidden-accessible" wire:model="presentationm" wire:change="change_price()" style="width: auto">
-                                  <option selected="selected" hidden="">Seleccione una presentación</option>
+                                  <option selected="selected" hidden="">Seleccione un packaging</option>
                                   @foreach($provider_presentations as $presentation)
                                       <option value="{{ $presentation }}">{{ $presentation->unit }}  {{ $presentation->presentation }}</option>
                                   @endforeach

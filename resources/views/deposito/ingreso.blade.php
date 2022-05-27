@@ -237,7 +237,7 @@
                                     <tr>
                                         <th style="text-align: center">Codigo</th>
                                         <th style="text-align: center">Descripción</th>
-                                        <th style="text-align: center">Presentación</th>
+                                        <th style="text-align: center">Packaging</th>
                                         <th style="text-align: center">Cantidad</th>
                                         <th></th>
                                     </tr>
@@ -581,12 +581,12 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-3">
-                                    <label>Presentación:</label>
+                                    <label>Packaging:</label>
                                 </div>
                                 <div class="col-4">
                                     <select wire:model.defer="presentation" id="presentation"
                                         class="form-control form-control-sm">
-                                        <option selected>Seleccione una presentación</option>
+                                        <option selected>Seleccione un packaging</option>
                                         @foreach ($presentationm as $presentation)
                                         <option value="{{ $presentation->presentation }}"> {{
                                             $presentation->presentation }}
@@ -600,7 +600,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-3">
-                                    <label>Presentación: </label>
+                                    <label>Packaging: </label>
                                 </div>
                                 <div class="col-4">
                                     <input wire:model.defer="presentation" type="number">

@@ -425,7 +425,7 @@
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Proveedor</th>
-                            <th>Presentación</th>
+                            <th>Packaging</th>
                             <th>Fecha</th>
                             <th>Precio</th>
                             <th></th>
