@@ -364,12 +364,14 @@ class Ordenesclientes extends Component
     {
         if($order->order_state==1){
             $this->order_id=$order->id;
-            $this->customer=Customer::find($order->customer_id);
-            $this->namecust=$this->customer->name;
             $this->deadline = $order->deadline;
             $this->total=$order->usd_price;
             $this->address=DomicileDelivery::find($order->deliverydomicile_id);
             $this->detailcollect=Orderdetail::where('clientorder_id', $order->id)->get();
+            $this->customer=Customer::find($order->customer_id);
+            if($this->customer){
+                $this->namecust=$this->customer->name;
+            }
             $this->update =true;
             $this->funcion="ordernew";
         }
