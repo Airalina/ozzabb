@@ -218,7 +218,7 @@ class OrdenDeEgresoDeMateriales extends Component
             'presentation_m' =>  $val.'|integer|min:1|max:1000000',
             'depo' => 'required'
         ],[
-            'presentation_m.required' => 'Seleccione una opción del campo "Presentación"',
+            'presentation_m.required' => 'Seleccione una opción del campo "Packaging"',
             'depo.required' => 'Seleccione una opción del campo "Deposito"'
         ]);
 

@@ -16,6 +16,8 @@ use App\Models\Cable;
 use App\Models\Provider;
 use App\Models\ProviderPrice;
 use App\Models\Price;
+use App\Models\ConnectorTerminal;
+use App\Models\ConnectorSeal;
 use App\Models\Workorder;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -29,8 +31,7 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $ma, $dolar,$ar_price, $search, $termi, $seli, $provider_material_code, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled;
-
+    public  $paginas=25, $addterminal=array(), $count_terminales=0,$terminales=array(),$searchs="",$addsello=array(), $count_sellos=0,$sellos=array(),$ma, $conector, $dolar,$ar_price, $search, $termi, $seli, $provider_material_code, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='name', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled;
     public function render()
     {
         $this->dolar=Dollar::where('id',1)->first();
@@ -45,8 +46,21 @@ class MaterialComponent extends Component
         ->orWhere('stock_max','LIKE','%'.$this->search.'%')
         ->orWhere('stock','LIKE','%'.$this->search.'%')
         ->orderBy($this->order);
-
         $this->materials = $mats->paginate($this->paginas);
+        
+        $this->info_term = Material::where('family','Terminales')
+        ->where(function($query) {
+            $query->orWhere('name','LIKE','%'.$this->search.'%')
+                  ->orwhere('code','LIKE','%'.$this->search.'%');
+        })->get();
+
+        $this->info_sell = Material::where('family','Sellos')
+        ->where(function($query) {
+            $query->orWhere('name','LIKE','%'.$this->searchs.'%')
+                  ->orwhere('code','LIKE','%'.$this->searchs.'%');
+        })->get();
+
+        
         
         $reservations_materials = $mats->get();
         $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
@@ -57,7 +71,6 @@ class MaterialComponent extends Component
                     total'))->where('workorder_id', $workorder->id)->first();
                 }
             }            
-            
         $this->providers =Provider::where('name','LIKE','%'.$this->searchproviders.'%')
             ->orWhere('address','LIKE','%'.$this->searchproviders.'%')
             ->orWhere('phone','LIKE','%'.$this->searchproviders.'%')
@@ -79,6 +92,8 @@ class MaterialComponent extends Component
     {
         $this->resetValidation();
         $this->funcion="crear";
+        $this->count_terminales=0;
+        $this->count_sellos=0;
         $this->id_provider=null;
         $this->code=null;
         $this->name=null;
@@ -147,13 +162,7 @@ class MaterialComponent extends Component
         $this->idu=null;
         $this->info_line=Line::all();
         $this->info_usage=Usage::all();
-        $this->info_term = Terminal::whereExists(function ($query) {
-            $query->select('id')
-                  ->from('materials')
-                  ->where('family','Terminales')
-                  ->whereColumn('terminals.material_id', 'materials.id');
-        })
-        ->get();
+        
         $this->info_sell=Seal::whereExists(function ($query) {
             $query->select('id')
                   ->from('materials')
@@ -161,11 +170,62 @@ class MaterialComponent extends Component
                   ->whereColumn('seals.material_id', 'materials.id');
         })
         ->get();
-        
         $this->info_con=Connector::all();
         $this->disabled='';
+        $this->terminales=[];
+        $this->addterminal=[];
+        $this->sellos=[];
+        $this->addsello=[];
     }
-    
+
+
+
+
+
+
+    public function addterminal(Material $terminal){
+        $flag=false;
+        foreach($this->terminales as $ter){
+            if($terminal->id==$ter[0]){
+                $flag=true;
+            }
+        }
+        if(!$flag){
+            $this->addterminal[0]=$terminal->id;
+            $this->addterminal[1]=$terminal->name;
+            $this->addterminal[2]=$terminal->code;
+            $this->addterminal[3]=$this->count_terminales;
+            $this->terminales[$this->count_terminales]=$this->addterminal;
+            $this->count_terminales++;
+        }   
+    }
+    public function dropterminal($pos_terminal){
+        unset($this->terminales[$pos_terminal]);
+    }
+    public function addsello(Material $sello){
+        $flag=false;
+        foreach($this->sellos as $sel){
+            if($sello->id==$sel[0]){
+                $flag=true;
+            }
+        }
+        if(!$flag){
+            $this->addsello[0]=$sello->id;
+            $this->addsello[1]=$sello->name;
+            $this->addsello[2]=$sello->code;
+            $this->addsello[3]=$this->count_terminales;
+            $this->sellos[$this->count_sellos]=$this->addsello;
+            $this->count_sellos++;
+        }   
+    }
+    public function dropsello($pos_sello){
+        unset($this->sellos[$pos_sello]);
+    }
+
+
+
+
+
     public function store(){
         $this->validate([
             'code' => 'required',
@@ -192,7 +252,7 @@ class MaterialComponent extends Component
             'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
-        if($this->family == 'Cables'){
+        if($this->family == 'Cables' || $this->family == 'Terminales' || $this->family == 'Tubos' || $this->family == 'Clips'){
             $this->validate([
                 'color' => 'nullable',
             ]);
@@ -209,7 +269,7 @@ class MaterialComponent extends Component
             $this->validate([
                 'terminal' => 'nullable',
                 'seal' => 'nullable',
-                'number_of_ways' => 'numeric|integer|digits:1|required',
+                'number_of_ways' => 'numeric|integer|min:1|max:999|required',
                 'type' => 'required',
                 'connector' =>'nullable',
                 'watertight' =>'required|boolean',
@@ -218,7 +278,8 @@ class MaterialComponent extends Component
             ], [
                 'number_of_ways.numeric' => 'El campo cantidad de vías es numérico (decimales separados por punto)',
                 'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
-                'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
+                'number_of_ways.min' => 'El campo cantidad de vías debe ser un número entero de 1 a 999',
+                'number_of_ways.max' => 'El campo cantidad de vías debe ser un número entero de 1 a 999',
                 'number_of_ways.required' => 'El campo cantidad de vías es requerido',
                 'type.required' => 'El campo tipo es requerido',
                 'watertight.required' => 'Seleccione una opción para el campo estanco',
@@ -242,10 +303,8 @@ class MaterialComponent extends Component
                 'stock' => $this->stock,
             ]);
             
-            Connector::create([
+            $this->conector=Connector::create([
                 'material_id' => $this->material->id,
-                'terminal_id' => $this->terminal,
-                'seal_id' => $this->seal,
                 'number_of_ways' => $this->number_of_ways,
                 'type' => $this->type,
                 'connector_id' => $this->connector,
@@ -253,6 +312,21 @@ class MaterialComponent extends Component
                 'lock' => $this->lock,
                 'cover' => $this->cover,
             ]);
+            foreach($this->terminales as $ter){
+                $term=Terminal::where('material_id', $ter[0])->first();
+                ConnectorTerminal::create([
+                    'connector_id' => $this->conector->id,
+                    'terminal_id' => $term->id,
+                ]);
+            }
+            foreach($this->sellos as $sel){
+                $sell=Seal::where('material_id', $sel[0])->first();
+                ConnectorSeal::create([
+                    'connector_id' => $this->conector->id,
+                    'seal_id' => $sell->id,
+                ]);
+            }
+            
             if(!empty($this->images)){
                 foreach ($this->images as $key => $image) {
                     $this->images[$key] = $image->store('materials','public');
@@ -591,6 +665,12 @@ class MaterialComponent extends Component
     
     public function update(Material $material)
     {   
+        $this->terminales=[];
+        $this->addterminal=[];
+        $this->count_terminales=0;
+        $this->sellos=[];
+        $this->addsello=[];
+        $this->count_sellos=0;
         $this->resetValidation();
         $this->disabled='disabled';
         $this->idu=$material->id;
@@ -612,20 +692,6 @@ class MaterialComponent extends Component
         $this->images = json_decode($material->image);
         $this->info_line=Line::all();
         $this->info_usage=Usage::all();
-        $this->info_term = Terminal::whereExists(function ($query) {
-            $query->select('id')
-                  ->from('materials')
-                  ->where('family','Terminales')
-                  ->whereColumn('terminals.material_id', 'materials.id');
-        })
-        ->get();
-        $this->info_sell=Seal::whereExists(function ($query) {
-            $query->select('id')
-                  ->from('materials')
-                  ->where('family','Sellos')
-                  ->whereColumn('seals.material_id', 'materials.id');
-        })
-        ->get();
         $this->info_con=Connector::all();
        
         if($this->family == 'Conectores'){
@@ -633,16 +699,31 @@ class MaterialComponent extends Component
             $this->conn_id=$this->conn->id;
             $this->number_of_ways=$this->conn->number_of_ways;
             $this->type=$this->conn->type;
-            $this->terminal_id=$this->conn->terminal_id;
-            $this->term_size = (!empty($this->terminal_id)) ? Terminal::find($this->terminal_id)->size : '';
+            $this->terminal_id=$this->conn->terminals()->get();
             $this->cover=$this->conn->cover;
             $this->lock=$this->conn->lock;
-            $this->seal_id=$this->conn->seal_id;
+            $this->seal_id=$this->conn->seals()->get();
             $this->connector_id=$this->conn->connector_id;
             $this->watertight=$this->conn->watertight;
             if($this->conn !=null){
-                $this->termi = Terminal::where('id',$this->terminal_id)->first();
-                $this->seli = Seal::where('id',$this->seal_id)->first();
+                foreach($this->terminal_id as $ter){
+                    $material=Material::where('id',$ter->material_id)->first();
+                    $this->addterminal[0]=$ter->material_id;
+                    $this->addterminal[1]=$material->name;
+                    $this->addterminal[2]=$material->code;
+                    $this->addterminal[3]=$this->count_terminales;
+                    $this->terminales[$this->count_terminales]=$this->addterminal;
+                    $this->count_terminales++;
+                }
+                foreach($this->seal_id as $sel){
+                    $material=Material::where('id',$sel->material_id)->first();
+                    $this->addsello[0]=$sel->material_id;
+                    $this->addsello[1]=$material->name;
+                    $this->addsello[2]=$material->code;
+                    $this->addsello[3]=$this->count_sellos;
+                    $this->sellos[$this->count_sellos]=$this->addsello;
+                    $this->count_sellos++;
+                }
                 $this->connect = Connector::where('id',$this->connector_id)->first();
             }   
         }elseif($this->family == 'Terminales'){
@@ -723,7 +804,7 @@ class MaterialComponent extends Component
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
     
-        if($this->family == 'Cables'){
+        if($this->family == 'Cables' ||$this->family == 'Terminales' ||$this->family == 'Tubos' || $this->family == 'Clips'){
             $this->validate([
                 'color' => 'nullable',
             ]);
@@ -745,7 +826,7 @@ class MaterialComponent extends Component
             $this->validate([
                 'terminal' => 'nullable',
                 'seal' => 'nullable',
-                'number_of_ways' => 'numeric|integer|digits:1|required',
+                'number_of_ways' => 'numeric|integer|min:1|max:999|required',
                 'type' => 'required',
                 'connector' =>'nullable',
                 'watertight' =>'required|boolean',
@@ -754,7 +835,8 @@ class MaterialComponent extends Component
             ], [
                 'number_of_ways.numeric' => 'El campo cantidad de vías es numérico (decimales separados por punto)',
                 'number_of_ways.integer' => 'El campo cantidad de vías es un número natural',
-                'number_of_ways.digits' => 'El campo cantidad de vías debe ser un número natural de 1 digito',
+                'number_of_ways.min' => 'El campo cantidad de vías debe ser un número entero de 1 a 999',
+                'number_of_ways.max' => 'El campo cantidad de vías debe ser un número entero de 1 a 999',
                 'number_of_ways.required' => 'El campo cantidad de vías es requerido',
                 'type.required' => 'El campo tipo es requerido',
                 'watertight.required' => 'Seleccione una opción para el campo estanco',
@@ -769,8 +851,6 @@ class MaterialComponent extends Component
             if($connector_up == null){
                 Connector::create([
                     'material_id' => $this->material->id,
-                    'terminal_id' => $this->terminal,
-                    'seal_id' => $this->seal,
                     'number_of_ways' => $this->number_of_ways,
                     'type' => $this->type,
                     'connector_id' => $this->connector,
@@ -781,8 +861,6 @@ class MaterialComponent extends Component
                 ]);
             }else{
             $connector_up->material_id=$this->idu;
-            $connector_up->terminal_id=$this->terminal;
-            $connector_up->seal_id=$this->seal;
             $connector_up->number_of_ways=$this->number_of_ways;
             $connector_up->type=$this->type;
             $connector_up->connector_id=$this->connector;
@@ -790,6 +868,29 @@ class MaterialComponent extends Component
             $connector_up->cover=$this->cover;
             $connector_up->lock=$this->lock;
             $connector_up->save();
+            $terminals_of_connector=ConnectorTerminal::where('connector_id',$connector_up->id)->get();
+            foreach($terminals_of_connector as $t_o_c){
+                $t_o_c->delete();
+            }
+            foreach($this->terminales as $ter){
+                $term=Terminal::where('material_id', $ter[0])->first();
+                ConnectorTerminal::create([
+                    'connector_id' => $connector_up->id,
+                    'terminal_id' => $term->id,
+                ]);
+            }
+            $seals_of_connector=ConnectorSeal::where('connector_id',$connector_up->id)->get();
+            foreach($seals_of_connector as $s_o_c){
+                $s_o_c->delete();
+            }
+            foreach($this->sellos as $sel){
+                $sell=Seal::where('material_id', $sel[0])->first();
+                ConnectorSeal::create([
+                    'connector_id' => $connector_up->id,
+                    'seal_id' => $sell->id,
+                ]);
+            }
+
             }
         }elseif($this->family == 'Terminales'){
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
@@ -1112,20 +1213,37 @@ class MaterialComponent extends Component
         $this->info_con=Connector::all();
        
         if($this->family == 'Conectores'){
+            $this->terminales=[];
+            $this->addterminal=[];
             $this->conn = Connector::where('material_id',$material_id->id)->first();
             $this->conn_id=$this->conn->id;
             $this->number_of_ways=$this->conn->number_of_ways;
             $this->type=$this->conn->type;
-            $this->terminal_id=$this->conn->terminal_id;
-            $this->term_size = (!empty($this->terminal_id)) ? Terminal::find($this->terminal_id)->size : '';
-            $this->seal_id=$this->conn->seal_id;
+            $this->terminal_id=$this->conn->terminals()->get();
+            $this->seal_id=$this->conn->seals()->get();
             $this->cover=$this->conn->cover;
             $this->lock=$this->conn->lock;
             $this->connector_id=$this->conn->connector_id;
             $this->watertight=$this->conn->watertight;
             if($this->conn !=null){
-                $this->termi = Terminal::where('id',$this->terminal_id)->first();
-                $this->seli = Seal::where('id',$this->seal_id)->first();
+                foreach($this->terminal_id as $ter){
+                    $material=Material::where('id',$ter->material_id)->first();
+                    $this->addterminal[0]=$ter->material_id;
+                    $this->addterminal[1]=$material->name;
+                    $this->addterminal[2]=$material->code;
+                    $this->addterminal[3]=$this->count_terminales;
+                    $this->terminales[$this->count_terminales]=$this->addterminal;
+                    $this->count_terminales++;
+                }
+                foreach($this->seal_id as $sel){
+                    $material=Material::where('id',$sel->material_id)->first();
+                    $this->addsello[0]=$sel->material_id;
+                    $this->addsello[1]=$material->name;
+                    $this->addsello[2]=$material->code;
+                    $this->addsello[3]=$this->count_sellos;
+                    $this->terminales[$this->count_sellos]=$this->addsello;
+                    $this->count_sellos++;
+                }
                 $this->connect = Connector::where('id',$this->connector_id)->first();
             }   
         }elseif($this->family == 'Terminales'){
@@ -1232,6 +1350,14 @@ class MaterialComponent extends Component
     }else{
         if($this->material->family == 'Conectores'){
             $this->conn_del = Connector::where('material_id',$this->material->id)->first();
+            $seals_of_connector=ConnectorSeal::where('connector_id',$this->conn_del->id)->get();
+            foreach($seals_of_connector as $s_o_c){
+                $s_o_c->delete();
+            }
+            $terminals_of_connector=ConnectorTerminal::where('connector_id',$this->conn_del->id)->get();
+            foreach($terminals_of_connector as $t_o_c){
+                $t_o_c->delete();
+            }
             $this->conn_del->delete();
         }elseif($this->material->family == 'Terminales'){
             $this->term_del = Terminal::where('material_id',$this->material->id)->first();
@@ -1288,6 +1414,7 @@ class MaterialComponent extends Component
     $this->addres_provider = null;
     $this->email_provider = null;
     $this->provider_new=null;
+    $this->provider_material_code=null;
     $this->addProvider = true;
     $this->explora='inactivo';
     $this->funcion="crearmat";    
@@ -1309,7 +1436,7 @@ public function storemat(Material $material){
         'unit.required' => 'El campo unidad es requerido',
         'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
         'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
-        'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+        'presentation.required' => 'Seleccione una opción para el campo de la unidad de packaging',
         'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
         'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
         'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
@@ -1355,11 +1482,13 @@ public function destruirmat(Material $material)
 
 public function updatemat(ProviderPrice $provider_price)
 {  
+    $this->resetValidation();
     $this->id_provider_price = $provider_price->id;
     $this->material_price=$provider_price->material_id;
     $this->id_provider=$provider_price->provider_id;
     $this->amount=$provider_price->amount;
     $this->unit=$provider_price->unit;
+    $this->provider_material_code=$provider_price->provider_code;
     $this->presentation=$provider_price->presentation;
     $this->usd_price=$provider_price->usd_price;
     $this->ars_price=$provider_price->ars_price;;
@@ -1389,7 +1518,7 @@ public function editarmat(){
         'unit.required' => 'El campo unidad es requerido',
         'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
         'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
-        'presentation.required' => 'Seleccione una opción para el campo de la unidad de presentación',
+        'presentation.required' => 'Seleccione una opción para el campo de la unidad de packaging',
         'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
         'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
         'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',

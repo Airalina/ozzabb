@@ -25,6 +25,10 @@
                             <input class="form-control form-control-sm" type="text" wire:model="name"  placeholder="Ingrese nombre del cliente">
                         </div>
                         <div class="form-group">
+                            <label for="cuit">CUIT</label>
+                            <input type="text" class="form-control form-control-sm" id="cuit" wire:model="cuit" placeholder="CUIT">
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
                             <input class="form-control form-control-sm" type="email" wire:model="email"  placeholder="Ingrese email del cliente">
                         </div>
@@ -68,16 +72,12 @@
                             <input class="form-control form-control-sm" type="text" wire:model="province"  placeholder="Ingrese provincia">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Pais</label>
+                            <label for="exampleInputEmail1">País</label>
                             <input class="form-control form-control-sm" type="text" wire:model="country" placeholder="Ingrese pais">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Codigo Postal</label>
                             <input class="form-control form-control-sm" type="text" wire:model="postcode"  placeholder="Ingrese codigo postal">
-                        </div>
-                        <div class="form-group">
-                            <label for="cuit">CUIT</label>
-                            <input type="text" class="form-control form-control-sm" id="cuit" wire:model="cuit" placeholder="CUIT">
                         </div>
                     </div>
                     <div class="card-footer">

@@ -109,7 +109,7 @@
                                     wire:model="amount" placeholder="Ingrese la cantidad">
                             </div>
                             <div class="form-group">
-                                <label for="unit">Unidad de presentación</label>
+                                <label for="unit">Unidad de packaging</label>
                                 <div class="d-flex">
                                     <input class="form-control form-control-sm" type="string" id="unit"
                                         wire:model="unit" placeholder="Ingrese las unidades">
@@ -223,7 +223,7 @@
                             <select class="form-control form-control-sm" wire:model.defer="line" id="line">
                                 <option selected>Selecciona una linea</option>
                                 <option value="Bulldog">Bulldog</option>
-                                <option value="Ecoseal">Ecoseal</option>
+                                <option value="Ecoseal">Econoseal</option>
                                 <option value="Ecu">Ecu</option>
                                 <option value="Fit"></option>
                                 <option value="Fastin Faston">Fastin Faston</option>    

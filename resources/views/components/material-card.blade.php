@@ -1,55 +1,89 @@
             @switch($div)
                 @case("Conectores")
                     <div class="form-group">
-                        <label for="terminal">Terminal Asociado</label>
-                        <select wire:model="terminal" wire:change="size" id="terminal" class="form-control form-control-sm">
-
-                            @if ($terminalId != null)
-                                <option value="{{ $termi->id }}" selected>{{ $termi->material_info->name }}</option>
-                            @else
-                                <option selected value="">Seleccione un terminal</option>
-                            @endif
-                            @if ($terminalId != null)
-                                <option value="">Seleccione un terminal</option>
-                            @endif
-                            @foreach ($infoTerm as $term)
-                                @if ($terminalId != null)
-                                    @if ($terminalId === $term->id)
-                                        @php continue;  @endphp
-                                    @endif
-                                @endif
-                                <option value="{{ $term->id }}"> {{ $term->material_info->name }}</option>
+                        <label for="terminal">Terminales Asociado</label>
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input wire:model="search" type="text" class="form-control float-right"
+                                placeholder="Buscar Material...">
+                        </div>
+                        @if($search!=null)
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($infoTerm as $terminal)
+                                <tbody>
+                                    <td>{{$terminal->code}}</td>
+                                    <td>{{$terminal->name}}</td>
+                                    <td><button wire:click="addterminal({{ $terminal->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                </tbody>
                             @endforeach
-                        </select>
+                        </table>
+                        @endif
+                        <label for="terminal">Terminales Asociados Seleccionados:</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($terminales as $terminal)
+                                <tbody>
+                                    <td>{{$terminal[2]}}</td>
+                                    <td>{{$terminal[1]}}</td>
+                                    <td><button wire:click="dropterminal({{ $terminal[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                </tbody>
+                            @endforeach
+                        </table>
                     </div>
                 
                     <div class="form-group">
-                        <label for="term_size">Tamaño de terminal</label>
-                        <input type="text" class="form-control" id="term_size" wire:model="term_size"
-                            placeholder="Tamaño de terminal" disabled>
-                    </div>
-                
-                    <div class="form-group">
-                        <label for="seal">Sello Asociado</label>
-
-                        <select wire:model="seal" id="seal" class="form-control form-control-sm">
-                            @if ($sealId != null)
-                                <option value="{{ $seli->id }}" selected>{{ $seli->material_info->name }}</option>
-                            @else
-                                <option selected>Seleccione un sello</option>
+                        <label for="sello">Sellos Asociados</label>
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input wire:model="searchs" type="text" class="form-control float-right"
+                                    placeholder="Buscar Material...">
+                            </div>
+                            @if($searchs!=null)
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($infoSell as $sello)
+                                    <tbody>
+                                        <td>{{$sello->code}}</td>
+                                        <td>{{$sello->name}}</td>
+                                        <td><button wire:click="addsello({{ $sello->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                    </tbody>
+                                @endforeach
+                            </table>
                             @endif
-                            @if ($sealId != null)
-                                <option>Seleccione un sello</option>
-                            @endif
-                            @foreach ($infoSell as $sell)
-                                @if ($sealId != null)
-                                    @if ($sealId === $sell->id)
-                                        @php continue;  @endphp
-                                    @endif
-                                @endif
-                                <option value="{{ $sell->id }}"> {{ $sell->material_info->name }}</option>
-                            @endforeach
-                        </select>
+                            <label for="sello">Sellos Asociados Seleccionados:</label>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($sellos as $sello)
+                                    <tbody>
+                                        <td>{{$sello[2]}}</td>
+                                        <td>{{$sello[1]}}</td>
+                                        <td><button wire:click="dropsello({{ $sello[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                    </tbody>
+                                @endforeach
+                            </table>
                     </div>
                     <div class="form-group">
                         <label for="number_of_ways">Cantidad de vías</label>
@@ -120,39 +154,37 @@
                     <div class="form-group">
                         <label for="base_color">Color base</label>
                         <select class="form-control form-control-sm" wire:model="base_color" id="base_color">
-                            <option selected value="">Selecciona un color</option>
                             <option value="Negro" class="text-dark">Negro</option>
-                            <option value="Blanco">Blanco</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
-                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
-                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
-                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Azul" class="text-primary">Azul</option>
                             <option value="Violeta" style="color:violet">Violeta</option>
                             <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Blanco">Blanco</option>
                             <option value="Rosado" style="color:palevioletred">Rosado</option>
-                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                             <option value="Verde claro" style="color:lightgreen">Verde claro</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="line_color">Color Línea</label>
                         <select class="form-control form-control-sm" wire:model="line_color" id="line_color">
-                            <option selected value="">Selecciona un color</option>
                             <option value="Negro" class="text-dark">Negro</option>
-                            <option value="Blanco">Blanco</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
-                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
-                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
-                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Azul" class="text-primary">Azul</option>
                             <option value="Violeta" style="color:violet">Violeta</option>
                             <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Blanco">Blanco</option>
                             <option value="Rosado" style="color:palevioletred">Rosado</option>
-                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                             <option value="Verde claro" style="color:lightgreen">Verde claro</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -293,6 +325,8 @@
                             <option value="Relay">Relay</option>
                             <option value="Tapón ciego">Tapón ciego</option>
                             <option value="Pasante de goma">Pasante de Goma</option>
+                            <option value="Portafusible">Portafusible</option>
+                            <option value="Moldeado">Moldeado</option>
                         </select>
                     </div>
                 @break

@@ -101,7 +101,7 @@
                                   <th>Material</th>
                                   <th>Nombre</th>
                                   <th>Cantidad</th>
-                                  <th>Presentación</th>
+                                  <th>Packaging</th>
                                   <th>Precio U$D</th>
                                   <th>Precio AR$</th>
                                   <th></th>

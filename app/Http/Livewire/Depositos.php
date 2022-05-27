@@ -652,7 +652,7 @@ class Depositos extends Component
                 'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
                 'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
                 'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
-                'presentation.required'=>'El campo Presentación es requerido',
+                'presentation.required'=>'El campo Packaging es requerido',
             ]);
         foreach($this->details as $detail){
             if($detail[0]==$this->codem && $detail[5]==$this->presentation && $detail[6]==$this->deposito_id){

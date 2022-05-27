@@ -33,9 +33,9 @@
                     <thead>
                         <tr>
                             <th style="text-align: center">Nombre Material</th>
-                            <th style="text-align: center">Presentación</th>
+                            <th style="text-align: center">Packaging</th>
                             <th style="text-align: center">Cantidad</th>
-                            <th style="text-align: center">Precio U$D por presentación</th>
+                            <th style="text-align: center">Precio U$D por packaging</th>
                             <th style="text-align: center">Total U$D</th>
                             <th></th>
                         </tr>

@@ -26,7 +26,7 @@
                     <th>Código material</th>
                         <th>Descripción material</th>
                         <th>Proveedor</th>
-                        <th>Presentación</th>
+                        <th>Packaging</th>
                         <th>P/U U$D</th>
                         <th>Cantidad</th>
                         <th>Total U$D</th>

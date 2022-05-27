@@ -26,7 +26,7 @@
                                             <th style="text-align: center">Producto</th>
                                             <th style="text-align: center">Código</th>
                                             <th style="text-align: center">Descripción</th>
-                                            <th style="text-align: center">Presentación</th>
+                                            <th style="text-align: center">Packaging</th>
                                             <th style="text-align: center">Cantidad</th>
                                             <th style="text-align: center">Deposito</th>
                                             <th></th>

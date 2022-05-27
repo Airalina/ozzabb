@@ -32,23 +32,29 @@
                         <option value="Clips">clips</option>
                     </select>
                 </div>
-                <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id"
+                <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id" :search="$search" :terminales="$terminales"
                     :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
-                    :connect="$connect" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" />
+                    :connect="$connect" :searchs="$searchs" :sellos="$sellos" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" />
 
-                @if ($family != 'Cables')
+                @if ($family != 'Cables' && $family !='Terminales')
                 <div class="form-group">
                     <label for="color">Color</label>
                     <select class="form-control form-control-sm" wire:model="color" id="color">
-                        <option selected value="">Selecciona un color</option>
-                        <option value="Transparente">Transparente</option>
-                        <option value="Negro" class="text-dark">Negro</option>
-                        <option value="Blanco">Blanco</option>
-                        <option value="Rojo" class="text-danger">Rojo</option>
-                        <option value="Azul" class="text-primary">Azul</option>
-                        <option value="Amarillo" class="text-warning">Amarillo</option>
-                        <option value="Verde" class="text-success">Verde</option>
-                    </select>
+                            <option selected value="">Selecciona un color</option>
+                            <option value="Negro" class="text-dark">Negro</option>
+                            <option value="Blanco">Blanco</option>
+                            <option value="Rojo" class="text-danger">Rojo</option>
+                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Amarillo" class="text-warning">Amarillo</option>
+                            <option value="Verde" class="text-success">Verde</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Violeta" style="color:violet">Violeta</option>
+                            <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Rosado" style="color:palevioletred">Rosado</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
+                            <option value="Verde claro" style="color:lightgreen">Verde claro</option>
+                        </select>
                 </div>
                 @endif
                 <div class="form-group">
@@ -62,7 +68,7 @@
                     <select class="form-control form-control-sm" wire:model="line" id="line">
                         <option selected>Selecciona una linea</option> 
                         <option value="Bulldog">Bulldog</option>
-                        <option value="Ecoseal">Ecoseal</option>
+                        <option value="Ecoseal">Econoseal</option>
                         <option value="Ecu">Ecu</option>
                         <option value="Fastin Faston">Fastin Faston</option>    
                         <option value="Mini Fit">Mini Fit</option>
@@ -101,7 +107,7 @@
                     <label for="exampleInputFile">Imagen</label>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input wire:model="images" type="file" name="images" class="custom-file-input" multiple>
+                            <input wire:model="images" type="file" name="images[]" class="custom-file-input" multiple>
                             <label class="custom-file-label" for="exampleInputFile">Selecciona las imágenes</label>
                         </div>
                     </div>

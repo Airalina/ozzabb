@@ -253,7 +253,7 @@ class PurchasingSheet extends Component
             'amount'=>'required|numeric|min:1',
             'proveedor_name'=>'required',
         ], [
-            'presentationm.required'=>'Debe seleccionar una presentación',
+            'presentationm.required'=>'Debe seleccionar un packaging',
             'amount.required'=>'Debe ingresar una cantidad',
             'amount.numeric'=>'El campo cantidad debe ser numérico',
             'amount.min'=>'El campo cantidad debe ser mayor a cero',
@@ -320,12 +320,12 @@ class PurchasingSheet extends Component
             'iva.min'=>'El campo IVA es mayor a 0',
             'compras.min'=>'Debe comprar al menos un material',
             'purchasings.*.7.required'=>'Debe rellenar el campo cantidad para el material ',
-            'purchasings.*.6.required'=>'Debe seleccionar el campo presentación para el material ',
+            'purchasings.*.6.required'=>'Debe seleccionar el campo packaging para el material ',
             'purchasings.*.7.numeric'=>'El campo cantidad debe ser numérico ',
-            'purchasings.*.6.numeric'=>'El campo presentación debe ser numérico ',
+            'purchasings.*.6.numeric'=>'El campo packaging debe ser numérico ',
             'purchasings.*.7.min'=>'El campo cantidad debe ser mayor a cero ',
-            'purchasings.*.6.min'=>'El campo presentación debe ser mayor a cero',
-            'purchasings.*.10.required'=>'Debe rellenar el campo proveedor, presentación y cantidad para los materiales ',
+            'purchasings.*.6.min'=>'El campo packaging debe ser mayor a cero',
+            'purchasings.*.10.required'=>'Debe rellenar el campo proveedor, packaging y cantidad para los materiales ',
     
         ]);
  

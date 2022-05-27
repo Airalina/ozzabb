@@ -16,7 +16,7 @@
           <th style="text-align: center">Orden N°</th>
           <th style="text-align: center">Código</th>
           <th style="text-align: center">Descripción</th>
-          <th style="text-align: center">Presentación</th>
+          <th style="text-align: center">Packaging</th>
           <th style="text-align: center">Cantidad Retirada</th>
           <th style="text-align: center">Total</th>
           <th style="text-align: center">Destino</th>

@@ -38,27 +38,40 @@
                     @switch($div)
                     @case("Conectores")
                     <div class="form-group">
-                        <label for="terminal">Terminal Asociado</label>
-                        <select wire:model="terminal" id="terminal" class="form-control form-control-sm" disabled>
-                            <option></option>
-                            @foreach ($info_term as $term)
-                            <option value="{{ $term->id }}"> {{ $term->material_info->name }}</option>
+                        <label for="terminal">Terminales Asociados Seleccionados:</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($terminales as $terminal)
+                                <tbody>
+                                    <td>{{$terminal[2]}}</td>
+                                    <td>{{$terminal[1]}}</td>
+                                </tbody>
                             @endforeach
-                        </select>
+                        </table>
                     </div>
                     <div class="form-group">
-                        <label for="term_size">Tamaño de terminal</label>
-                        <input type="text" class="form-control" id="term_size" wire:model="term_size"
-                            placeholder="Tamaño de terminal" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="seal">Sello Asociado</label>
-                        <select wire:model="seal" id="seal" class="form-control form-control-sm" disabled>
-                            <option></option>
-                            @foreach ($info_sell as $sell)
-                            <option value="{{ $sell->id }}"> {{ $sell->material_info->name }}</option>
+                        <label for="sello">Sellos Asociados Seleccionados:</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Codigo</th>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach($sellos as $sello)
+                                <tbody>
+                                    <td>{{$sello[2]}}</td>
+                                    <td>{{$sello[1]}}</td>
+                                </tbody>
                             @endforeach
-                        </select>
+                        </table>
                     </div>
                     <div class="form-group">
                         <label for="number_of_ways">Cantidad de vías</label>
@@ -75,10 +88,11 @@
                     <div class="form-group">
                         <label for="connector">Contraparte</label>
                         <select wire:model="connector" id="connector" class="form-control form-control-sm" disabled>
-                            <option></option>
-                            @foreach ($info_con as $con)
-                            <option value="{{ $con->id }}"> {{ $con->material->name }}</option>
-                            @endforeach
+                            @if(empty($connect))              
+                                <option></option>             
+                            @else
+                                <option> {{ $connect->material->name }}</option>
+                            @endif
                         </select>
                     </div>
                     <div class="form-group">
@@ -115,37 +129,36 @@
                         <label for="base_color">Color base</label>
                         <select class="form-control form-control-sm" wire:model="base_color" id="base_color" disabled>
                             <option value="Negro" class="text-dark">Negro</option>
-                            <option value="Blanco">Blanco</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
-                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
-                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
-                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Azul" class="text-primary">Azul</option>
                             <option value="Violeta" style="color:violet">Violeta</option>
                             <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Blanco">Blanco</option>
                             <option value="Rosado" style="color:palevioletred">Rosado</option>
-                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                             <option value="Verde claro" style="color:lightgreen">Verde claro</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="line_color">Color Línea</label>
                         <select class="form-control form-control-sm" wire:model="line_color" id="line_color" disabled>
-                            <option selected value="">Selecciona un color</option>
                             <option value="Negro" class="text-dark">Negro</option>
-                            <option value="Blanco">Blanco</option>
+                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
-                            <option value="Azul" class="text-primary">Azul</option>
+                            <option value="Naranja" style="color:orange">Naranja</option>
                             <option value="Amarillo" class="text-warning">Amarillo</option>
                             <option value="Verde" class="text-success">Verde</option>
-                            <option value="Marrón" style="color:saddlebrown">Marrón</option>
-                            <option value="Naranja" style="color:orange">Naranja</option>
+                            <option value="Azul" class="text-primary">Azul</option>
                             <option value="Violeta" style="color:violet">Violeta</option>
                             <option value="Gris" style="color:grey">Gris</option>
+                            <option value="Blanco">Blanco</option>
                             <option value="Rosado" style="color:palevioletred">Rosado</option>
-                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                             <option value="Verde claro" style="color:lightgreen">Verde claro</option>
+                            <option value="Celeste" style="color:cadetblue">Celeste</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -280,6 +293,8 @@
                             <option value="Relay">Relay</option>
                             <option value="Pasante de goma">Pasante de Goma</option>
                             <option value="Tapón ciego">Tapón ciego</option>
+                            <option value="Portafusible">Portafusible</option>
+                            <option value="Moldeado">Moldeado</option>
                         </select>
                     </div>
                     @break
@@ -344,10 +359,9 @@
                         <select class="form-control form-control-sm" wire:model="line" id="line" disabled>
                             <option selected>Selecciona una linea</option>
                             <option value="Superseal">Superseal</option>
-                            <option value="Mini">Mini</option>
-                            <option value="Fit">Fit</option>
+                            <option value="Mini Fit">Mini Fit</option>
                             <option value="Bulldog">Bulldog</option>
-                            <option value="Ecoseal">Ecoseal</option>
+                            <option value="Ecoseal">Econoseal</option>
                             <option value="Ecu">Ecu</option>
                             <option value="Sicma">Sicma</option>
                             <option value="Fastin Faston">Fastin Faston</option>
@@ -378,6 +392,14 @@
                         <input type="text" class="form-control" id="stock" wire:model="stock"
                             placeholder="Stock en planta" readonly>
                     </div>
+                    <div class="form-group">
+                        <label for="stock">Imagenes</label>
+                        @if ($funcion == 'crear')
+                            <x-img-create-card :images="$images" />
+                        @else
+                            <x-img-update-card :images="$images" :material="$material" />
+                        @endif
+                    </div>
                 </div>
             </div>
         </form>
@@ -403,7 +425,7 @@
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Proveedor</th>
-                            <th>Presentación</th>
+                            <th>Packaging</th>
                             <th>Fecha</th>
                             <th>Precio</th>
                             <th></th>
