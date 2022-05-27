@@ -89,7 +89,7 @@
                                     <th style="text-align: center">Stock</th>
                                     <th style="text-align: center">Stock en tránsito</th>
                                     <th style="text-align: center">Proveedor</th>
-                                    <th style="text-align: center">Presentación</th>
+                                    <th style="text-align: center">Packaging</th>
                                     <th style="text-align: center">Cantidad</th>
                                     <th style="text-align: center">Cantidad total</th>
                                     <th style="text-align: center">P/U U$D</th>

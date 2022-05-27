@@ -318,10 +318,10 @@ class OrdenDeEntradaDeMateriales extends Component
                 'cant.integer' => 'El campo "Cantidad" debe ser un entero',
                 'cant.min' => 'El campo "Cantidad" debe ser como mínimo 1(Uno)',
                 'cant.max' => 'El campo "Cantidad" debe ser como máximo 1000000(Un millón)',
-                'present.required' => 'El campo "Presentación" es requerido',
-                'present.integer' => 'El campo "Presentación" debe ser un entero',
-                'present.min' => 'El campo "Presentación" debe ser como mínimo 1(Uno)',
-                'present.max' => 'El campo "Presentación" debe ser como máximo 1000000(Un millón)',
+                'present.required' => 'El campo "Packaging" es requerido',
+                'present.integer' => 'El campo "Packaging" debe ser un entero',
+                'present.min' => 'El campo "Packaging" debe ser como mínimo 1(Uno)',
+                'present.max' => 'El campo "Packaging" debe ser como máximo 1000000(Un millón)',
                 'deposito_id.required' => 'Seleccione una opción del campo "Deposito"'
     
             ]);

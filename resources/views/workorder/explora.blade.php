@@ -404,7 +404,7 @@
                                         <tr>
                                             <th style="text-align: center">Depósito</th>
                                             <th style="text-align: center">Tipo</th>
-                                            <th style="text-align: center">Presentación</th>
+                                            <th style="text-align: center">Packaging</th>
                                             <th style="text-align: center">Cantidad disponible</th>
                                             <th style="text-align: center">Cantidad</th>
                                             <th></th>
@@ -524,7 +524,7 @@
                                         <tr>
                                             <th style="text-align: center">Depósito</th>
                                             <th style="text-align: center">Tipo</th>
-                                            <th style="text-align: center">Presentación</th>
+                                            <th style="text-align: center">Packaging</th>
                                             <th style="text-align: center">Cantidad disponible</th>
                                             <th style="text-align: center">Cantidad</th>
                                             <th></th>
@@ -642,7 +642,7 @@
                                         <tr>
                                             <th style="text-align: center">Depósito</th>
                                             <th style="text-align: center">Tipo</th>
-                                            <th style="text-align: center">Presentación</th>
+                                            <th style="text-align: center">Packaging</th>
                                             <th style="text-align: center">Cantidad disponible</th>
                                             <th style="text-align: center">Cantidad</th>
                                             <th></th>
@@ -712,7 +712,7 @@
                                         <tr>
                                             <th style="text-align: center">Depósito</th>
                                             <th style="text-align: center">Tipo</th>
-                                            <th style="text-align: center">Presentación</th>
+                                            <th style="text-align: center">Packaging</th>
                                             <th style="text-align: center">Cantidad Reservada</th>
                                         </tr>
                                     </thead>

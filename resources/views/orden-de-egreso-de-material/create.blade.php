@@ -110,7 +110,7 @@
                                             <th style="text-align: center">Producto</th>
                                             <th style="text-align: center">Codigo</th>
                                             <th style="text-align: center">Descripción</th>
-                                            <th style="text-align: center">Presentación</th>
+                                            <th style="text-align: center">Packaging</th>
                                             <th style="text-align: center">Cantidad</th>
                                             <th style="text-align: center">Deposito</th>
                                             <th></th>
@@ -310,12 +310,12 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-3">
-                                    <label>Presentación:</label>
+                                    <label>Packaging:</label>
                                 </div>
                                 <div class="col-6">
                                     <select wire:model.defer="presentation_m" id="presentation_m"
                                         class="form-control form-control-sm" wire:click.prevent="change_amount()">
-                                        <option selected>Seleccione una presentación</option>
+                                        <option selected>Seleccione un pakcaging</option>
                                         @foreach ($presentations as $presentation)
                                         <option> {{
                                             $presentation }}

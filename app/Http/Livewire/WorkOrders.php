@@ -480,7 +480,7 @@ class WorkOrders extends Component
             'presentation_selected' => 'required',
             
         ], [
-            'presentation_selected.required' => 'Seleccione una presentación',
+            'presentation_selected.required' => 'Seleccione un packaging',
         ]);
 
             $presentation = json_decode($this->presentation_selected[$deposit_material->material_id][$deposit_material->warehouse_id])->presentation;
@@ -488,7 +488,7 @@ class WorkOrders extends Component
             if(count($this->deposits)>0 && !empty($this->deposits[$this->material_id])){
                 foreach ($this->deposits[$this->material_id] as $depositos) {
                     if ($depositos['deposit_material'] == $deposit_material->id && $depositos['presentation'] == $presentation) {
-                        $this->addError('deposit', 'Este depósito ya está seleccionado con la presentación '. $presentation);
+                        $this->addError('deposit', 'Este depósito ya está seleccionado con el packaging '. $presentation);
                         $count ++;
                     }
                 }
@@ -526,8 +526,8 @@ class WorkOrders extends Component
                         
                     ], [
                         'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.max' => 'El valor del campo cantidad debe ser un número entero',
-                        'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.min' => 'El valor mínimo disponible para el depósito '.$depositos['name'].' para la presentación '.$presentation.' es de: 0',
-                        'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.max' => 'El valor máximo disponible para el depósito '.$depositos['name'].' para la presentación '.$presentation.' es de: '.$this->amount_saved[$this->material_id][$depositos['id']][$presentation],
+                        'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.min' => 'El valor mínimo disponible para el depósito '.$depositos['name'].' para el packaging '.$presentation.' es de: 0',
+                        'amount_deposit.'.$this->material_id.'.'.$depositos['id'].'.'.$presentation.'.max' => 'El valor máximo disponible para el depósito '.$depositos['name'].' para el packaging '.$presentation.' es de: '.$this->amount_saved[$this->material_id][$depositos['id']][$presentation],
                     ]);
                 }
            
@@ -638,7 +638,7 @@ class WorkOrders extends Component
             'proveedor_selected' => 'required',
         ], [
             'proveedor_selected.required' => 'Seleccione un proveedor',
-            'presentationm.required' => 'Seleccione una presentación',
+            'presentationm.required' => 'Seleccione un packaging',
         ]);
 
         foreach($this->clientorders as $clientorder){

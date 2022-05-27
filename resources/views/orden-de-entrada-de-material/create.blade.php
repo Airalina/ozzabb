@@ -114,7 +114,7 @@
                                             <tr>
                                                 <th style="text-align: center">Codigo</th>
                                                 <th style="text-align: center">Descripción</th>
-                                                <th style="text-align: center">Presentación</th>
+                                                <th style="text-align: center">Packaging</th>
                                                 <th style="text-align: center">Cantidad</th>
                                                 <th style="text-align: center">Deposito Id</th>
                                                 <th></th>
@@ -283,7 +283,7 @@
                                                 <tr>
                                                     <th style="text-align: center">Código Material</th>
                                                     <th style="text-align: center">Descripción</th>
-                                                    <th style="text-align: center">Presentación</th>
+                                                    <th style="text-align: center">Packaging</th>
                                                     <th style="text-align: center">Cantidad pedida</th>
                                                     <th style="text-align: center">Cantidad enviada</th>
                                                     <th style="text-align: center">Cantidad remito</th>
@@ -352,7 +352,7 @@
                                         <th style="text-align: center">Código Material</th>
                                         <th style="text-align: center">Descripción</th>
                                         <th style="text-aling: center">N° Deposito</th>
-                                        <th style="text-align: center">Presentación</th>
+                                        <th style="text-align: center">Packaging</th>
                                         <th style="text-align: center">Cantidad requerida</th>
                                         <th style="text-align: center">Cantidad remito</th>
                                         <th style="text-align: center">Cantidad recibida</th>
@@ -450,7 +450,7 @@
                             </div>
                         @else
                             <div class="form-group">
-                                <label>Presentación:</label>
+                                <label>Packaging:</label>
                                 <input wire:model.defer="present" type="number">
                             </div>
                             <div class="form-group">

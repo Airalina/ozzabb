@@ -214,7 +214,7 @@
                   @if ($selection == 'Materiales')
                   <th style="text-align: center">Código</th>
                   <th style="text-align: center">Descripción</th>
-                  <th style="text-align: center">Presentación</th>
+                  <th style="text-align: center">Packaging</th>
                   @else
                   <th style="text-align: center">Descripción</th>
                   @endif
@@ -291,7 +291,7 @@
                   <th style="text-align: center">Código</th>
                   <th style="text-align: center">Descripción</th>
                   @if ($selection == 'Materiales')
-                  <th style="text-align: center">Presentación</th>
+                  <th style="text-align: center">Packaging</th>
                   @endif
                   <th style="text-align: center">Cantidad a retirar</th>
                   <th></th>
@@ -354,10 +354,10 @@
           </div>
           @if (isset($materials_presentation))
           <div class="form-group col-3">
-            <label>Presentación:</label>
+            <label>Packaging:</label>
             <select wire:model.defer="presentation" id="presentation" wire:change="amount({{ $material_id }})"
               class="form-control form-control-sm">
-              <option selected>Seleccione una presentación</option>
+              <option selected>Seleccione un packaging</option>
               @foreach ($materials_presentation as $index => $presentation)
               <option value="{{ $presentation->presentation }}"> {{ $presentation->presentation }} </option>
               @endforeach

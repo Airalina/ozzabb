@@ -181,7 +181,7 @@
                                     <th style="text-align: center">Stock en tránsito</th>
                                     <th style="text-align: center">Stock requerido</th>
                                     <th style="text-align: center">Proveedor</th>
-                                    <th style="text-align: center">Presentación</th>
+                                    <th style="text-align: center">Packaging</th>
                                     <th style="text-align: center">Cantidad</th>
                                     <th style="text-align: center">Cantidad total</th>
                                     <th style="text-align: center">P/U U$D</th>
@@ -256,7 +256,7 @@
                         </div>
                         @if($proveedor_name!="")
                         <div class="form-group">
-                            <label>Presentación:</label>
+                            <label>Packaging:</label>
                             <select class="form-control form-control-sm select2 select2-hidden-accessible" wire:model="presentationm" style="width: auto">
                                 <option selected="selected"></option>
                                 @foreach($presentationsm as $presentation)
