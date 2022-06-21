@@ -211,7 +211,7 @@ class OrdenDeEntradaDeMateriales extends Component
                 $this->entry_orderbuy->entry_order_id=$this->orden->id;
                 $this->entry_orderbuy->save();
                 $this->sin_entrega = MaterialEntryOrder::where('buy_order_id', $this->buyorder_id)->get();             
-                if (count($this->sin_entrega)>1) {
+                if (count($this->sin_entrega)>=1) {
                     foreach ($this->sin_entrega as $key => $value) {
                         $this->sin_entrega_detail[$value->id] = MaterialEntryOrderDetail::where('entry_order_id',  $value->id)->get();
                        
