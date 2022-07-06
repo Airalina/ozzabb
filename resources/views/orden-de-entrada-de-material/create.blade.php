@@ -167,36 +167,38 @@
                                             </thead>
                                             <tbody>
                                                 @forelse($buyorders as $ord => $order)
-                                                    <tr>
-                                                        <td style="text-align: center">#{{ $order->order_number }}
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            @if($order->provider)
-                                                                {{ $order->provider->name }}
-                                                            @endif
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            {{ $order->buy_date->format('d/m/Y') }}
-                                                        </td>
-                                                        <td style="text-align: center">
-                                                            @if ($order->state == 2)
-                                                                Completa
-                                                            @elseif($order->state == 0)
-                                                                Parcialmente Recibido
-                                                            @else
-                                                                En tránsito
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            <div>
-                                                                <button type="button"
-                                                                    wire:click="addorder({{ $order->id }})"
-                                                                    class="btn btn-success btn-xs">
-                                                                    Agregar
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                    @if ($order->state != 2)
+                                                        <tr>
+                                                            <td style="text-align: center">#{{ $order->order_number }}
+                                                            </td>
+                                                            <td style="text-align: center">
+                                                                @if($order->provider)
+                                                                    {{ $order->provider->name }}
+                                                                @endif
+                                                            </td>
+                                                            <td style="text-align: center">
+                                                                {{ $order->buy_date->format('d/m/Y') }}
+                                                            </td>
+                                                            <td style="text-align: center">
+                                                                @if ($order->state == 2)
+                                                                    Completa
+                                                                @elseif($order->state == 0)
+                                                                    Parcialmente Recibido
+                                                                @else
+                                                                    En tránsito
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                <div>
+                                                                    <button type="button"
+                                                                        wire:click="addorder({{ $order->id }})"
+                                                                        class="btn btn-success btn-xs">
+                                                                        Agregar
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @empty
                                                     <tr class="text-center">
                                                         <td colspan="4" class="py-3 italic">No hay información
@@ -357,7 +359,7 @@
                                         <th style="text-align: center">Cantidad remito</th>
                                         <th style="text-align: center">Cantidad recibida</th>
                                         <th style="text-align: center">Diferencia</th>
-                                        <th style="text-align: center">Sin Entrgar</th>
+                                        <th style="text-align: center">Sin Entregar</th>
                                         <th style="text-align: center">Lote</th>
                                         <th></th>
                                         <th></th>
