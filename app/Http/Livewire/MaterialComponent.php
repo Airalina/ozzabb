@@ -585,9 +585,7 @@ class MaterialComponent extends Component
             $this->material->save();
         }else{
             $this->validate([
-                'accesory_type' => 'required',
-     ], [
-                'accesory_type.required' => 'Seleccione una opción del campo tipo de Accesorio',
+                'accesory_type' => 'nullable',
             ]);
 
             $this->material=Material::create([
@@ -998,13 +996,9 @@ class MaterialComponent extends Component
                 }
             }elseif($this->family == 'Accesorios'){
                     $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
-        
-                        $this->validate([
-                            'accesory_type' => 'required',
-                        ], [
-                            'accesory_type.required' => 'Seleccione una opción del campo tipo de Accesorio',
-                        ]);
-
+                    $this->validate([
+                            'accesory_type' => 'nullable',
+                    ]);
                     $accesory_up =Accessory::find($this->acc_id);
                     if($accesory_up == null){
                         Accessory::create([
