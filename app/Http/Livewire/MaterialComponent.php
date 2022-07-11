@@ -539,21 +539,17 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'long' => 'numeric|required|regex: '.$regex,
-                'width' => 'numeric|required|regex: '.$regex,
-                'hole_diameter' => 'numeric|required|regex: '.$regex,
-                'clip_type' => 'required',
+                'long' => 'numeric|nullable|regex: '.$regex,
+                'width' => 'numeric|nullable|regex: '.$regex,
+                'hole_diameter' => 'numeric|nullable|regex: '.$regex,
+                'clip_type' => 'nullable',
      ], [
                 'long.numeric' => 'El campo Largo es numérico (decimales separados por punto)',
-                'long.required' => 'El campo Largo es requerido',
                 'long.regex' => 'El campo Largo es un número de máximo 4 cifras con 2 posiciones decimales',
                 'width.numeric' => 'El campo Ancho es numérico (decimales separados por punto)',
-                'width.required' => 'El campo Ancho es requerido',
                 'width.regex' => 'El campo Ancho es un número de máximo 4 cifras con 2 posiciones decimales',
                 'hole_diameter.numeric' => 'El campo Diámetro del Orificio es numérico (decimales separados por punto)',
-                'hole_diameter.required' => 'El campo Diámetro del Orificio es requerido',
                 'hole_diameter.regex' => 'El campo Diámetro del Orificio es un número de máximo 4 cifras con 2 posiciones decimales',
-                'clip_type.required' => 'Seleccione una opción del campo tipo de Clip',
             ]);
             $this->material=Material::create([
                 'code' => $this->code,
@@ -960,21 +956,17 @@ class MaterialComponent extends Component
                 $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
     
                 $this->validate([
-                    'long' => 'numeric|required|regex: '.$regex,
-                    'width' => 'numeric|required|regex: '.$regex,
-                    'hole_diameter' => 'numeric|required|regex: '.$regex,
-                    'clip_type' => 'required',
+                    'long' => 'numeric|nullable|regex: '.$regex,
+                    'width' => 'numeric|nullable|regex: '.$regex,
+                    'hole_diameter' => 'numeric|nullable|regex: '.$regex,
+                    'clip_type' => 'nullable',
          ], [
                     'long.numeric' => 'El campo Largo es numérico (decimales separados por punto)',
-                    'long.required' => 'El campo Largo es requerido',
                     'long.regex' => 'El campo Largo es un número de máximo 4 cifras con 2 posiciones decimales',
                     'width.numeric' => 'El campo Ancho es numérico (decimales separados por punto)',
-                    'width.required' => 'El campo Ancho es requerido',
                     'width.regex' => 'El campo Ancho es un número de máximo 4 cifras con 2 posiciones decimales',
                     'hole_diameter.numeric' => 'El campo Diámetro del Orificio es numérico (decimales separados por punto)',
-                    'hole_diameter.required' => 'El campo Diámetro del Orificio es requerido',
                     'hole_diameter.regex' => 'El campo Diámetro del Orificio es un número de máximo 4 cifras con 2 posiciones decimales',
-                    'clip_type.required' => 'Seleccione una opción del campo tipo de Clip',
                 ]);
             
                 $clip_up =Clip::find($this->clip_id);
