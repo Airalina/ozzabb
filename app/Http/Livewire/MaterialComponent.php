@@ -369,27 +369,21 @@ class MaterialComponent extends Component
 
 
             $this->validate([
-                'section' => 'numeric|required|regex: '.$regex,
-                'base_color' => 'required',
+                'section' => 'numeric|nullable|regex: '.$regex,
+                'base_color' => 'nullable',
                 'line_color' => 'nullable',
-                'braid_configuration' => 'required',
-                'norm' =>  'required',
+                'braid_configuration' => 'nullable',
+                'norm' =>  'nullable',
                 'number_of_unipolar' => 'numeric|nullable|min:1',
                 'mesh_type' => 'string|nullable',
-                'operating_temperature' => 'numeric|required|regex: '.$regex,
+                'operating_temperature' => 'numeric|nullable|regex: '.$regex,
             ], [
                 'section.numeric' => 'El campo sección es numérico (decimales separados por punto)',
-                'section.required' => 'El campo sección es requerido',
                 'section.regex' => 'El campo sección es un número de máximo 4 cifras con 2 posiciones decimales',
-                'base_color.required' => 'Seleccione una opción del campo color base',
-                'braid_configuration.required' => 'Seleccione una opción del campo Configuración de Trenza',
-                'norm.required' => 'Seleccione una opción del campo Norma',
                 'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico (decimales separados por punto)',
                 'number_of_unipolar.min' => 'El campo Cantidad de unipolares debe ser un número mayor a cero (0) ',
                 'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico (decimales separados por punto)',
-                'operating_temperature.required' => 'El campo Temperatura de Servicio es requerido',
                 'operating_temperature.regex' => 'El campo Temperatura de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
-
             ]);
             $this->material=Material::create([
                 'code' => $this->code,
@@ -885,25 +879,20 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'section' => 'numeric|required|regex: '.$regex,
-                'base_color' => 'required',
+                'section' => 'numeric|nullable|regex: '.$regex,
+                'base_color' => 'nullable',
                 'line_color' => 'nullable',
-                'braid_configuration' => 'required',
-                'norm' =>  'required',
+                'braid_configuration' => 'nullable',
+                'norm' =>  'nullable',
                 'number_of_unipolar' => 'numeric|nullable|min:1',
                 'mesh_type' => 'string|nullable',
-                'operating_temperature' => 'numeric|required|regex: '.$regex,
+                'operating_temperature' => 'numeric|nullable|regex: '.$regex,
             ], [
                 'section.numeric' => 'El campo sección es numérico (decimales separados por punto)',
-                'section.required' => 'El campo sección es requerido',
                 'section.regex' => 'El campo sección es un número de máximo 4 cifras con 2 posiciones decimales',
-                'base_color.required' => 'Seleccione una opción del campo color base',
-                'braid_configuration.required' => 'Seleccione una opción del campo Configuración de Trenza',
-                'norm.required' => 'Seleccione una opción del campo Norma',
                 'number_of_unipolar.numeric' => 'El campo Cantidad de unipolares es numérico (decimales separados por punto)',
                 'number_of_unipolar.min' => 'El campo Cantidad de unipolares debe ser un número mayor a cero (0) ',
                 'operating_temperature.numeric' => 'El campo Temperatura de Servicio es numérico (decimales separados por punto)',
-                'operating_temperature.required' => 'El campo Temperatura de Servicio es requerido',
                 'operating_temperature.regex' => 'El campo Temperatura de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
 
             ]);
