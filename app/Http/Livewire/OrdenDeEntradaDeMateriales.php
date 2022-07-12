@@ -20,7 +20,7 @@ class OrdenDeEntradaDeMateriales extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     protected $orders;
-    public  $buyorders, $order= 'date', $material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy='', $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false, $code_m, $description_m, $presentation_m, $id_m, $deposit_m;
+    public  $buyorders, $order= 'date', $flag_complete=false, $material_entry, $x=0,$date, $ingresa=false, $hour,$paginas=25,$paginas1=25, $buyorderdetails, $orden, $funcion="", $searchorderbuy='', $count=0, $depositm, $detailem, $warehouse_id, $nombre_deposito, $depositos, $materiales, $detail=array(), $details=array(),$searchordenesem="", $amount, $description, $presentation, $origen, $causa, $material_id, $code, $modo, $create_date, $create_hour, $searchmateriales, $select=false, $material_order, $close_order = false, $code_m, $description_m, $presentation_m, $id_m, $deposit_m;
     public $orderdetails,$entry_orderbuy, $smaterial, $entry_order_id, $entry_order_type , $buy_order_id, $follow, $amount_requested, $amount_follow, $difference, $set, $amount_undelivered, $campos_modo, $buyorderinfo, $refer_amount, $received_amount, $requested_amount, $requested_presentation , $id_warehouse, $buyorder_id, $entry_order_detail, $sin_entrega, $sin_entrega_detail, $sum, $buy_order_state, $cant, $present, $select_depo = array(), $provider, $materials = array(), $deposito_id, $order_selected, $type, $buy_card = true;
 
     public function updatingSearch()
@@ -211,7 +211,7 @@ class OrdenDeEntradaDeMateriales extends Component
                 $this->entry_orderbuy->entry_order_id=$this->orden->id;
                 $this->entry_orderbuy->save();
                 $this->sin_entrega = MaterialEntryOrder::where('buy_order_id', $this->buyorder_id)->get();             
-                if (count($this->sin_entrega)>=1) {
+                if (count($this->sin_entrega)>1) {
                     foreach ($this->sin_entrega as $key => $value) {
                         $this->sin_entrega_detail[$value->id] = MaterialEntryOrderDetail::where('entry_order_id',  $value->id)->get();
                        
@@ -238,16 +238,27 @@ class OrdenDeEntradaDeMateriales extends Component
                 }
 
                 foreach($this->details as $detail){
+                    $this->smaterial=Material::where('code', $detail[0])->first();
+                    $this->smaterial->stock_transit-=$detail[2]*$detail[5];
+                    $this->smaterial->stock+=$detail[2]*$detail[5];
+                    $this->smaterial->save();
                     if(isset($this->material_entry[$detail[0]])){
                         if(count($this->material_entry[$detail[0]]) > 0){
                             $detail[10]=abs($detail[2])-abs(end($this->material_entry[$detail[0]])->difference);
                             $detail[2]+=end($this->material_entry[$detail[0]])->amount_received;
-                                if($detail[10] == 0){
-                                    $this->buy_order_state->state=2;                       
-                                }
-                                
+                                if($detail[10] < 0){
+                                    $this->buy_order_state->state=0;
+                                    $this->flag_complete=true;                       
+                                }          
                                  $this->buy_order_state->save();
                            }
+                    }else{
+                        if($detail[10]<0){
+                            $this->buy_order_state=BuyOrder::find($this->buyorder_id);
+                            $this->buy_order_state->state=0;
+                            $this->flag_complete=true;
+                            $this->buy_order_state->save(); 
+                        }
                     }                   
                    /* $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$detail[6])->get();
                     if($this->ingreso->count()==0){
@@ -293,15 +304,18 @@ class OrdenDeEntradaDeMateriales extends Component
                     $this->detailem->difference=$detail[10];
                     $this->detailem->set=$detail[11];
                     $this->detailem->save();
-                    $this->smaterial=Material::where('code', $this->detailem->material_code )->first();
-                    $this->smaterial->stock_transit-=$this->detailem->amount_requested*$this->detailem->presentation;
-                    $this->smaterial->stock+=$this->detailem->amount_received*$this->detailem->presentation;
-                    $this->smaterial->save();
+                    
                 }
+            if($this->flag_complete!=true){
+                $this->buy_order_state=BuyOrder::find($this->buyorder_id);
+                $this->buy_order_state->state=2;
+                $this->buy_order_state->save();
+            }
         }
         $this->modo="";
         $this->funcion="";
         $this->function="";
+        $this->flag_complete=false;
         $this->resetValidation();
         
         return redirect()->to('/ordenes-de-ingreso-de-materiales');
