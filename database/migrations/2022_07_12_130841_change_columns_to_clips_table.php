@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeColumnsNullclipsTable extends Migration
+class ChangeColumnsToClipsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class ChangeColumnsNullclipsTable extends Migration
      */
     public function up()
     {
-        DB::connection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+        Schema::table('clips', function (Blueprint $table) {
+            DB::connection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
         DB::statement("ALTER TABLE `clips` MODIFY COLUMN  `type` ENUM('Clip', 'Precinto');");
+        });
     }
 
     /**
@@ -24,6 +26,8 @@ class ChangeColumnsNullclipsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('clips', function (Blueprint $table) {
+            //
+        });
     }
 }
