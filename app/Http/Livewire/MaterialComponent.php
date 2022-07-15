@@ -854,7 +854,7 @@ class MaterialComponent extends Component
                 $terminal_up->material_id=$this->idu;
                 $terminal_up->size=$this->size;
                 $terminal_up->minimum_section=(!empty($this->minimum_section)) ? $this->minimum_section : 0;
-                $terminal_up->maximum_section=(!empty($this->maximum_section)) ? $this->minimum_section : 0;
+                $terminal_up->maximum_section=(!empty($this->maximum_section)) ? $this->maximum_section : 0;
                 $terminal_up->material=$this->term_material;
                 $terminal_up->type=$this->term_type;
                 $terminal_up->save();
