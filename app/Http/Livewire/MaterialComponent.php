@@ -178,11 +178,6 @@ class MaterialComponent extends Component
         $this->addsello=[];
     }
 
-
-
-
-
-
     public function addterminal(Material $terminal){
         $flag=false;
         foreach($this->terminales as $ter){
@@ -644,6 +639,7 @@ class MaterialComponent extends Component
         $this->info_line=Line::all();
         $this->info_usage=Usage::all();
         $this->info_con=Connector::all();
+        $this->con();
        
         if($this->family == 'Conectores'){
             $this->conn = Connector::where('material_id',$material->id)->first();
@@ -1209,7 +1205,7 @@ class MaterialComponent extends Component
 
     public function con(){
         $this->div=$this->family;
-        $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->get();
+        $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->where('code','!=',$this->code)->get();
         
         if(!empty($this->idu)){
             if($this->div == 'Conectores'){
