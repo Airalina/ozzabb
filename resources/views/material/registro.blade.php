@@ -107,7 +107,7 @@
                     <label for="exampleInputFile">Imagen</label>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input wire:model="images" type="file" name="images[]" class="custom-file-input" multiple>
+                            <input wire:model="images" accept=".png,.jpg" type="file" name="images[]" class="custom-file-input" multiple>
                             <label class="custom-file-label" for="exampleInputFile">Selecciona las imágenes</label>
                         </div>
                     </div>
