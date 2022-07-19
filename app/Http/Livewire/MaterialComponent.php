@@ -1073,6 +1073,7 @@ class MaterialComponent extends Component
 
     public function back(){
         $this->div=null;
+        $this->search=null;
         $this->funcion="";
         $this->explora='inactivo';  
        
