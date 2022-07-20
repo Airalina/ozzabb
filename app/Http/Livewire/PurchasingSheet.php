@@ -21,6 +21,7 @@ use App\Jobs\SendBuyEmail;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use PDF;
+use Exception;
 class PurchasingSheet extends Component
 {
     use WithPagination;
@@ -383,7 +384,13 @@ class PurchasingSheet extends Component
                 $this->stmaterial->save();
                 
             }elseif($this->proveedor_id!=$ordenes->provider_id){
-                SendBuyEmail::dispatch($this->ordenes_de_compra);
+                try{
+                    SendBuyEmail::dispatch($this->ordenes_de_compra);
+                }catch(Exception $e){
+                    report($e);
+                    return false;                    
+                }
+                
                 $this->proveedor_id=$ordenes->provider_id;
                 $this->ordenes_de_compra=new BuyOrder;
                 $this->ordenes_de_compra->buy_date=$this->date;
@@ -422,7 +429,12 @@ class PurchasingSheet extends Component
             }
             $this->index_array++;
             if(count($this->plantilla_ordenes)==$this->index_array){
-                SendBuyEmail::dispatch($this->ordenes_de_compra);
+                try{
+                    SendBuyEmail::dispatch($this->ordenes_de_compra);
+                }catch(Exception $e){
+                    report($e);
+                    return false;                    
+                }
             }
         }
         if (!empty($this->ordenes_de_compra)) {
