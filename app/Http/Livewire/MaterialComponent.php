@@ -229,21 +229,19 @@ class MaterialComponent extends Component
     public function store(){
         $this->validate([
             'code' => 'required',
-            'name' => 'required',
             'family' => 'required',
+            'color' => 'nullable',
             'description' => 'max:500|nullable',
             'line' => 'nullable',
-            'usage' => 'required',
+            'usage' => 'nullable',
             'replace' => 'nullable',
-            'stock_min' => 'numeric|required|min:1|max:999999',
+            'stock_min' => 'numeric|nullable|min:1|max:999999',
             'stock_max' => 'numeric|nullable|min:1|max:999999',
             'images' => 'nullable'
         ],[
             'code.required' => 'El campo código es requerido',
-            'name.required' => 'El campo nombre es requerido',
             'family.required' => 'El campo familia es requerido',
             'description.max' => 'El campo descripción no debe superar 500 carácteres',
-            'usage.required' => 'Seleccione una opción para el campo de uso',
             'stock_min.required' => 'El campo stock mínimo es requerido',
             'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
             'stock_min.min' => 'El campo stock mínimo debe ser un número mayor a 0(cero).',
@@ -252,19 +250,6 @@ class MaterialComponent extends Component
             'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
-        if($this->family == 'Cables' || $this->family == 'Terminales' || $this->family == 'Tubos' || $this->family == 'Clips'){
-            $this->validate([
-                'color' => 'nullable',
-            ]);
-        }else{
-            $this->validate([
-                'color' => 'required',
-            ], [
-                'color.required' => 'El campo color es requerido',
-            ]);
-        }
-            
-
         if($this->family == 'Conectores'){
             $this->validate([
                 'terminal' => 'nullable',
@@ -780,21 +765,19 @@ class MaterialComponent extends Component
     public function editar(){
         $this->validate([
             'code' => 'required',
-            'name' => 'required',
             'family' => 'required',
+            'color' => 'nullable',
             'description' => 'max:500|nullable',
             'line' => 'nullable',
-            'usage' => 'required',
+            'usage' => 'nullable',
             'replace' => 'nullable',
-            'stock_min' => 'numeric|required|min:1|max:999999',
+            'stock_min' => 'numeric|nullable|min:1|max:999999',
             'stock_max' => 'numeric|nullable|min:1|max:999999',
             'images' => 'nullable'
         ],[
             'code.required' => 'El campo código es requerido',
-            'name.required' => 'El campo nombre es requerido',
             'family.required' => 'El campo familia es requerido',
             'description.max' => 'El campo descripción no debe superar 500 carácteres',
-            'usage.required' => 'Seleccione una opción para el campo de uso',
             'stock_min.required' => 'El campo stock mínimo es requerido',
             'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
             'stock_min.min' => 'El campo stock mínimo debe ser un número mayor a 0(cero).',
@@ -803,20 +786,6 @@ class MaterialComponent extends Component
             'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
         ]);
-    
-        if($this->family == 'Cables' ||$this->family == 'Terminales' ||$this->family == 'Tubos' || $this->family == 'Clips'){
-            $this->validate([
-                'color' => 'nullable',
-            ]);
-        }else{
-            $this->validate([
-                'color' => 'required',
-            ], [
-                'color.required' => 'El campo color es requerido',
-            ]);
-        }
-       
-
         $material_up =Material::find($this->idu);
         $material_up->name=$this->name;
         $material_up->code=$this->code;
