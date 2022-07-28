@@ -438,15 +438,13 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'minimum_diameter' => 'numeric|required|regex: '.$regex,
-                'maximum_diameter' => 'numeric|required|regex: '.$regex,
+                'minimum_diameter' => 'numeric|nullable|regex: '.$regex,
+                'maximum_diameter' => 'numeric|nullable|regex: '.$regex,
                 'seal_type' => 'nullable|max:30',
                 ], [
                 'minimum_diameter.numeric' => 'El campo Diámetro mínimo de Cable es numérico (decimales separados por punto)',
-                'minimum_diameter.required' => 'El campo Diámetro mínimo de Cable es requerido',
                 'minimum_diameter.regex' => 'El campo Diámetro mínimo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
                 'maximum_diameter.numeric' => 'El campo Diámetro máximo de Cable es numérico (decimales separados por punto)',
-                'maximum_diameter.required' => 'El campo Diámetro máximo de Cable es requerido',
                 'maximum_diameter.regex' => 'El campo Diámetro máximo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
                 'seal_type.max' => 'El campo Tipo de sello debe ser inferior a 30 carácteres'
             ]);
@@ -829,37 +827,36 @@ class MaterialComponent extends Component
                     
                 ]);
             }else{
-            $connector_up->material_id=$this->idu;
-            $connector_up->number_of_ways=$this->number_of_ways;
-            $connector_up->type=$this->type;
-            $connector_up->connector_id=$this->connector;
-            $connector_up->watertight=$this->watertight;
-            $connector_up->cover=$this->cover;
-            $connector_up->lock=$this->lock;
-            $connector_up->save();
-            $terminals_of_connector=ConnectorTerminal::where('connector_id',$connector_up->id)->get();
-            foreach($terminals_of_connector as $t_o_c){
-                $t_o_c->delete();
-            }
-            foreach($this->terminales as $ter){
-                $term=Terminal::where('material_id', $ter[0])->first();
-                ConnectorTerminal::create([
-                    'connector_id' => $connector_up->id,
-                    'terminal_id' => $term->id,
-                ]);
-            }
-            $seals_of_connector=ConnectorSeal::where('connector_id',$connector_up->id)->get();
-            foreach($seals_of_connector as $s_o_c){
-                $s_o_c->delete();
-            }
-            foreach($this->sellos as $sel){
-                $sell=Seal::where('material_id', $sel[0])->first();
-                ConnectorSeal::create([
-                    'connector_id' => $connector_up->id,
-                    'seal_id' => $sell->id,
-                ]);
-            }
-
+                $connector_up->material_id=$this->idu;
+                $connector_up->number_of_ways=$this->number_of_ways;
+                $connector_up->type=$this->type;
+                $connector_up->connector_id=$this->connector;
+                $connector_up->watertight=$this->watertight;
+                $connector_up->cover=$this->cover;
+                $connector_up->lock=$this->lock;
+                $connector_up->save();
+                $terminals_of_connector=ConnectorTerminal::where('connector_id',$connector_up->id)->get();
+                foreach($terminals_of_connector as $t_o_c){
+                    $t_o_c->delete();
+                }
+                foreach($this->terminales as $ter){
+                    $term=Terminal::where('material_id', $ter[0])->first();
+                    ConnectorTerminal::create([
+                        'connector_id' => $connector_up->id,
+                        'terminal_id' => $term->id,
+                    ]);
+                }
+                $seals_of_connector=ConnectorSeal::where('connector_id',$connector_up->id)->get();
+                foreach($seals_of_connector as $s_o_c){
+                    $s_o_c->delete();
+                }
+                foreach($this->sellos as $sel){
+                    $sell=Seal::where('material_id', $sel[0])->first();
+                    ConnectorSeal::create([
+                        'connector_id' => $connector_up->id,
+                        'seal_id' => $sell->id,
+                    ]);
+                }
             }
         }elseif($this->family == 'Terminales'){
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
@@ -895,15 +892,14 @@ class MaterialComponent extends Component
                     'type' => $this->term_type,
                 ]);
             }else{
-            $terminal_up->material_id=$this->idu;
-            $terminal_up->size=$this->size;
-            $terminal_up->minimum_section=(!empty($this->minimum_section)) ? $this->minimum_section : 0;
-            $terminal_up->maximum_section=(!empty($this->maximum_section)) ? $this->minimum_section : 0;
-            $terminal_up->material=$this->term_material;
-            $terminal_up->type=$this->term_type;
-            $terminal_up->save();
-            }
-            
+                $terminal_up->material_id=$this->idu;
+                $terminal_up->size=$this->size;
+                $terminal_up->minimum_section=(!empty($this->minimum_section)) ? $this->minimum_section : 0;
+                $terminal_up->maximum_section=(!empty($this->maximum_section)) ? $this->minimum_section : 0;
+                $terminal_up->material=$this->term_material;
+                $terminal_up->type=$this->term_type;
+                $terminal_up->save();
+            }           
         }elseif($this->family == 'Cables'){
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
@@ -945,18 +941,17 @@ class MaterialComponent extends Component
                     'operating_temperature' => $this->operating_temperature,
                 ]);
             }else{
-            $cable_up->material_id=$this->idu;
-            $cable_up->section=$this->section;
-            $cable_up->base_color=$this->base_color;
-            $cable_up->line_color=$this->line_color;
-            $cable_up->braid_configuration=$this->braid_configuration;
-            $cable_up->norm=$this->norm;
-            $cable_up->number_of_unipolar=$this->number_of_unipolar;
-            $cable_up->mesh_type=$this->mesh_type;
-            $cable_up->operating_temperature=$this->operating_temperature;
-            $cable_up->save();
+                $cable_up->material_id=$this->idu;
+                $cable_up->section=$this->section;
+                $cable_up->base_color=$this->base_color;
+                $cable_up->line_color=$this->line_color;
+                $cable_up->braid_configuration=$this->braid_configuration;
+                $cable_up->norm=$this->norm;
+                $cable_up->number_of_unipolar=$this->number_of_unipolar;
+                $cable_up->mesh_type=$this->mesh_type;
+                $cable_up->operating_temperature=$this->operating_temperature;
+                $cable_up->save();
             }
-
         }elseif($this->family == 'Tubos'){
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
@@ -1000,15 +995,14 @@ class MaterialComponent extends Component
                     'type' => $this->tube_type,
                 ]);
             }else{
-            $tube_up->material_id=$this->idu;
-            $tube_up->diameter=$this->tube_diameter;
-            $tube_up->wall_thickness=$this->wall_thickness;
-            $tube_up->contracted_diameter=($this->tube_type == 'Termocontraible') ? $this->contracted_diameter : 0;
-            $tube_up->minimum_temperature=($this->tube_type == 'Termocontraible') ? $this->minimum_temperature : 0;
-            $tube_up->maximum_temperature=($this->tube_type == 'Termocontraible') ? $this->maximum_temperature : 0;
-            $tube_up->type=$this->tube_type;
-            $tube_up->save();
-
+                $tube_up->material_id=$this->idu;
+                $tube_up->diameter=$this->tube_diameter;
+                $tube_up->wall_thickness=$this->wall_thickness;
+                $tube_up->contracted_diameter=($this->tube_type == 'Termocontraible') ? $this->contracted_diameter : 0;
+                $tube_up->minimum_temperature=($this->tube_type == 'Termocontraible') ? $this->minimum_temperature : 0;
+                $tube_up->maximum_temperature=($this->tube_type == 'Termocontraible') ? $this->maximum_temperature : 0;
+                $tube_up->type=$this->tube_type;
+                $tube_up->save();
             }
         }elseif($this->family == 'Clips'){
                 $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
@@ -1072,15 +1066,13 @@ class MaterialComponent extends Component
                         $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
                         $this->validate([
-                            'minimum_diameter' => 'numeric|required|regex: '.$regex,
-                            'maximum_diameter' => 'numeric|required|regex: '.$regex,
+                            'minimum_diameter' => 'numeric|nullable|regex: '.$regex,
+                            'maximum_diameter' => 'numeric|nullable|regex: '.$regex,
                             'seal_type' => 'nullable|max:30',
                             ], [
                             'minimum_diameter.numeric' => 'El campo Diámetro mínimo de Cable es numérico (decimales separados por punto)',
-                            'minimum_diameter.required' => 'El campo Diámetro mínimo de Cable es requerido',
                             'minimum_diameter.regex' => 'El campo Diámetro mínimo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
                             'maximum_diameter.numeric' => 'El campo Diámetro máximo de Cable es numérico (decimales separados por punto)',
-                            'maximum_diameter.required' => 'El campo Diámetro máximo de Cable es requerido',
                             'maximum_diameter.regex' => 'El campo Diámetro máximo de Cable es un número de máximo 4 cifras con 2 posiciones decimales',
                             'seal_type.max' => 'El campo Tipo de sello debe ser inferior a 30 carácteres'
                         ]);
