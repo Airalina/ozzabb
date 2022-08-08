@@ -320,23 +320,19 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'size' => 'numeric|required|min:1|max:99999',
+                'size' => 'numeric|nullable|min:1|max:99999',
                 'minimum_section' => 'numeric|nullable|regex: '.$regex,
                 'maximum_section' => 'numeric|nullable|regex: '.$regex,
-                'term_material' => 'required',
-                'term_type' => 'required'
+                'term_material' => 'nullable',
+                'term_type' => 'nullable'
             ], [
                 'size.numeric' => 'El campo tamaño es numérico(decimales separados por púnto)',
-                'size.required' => 'El campo tamaño es requerido',
                 'size.min' => 'El campo tamaño debe ser un número mayor a 0(cero)',
                 'size.max' => 'El campo tamaño debe ser un número de 5 cifras como máximo',
                 'minimum_section.numeric' => 'El campo sección mínima es numérico (decimales separados por punto)',
                 'maximum_section.numeric' => 'El campo sección máxima es numérico (decimales separados por punto)',
                 'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
-                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimal',
-                'term_material.required' => 'Seleccione una opción para el campo Material',
-                'term_type.required' => 'Seleccione una opción para el campo Tipo',
-                
+                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimal',   
             ]);
             $this->material=Material::create([
                 'code' => $this->code,
@@ -851,23 +847,19 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'size' => 'numeric|required|min:1|max:99999',
+                'size' => 'numeric|nullable|min:1|max:99999',
                 'minimum_section' => 'numeric|nullable|regex: '.$regex,
                 'maximum_section' => 'numeric|nullable|regex: '.$regex,
-                'term_material' => 'required',
-                'term_type' => 'required'
+                'term_material' => 'nullable',
+                'term_type' => 'nullable'
             ], [
                 'size.numeric' => 'El campo tamaño es numérico',
-                'size.required' => 'El campo tamaño es requerido',
                 'size.min' => 'El campo tamaño debe ser un número mayor a 0(cero)',
                 'size.max' => 'El campo tamaño debe ser un número de 5 cifras como máximo',
                 'minimum_section.numeric' => 'El campo sección mínima es numérico (decimales separados por punto)',
                 'maximum_section.numeric' => 'El campo sección máxima es numérico (decimales separados por punto)',
                 'minimum_section.regex' => 'El campo sección mínima es un número de máximo 4 cifras con 2 posiciones decimales',
-                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimales',
-                'term_material.required' => 'Seleccione una opción para el campo Material',
-                'term_type.required' => 'Seleccione una opción para el campo Tipo',
-                
+                'maximum_section.regex' => 'El campo sección máxima es un número de máximo 4 cifras con 2 posiciones decimales',      
             ]);
 
             $terminal_up =Terminal::find($this->term_id);

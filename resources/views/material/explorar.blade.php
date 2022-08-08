@@ -216,6 +216,7 @@
                     <div class="form-group">
                         <label for="term_material">Material</label>
                         <select class="form-control form-control-sm" wire:model="term_material" id="term_material" disabled>
+                            <option value="">Seleccione un material</option>
                             <option value="Latón">Latón</option>
                             <option value="Estañado">Estañado</option>
                         </select>
@@ -223,6 +224,7 @@
                     <div class="form-group">
                         <label for="term_type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="term_type" id="term_type" disabled>
+                            <option value="">Seleccione un tipo</option>
                             <option value="Macho">Macho</option>
                             <option value="Hembra">Hembra</option>
                             <option value="Ojal">Ojal</option>
