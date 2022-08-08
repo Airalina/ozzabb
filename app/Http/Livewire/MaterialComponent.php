@@ -37,15 +37,7 @@ class MaterialComponent extends Component
         $this->dolar=Dollar::where('id',1)->first();
         $this->ar_price=$this->dolar->arp_price;
         $mats = Material::where('code','like','%'.$this->search.'%')
-        ->orWhere('name','LIKE','%'.$this->search.'%')
-        ->orWhere('family','LIKE','%'.$this->search.'%')
-        ->orWhere('color','LIKE','%'.$this->search.'%')
-        ->orWhere('description','LIKE','%'.$this->search.'%')
-        ->orWhere('replace_id','LIKE','%'.$this->search.'%')
-        ->orWhere('stock_min','LIKE','%'.$this->search.'%')
-        ->orWhere('stock_max','LIKE','%'.$this->search.'%')
-        ->orWhere('stock','LIKE','%'.$this->search.'%')
-        ->orderBy($this->order);
+                ->orderBy($this->order);
         $this->materials = $mats->paginate($this->paginas);
         
         $this->info_term = Material::where('family','Terminales')
