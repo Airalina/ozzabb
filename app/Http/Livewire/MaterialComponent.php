@@ -46,14 +46,13 @@ class MaterialComponent extends Component
                   ->orwhere('code','LIKE','%'.$this->search.'%');
         })->get();
 
-        $this->info_sell = Material::where('family','Sellos')
-        ->where(function($query) {
-            $query->orWhere('name','LIKE','%'.$this->searchs.'%')
-                  ->orwhere('code','LIKE','%'.$this->searchs.'%');
-        })->get();
+        $this->info_sell = Material::where('family', 'Sellos')
+            ->where(function ($query) {
+                $query->orwhere('code', 'LIKE', '%' . $this->searchs . '%');
+            })
+            ->orderBy('code')
+            ->get();
 
-        
-        
         $reservations_materials = $mats->get();
         $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
          
@@ -189,19 +188,22 @@ class MaterialComponent extends Component
     public function dropterminal($pos_terminal){
         unset($this->terminales[$pos_terminal]);
     }
-    public function addsello(Material $sello){
+    public function addsello(Material $material){
         $flag=false;
         foreach($this->sellos as $sel){
-            if($sello->id==$sel[0]){
+            if($material->id==$sel[0]){
                 $flag=true;
             }
         }
         if(!$flag){
-            $this->addsello[0]=$sello->id;
-            $this->addsello[1]=$sello->name;
-            $this->addsello[2]=$sello->code;
-            $this->addsello[3]=$this->count_terminales;
-            $this->sellos[$this->count_sellos]=$this->addsello;
+            $this->addsello[0]=$material->id;
+            $this->addsello[1]=$material->name;
+            $this->addsello[2]=$material->code;
+            $this->addsello[3]=$material->seal->type;
+            $this->addsello[4]=$material->seal->minimum_diameter;
+            $this->addsello[5]=$material->seal->maximum_diameter;
+            $this->addsello[6]=$this->count_sellos;
+            $this->sellos[$material->id]=$this->addsello;
             $this->count_sellos++;
         }   
     }
@@ -659,11 +661,14 @@ class MaterialComponent extends Component
                 }
                 foreach($this->seal_id as $sel){
                     $material=Material::where('id',$sel->material_id)->first();
-                    $this->addsello[0]=$sel->material_id;
+                    $this->addsello[0]=$material->id;
                     $this->addsello[1]=$material->name;
                     $this->addsello[2]=$material->code;
-                    $this->addsello[3]=$this->count_sellos;
-                    $this->sellos[$this->count_sellos]=$this->addsello;
+                    $this->addsello[3]=$material->seal->type;
+                    $this->addsello[4]=$material->seal->minimum_diameter;
+                    $this->addsello[5]=$material->seal->maximum_diameter;
+                    $this->addsello[6]=$this->count_sellos;
+                    $this->sellos[$material->id]=$this->addsello;
                     $this->count_sellos++;
                 }
                 $this->connect = Connector::where('id',$this->connector_id)->first();
@@ -1131,11 +1136,14 @@ class MaterialComponent extends Component
                 }
                 foreach($this->seal_id as $sel){
                     $material=Material::where('id',$sel->material_id)->first();
-                    $this->addsello[0]=$sel->material_id;
+                    $this->addsello[0]=$material->id;
                     $this->addsello[1]=$material->name;
                     $this->addsello[2]=$material->code;
-                    $this->addsello[3]=$this->count_sellos;
-                    $this->terminales[$this->count_sellos]=$this->addsello;
+                    $this->addsello[3]=$material->seal->type;
+                    $this->addsello[4]=$material->seal->minimum_diameter;
+                    $this->addsello[5]=$material->seal->maximum_diameter;
+                    $this->addsello[6]=$this->count_sellos;
+                    $this->sellos[$material->id]=$this->addsello;
                     $this->count_sellos++;
                 }
                 $this->connect = Connector::where('id',$this->connector_id)->first();

@@ -45,45 +45,55 @@
                 
                     <div class="form-group">
                         <label for="sello">Sellos Asociados</label>
-                            <div class="input-group input-group-sm" style="width: 150px;">
+                            <div class="input-group input-group-sm mb-4" style="width: 150px;">
                                 <input wire:model="searchs" type="text" class="form-control float-right"
                                     placeholder="Buscar Material...">
                             </div>
                             @if($searchs!=null)
-                            <table>
+                            <table class="table table-head table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: center">Codigo</th>
-                                        <th style="text-align: center">Nombre</th>
+                                        <th style="text-align: center">Código</th>
+                                        <th style="text-align: center">Tipo</th>
+                                        <th style="text-align: center">Diámetro mínimo de cable</th>
+                                        <th style="text-align: center">Diámetro máximo de cable</th>
                                         <th></th>
                                     </tr>
                                 </thead>
-                                @foreach($infoSell as $sello)
+                                @foreach($infoSell as $material)
                                     <tbody>
-                                        <td>{{$sello->code}}</td>
-                                        <td>{{$sello->name}}</td>
-                                        <td><button wire:click="addsello({{ $sello->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                        <td style="text-align: center">{{ $material->code }}</td>
+                                        <td style="text-align: center">{{ $material->seal->type }}</td>
+                                        <td style="text-align: center">{{ $material->seal->minimum_diameter }}</td>
+                                        <td style="text-align: center">{{ $material->seal->maximum_diameter }}</td>
+                                        <td style="text-align: center"><button wire:click="addsello({{ $material->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
                                     </tbody>
                                 @endforeach
                             </table>
                             @endif
+                            @if (count($sellos) > 0)
                             <label for="sello">Sellos Asociados Seleccionados:</label>
-                            <table>
+                            <table class="table table-head table-sm">
                                 <thead>
-                                    <tr>
-                                        <th style="text-align: center">Codigo</th>
-                                        <th style="text-align: center">Nombre</th>
+                                    <tr> 
+                                        <th style="text-align: center">Código</th>
+                                        <th style="text-align: center">Tipo</th>
+                                        <th style="text-align: center">Diámetro mínimo de cable</th>
+                                        <th style="text-align: center">Diámetro máximo de cable</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 @foreach($sellos as $sello)
                                     <tbody>
-                                        <td>{{$sello[2]}}</td>
-                                        <td>{{$sello[1]}}</td>
-                                        <td><button wire:click="dropsello({{ $sello[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                        <td style="text-align: center">{{ $sello[2] }}</td>
+                                        <td style="text-align: center">{{ $sello[3] }}</td>
+                                        <td style="text-align: center">{{ $sello[4] }}</td>
+                                        <td style="text-align: center">{{ $sello[5] }}</td>
+                                        <td style="text-align: center"><button wire:click="dropsello({{ $sello[0] }})" type="button"  class="btn btn-danger btn-sm">-</td>
                                     </tbody>
                                 @endforeach
                             </table>
+                            @endif
                     </div>
                     <div class="form-group">
                         <label for="number_of_ways">Cantidad de vías</label>
