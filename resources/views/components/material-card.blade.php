@@ -2,45 +2,55 @@
                 @case("Conectores")
                     <div class="form-group">
                         <label for="terminal">Terminales Asociado</label>
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input wire:model="search" type="text" class="form-control float-right"
+                        <div class="input-group input-group-sm mb-4" style="width: 150px;">
+                            <input wire:model="search_terminal" type="text" class="form-control float-right"
                                 placeholder="Buscar Material...">
                         </div>
-                        @if($search!=null)
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="text-align: center">Codigo</th>
-                                    <th style="text-align: center">Nombre</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            @foreach($infoTerm as $terminal)
-                                <tbody>
-                                    <td>{{$terminal->code}}</td>
-                                    <td>{{$terminal->name}}</td>
-                                    <td><button wire:click="addterminal({{ $terminal->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
-                                </tbody>
-                            @endforeach
-                        </table>
+                        @if($searchTerminal!=null)
+                            <table class="table table-head table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Tamaño</th>
+                                        <th style="text-align: center">Sección mínima agrafado</th>
+                                        <th style="text-align: center">Sección máxima agrafado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($infoTerm as $material)
+                                    <tbody>
+                                        <td style="text-align: center">{{$material->code}}</td>
+                                        <td style="text-align: center">{{$material->terminal->size}}</td>
+                                        <td style="text-align: center">{{$material->terminal->minimum_section}}</td>
+                                        <td style="text-align: center">{{$material->terminal->maximum_section}}</td>
+                                        <td style="text-align: center"><button wire:click="addterminal({{ $material->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                    </tbody>
+                                @endforeach
+                            </table>
                         @endif
-                        <label for="terminal">Terminales Asociados Seleccionados:</label>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="text-align: center">Codigo</th>
-                                    <th style="text-align: center">Nombre</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            @foreach($terminales as $terminal)
-                                <tbody>
-                                    <td>{{$terminal[2]}}</td>
-                                    <td>{{$terminal[1]}}</td>
-                                    <td><button wire:click="dropterminal({{ $terminal[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
-                                </tbody>
-                            @endforeach
-                        </table>
+                        @if (count($terminales) > 0)
+                            <label for="terminal">Terminales Asociados Seleccionados:</label>
+                            <table class="table table-head table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Tamaño</th>
+                                        <th style="text-align: center">Sección mínima agrafado</th>
+                                        <th style="text-align: center">Sección máxima agrafado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($terminales as $terminal)
+                                    <tbody>
+                                        <td style="text-align: center">{{$terminal[2]}}</td>
+                                        <td style="text-align: center">{{$terminal[3]}}</td>
+                                        <td style="text-align: center">{{$terminal[4]}}</td>
+                                        <td style="text-align: center">{{$terminal[5]}}</td>
+                                        <td style="text-align: center"><button wire:click="dropterminal({{ $terminal[6] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                    </tbody>
+                                @endforeach
+                            </table>
+                        @endif
                     </div>
                 
                     <div class="form-group">

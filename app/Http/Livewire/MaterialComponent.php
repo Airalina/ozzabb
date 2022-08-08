@@ -31,7 +31,7 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $addterminal=array(), $count_terminales=0,$terminales=array(),$searchs="",$addsello=array(), $count_sellos=0,$sellos=array(),$ma, $conector, $dolar,$ar_price, $search, $termi, $seli, $provider_material_code, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='code', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled;
+    public  $paginas=25, $addterminal=array(), $count_terminales=0,$terminales=array(),$searchs="",$addsello=array(), $count_sellos=0,$sellos=array(),$ma, $conector, $dolar,$ar_price, $search, $search_terminal= "", $termi, $seli, $provider_material_code, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='code', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled;
     public function render()
     {
         $this->dolar=Dollar::where('id',1)->first();
@@ -39,20 +39,19 @@ class MaterialComponent extends Component
         $mats = Material::where('code','like','%'.$this->search.'%')
                 ->orderBy($this->order);
         $this->materials = $mats->paginate($this->paginas);
-        
-        $this->info_term = Material::where('family','Terminales')
-        ->where(function($query) {
-            $query->orWhere('name','LIKE','%'.$this->search.'%')
-                  ->orwhere('code','LIKE','%'.$this->search.'%');
-        })->get();
 
-        $this->info_sell = Material::where('family', 'Sellos')
+        $this->info_term = Material::where('family', 'Terminales')
             ->where(function ($query) {
-                $query->orwhere('code', 'LIKE', '%' . $this->searchs . '%');
+                $query->orWhere('code', 'LIKE', '%' . $this->search_terminal . '%');
             })
             ->orderBy('code')
             ->get();
 
+        $this->info_sell = Material::where('family','Sellos')
+        ->where(function($query) {
+            $query->orwhere('code','LIKE','%'.$this->searchs.'%');
+        })->get();
+        
         $reservations_materials = $mats->get();
         $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
          
@@ -169,18 +168,21 @@ class MaterialComponent extends Component
         $this->addsello=[];
     }
 
-    public function addterminal(Material $terminal){
+    public function addterminal(Material $material){
         $flag=false;
         foreach($this->terminales as $ter){
-            if($terminal->id==$ter[0]){
+            if($material->id==$ter[0]){
                 $flag=true;
             }
         }
         if(!$flag){
-            $this->addterminal[0]=$terminal->id;
-            $this->addterminal[1]=$terminal->name;
-            $this->addterminal[2]=$terminal->code;
-            $this->addterminal[3]=$this->count_terminales;
+            $this->addterminal[0]=$material->id;
+            $this->addterminal[1]=$material->name;
+            $this->addterminal[2]=$material->code;
+            $this->addterminal[3]=$material->terminal->size;
+            $this->addterminal[4]=$material->terminal->minimum_section;
+            $this->addterminal[5]=$material->terminal->maximum_section;
+            $this->addterminal[6]=$this->count_terminales;
             $this->terminales[$this->count_terminales]=$this->addterminal;
             $this->count_terminales++;
         }   
@@ -210,10 +212,6 @@ class MaterialComponent extends Component
     public function dropsello($pos_sello){
         unset($this->sellos[$pos_sello]);
     }
-
-
-
-
 
     public function store(){
         $this->validate([
@@ -652,10 +650,13 @@ class MaterialComponent extends Component
             if($this->conn !=null){
                 foreach($this->terminal_id as $ter){
                     $material=Material::where('id',$ter->material_id)->first();
-                    $this->addterminal[0]=$ter->material_id;
+                    $this->addterminal[0]=$material->id;
                     $this->addterminal[1]=$material->name;
                     $this->addterminal[2]=$material->code;
-                    $this->addterminal[3]=$this->count_terminales;
+                    $this->addterminal[3]=$material->terminal->size;
+                    $this->addterminal[4]=$material->terminal->minimum_section;
+                    $this->addterminal[5]=$material->terminal->maximum_section;
+                    $this->addterminal[6]=$this->count_terminales;
                     $this->terminales[$this->count_terminales]=$this->addterminal;
                     $this->count_terminales++;
                 }
@@ -1127,11 +1128,13 @@ class MaterialComponent extends Component
             if($this->conn !=null){
                 foreach($this->terminal_id as $ter){
                     $material=Material::where('id',$ter->material_id)->first();
-                    $this->addterminal[0]=$ter->material_id;
+                    $this->addterminal[0]=$material->id;
                     $this->addterminal[1]=$material->name;
                     $this->addterminal[2]=$material->code;
-                    $this->addterminal[3]=$this->count_terminales;
-                    $this->terminales[$this->count_terminales]=$this->addterminal;
+                    $this->addterminal[3]=$material->terminal->size;
+                    $this->addterminal[4]=$material->terminal->minimum_section;
+                    $this->addterminal[5]=$material->terminal->maximum_section;
+                    $this->addterminal[6]=$this->count_terminales;
                     $this->count_terminales++;
                 }
                 foreach($this->seal_id as $sel){
