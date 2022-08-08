@@ -335,7 +335,7 @@
                             
                         </select>
                     </div>
-                    @if ($family != 'Cables')
+                    @if ($showColor)
                         <div class="form-group">
                             <label for="color">Color</label>
                             <select class="form-control form-control-sm" wire:model="color" id="color" disabled>

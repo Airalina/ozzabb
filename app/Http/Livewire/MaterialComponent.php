@@ -31,7 +31,7 @@ class MaterialComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
-    public  $paginas=25, $addterminal=array(), $count_terminales=0,$terminales=array(),$searchs="",$addsello=array(), $count_sellos=0,$sellos=array(),$ma, $conector, $dolar,$ar_price, $search, $search_terminal= "", $termi, $seli, $provider_material_code, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='code', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled;
+    public  $paginas=25, $addterminal=array(), $count_terminales=0,$terminales=array(),$searchs="",$addsello=array(), $count_sellos=0,$sellos=array(),$ma, $conector, $dolar,$ar_price, $search, $search_terminal= "", $termi, $seli, $provider_material_code, $connect, $rplce, $info, $hola="", $funcion="", $explora="inactivo",  $order='code', $material, $material_id, $code, $name, $family, $terminal, $connector, $seal ,$color, $description, $line_id, $usage_id, $replace_id, $stock_min, $stock_max, $stock, $line, $usage, $replace, $info_line, $info_usage, $info_term, $info_sell, $div, $info_con, $number_of_ways, $type, $size, $minimum_section, $maximum_section, $material_family, $material_replace, $idu, $material_up, $connector_up, $conn, $term, $sl, $cab, $terminal_id, $seal_id, $connector_id, $conn_id, $term_id, $cab_id, $terminal_up, $cable_up, $seal_up, $conn_del, $seal_del, $term_del, $cable_del, $mat_n, $info_pro, $provider, $unit, $presentation, $usd_price, $ars_price, $amount, $provider_prices, $id_provider_price, $id_provider, $marterial, $pro, $images = [], $imagenes = [], $images_up = [], $img, $addProvider, $name_provider, $addres_provider, $email_provider, $regex, $watertight, $section , $base_color, $line_color, $braid_configuration, $norm, $number_of_unipolar, $mesh_type, $operating_temperature, $term_material, $term_type, $minimum_diameter, $maximum_diameter, $seal_type, $tube_type, $tube_diameter, $wall_thickness, $contracted_diameter, $minimum_temperature, $maximum_temperature, $accesory_type, $clip_type, $long, $width, $hole_diameter, $acc, $tub, $sl_id, $tub_id, $acc_id, $clip_id, $provider_new, $searchproviders, $providers, $material_price, $term_size, $lock, $cover, $div_tube=false, $reservations=array(), $disabled, $showColor = false;
     public function render()
     {
         $this->dolar=Dollar::where('id',1)->first();
@@ -166,6 +166,7 @@ class MaterialComponent extends Component
         $this->addterminal=[];
         $this->sellos=[];
         $this->addsello=[];
+        $this->showColor = false;
     }
 
     public function addterminal(Material $material){
@@ -635,7 +636,8 @@ class MaterialComponent extends Component
         $this->info_usage=Usage::all();
         $this->info_con=Connector::all();
         $this->con();
-       
+        $this->showColor = ($material->family == 'Terminales' || $material->family == 'Cables') ? false : true;
+
         if($this->family == 'Conectores'){
             $this->conn = Connector::where('material_id',$material->id)->first();
             $this->conn_id=$this->conn->id;
@@ -1092,6 +1094,7 @@ class MaterialComponent extends Component
         $this->usage=$material_id->usage;
         $this->line=$material_id->line;
         $this->div=$material_id->family;
+        $this->showColor = ($material_id->family == 'Terminales' || $material_id->family == 'Cables') ? false : true;
         $this->images_up=json_decode($material_id->image);
         $this->images = json_decode($material_id->image);
         $this->info_line=Line::all();
@@ -1214,7 +1217,8 @@ class MaterialComponent extends Component
     public function con(){
         $this->div=$this->family;
         $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->where('code','!=',$this->code)->get();
-        
+        $this->showColor = ($this->family == 'Terminales' || $this->family == 'Cables') ? false : true;
+
         if(!empty($this->idu)){
             if($this->div == 'Conectores'){
                 $this->conn = Connector::where('material_id',$this->idu)->first();
