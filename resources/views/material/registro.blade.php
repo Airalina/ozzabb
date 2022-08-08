@@ -36,7 +36,7 @@
                     :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
                     :connect="$connect" :searchs="$searchs" :sellos="$sellos" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" />
 
-                @if ($family != 'Cables' && $family !='Terminales')
+                @if ($showColor)
                 <div class="form-group">
                     <label for="color">Color</label>
                     <select class="form-control form-control-sm" wire:model="color" id="color">
