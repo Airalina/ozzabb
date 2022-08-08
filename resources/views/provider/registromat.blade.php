@@ -99,9 +99,9 @@
                             </div>
                             @endif
                             <div class="form-group">
-                                <label for="amount">Código de material</label>
+                                <label for="amount">Código de proveedor</label>
                                 <input class="form-control form-control-sm" type="string" id="provider_material_code"
-                                    wire:model="provider_material_code" placeholder="Código del material interno del proveedor">
+                                    wire:model="provider_material_code" placeholder="Código del proveedor">
                             </div>
                             <div class="form-group">
                                 <label for="amount">Cantidad</label>
