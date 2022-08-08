@@ -178,11 +178,6 @@ class MaterialComponent extends Component
         $this->addsello=[];
     }
 
-
-
-
-
-
     public function addterminal(Material $terminal){
         $flag=false;
         foreach($this->terminales as $ter){
@@ -644,6 +639,7 @@ class MaterialComponent extends Component
         $this->info_line=Line::all();
         $this->info_usage=Usage::all();
         $this->info_con=Connector::all();
+        $this->con();
        
         if($this->family == 'Conectores'){
             $this->conn = Connector::where('material_id',$material->id)->first();
@@ -854,7 +850,7 @@ class MaterialComponent extends Component
                 $terminal_up->material_id=$this->idu;
                 $terminal_up->size=$this->size;
                 $terminal_up->minimum_section=(!empty($this->minimum_section)) ? $this->minimum_section : 0;
-                $terminal_up->maximum_section=(!empty($this->maximum_section)) ? $this->minimum_section : 0;
+                $terminal_up->maximum_section=(!empty($this->maximum_section)) ? $this->maximum_section : 0;
                 $terminal_up->material=$this->term_material;
                 $terminal_up->type=$this->term_type;
                 $terminal_up->save();
@@ -1209,7 +1205,7 @@ class MaterialComponent extends Component
 
     public function con(){
         $this->div=$this->family;
-        $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->get();
+        $this->material_family=Material::where('family','LIKE','%'.$this->div.'%')->where('code','!=',$this->code)->get();
         
         if(!empty($this->idu)){
             if($this->div == 'Conectores'){
