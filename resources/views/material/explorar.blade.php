@@ -362,7 +362,7 @@
                             cols="30" rows="3" readonly></textarea>
                     </div>
                     <div class="form-group">
-                        @if($family != "Cables" && $family != "Tubos")
+                        @if($family != "Cables" && $family != "Tubos" && $family != "Accesorios")
                         <label for="line">Línea</label>
                         <select class="form-control form-control-sm" wire:model="line" id="line" disabled>
                             <option selected>Selecciona una linea</option>
