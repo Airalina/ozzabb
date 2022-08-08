@@ -613,6 +613,7 @@ class MaterialComponent extends Component
     
     public function update(Material $material)
     {   
+        $this->search=null;
         $this->terminales=[];
         $this->addterminal=[];
         $this->count_terminales=0;
