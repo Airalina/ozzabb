@@ -41,13 +41,7 @@ class Providers extends Component
         ->orWhere('cuit','LIKE','%'.$this->search.'%')
         ->orderBy($this->order)->paginate($this->paginas);
         $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
-            ->orWhere('name','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('family','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('color','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
+                            ->get();
 
             if(isset($this->usd_price) && $this->usd_price > 0){
                 $this->ars_price = $this->usd_price*$this->ar_price;

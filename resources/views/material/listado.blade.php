@@ -60,7 +60,6 @@
                 </thead>
 
                 <tbody>
-
                     @forelse($materials as $material)
                     @if (!empty($material))
                         <tr class="registros">
@@ -118,7 +117,7 @@
                     @endif
                     @empty
                         <tr class="text-center">
-                            <td colspan="11" class="py-3 italic">No hay información</td>
+                            <td colspan="11" class="py-3 italic">{{ !empty($search) ? 'No hay materiales que coincidan con el código buscado' : 'No hay información' }}</td>
                         </tr>
                     @endforelse
                 </tbody>
