@@ -27,7 +27,7 @@
                                         <td style="text-align: center">{{ date('d-m-Y H:i', strtotime($order->buy_date))  }}</td>
                                         <td style="text-align: center">{{ count($order->buyorderdetails) }}</td>
                                         <td style="text-align: center">{{ $order->total_price }}</td>
-                                        @if($order->state==null)
+                                        @if($order->state==1)
                                             <td style="text-align: center">Mail enviado</td>
                                         @else
                                             <td style="text-align: center">Mail no enviado</td>
