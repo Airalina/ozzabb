@@ -109,7 +109,7 @@
                                     wire:model="amount" placeholder="Ingrese la cantidad">
                             </div>
                             <div class="form-group">
-                                <label for="unit">Unidad de packaging</label>
+                                <label for="unit">Packaging</label>
                                 <div class="d-flex">
                                     <input class="form-control form-control-sm" type="string" id="unit"
                                         wire:model="unit" placeholder="Ingrese las unidades">
