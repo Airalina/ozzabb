@@ -67,6 +67,11 @@ class Material extends Model
         return $this->hasMany(ReservationMaterial::class); 
     }
 
+    public function terminal()
+    {
+        return $this->hasOne(Terminal::class); 
+    }
+
     public function terminals()
     {
         return $this->hasMany(Terminal::class); 
