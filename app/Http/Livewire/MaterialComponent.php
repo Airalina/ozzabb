@@ -223,7 +223,7 @@ class MaterialComponent extends Component
 
     public function store(){
         $this->validate([
-            'code' => 'required',
+            'code' => 'required|unique:materials',
             'family' => 'required',
             'color' => 'nullable',
             'description' => 'max:500|nullable',
@@ -232,9 +232,10 @@ class MaterialComponent extends Component
             'replace' => 'nullable',
             'stock_min' => 'numeric|nullable|min:1|max:999999',
             'stock_max' => 'numeric|nullable|min:1|max:999999',
-            'images' => 'nullable'
+            'images.*' => 'nullable|max:20480',
         ],[
             'code.required' => 'El campo código es requerido',
+            'code.unique' => 'El campo código que inteta ingresar se encuentra en uso, debe ser único',
             'family.required' => 'El campo familia es requerido',
             'description.max' => 'El campo descripción no debe superar 500 carácteres',
             'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
@@ -243,6 +244,7 @@ class MaterialComponent extends Component
             'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
             'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
+            'images.*.max' => 'La imagen que inteta adjuntar superan el límite de peso (20MB)'
         ]);
         if($this->family == 'Conectores'){
             $this->validate([
@@ -735,7 +737,7 @@ class MaterialComponent extends Component
             'replace' => 'nullable',
             'stock_min' => 'numeric|nullable|min:1|max:999999',
             'stock_max' => 'numeric|nullable|min:1|max:999999',
-            'images' => 'nullable'
+            'images.*' => 'nullable|max:20480',
         ],[
             'code.required' => 'El campo código es requerido',
             'family.required' => 'El campo familia es requerido',
@@ -747,6 +749,7 @@ class MaterialComponent extends Component
             'stock_max.numeric' => 'El campo stock máximo es numérico (decimales separados por punto)',
             'stock_max.min' => 'El campo stock máximo debe ser un número mayor a 0(cero).',
             'stock_max.max' => 'El campo stock máximo es inferior a 6 digitos.',
+            'images.*.max' => 'La imagen que inteta adjuntar superan el límite de peso (20MB)'
         ]);
         $material_up =Material::find($this->idu);
         $material_up->name=$this->name;
