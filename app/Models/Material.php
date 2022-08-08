@@ -77,6 +77,11 @@ class Material extends Model
         return $this->hasMany(Seal::class); 
     }
     
+    public function seal()
+    {
+        return $this->hasOne(Seal::class); 
+    }
+
     public function cable()
     {
         return $this->hasOne(Cable::class, 'material_id');
