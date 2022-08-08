@@ -464,45 +464,35 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,2})?$/';
             if($this->tube_type=="Termocontraible"){
             $this->validate([
-                'tube_diameter' => 'numeric|required|regex: '.$regex,
-                'tube_type' => 'required',
-                'wall_thickness' => 'numeric|required|regex: '.$regex,
+                'tube_diameter' => 'numeric|nullable|regex: '.$regex,
+                'tube_type' => 'nullable',
+                'wall_thickness' => 'numeric|nullable|regex: '.$regex,
                 'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
                 'minimum_temperature' => 'numeric|nullable|min:0|max:9999',
                 'maximum_temperature' => 'numeric|nullable|min:0|max:9999',
             ], [
                 'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
-                'tube_diameter.required' => 'El campo Diámetro es requerido',
                 'tube_diameter.regex' => 'El campo Diámetro es un número de máximo 4 cifras con 2 posiciones decimal',
                 'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico (decimales separados por punto)',
-                'wall_thickness.required' => 'El campo Espesor de Pared es requerido',
                 'wall_thickness.regex' => 'El campo Espesor de Pared es un número de máximo 4 cifras con 2 posiciones decimal',
                 'contracted_diameter.numeric' => 'El campo Diámetro Contraído es numérico (decimales separados por punto)',
-                'contracted_diameter.required' => 'El campo Diámetro Contraído es requerido',
                 'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimal',
                 'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
-                'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
                 'minimum_temperature.min' => 'El campo Temperatura mínima de Servicio es como mínimo 0°C',
                 'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
                 'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
-                'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
                 'maximum_temperature.min' => 'El campo Temperatura máxima de Servicio es como mínimo 0°C',
                 'maximum_temperature.max' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
-                 'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
-                          ]);
+            ]);
             }else{
                 $this->validate([
-                    'tube_diameter' => 'numeric|required|regex: '.$regex,
-                    'tube_type' => 'required',
-                    'wall_thickness' => 'numeric|required|regex: '.$regex,
+                    'tube_diameter' => 'numeric|nullable|regex: '.$regex,
+                    'wall_thickness' => 'numeric|nullable|regex: '.$regex,
                 ], [
                     'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
-                    'tube_diameter.required' => 'El campo Diámetro es requerido',
                     'tube_diameter.regex' => 'El campo Diámetro es un número de máximo 4 cifras con 2 posiciones decimal',
                     'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico (decimales separados por punto)',
-                    'wall_thickness.required' => 'El campo Espesor de Pared es requerido',
                     'wall_thickness.regex' => 'El campo Espesor de Pared es un número de máximo 4 cifras con 2 posiciones decimal',
-                    'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
                               ]);
             }
             $this->material=Material::create([
@@ -926,32 +916,26 @@ class MaterialComponent extends Component
             $regex = '/^[\d]{0,4}(\.[\d]{1,8})?$/';
 
             $this->validate([
-                'tube_diameter' => 'numeric|required|regex: '.$regex,
-                'tube_type' => 'required',
-                'wall_thickness' => 'numeric|required|regex: '.$regex,
-                'contracted_diameter' => 'numeric|required|regex: '.$regex,
-                'minimum_temperature' => 'numeric|required|min:0|max:9999',
+                'tube_diameter' => 'numeric|nullable|regex: '.$regex,
+                'tube_type' => 'nullable',
+                'wall_thickness' => 'numeric|nullable|regex: '.$regex,
+                'contracted_diameter' => 'numeric|nullable|regex: '.$regex,
+                'minimum_temperature' => 'numeric|nullable|min:0|max:9999',
                 'maximum_temperature' => 'numeric|nullable|min:0|max:9999',
             ], [
                 'tube_diameter.numeric' => 'El campo Diámetro es numérico (decimales separados por punto)',
-                'tube_diameter.required' => 'El campo Diámetro es requerido',
                 'tube_diameter.regex' => 'El campo Diámetro es un número de máximo 4 cifras con 2 posiciones decimales',
                 'wall_thickness.numeric' => 'El campo Espesor de Pared es numérico (decimales separados por punto)',
-                'wall_thickness.required' => 'El campo Espesor de Pared es requerido',
                 'wall_thickness.regex' => 'El campo Espesor de Pared es un número de máximo 4 cifras con 2 posiciones decimales',
                 'contracted_diameter.numeric' => 'El campo Diámetro Contraído es numérico (decimales separados por punto)',
-                'contracted_diameter.required' => 'El campo Diámetro Contraído es requerido',
                 'contracted_diameter.regex' => 'El campo Diámetro Contraído es un número de máximo 4 cifras con 2 posiciones decimales',
                 'minimum_temperature.numeric' => 'El campo Temperatura mínima de Servicio es numérico (decimales separados por punto)',
-                'minimum_temperature.required' => 'El campo Temperatura mínima de Servicio es requerido',
                 'minimum_temperature.min' => 'El campo Temperatura es como mínimo 0°C',
                 'minimum_temperature.max' => 'El campo Temperatura mínima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
                 'maximum_temperature.numeric' => 'El campo Temperatura máxima de Servicio es numérico (decimales separados por punto)',
-                'maximum_temperature.required' => 'El campo Temperatura máxima de Servicio es requerido',
                 'maximum_temperature.min' => 'El campo Temperatura máxima es como mínimo -0°C',
                 'maximum_temperature.max' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimales',
-                 'tube_type.required' => 'Seleccione una opción del campo Tipo de Tubo',
-                          ]);
+            ]);
 
             $tube_up =Tube::find($this->tub_id);
             if($tube_up == null){
