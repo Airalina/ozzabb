@@ -324,15 +324,15 @@
                     @break
 
                     @endswitch
+                    @if ($show_replace)
                     <div class="form-group">
                         <label for="replace">Reemplazo</label>
                         <select class="form-control form-control-sm" wire:model="replace" id="replace" disabled>
-                            @if (!empty($rplce))
-                            <option value="{{ $rplce->id }}"> {{ $rplce->name }}</option>
-                            @else 
-                            <option value="">Sin reemplazo</option>
+                            @if (!empty($replace))
+                            <option value="{{ $replace->id }}"> {{ $replace->name }}</option>
+                            @else
+                            <option value=""> Sin reemplazo </option>
                             @endif
-                            
                         </select>
                     </div>
                     @if ($showColor)

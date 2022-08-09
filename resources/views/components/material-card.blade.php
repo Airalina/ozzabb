@@ -379,22 +379,13 @@
                 @break
                 
             @endswitch
-            @if ($materialFamily)
+            @if ($showReplace)
                 <div class="form-group">
                     <label for="replace">Reemplazo</label>
                     <select class="form-control form-control-sm" wire:model="replace" id="replace">
-                        @if ($rplce != null)
-                            <option value="{{ $rplce->id }}" selected>{{ $rplce->name }}</option>
-                        @else
-                            <option selected>Seleccione un reemplazo</option>
-                        @endif
-                        @foreach ($materialFamily as $rep)
-                            @if ($rplce != null)
-                                @if ($rplce->id === $rep->id)
-                                    @php continue;  @endphp
-                                @endif
-                            @endif
-                            <option value="{{ $rep->id }}"> {{ $rep->name }}</option>
+                        <option selected value="" hidden>Seleccione un reemplazo</option>
+                        @foreach ($materialFamily as $material)
+                            <option value="{{ $material->id }}"> {{ $material->name }}</option>
                         @endforeach
                     </select>
                 </div>
