@@ -324,7 +324,6 @@
                     @break
 
                     @endswitch
-                    @if ($show_replace)
                     <div class="form-group">
                         <label for="replace">Reemplazo</label>
                         <select class="form-control form-control-sm" wire:model="replace" id="replace" disabled>
@@ -335,7 +334,6 @@
                             @endif
                         </select>
                     </div>
-                    @endif
                     @if ($showColor)
                         <div class="form-group">
                             <label for="color">Color</label>
