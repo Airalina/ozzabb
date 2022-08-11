@@ -379,6 +379,7 @@
                 @break
                 
             @endswitch
+            @if ($showReplace)
                 <div class="form-group">
                     <label for="replace">Reemplazo</label>
                     <select class="form-control form-control-sm" wire:model="replace" id="replace">
@@ -388,4 +389,4 @@
                         @endforeach
                     </select>
                 </div>
-
+            @endif
