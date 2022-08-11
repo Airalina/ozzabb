@@ -1271,26 +1271,27 @@ class MaterialComponent extends Component
             foreach($terminals_of_connector as $t_o_c){
                 $t_o_c->delete();
             }
-            $this->conn_del->delete();
+            $deleteFamily = $this->conn_del ? $this->conn_del->delete() : '';
         }elseif($this->material->family == 'Terminales'){
-            $this->term_del = Terminal::where('material_id',$this->material->id)->first();
-            $this->term_del->delete();
+            $term_del = Terminal::where('material_id',$this->material->id)->first();
+            $deleteFamily = $term_del ? $term_del->delete() : '';
         }elseif($material->family == 'Cables'){
-         $this->cable_del = Cable::where('material_id',$this->material->id)->first();
-         $this->cable_del->delete();
+            $cable_del = Cable::where('material_id',$this->material->id)->first();
+            $deleteFamily = $cable_del ? $cable_del->delete() : '';
         }elseif($this->material->family == 'Tubos'){
-         $tube_del = Tube::where('material_id',$this->material->id)->first();
-         $tube_del->delete();
+            $tube_del = Tube::where('material_id',$this->material->id)->first();
+            $deleteFamily = $tube_del ? $tube_del->delete() : '';
         }elseif($this->material->family == 'Clips'){
-         $clip_del = Clip::where('material_id',$this->material->id)->first();
-         $clip_del->delete();
+            $clip_del = Clip::where('material_id',$this->material->id)->first();
+            $deleteFamily = $clip_del ? $clip_del->delete() : '';
         }elseif($this->material->family == 'Accesorios'){
-         $accesory_del = Accessory::where('material_id',$this->material->id)->first();
-         $accesory_del->delete();
+            $accesory_del = Accessory::where('material_id',$this->material->id)->first();
+            $deleteFamily = $accesory_del ? $accesory_del->delete() : '';
         }elseif($this->material->family == 'Sellos'){
-         $this->seal_del = Seal::where('material_id',$this->material->id)->first();
-         $this->seal_del->delete();
+            $seal_del = Seal::where('material_id',$this->material->id)->first();
+            $deleteFamily = $seal_del ? $seal_del->delete() : '';
         }
+        
         if(!empty($this->material->providerprices)){
             foreach ($this->material->providerprices as $provider_price) {
                  $provider_price->delete();
