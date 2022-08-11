@@ -31,10 +31,10 @@
                         <option value="Accesorios">accesorios</option>
                         <option value="Clips">clips</option>
                     </select>
-                </div>
-                <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id" :search="$search" :terminales="$terminales" :search_terminal="$search_terminal"
-                    :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
-                    :connect="$connect" :searchs="$searchs" :sellos="$sellos" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" :show_replace="$show_replace"  />
+                </div> 
+                <x-material-card :div="$div" :search="$search" :terminales="$terminales" :searchTerminal="$search_terminal"
+                     :infoTerm="$info_term" :infoSell="$info_sell" :connectorId="$connector_id"
+                    :connect="$connect" :searchs="$searchs" :sellos="$sellos" :infoCon="$info_con" :materialFamily="$material_family" :divTube="$div_tube" :showReplace="$show_replace"  />
 
                 @if ($showColor)
                 <div class="form-group">
