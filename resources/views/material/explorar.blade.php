@@ -335,6 +335,7 @@
                             @endif
                         </select>
                     </div>
+                    @endif
                     @if ($showColor)
                         <div class="form-group">
                             <label for="color">Color</label>
@@ -441,25 +442,24 @@
                     </thead>
                     <tbody>
                         @if($provider_prices)
-                        @forelse($provider_prices as $provider_price)
-                        <tr>
-                            <td>{{ $provider_price->material->code }}</td>
-                            <td>{{ $provider_price->material->name }}</td>
-                            <td>{{ $provider_price->provider->name }}</td>
-                            <td>{{ $provider_price->unit }} {{ $provider_price->presentation }}</td>
-                            <td>{{ $provider_price->created_at->format('d/m/Y') }}</td>
-                            <td>{{ $provider_price->usd_price }}</td>
-
-                            @if (auth()->user()->can('updatematerial', auth()->user()))
-                            <td><button wire:click="updatemat({{ $provider_price->id }})" type="button"
-                                    class="btn btn-success btn-sm">Actualizar</button></td>
-                            @endif
-                        </tr>
-                        @empty
-                        <tr class="text-center">
-                            <td colspan="4" class="py-3 italic">No hay información</td>
-                        </tr>
-                        @endforelse
+                            @forelse($provider_prices as $provider_price)
+                            <tr>
+                                <td>{{ $provider_price->material->code }}</td>
+                                <td>{{ $provider_price->material->name }}</td>
+                                <td>{{ $provider_price->provider->name }}</td>
+                                <td>{{ $provider_price->unit }} {{ $provider_price->presentation }}</td>
+                                <td>{{ $provider_price->created_at->format('d/m/Y') }}</td>
+                                <td>{{ $provider_price->usd_price }}</td>
+                                @if(auth()->user()->can('updatematerial', auth()->user()))
+                                <td><button wire:click="updatemat({{ $provider_price->id }})" type="button"
+                                        class="btn btn-success btn-sm">Actualizar</button></td>
+                                @endif
+                            </tr>
+                            @empty
+                            <tr class="text-center">
+                                <td colspan="4" class="py-3 italic">No hay información</td>
+                            </tr>
+                            @endforelse
                         @endif
                     </tbody>
                 </table>
