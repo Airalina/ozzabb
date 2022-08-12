@@ -101,9 +101,9 @@
                             </div>
                             @endif
                             <div class="form-group">
-                                <label for="amount">Código de material</label>
+                                <label for="amount">Código de proveedor</label>
                                 <input class="form-control form-control-sm" type="string" id="provider_material_code"
-                                    wire:model="provider_material_code" placeholder="Código del material interno del proveedor">
+                                    wire:model="provider_material_code" placeholder="Código del proveedor">
                             </div>
                             <div class="form-group">
                                 <label for="amount">Cantidad</label>
@@ -111,7 +111,7 @@
                                     wire:model="amount" placeholder="Ingrese la cantidad">
                             </div>
                             <div class="form-group">
-                                <label for="unit">Unidad de packaging</label>
+                                <label for="unit">Packaging</label>
                                 <div class="d-flex">
                                     <input class="form-control form-control-sm" type="string" id="unit"
                                         wire:model="unit" placeholder="Ingrese las unidades">

@@ -4,16 +4,18 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class img-update-card extends Component
+class ImgUpdateCard extends Component
 {
+    public $images, $material; 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($images = [], $material)
     {
-        //
+        $this->images = $images;
+        $this->material = $material;
     }
 
     /**

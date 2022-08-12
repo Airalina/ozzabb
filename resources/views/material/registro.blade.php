@@ -31,12 +31,12 @@
                         <option value="Accesorios">accesorios</option>
                         <option value="Clips">clips</option>
                     </select>
-                </div>
-                <x-material-card :div="$div" :terminal_id="$terminal_id" :termi="$termi" :seal_id="$seal_id" :search="$search" :terminales="$terminales"
-                    :seli="$seli" :info_term="$info_term" :info_sell="$info_sell" :connector_id="$connector_id"
-                    :connect="$connect" :searchs="$searchs" :sellos="$sellos" :info_con="$info_con" :material_family="$material_family" :rplce="$rplce" :div_tube="$div_tube" />
+                </div> 
+                <x-material-card :div="$div" :search="$search" :terminales="$terminales" :searchTerminal="$search_terminal"
+                     :infoTerm="$info_term" :infoSell="$info_sell" :connectorId="$connector_id"
+                    :connect="$connect" :searchs="$searchs" :sellos="$sellos" :infoCon="$info_con" :materialFamily="$material_family" :divTube="$div_tube" :showReplace="$show_replace"  />
 
-                @if ($family != 'Cables' && $family !='Terminales')
+                @if ($showColor)
                 <div class="form-group">
                     <label for="color">Color</label>
                     <select class="form-control form-control-sm" wire:model="color" id="color">
@@ -63,7 +63,7 @@
                         cols="30" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                @if($family != "Cables" && $family != "Tubos")
+                @if($family != "Cables" && $family != "Tubos" && $family!="Accesorios")
                     <label for="line">Línea</label>
                     <select class="form-control form-control-sm" wire:model="line" id="line">
                         <option selected>Selecciona una linea</option> 
@@ -107,7 +107,7 @@
                     <label for="exampleInputFile">Imagen</label>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input wire:model="images" type="file" name="images[]" class="custom-file-input" multiple>
+                            <input wire:model="images" accept=".png,.jpg" type="file" name="images[]" class="custom-file-input" multiple>
                             <label class="custom-file-label" for="exampleInputFile">Selecciona las imágenes</label>
                         </div>
                     </div>

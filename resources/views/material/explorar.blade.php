@@ -216,6 +216,7 @@
                     <div class="form-group">
                         <label for="term_material">Material</label>
                         <select class="form-control form-control-sm" wire:model="term_material" id="term_material" disabled>
+                            <option value="">Seleccione un material</option>
                             <option value="Latón">Latón</option>
                             <option value="Estañado">Estañado</option>
                         </select>
@@ -223,6 +224,7 @@
                     <div class="form-group">
                         <label for="term_type">Tipo</label>
                         <select class="form-control form-control-sm" wire:model="term_type" id="term_type" disabled>
+                            <option value="">Seleccione un tipo</option>
                             <option value="Macho">Macho</option>
                             <option value="Hembra">Hembra</option>
                             <option value="Ojal">Ojal</option>
@@ -325,15 +327,14 @@
                     <div class="form-group">
                         <label for="replace">Reemplazo</label>
                         <select class="form-control form-control-sm" wire:model="replace" id="replace" disabled>
-                            @if (!empty($rplce))
-                            <option value="{{ $rplce->id }}"> {{ $rplce->name }}</option>
-                            @else 
-                            <option value="">Sin reemplazo</option>
+                            @if (!empty($replace))
+                            <option value="{{ $replace->id }}"> {{ $replace->name }}</option>
+                            @else
+                            <option value=""> Sin reemplazo </option>
                             @endif
-                            
                         </select>
                     </div>
-                    @if ($family != 'Cables')
+                    @if ($showColor)
                         <div class="form-group">
                             <label for="color">Color</label>
                             <select class="form-control form-control-sm" wire:model="color" id="color" disabled>
@@ -360,7 +361,7 @@
                             cols="30" rows="3" readonly></textarea>
                     </div>
                     <div class="form-group">
-                        @if($family != "Cables" && $family != "Tubos")
+                        @if($family != "Cables" && $family != "Tubos" && $family != "Accesorios")
                         <label for="line">Línea</label>
                         <select class="form-control form-control-sm" wire:model="line" id="line" disabled>
                             <option selected>Selecciona una linea</option>
@@ -439,25 +440,24 @@
                     </thead>
                     <tbody>
                         @if($provider_prices)
-                        @forelse($provider_prices as $provider_price)
-                        <tr>
-                            <td>{{ $provider_price->material->code }}</td>
-                            <td>{{ $provider_price->material->name }}</td>
-                            <td>{{ $provider_price->provider->name }}</td>
-                            <td>{{ $provider_price->unit }} {{ $provider_price->presentation }}</td>
-                            <td>{{ $provider_price->created_at->format('d/m/Y') }}</td>
-                            <td>{{ $provider_price->usd_price }}</td>
-
-                            @if (auth()->user()->can('updatematerial', auth()->user()))
-                            <td><button wire:click="updatemat({{ $provider_price->id }})" type="button"
-                                    class="btn btn-success btn-sm">Actualizar</button></td>
-                            @endif
-                        </tr>
-                        @empty
-                        <tr class="text-center">
-                            <td colspan="4" class="py-3 italic">No hay información</td>
-                        </tr>
-                        @endforelse
+                            @forelse($provider_prices as $provider_price)
+                            <tr>
+                                <td>{{ $provider_price->material->code }}</td>
+                                <td>{{ $provider_price->material->name }}</td>
+                                <td>{{ $provider_price->provider->name }}</td>
+                                <td>{{ $provider_price->unit }} {{ $provider_price->presentation }}</td>
+                                <td>{{ $provider_price->created_at->format('d/m/Y') }}</td>
+                                <td>{{ $provider_price->usd_price }}</td>
+                                @if(auth()->user()->can('updatematerial', auth()->user()))
+                                <td><button wire:click="updatemat({{ $provider_price->id }})" type="button"
+                                        class="btn btn-success btn-sm">Actualizar</button></td>
+                                @endif
+                            </tr>
+                            @empty
+                            <tr class="text-center">
+                                <td colspan="4" class="py-3 italic">No hay información</td>
+                            </tr>
+                            @endforelse
                         @endif
                     </tbody>
                 </table>

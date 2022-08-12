@@ -41,13 +41,7 @@ class Providers extends Component
         ->orWhere('cuit','LIKE','%'.$this->search.'%')
         ->orderBy($this->order)->paginate($this->paginas);
         $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
-            ->orWhere('name','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('family','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('color','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
+                            ->get();
 
             if(isset($this->usd_price) && $this->usd_price > 0){
                 $this->ars_price = $this->usd_price*$this->ar_price;
@@ -325,27 +319,26 @@ class Providers extends Component
     public function storemat(Provider $provider){
         
         $this->validar= $this->validate([
+            'material_new'=>'required',
             'amount' => 'nullable|numeric|min:0',
-            'unit' => 'required|numeric|min:0',
-            'presentation' => 'required',
-            'provider_material_code' => 'required|string|min:1|max:50',
-            'usd_price' => 'required|numeric|min:0',
-            'ars_price' => 'required|numeric|min:0',
+            'unit' => 'nullable|numeric|min:0',
+            'presentation' => 'nullable',
+            'provider_material_code' => 'nullable|string|min:1|max:50',
+            'usd_price' => 'nullable|numeric|min:0',
+            'ars_price' => 'nullable|numeric|min:0',
           ], [
+            'material_new.required'=>'La selección de un material, es requerida',
             'amount.numeric' => 'El campo cantidad debe ser numérico (decimales separados por punto)',
             'amount.min' => 'El campo cantidad debe ser mayor a cero (0)',
-            'unit.required' => 'El campo unidad es requerido',
             'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
             'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
-            'presentation.required' => 'Seleccione una opción para el campo de la unidad de packaging',
-            'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
-            'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
-            'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
-            'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
-            'usd_price.required' => 'El campo precio U$D es requerido',
+            'presentation.required' => 'Seleccione una opción para el campo de la unidad de packaging',  
+            'provider_material_code.required' => 'El código de proveedor es requerido',
+            'provider_material_code.string' => 'El código de proveedor es requerido',
+            'provider_material_code.min'=>'El código de proveedor tiene como mínimo un caracter',
+            'provider_material_code.max'=>'El código de proveedor tiene como máximo cincuenta caracteres',
             'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
             'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
-            'ars_price.required' => 'El campo precio AR$ es requerido',
             'ars_price.numeric' => 'El campo precio AR$ es numérico (decimales separados por punto)',
             'ars_price.min' => 'El campo  AR$  debe ser mayor a cero (0)',
           ]);
@@ -392,6 +385,7 @@ class Providers extends Component
         $this->usd_price=$provider_price->usd_price;
         $this->ars_price=$provider_price->ars_price;;
         $this->mat_n = $provider_price->material;
+        $this->provider_material_code=$provider_price->provider_code;
         $this->info_mat = Material::all();        
         $this->code=null;
         $this->name_material=null;
@@ -449,27 +443,26 @@ class Providers extends Component
     public function editarmat(){
        
       $this->validar=  $this->validate([
+            'material_new'=>'required',
             'amount' => 'nullable|numeric|min:0',
-            'unit' => 'required|numeric|min:0',
-            'presentation' => 'required',
-            'provider_material_code' => 'required|string|min:1|max:50',
-            'usd_price' => 'required|numeric|min:0',
-            'ars_price' => 'required|numeric|min:0',
+            'unit' => 'nullable|numeric|min:0',
+            'presentation' => 'nullable',
+            'provider_material_code' => 'nullable|string|min:1|max:50',
+            'usd_price' => 'nullable|numeric|min:0',
+            'ars_price' => 'nullable|numeric|min:0',
           ], [
+            'material_new.required'=>'La selección de un material, es requerida',
             'amount.numeric' => 'El campo cantidad debe ser numérico (decimales separados por punto)',
             'amount.min' => 'El campo cantidad debe ser mayor a cero (0)',
-            'unit.required' => 'El campo unidad es requerido',
             'unit.numeric' => 'El campo unidad debe ser numérico (decimales separados por punto)',
             'unit.min' => 'El campo unidad debe ser mayor a cero (0)',
             'presentation.required' => 'Seleccione una opción para el campo de la unidad de packaging',
-            'provider_material_code.required' => 'El código de material interno del proveedor es requerido',
-            'provider_material_code.string' => 'El código de material interno del proveedor es requerido',
-            'provider_material_code.min'=>'El código de material interno del proveedor tiene como mínimo un caracter',
-            'provider_material_code.max'=>'El código de material interno del proveedor tiene como máximo cincuenta caracteres',
-            'usd_price.required' => 'El campo precio U$D es requerido',
+            'provider_material_code.required' => 'El código de proveedor es requerido',
+            'provider_material_code.string' => 'El código de proveedor es requerido',
+            'provider_material_code.min'=>'El código de proveedor tiene como mínimo un caracter',
+            'provider_material_code.max'=>'El código de proveedor tiene como máximo cincuenta caracteres',
             'usd_price.numeric' => 'El campo precio U$D debe ser numérico (decimales separados por punto)',
             'usd_price.min' => 'El campo  U$D  debe ser mayor a cero (0)',
-            'ars_price.required' => 'El campo precio AR$ es requerido',
             'ars_price.numeric' => 'El campo precio AR$ es numérico (decimales separados por punto)',
             'ars_price.min' => 'El campo  AR$  debe ser mayor a cero (0)',
         ]);

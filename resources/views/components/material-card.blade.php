@@ -2,88 +2,108 @@
                 @case("Conectores")
                     <div class="form-group">
                         <label for="terminal">Terminales Asociado</label>
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input wire:model="search" type="text" class="form-control float-right"
+                        <div class="input-group input-group-sm mb-4" style="width: 150px;">
+                            <input wire:model="search_terminal" type="text" class="form-control float-right"
                                 placeholder="Buscar Material...">
                         </div>
-                        @if($search!=null)
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="text-align: center">Codigo</th>
-                                    <th style="text-align: center">Nombre</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            @foreach($infoTerm as $terminal)
-                                <tbody>
-                                    <td>{{$terminal->code}}</td>
-                                    <td>{{$terminal->name}}</td>
-                                    <td><button wire:click="addterminal({{ $terminal->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
-                                </tbody>
-                            @endforeach
-                        </table>
+                        @if($searchTerminal!=null)
+                            <table class="table table-head table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Tamaño</th>
+                                        <th style="text-align: center">Sección mínima agrafado</th>
+                                        <th style="text-align: center">Sección máxima agrafado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($infoTerm as $material)
+                                    <tbody>
+                                        <td style="text-align: center">{{$material->code}}</td>
+                                        <td style="text-align: center">@if(isset($material["terminal"]["size"])){{$material["terminal"]["size"]}}@endif</td>
+                                        <td style="text-align: center">@if(isset($material["terminal"]["minimum_section"])){{$material["terminal"]["minimum_section"]}}@endif</td>
+                                        <td style="text-align: center">@if(isset($material["terminal"]["maximum_section"])){{$material["terminal"]["maximum_section"]}}@endif</td>
+                                        <td style="text-align: center"><button wire:click="addterminal({{ $material->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                    </tbody>
+                                @endforeach
+                            </table>
                         @endif
-                        <label for="terminal">Terminales Asociados Seleccionados:</label>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="text-align: center">Codigo</th>
-                                    <th style="text-align: center">Nombre</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            @foreach($terminales as $terminal)
-                                <tbody>
-                                    <td>{{$terminal[2]}}</td>
-                                    <td>{{$terminal[1]}}</td>
-                                    <td><button wire:click="dropterminal({{ $terminal[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
-                                </tbody>
-                            @endforeach
-                        </table>
+                        @if (count($terminales) > 0)
+                            <label for="terminal">Terminales Asociados Seleccionados:</label>
+                            <table class="table table-head table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Codigo</th>
+                                        <th style="text-align: center">Tamaño</th>
+                                        <th style="text-align: center">Sección mínima agrafado</th>
+                                        <th style="text-align: center">Sección máxima agrafado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @foreach($terminales as $terminal)
+                                    <tbody>
+                                        <td style="text-align: center">{{$terminal[2]}}</td>
+                                        <td style="text-align: center">{{$terminal[3]}}</td>
+                                        <td style="text-align: center">{{$terminal[4]}}</td>
+                                        <td style="text-align: center">{{$terminal[5]}}</td>
+                                        <td style="text-align: center"><button wire:click="dropterminal({{ $terminal[6] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                    </tbody>
+                                @endforeach
+                            </table>
+                        @endif
                     </div>
                 
                     <div class="form-group">
                         <label for="sello">Sellos Asociados</label>
-                            <div class="input-group input-group-sm" style="width: 150px;">
+                            <div class="input-group input-group-sm mb-4" style="width: 150px;">
                                 <input wire:model="searchs" type="text" class="form-control float-right"
                                     placeholder="Buscar Material...">
                             </div>
                             @if($searchs!=null)
-                            <table>
+                            <table class="table table-head table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: center">Codigo</th>
-                                        <th style="text-align: center">Nombre</th>
+                                        <th style="text-align: center">Código</th>
+                                        <th style="text-align: center">Tipo</th>
+                                        <th style="text-align: center">Diámetro mínimo de cable</th>
+                                        <th style="text-align: center">Diámetro máximo de cable</th>
                                         <th></th>
                                     </tr>
                                 </thead>
-                                @foreach($infoSell as $sello)
+                                @foreach($infoSell as $material)
                                     <tbody>
-                                        <td>{{$sello->code}}</td>
-                                        <td>{{$sello->name}}</td>
-                                        <td><button wire:click="addsello({{ $sello->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
+                                        <td style="text-align: center">{{ $material->code }}</td>
+                                        <td style="text-align: center">@if(isset($material["seal"]["type"])){{ $material["seal"]["type"]}}@endif</td>
+                                        <td style="text-align: center">@if(isset($material["seal"]["minimum_diameter"])){{ $material["seal"]["minimum_diameter"] }}@endif</td>
+                                        <td style="text-align: center">@if(isset($material["seal"]["maximum_diameter"])){{ $material["seal"]["maximum_diameter"] }}@endif</td>
+                                        <td style="text-align: center"><button wire:click="addsello({{ $material->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
                                     </tbody>
                                 @endforeach
                             </table>
                             @endif
+                            @if (count($sellos) > 0)
                             <label for="sello">Sellos Asociados Seleccionados:</label>
-                            <table>
+                            <table class="table table-head table-sm">
                                 <thead>
-                                    <tr>
-                                        <th style="text-align: center">Codigo</th>
-                                        <th style="text-align: center">Nombre</th>
+                                    <tr> 
+                                        <th style="text-align: center">Código</th>
+                                        <th style="text-align: center">Tipo</th>
+                                        <th style="text-align: center">Diámetro mínimo de cable</th>
+                                        <th style="text-align: center">Diámetro máximo de cable</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 @foreach($sellos as $sello)
                                     <tbody>
-                                        <td>{{$sello[2]}}</td>
-                                        <td>{{$sello[1]}}</td>
-                                        <td><button wire:click="dropsello({{ $sello[3] }})" type="button"  class="btn btn-danger btn-sm">-</td>
+                                        <td style="text-align: center">{{ $sello[2] }}</td>
+                                        <td style="text-align: center">{{ $sello[3] }}</td>
+                                        <td style="text-align: center">{{ $sello[4] }}</td>
+                                        <td style="text-align: center">{{ $sello[5] }}</td>
+                                        <td style="text-align: center"><button wire:click="dropsello({{ $sello[0] }})" type="button"  class="btn btn-danger btn-sm">-</td>
                                     </tbody>
                                 @endforeach
                             </table>
+                            @endif
                     </div>
                     <div class="form-group">
                         <label for="number_of_ways">Cantidad de vías</label>
@@ -154,6 +174,7 @@
                     <div class="form-group">
                         <label for="base_color">Color base</label>
                         <select class="form-control form-control-sm" wire:model="base_color" id="base_color">
+                            <option selected value="">Selecciona un color</option>
                             <option value="Negro" class="text-dark">Negro</option>
                             <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
@@ -172,6 +193,7 @@
                     <div class="form-group">
                         <label for="line_color">Color Línea</label>
                         <select class="form-control form-control-sm" wire:model="line_color" id="line_color">
+                            <option selected value="">Selecciona un color</option>
                             <option value="Negro" class="text-dark">Negro</option>
                             <option value="Marrón" style="color:saddlebrown">Marrón</option>
                             <option value="Rojo" class="text-danger">Rojo</option>
@@ -357,22 +379,13 @@
                 @break
                 
             @endswitch
-            @if ($materialFamily)
+            @if ($showReplace)
                 <div class="form-group">
                     <label for="replace">Reemplazo</label>
                     <select class="form-control form-control-sm" wire:model="replace" id="replace">
-                        @if ($rplce != null)
-                            <option value="{{ $rplce->id }}" selected>{{ $rplce->name }}</option>
-                        @else
-                            <option selected>Seleccione un reemplazo</option>
-                        @endif
-                        @foreach ($materialFamily as $rep)
-                            @if ($rplce != null)
-                                @if ($rplce->id === $rep->id)
-                                    @php continue;  @endphp
-                                @endif
-                            @endif
-                            <option value="{{ $rep->id }}"> {{ $rep->name }}</option>
+                        <option selected value="" hidden>Seleccione un reemplazo</option>
+                        @foreach ($materialFamily as $material)
+                            <option value="{{ $material->id }}"> {{ $material->name }}</option>
                         @endforeach
                     </select>
                 </div>
