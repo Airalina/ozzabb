@@ -187,6 +187,7 @@ class MaterialComponent extends Component
             $this->terminales[$this->count_terminales]=$this->addterminal;
             $this->count_terminales++;
         }   
+        $this->search_terminal="";
     }
     public function dropterminal($pos_terminal){
         unset($this->terminales[$pos_terminal]);
@@ -209,6 +210,7 @@ class MaterialComponent extends Component
             $this->sellos[$material->id]=$this->addsello;
             $this->count_sellos++;
         }   
+        $this->searchs="";
     }
     public function dropsello($pos_sello){
         unset($this->sellos[$pos_sello]);
