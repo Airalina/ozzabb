@@ -20,9 +20,9 @@
                                 @foreach($infoTerm as $material)
                                     <tbody>
                                         <td style="text-align: center">{{$material->code}}</td>
-                                        <td style="text-align: center">@if($material->terminal->size=!null){{$material->terminal->size}}@endif</td>
-                                        <td style="text-align: center">@if($material->terminal->minimum_section=!null){{$material->terminal->minimum_section}}@endif</td>
-                                        <td style="text-align: center">@if($material->terminal->maximum_section=!null){{$material->terminal->maximum_section}}@endif</td>
+                                        <td style="text-align: center">{{$material["terminal"]["size"]}}</td>
+                                        <td style="text-align: center">{{$material["terminal"]["minimum_section"]}}</td>
+                                        <td style="text-align: center">{{$material["terminal"]["maximum_section"]}}</td>
                                         <td style="text-align: center"><button wire:click="addterminal({{ $material->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
                                     </tbody>
                                 @endforeach
@@ -73,9 +73,9 @@
                                 @foreach($infoSell as $material)
                                     <tbody>
                                         <td style="text-align: center">{{ $material->code }}</td>
-                                        <td style="text-align: center">@if($material->seal->type=!null){{ $material->seal->type }}@endif</td>
-                                        <td style="text-align: center">@if($material->seal->minimum_diameter=!null){{ $material->seal->minimum_diameter }}@endif</td>
-                                        <td style="text-align: center">@if($material->seal->maximum_diameter=!null){{ $material->seal->maximum_diameter }}@endif</td>
+                                        <td style="text-align: center">{{ $material["seal"]["type"]}}</td>
+                                        <td style="text-align: center">{{ $material["seal"]["minimum_diameter"] }}</td>
+                                        <td style="text-align: center">{{ $material["seal"]["maximum_diameter"] }}</td>
                                         <td style="text-align: center"><button wire:click="addsello({{ $material->id }})" type="button"  class="btn btn-primary btn-sm">+</button></td>
                                     </tbody>
                                 @endforeach
