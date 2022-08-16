@@ -218,7 +218,7 @@ class MaterialComponent extends Component
 
     public function store(){
         $this->validate([
-            'code' => 'required|unique:materials',
+            'code' => 'required|unique:materials|max:20',
             'family' => 'required',
             'color' => 'nullable',
             'description' => 'max:500|nullable',
@@ -231,6 +231,7 @@ class MaterialComponent extends Component
         ],[
             'code.required' => 'El campo código es requerido',
             'code.unique' => 'El campo código que inteta ingresar se encuentra en uso, debe ser único',
+            'code.max' => 'El campo código tiene como máximo 20 caracteres',
             'family.required' => 'El campo familia es requerido',
             'description.max' => 'El campo descripción no debe superar 500 carácteres',
             'stock_min.numeric' => 'El campo stock mínimo es numérico (decimales separados por punto)',
@@ -733,7 +734,7 @@ class MaterialComponent extends Component
 
     public function editar(){
         $this->validate([
-            'code' => 'required',
+            'code' => 'required|max:20',
             'family' => 'required',
             'color' => 'nullable',
             'description' => 'max:500|nullable',
@@ -745,6 +746,7 @@ class MaterialComponent extends Component
             'images.*' => 'nullable|max:20480',
         ],[
             'code.required' => 'El campo código es requerido',
+            'code.max' => 'El campo código tiene como máximo 20 caracteres',
             'family.required' => 'El campo familia es requerido',
             'description.max' => 'El campo descripción no debe superar 500 carácteres',
             'stock_min.required' => 'El campo stock mínimo es requerido',
