@@ -1,5 +1,5 @@
 <div>
- 
+    
     @switch($funcion)
     @case("")
         @if (auth()->user()->can('seeproviders', auth()->user()))
@@ -10,27 +10,23 @@
     @case("crear")
         @include("material.registro")
         @break
-        
-    @case("crearmat")
-        @include("material.registromat")      
-        @break
-    
-    @case("actualizarmat")
-        @include("material.registromat")      
-        @break
-    
 
     @case("actualizar")
-        @include("material.registro")
+        @include("material.actualizar")
+        @break
+    
+    @case("explorar")
+        @include("material.explorar")
+        @break
+
+    @case("crearPrecio")
+        @include("material.registromat")      
+        @break
+    
+    @case("actualizarPrecio")
+        @include("material.registromat")      
         @break
 
   @endswitch
-
-  @switch($explora)
-      @case("activo")
-          @include("material.explorar")
-          @break
-  @endswitch
-
 
 </div>

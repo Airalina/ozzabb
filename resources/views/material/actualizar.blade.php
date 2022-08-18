@@ -2,7 +2,7 @@
     <!-- general form elements -->
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Agregar Material</h3>
+            <h3 class="card-title">Información sobre el Material: {{ $material['name'] }}</h3>
         </div>
         <form>
             <div class="card-body">
@@ -27,31 +27,15 @@
                         <x-img-create-card :files="$files" :funcion="$funcion" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="name">¿Desea agregar precio al material?</label>
-                    <div class="form-check">
-                        <input type="radio" name="price" class="form-check-input" wire:model="showPrice"
-                            value="yes">
-                        <label for="price" class="form-check-label">Si</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" name="price" class="form-check-input" wire:model="showPrice"
-                            value="no">
-                        <label for="price" class="form-check-label">No</label>
-                    </div>
-                </div>
-                @if ($showPrice == 'yes')
-                    <x-form-provider-price :searchproviders="$searchproviders" :providers="$providers" :addprovider="$addProvider"
-                        :providerselected="$providerSelected" />
-                @endif
             </div>
 
             <div class="card-footer">
-                <td><button wire:click="store()" type="button" class="btn btn-primary">Guardar</button></td>
+                <td><button wire:click="update({{ $material['id'] }})" type="button" class="btn btn-primary">Guardar
+                        Cambios</button>
+                </td>
                 <td><button wire:click="back()" type="button" class="btn btn-primary">Cancelar</button></td>
             </div>
 
         </form>
     </div>
 </div>
-<x-modal-provider-price />
