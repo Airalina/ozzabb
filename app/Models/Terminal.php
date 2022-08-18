@@ -10,14 +10,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Terminal extends Model
 {
     use SoftDeletes, HasFactory;
-    protected $fillable = ['material_id','size','minimum_section','maximum_section', 'material', 'type'];
 
-    public function material_info()
+    const MATERIALS = ['Latón', 'Estañado'];
+    const TYPES = ['Macho', 'Hembra', 'Ojal'];
+
+    protected $fillable = ['material_id', 'size', 'minimum_section', 'maximum_section', 'material', 'type'];
+
+
+    public function connectors()
+    {
+        return $this->belongsToMany(Connector::class)->withTimestamps();
+    }
+
+    public function materialId()
     {
         return $this->belongsTo(Material::class, 'material_id');
     }
-    public function connectors()
-    {
-        return $this->belongsToMany(Connector::class);
-    }
+
 }
