@@ -27,12 +27,16 @@ class Dolar extends Component
             'new_ars_price.required'=>'La cotización en pesos argentinos, es requerida.',
             'new_ars_price.numeric'=>'La cotización en pesos argentinos, debe ser numérica.',
             'new_ars_price.min'=>'La cotización en pesos argentinos, debe ser un número real positivo.',
-            'new_ars_price.max'=>'El valor de la cotización en pesos argentinos, esta por encima de del máximo.',
+            'new_ars_price.max'=>'El valor de la cotización en pesos argentinos, esta por encima del máximo.',
         ]);
         $this->new_price=Dollar::find(1);
         $this->new_price->arp_price=$this->new_ars_price;
         $this->new_price->save();
         $this->resetValidation();
         $this->dispatchBrowserEvent('hide-form');
+    }
+    public function cancel(){
+        $this->dispatchBrowserEvent('hide-form');
+        $this->resetValidation();
     }
 }
