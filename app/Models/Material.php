@@ -191,7 +191,7 @@ class Material extends Model
             ->withPivot(['id', 'deleted_at']);
     }
 
-    public static function search($search = '', $orderBy)
+    public static function search($search = '', $orderBy  = 'code')
     {
         $querySearch = self::where('code', 'like', '%' . $search . '%')
             ->orderBy($orderBy);
