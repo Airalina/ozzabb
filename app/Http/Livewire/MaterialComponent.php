@@ -33,7 +33,7 @@ class MaterialComponent extends Component
     public $dolar, $ar_price, $showPrice, $addProvider, $providerSelected, $provider, $familySelected, $providerPrice;
     //Arrays
     public $price = [], $material = [], $terminal = [], $connector = [], $cable = [], $seal = [], $tube = [], $clip = [], $accesory = [],
-        $files = [], $validation = [], $explora = [], $providerPrices = [], $upload  = [], $providers = [], $materialContent = [],
+        $files = [], $validation = [], $explorar = [], $providerPrices = [], $upload  = [], $providers = [], $materialContent = [],
         $information = [];
 
     public function __construct()
