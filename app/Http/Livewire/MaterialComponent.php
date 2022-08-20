@@ -805,6 +805,7 @@ class MaterialComponent extends Component
     {
         $this->funcion = "";
         $this->resetExcept(['information']);
+        $this->resetValidation();
         return $this->funcion;
     }
 

@@ -1,6 +1,9 @@
 @extends('adminlte::page')
 
 @section('plugins.Select2', true)
+
+@section('plugins.Lightbox2', true)
+
 @section('title', 'Materiales')
 
 @section('content_header')
