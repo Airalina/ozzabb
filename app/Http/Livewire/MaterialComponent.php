@@ -603,8 +603,9 @@ class MaterialComponent extends Component
 
                 //Elimina logicamente el familiar del material
                 $model = $this->information['families'][$material->family];
-
-                $material->$model->delete();
+                if ($material->$model) {
+                    $material->$model->delete();
+                }
                 //Elimina logicamente el material
                 $material->delete();
                 DB::commit();
