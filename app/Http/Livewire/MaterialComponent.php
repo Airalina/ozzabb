@@ -695,7 +695,7 @@ class MaterialComponent extends Component
                 'unit' => $this->providerPrice->unit,
                 'presentation' => $this->providerPrice->presentation,
                 'usd_price' => $this->providerPrice->usd_price,
-                'ars_price' => $this->providerPrice->ars_price,
+                'ars_price' => $this->providerPrice->usd_price * $this->ar_price,
             ];
             $this->providerSelected = $this->providerPrice->provider;
         }

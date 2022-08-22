@@ -12,7 +12,7 @@
             <x-form-create-material :familySelected="$familySelected" :materialContent="$materialContent" :searchTerminal="$searchTerminal" :searchSeal="$searchSeal"
                 :information="$information" :explorar="$explorar" />
             <x-img-create-card :files="$files" :funcion="$funcion" />
-            <x-list-prices-card type="material" :item="$material" :providerPrices="$providerPrices" permission="storematerial" />
+            <x-list-prices-card type="material" :item="$material" :providerPrices="$providerPrices" permission="storematerial" :arPrice="$ar_price" />
         </div>
     </div>
 </div>
