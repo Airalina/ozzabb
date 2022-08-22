@@ -34,7 +34,7 @@
                         <td>{{ $providerPrice->amount }}</td>
                         <td>{{ $providerPrice->created_at->format('d/m/Y') }}</td>
                         <td>{{ $providerPrice->usd_price }}</td>
-                        <td>{{ $providerPrice->ars_price }}</td>
+                        <td>{{ $providerPrice->usd_price * $arPrice }}</td>
                         @if (auth()->user()->can($permission, auth()->user()))
                             <td><button
                                     wire:click="editPrice({{ $providerPrice->material_id }},{{ $providerPrice->id }})"
