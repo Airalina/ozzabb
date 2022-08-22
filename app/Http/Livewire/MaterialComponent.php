@@ -49,6 +49,17 @@ class MaterialComponent extends Component
             'paths' => [],
             'images' => [],
         ];
+        //Inicializa array con informacion de los materiales 
+        $this->information = [
+            'families' => Material::TYPES,
+            'colors' => Material::COLORS,
+            'lines' => Material::LINES,
+            'usages' => Material::USAGES,
+            'showLines' => false,
+            'showReplace' => false,
+            'showColors' => false,
+            'replaces' => [],
+        ];
     }
 
     public function render()
@@ -87,16 +98,6 @@ class MaterialComponent extends Component
     //Inicializando variables
     public function mount()
     {
-        $this->information = [
-            'families' => Material::TYPES,
-            'colors' => Material::COLORS,
-            'lines' => Material::LINES,
-            'usages' => Material::USAGES,
-            'showLines' => false,
-            'showReplace' => false,
-            'showColors' => false,
-            'replaces' => [],
-        ];
         $this->addProvider = false;
         $this->providerPrice = [];
     }
@@ -318,7 +319,7 @@ class MaterialComponent extends Component
 
             DB::commit();
             $this->resetValidation();
-            $this->resetExcept(['information']);
+            $this->reset();
 
             return $material;
         } catch (\Exception $e) {
@@ -406,7 +407,7 @@ class MaterialComponent extends Component
             }
             DB::commit();
             $this->resetValidation();
-            $this->resetExcept(['information']);
+            $this->reset();
 
             return $material;
         } catch (\Exception $e) {
@@ -602,7 +603,7 @@ class MaterialComponent extends Component
 
                 //Elimina logicamente el familiar del material
                 $model = $this->information['families'][$material->family];
-        
+
                 $material->$model->delete();
                 //Elimina logicamente el material
                 $material->delete();
@@ -697,7 +698,7 @@ class MaterialComponent extends Component
             ];
             $this->providerSelected = $this->providerPrice->provider;
         }
-        
+
 
         return $this->price;
     }
@@ -804,7 +805,7 @@ class MaterialComponent extends Component
     public function back()
     {
         $this->funcion = "";
-        $this->resetExcept(['information']);
+        $this->reset();
         $this->resetValidation();
         return $this->funcion;
     }
@@ -815,8 +816,8 @@ class MaterialComponent extends Component
      */
     public function backToExplorar()
     {
-        $this->resetExcept(['information', 'material']);
         $this->resetValidation();
+        $this->reset(['price', 'providerSelected', 'searchproviders', 'provider']);
         return $this->explorar($this->material['id']);
     }
 
@@ -852,5 +853,4 @@ class MaterialComponent extends Component
         $this->price['ars_price'] = (is_numeric($this->price['usd_price'])) ? $this->price['usd_price'] * $this->ar_price : '';
         return $this->price['ars_price'];
     }
-
 }
