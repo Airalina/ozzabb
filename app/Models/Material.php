@@ -72,7 +72,7 @@ class Material extends Model
 
     const LINES = [
         1 => 'Bulldog',
-        2 => 'Ecoseal',
+        2 => 'Econoseal',
         3 => 'Ecu',
         4 => 'Fastin Faston',
         5 => 'Mini Fit',
