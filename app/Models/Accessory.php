@@ -10,6 +10,8 @@ class Accessory extends Model
 {
     use SoftDeletes, HasFactory;
 
+    CONST TYPES = ['Tapa de conector', 'Fusible', 'Relay', 'Tapón ciego', 'Pasante de goma', 'Portafusible', 'Moldeado'];
+
     protected $fillable = ['material_id', 'type'];
 
 }

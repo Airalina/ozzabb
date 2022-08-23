@@ -6,16 +6,17 @@ use Illuminate\View\Component;
 
 class ImgUpdateCard extends Component
 {
-    public $images, $material; 
+    public $images, $materials;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($images = [], $material)
+    public function __construct($images, $materials)
     {
         $this->images = $images;
-        $this->material = $material;
+        $this->materials = $materials;
     }
 
     /**

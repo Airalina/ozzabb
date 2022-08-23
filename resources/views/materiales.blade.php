@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 
+@section('plugins.Select2', true)
+
+@section('plugins.Lightbox2', true)
+
 @section('title', 'Materiales')
 
 @section('content_header')
@@ -8,12 +12,15 @@
 
 @section('content')
     @livewireStyles
+    <div>
         @livewire('material-component')
+    </div>
     @livewireScripts
 @stop
 
 @section('footer')
-    <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/" target="_blank">www.codigitar.com</a></strong>
+    <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/"
+            target="_blank">www.codigitar.com</a></strong>
 @stop
 
 @section('css')
@@ -22,16 +29,18 @@
 
 @section('js')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>|
-    <script> console.log('Hi!'); </script>
+    <script>
+        console.log('Hi!');
+    </script>
     <script>
         window.addEventListener('show-form', event => {
-             $('#form').modal('show');
-         })
-         window.addEventListener('hide-form', event => {
-             $('#form').modal('hide');
-         })
-     </script>
-     <script>
+            $('#form').modal('show');
+        })
+        window.addEventListener('hide-form', event => {
+            $('#form').modal('hide');
+        })
+    </script>
+    <script>
         window.addEventListener('show-borrar', event => {
             $('#borrar').modal('show');
         })
@@ -49,6 +58,11 @@
                 timer: 1300
             })
         })
-
     </script>
+    <script>
+        window.addEventListener('errorResponse', message => {
+            console.log(message.detail.error);
+        })
+    </script>
+
 @stop

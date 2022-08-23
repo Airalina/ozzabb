@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Connector extends Model
 {
     use SoftDeletes, HasFactory;
-    protected $fillable = ['id','material_id', 'terminal_id', 'seal_id', 'number_of_ways', 'type', 'connector_id', 'watertight', 'cover', 'lock'];
+    protected $fillable = ['id', 'material_id', 'terminal_id', 'seal_id', 'number_of_ways', 'type', 'connector_id', 'watertight', 'cover', 'lock'];
 
     public function material()
     {
@@ -19,12 +19,16 @@ class Connector extends Model
 
     public function terminals()
     {
-        return $this->belongsToMany(Terminal::class);
+        return $this->belongsToMany(Terminal::class)->withTimestamps();
     }
 
     public function seals()
     {
-        return $this->belongsToMany(Seal::class);
+        return $this->belongsToMany(Seal::class)->withTimestamps();
     }
 
+    public static function selection()
+    {
+        return self::with('material')->get()->toArray();
+    }
 }

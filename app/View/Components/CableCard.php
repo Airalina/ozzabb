@@ -4,16 +4,19 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class form-validation-errors extends Component
+class CableCard extends Component
 {
+    public $content, $explorar;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($materialContent, $explorar)
     {
-        //
+        $this->content = $materialContent;
+        $this->explorar = $explorar;
     }
 
     /**
@@ -23,6 +26,6 @@ class form-validation-errors extends Component
      */
     public function render()
     {
-        return view('components.form-validation-errors');
+        return view('components.cable-card');
     }
 }

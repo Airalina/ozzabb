@@ -4,20 +4,18 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class ImgCreateCard extends Component
+class ModalProviderPrice extends Component
 {
-    public $files, $funcion;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($files, $funcion)
+    public function __construct()
     {
-        $this->files = $files;
-        $this->funcion = $funcion;
+        //
     }
+
     /**
      * Get the view / contents that represent the component.
      *
@@ -25,6 +23,6 @@ class ImgCreateCard extends Component
      */
     public function render()
     {
-        return view('components.img-create-card');
+        return view('components.modal-provider-price');
     }
 }
