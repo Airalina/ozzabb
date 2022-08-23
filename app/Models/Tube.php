@@ -13,5 +13,9 @@ class Tube extends Model
     CONST TYPES = ['Barnizado', 'Corrugado', 'Termocontraible', 'PVC'];
 
     protected $fillable = ['material_id', 'type', 'diameter', 'wall_thickness', 'contracted_diameter', 'minimum_temperature', 'maximum_temperature'];
-    
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
 }

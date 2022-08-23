@@ -14,4 +14,10 @@ class Cable extends Model
     const NORMS = ['Iram 247-5', 'Iram 247-3', 'IR', 'ID', 'Blindado', 'Multifilar'];
 
     protected $fillable = ['section', 'base_color', 'line_color', 'braid_configuration', 'norm', 'number_of_unipolar', 'mesh_type', 'operating_temperature', 'material_id'];
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
+    
 }

@@ -40,13 +40,13 @@ class DeleteFamilyMaterialCommand extends Command
     {
         $materials = Material::all();
         $families = Material::TYPES;
-       
+
         $materials->each(function (Material $material) use ($families) {
             $model = $families[$material->family];
             if (!$material->$model) {
                 $material->delete();
+                $this->info('Eliminado el material codigo:' . $material->code);
             }
-            $this->info('Eliminado el material codigo:' . $material->code);
         });
         return 0;
     }

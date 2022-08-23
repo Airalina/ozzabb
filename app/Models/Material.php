@@ -8,7 +8,6 @@ use  App\Models\ProviderPrice;
 use  App\Models\Line;
 use  App\Models\Usage;
 use  App\Models\Revisiondetail;
-use App\View\Components\accesory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Material extends Model
@@ -93,7 +92,7 @@ class Material extends Model
         'Terminales' =>  'terminal',
         'Sellos' =>  'seal',
         'Tubos' =>  'tube',
-        'Accesorios' =>  'accesory',
+        'Accesorios' =>  'accessory',
         'Clips' =>  'clip'
     ];
 
@@ -167,7 +166,7 @@ class Material extends Model
         return $this->hasOne(Connector::class, 'material_id');
     }
 
-    public function accesory()
+    public function accessory()
     {
         return $this->hasOne(Accessory::class, 'material_id');
     }
