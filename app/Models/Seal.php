@@ -13,7 +13,7 @@ class Seal extends Model
 
     protected $fillable = ['material_id', 'minimum_diameter', 'maximum_diameter', 'type'];
     
-    public function material_info()
+    public function material()
     {
         return $this->belongsTo(Material::class, 'material_id');
     }
@@ -22,4 +22,5 @@ class Seal extends Model
     {
         return $this->belongsToMany(Connector::class);
     }
+
 }

@@ -4,20 +4,21 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class ImgCreateCard extends Component
+class ReplaceCard extends Component
 {
-    public $files, $funcion;
+    public $replaces, $explorar;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($files, $funcion)
+    public function __construct($replaces, $explorar)
     {
-        $this->files = $files;
-        $this->funcion = $funcion;
+        $this->replaces = $replaces;
+        $this->explorar = $explorar;
     }
+
     /**
      * Get the view / contents that represent the component.
      *
@@ -25,6 +26,6 @@ class ImgCreateCard extends Component
      */
     public function render()
     {
-        return view('components.img-create-card');
+        return view('components.replace-card');
     }
 }

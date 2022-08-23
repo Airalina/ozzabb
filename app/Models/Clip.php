@@ -10,6 +10,8 @@ class Clip extends Model
 {
     use SoftDeletes, HasFactory;
 
-    
+    CONST TYPES = ['Clip', 'Precinto'];
+
     protected $fillable = ['material_id', 'type', 'long', 'width', 'hole_diameter'];
+
 }
