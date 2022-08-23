@@ -10,11 +10,12 @@ trait ValidationTrait
      * @return array $validation
      */
     public function validationMaterials($family, $showPrice)
-    {
+    { 
         $regex = "/^[\d]{0,4}(\.[\d]{1,2})?$/";
-
-        $validation['rules'] =  [
-            'material.code' => 'required',
+        $materialId = $this->material['id'] ?? '';
+      
+        $validation['rules'] =  [ 
+            'material.code' => 'required|max:20|unique:materials,code,'. $materialId,
             'material.name' => 'nullable',
             'material.family' => 'required',
             'material.description' => 'nullable|max:500',
@@ -58,8 +59,8 @@ trait ValidationTrait
             'tube.contracted_diameter' => 'numeric|nullable|regex: ' . $regex,
             'tube.minimum_temperature' => 'numeric|nullable|min:0|max:9999',
             'tube.maximum_temperature' => 'numeric|nullable|min:0|max:9999',
-            'accesory' => 'sometimes',
-            'accesory.type' => 'required_if:family,Accesorios',
+            'accessory' => 'sometimes',
+            'accessory.type' => 'required_if:family,Accesorios',
             'clip' => 'sometimes',
             'clip.long' => 'numeric|required_if:family,Clips|nullable|regex: ' . $regex,
             'clip.width' => 'numeric|required_if:family,Clips|nullable|regex: ' . $regex,
@@ -69,6 +70,8 @@ trait ValidationTrait
 
         $validation['messages'] = [
             'material.code.required' => 'El campo Código es requerido',
+            'material.code.unique' => 'El campo código que inteta ingresar se encuentra en uso, debe ser único',
+            'material.code.max' => 'El campo código tiene como máximo 20 caracteres',
             'material.name.required' => 'El campo Nombre es requerido',
             'material.family.required' => 'El campo Familia es requerido',
             'material.description.max' => 'El campo Descripción no debe superar 500 carácteres',
@@ -150,7 +153,7 @@ trait ValidationTrait
             'clip.hole_diameter.required_if' => 'El campo Diámetro del Orificio es requerido si la familia es ' . $family,
             'clip.hole_diameter.regex' => 'El campo Diámetro del Orificio es un número de máximo 4 cifras con 2 posiciones decimales',
             'clip.type.required_if' => 'Seleccione una opción del campo tipo de Clip',
-            'accesory.type.required_if' => 'Seleccione una opción del campo tipo de Accesorio',
+            'accessory.type.required_if' => 'Seleccione una opción del campo tipo de Accesorio',
         ];
         if ($showPrice === 'yes') {
             $validationPrice = $this->validationPrice();

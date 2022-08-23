@@ -14,4 +14,8 @@ class Clip extends Model
 
     protected $fillable = ['material_id', 'type', 'long', 'width', 'hole_diameter'];
 
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
 }

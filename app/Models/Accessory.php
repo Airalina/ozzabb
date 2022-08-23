@@ -14,4 +14,9 @@ class Accessory extends Model
 
     protected $fillable = ['material_id', 'type'];
 
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
+    
 }
