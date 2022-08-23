@@ -32,7 +32,7 @@ class MaterialComponent extends Component
     //Variables
     public $dolar, $ar_price, $showPrice, $addProvider, $providerSelected, $provider, $familySelected, $providerPrice;
     //Arrays
-    public $price = [], $material = [], $terminal = [], $connector = [], $cable = [], $seal = [], $tube = [], $clip = [], $accesory = [],
+    public $price = [], $material = [], $terminal = [], $connector = [], $cable = [], $seal = [], $tube = [], $clip = [], $accessory = [],
         $files = [], $validation = [], $explorar = [], $providerPrices = [], $upload  = [], $providers = [], $materialContent = [],
         $information = [];
 
@@ -281,9 +281,9 @@ class MaterialComponent extends Component
     public function store()
     {
         //validacion para materiales
-        $validationProperties = $this->validationMaterials($this->familySelected, $this->showPrice);
+        $validationProperties = $this->validationMaterials($this->familySelected, $this->showPrice); 
         $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
-
+       
         try {
             DB::beginTransaction();
             //creando el material
@@ -291,7 +291,7 @@ class MaterialComponent extends Component
             //obteniendo la relacion de la familia escogida dinamicamente
             $model = $this->information['families'][$this->familySelected];
             //creando las caracteristicas del material y su familia
-            $familyColumns = $this->validation[$model] ?? [];
+            $familyColumns = $this->validation[$model] ?? []; 
             $familyMaterial = $material->$model()->firstOrCreate($familyColumns);
             //guardando sellos y terminales para materiales familia conectores
             if ($this->validation['material']['family'] == 'Conectores') {
@@ -535,7 +535,7 @@ class MaterialComponent extends Component
                 $this->tube['maximum_temperature'] = $material->tube->maximum_temperature;
                 break;
             case 'Accesorios':
-                $this->accesory['type'] = $material->accesory->type;
+                $this->accessory['type'] = $material->accessory->type;
                 break;
             case 'Sellos':
                 $this->seal['minimum_diameter'] = $material->seal->minimum_diameter;
