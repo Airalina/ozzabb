@@ -230,7 +230,7 @@ class PurchasingSheet extends Component
         $this->material_id=$this->material->id;
         $this->codem=$this->material->code;
         $this->descriptionm=$this->material->description;
-        foreach($this->material->provider_prices as $mat){
+        foreach($this->material->providerprices as $mat){
             if(count($this->proveedoresm)==0){
             $this->proveedoresm[$mat->provider_id]=Provider::find($mat->provider_id);
             $this->provcount+=1;
@@ -348,14 +348,14 @@ class PurchasingSheet extends Component
         }
         foreach($this->compras as $compra){
             if($compra[7]>0){
-                $this->plantilla_detail=new PucharsingSheetDetail;
-                $this->plantilla_detail->pucharsing_sheet_id=$this->plantilla->id;
-                $this->plantilla_detail->material_id=$compra[12];
-                $this->plantilla_detail->amount=$compra[7];
-                $this->plantilla_detail->presentation=$compra[6];
-                $this->plantilla_detail->usd_price=$compra[11];
-                $this->plantilla_detail->provider_id=Provider::where('name',$compra[10])->first()->id;
-                $this->plantilla_detail->save();
+                $this->plantilla_detalle=new PucharsingSheetDetail;
+                $this->plantilla_detalle->pucharsing_sheet_id=$this->plantilla->id;
+                $this->plantilla_detalle->material_id=$compra[12];
+                $this->plantilla_detalle->amount=$compra[7];
+                $this->plantilla_detalle->presentation=$compra[6];
+                $this->plantilla_detalle->usd_price=$compra[11];
+                $this->plantilla_detalle->provider_id=Provider::where('name',$compra[10])->first()->id;
+                $this->plantilla_detalle->save();
             }
         }
         $this->plantilla_ordenes=$this->plantilla->purchasing_sheet_details()->orderBy('provider_id')->get();
