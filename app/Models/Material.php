@@ -200,7 +200,7 @@ class Material extends Model
 
     public static function scopeFamilyMaterials($query, $family)
     {
-        return $query->where('family', $family);
+        return $query->where('family', $family)->has(self::TYPES[$family]);
     }
 
     public static function searchByFamily($materialQuery, $search = '', $orderBy = 'code')
