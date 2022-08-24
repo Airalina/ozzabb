@@ -78,3 +78,10 @@
     <input type="text" class="form-control" id="stock" wire:model="material.stock"
         placeholder="En órdenes de ingresos y egresos" readonly>
 </div>
+@if ($explorar['disabled'] == 'disabled')
+    <div class="form-group">
+        <label for="stock">Stock en tránsito</label>
+        <input type="text" class="form-control" id="stock" wire:model="material.stock_transit"
+            placeholder="Stock en tránsito" readonly>
+    </div>
+@endif
