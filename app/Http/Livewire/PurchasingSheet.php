@@ -35,7 +35,7 @@ class PurchasingSheet extends Component
     public $ordenes_ingreso, $stock_transito=0, $ordenrep=false, $materialrep=false; 
     public $codem, $descriptionm, $proveedorm, $proveedormm, $proveedoresm=array(), $proveedorrep=false, $provcount=0, $presentationm,$presentationsm, $pricem, $clavem, $amountm;
     public $proveedor_name, $material_id, $precio, $subtotalxmaterial;
-    public $plantilla, $plantilla_orden, $plantilla_detalle, $clientorder, $stmaterial;
+    public $plantilla, $plantilla_orden, $plantilla_detalle,$plantilla_detail, $clientorder, $stmaterial;
     public $collectionmaterial=array(),$exceptmaterial,$exceptmaterials, $countmaterial=0, $materialessinorden=array(),$materialsinorden=false;
     public $order1, $ordenes_de_compra, $materials, $buy_orders, $buy_order_details,$to_order, $searchmaterial="", $ordenes_de_compra_detalle, $plantilla_ordenes, $id_proveedor=null, $proveedor_id=0, $pucharsing_sheets_materials, $order_list = 'id';
     public $index_array=0, $type;
@@ -230,7 +230,7 @@ class PurchasingSheet extends Component
         $this->material_id=$this->material->id;
         $this->codem=$this->material->code;
         $this->descriptionm=$this->material->description;
-        foreach($this->material->provider_prices as $mat){
+        foreach($this->material->providerprices as $mat){
             if(count($this->proveedoresm)==0){
             $this->proveedoresm[$mat->provider_id]=Provider::find($mat->provider_id);
             $this->provcount+=1;
@@ -382,13 +382,11 @@ class PurchasingSheet extends Component
                 $this->stmaterial=Material::find($ordenes->material_id);
                 $this->stmaterial->stock_transit+=$ordenes->presentation*$ordenes->amount;
                 $this->stmaterial->save();
-                
             }elseif($this->proveedor_id!=$ordenes->provider_id){
-                try{
+                try{               
                     SendBuyEmail::dispatch($this->ordenes_de_compra);
                 }catch(Exception $e){
-                    report($e);
-                    return false;                    
+                    report($e);                   
                 }
                 
                 $this->proveedor_id=$ordenes->provider_id;
@@ -432,8 +430,7 @@ class PurchasingSheet extends Component
                 try{
                     SendBuyEmail::dispatch($this->ordenes_de_compra);
                 }catch(Exception $e){
-                    report($e);
-                    return false;                    
+                    report($e);           
                 }
             }
         }
