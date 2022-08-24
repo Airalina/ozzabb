@@ -281,9 +281,9 @@ class MaterialComponent extends Component
     public function store()
     {
         //validacion para materiales
-        $validationProperties = $this->validationMaterials($this->familySelected, $this->showPrice); 
+        $validationProperties = $this->validationMaterials($this->familySelected, $this->showPrice);
         $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
-       
+
         try {
             DB::beginTransaction();
             //creando el material
@@ -291,7 +291,7 @@ class MaterialComponent extends Component
             //obteniendo la relacion de la familia escogida dinamicamente
             $model = $this->information['families'][$this->familySelected];
             //creando las caracteristicas del material y su familia
-            $familyColumns = $this->validation[$model] ?? []; 
+            $familyColumns = $this->validation[$model] ?? [];
             $familyMaterial = $material->$model()->firstOrCreate($familyColumns);
             //guardando sellos y terminales para materiales familia conectores
             if ($this->validation['material']['family'] == 'Conectores') {
@@ -460,6 +460,7 @@ class MaterialComponent extends Component
                 'replace_id' => $material->replace_id,
                 'stock_min' => $material->stock_min,
                 'stock_max' => $material->stock_max,
+                'stock_transit' => $material->stock_transit,
                 'stock' => $material->stock,
                 'usage' => $material->usage,
                 'line' => $material->line,
