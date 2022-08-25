@@ -29,6 +29,6 @@ class Connector extends Model
 
     public static function selection()
     {
-        return self::with('material')->get()->toArray();
+        return self::has('material')->with('material')->get()->toArray();
     }
 }

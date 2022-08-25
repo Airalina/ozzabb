@@ -53,6 +53,7 @@
                         <th style="text-align: center">Stock Min.</th>
                         <th style="text-align: center">Stock Max.</th>
                         <th style="text-align: center">Stock</th>
+                        <th style="text-align: center">Stock en Tránsito</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -76,7 +77,8 @@
                             </td>
                             <td style="text-align: center">{{ $material->stock_min }} </td>
                             <td style="text-align: center">{{ $material->stock_max }} </td>
-                            <td style="text-align: center">{{ $material->stock }} </td>
+                            <td style="text-align: center">{{ $material->stock }} </td>                            
+                            <td style="text-align: center">{{ $material->stock_transit }} </td>
                             <td style="text-align: center">
                                 <button type="button" wire:click="explorar({{ $material->id }})"
                                     class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Ver</button>
