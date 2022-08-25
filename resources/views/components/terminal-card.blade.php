@@ -16,7 +16,7 @@
 <div class="form-group">
     <label for="term_material">Material</label>
     <select class="form-control form-control-sm" wire:model="terminal.material" id="term_material" {{ $explorar['disabled'] }}>
-        <option selected value="">Selecciona un material</option>
+        <option selected value="" hidden>Selecciona un material</option>
         @foreach ($content['materials'] as $material)
         <option value="{{ $material }}">{{ $material }}</option>
         @endforeach
@@ -25,7 +25,7 @@
 <div class="form-group">
     <label for="term_type">Tipo</label>
     <select class="form-control form-control-sm" wire:model="terminal.type" id="term_type" {{ $explorar['disabled'] }}>
-        <option selected value="">Selecciona un tipo</option>
+        <option selected value="" hidden>Selecciona un tipo</option>
         @foreach ($content['types'] as $type)
         <option value="{{ $type }}">{{ $type }}</option>
         @endforeach
