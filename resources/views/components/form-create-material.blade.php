@@ -48,7 +48,7 @@
             {{ $explorar['disabled'] }}>
             <option selected value="" hidden>Selecciona una linea</option>
             @foreach ($information['lines'] as $index => $line)
-                <option>{{ $line }}</option>
+                <option value="{{($line != 'Econoseal') ? $line : 'Ecoseal'}}">{{ $line }}</option>
             @endforeach
         </select>
     @endif

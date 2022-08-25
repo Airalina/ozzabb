@@ -171,21 +171,3 @@
     </select>
 </div>
 
-<script>
-    $(document).ready(function() {
-        $('#selectionTerminals').select2({
-            placeholder: "Seleccione terminales a asociar"
-        });
-        $('#selectionTerminals').on('change', function(e) {
-            var terminal = $('#selectionTerminals').select2("val");
-            @this.set('connector.terminals', terminal);
-        });
-        $('#selectionSeals').select2({
-            placeholder: "Seleccione sellos a asociar"
-        });
-        $('#selectionSeals').on('change', function(e) {
-            var seal = $('#selectionSeals').select2("val");
-            @this.set('connector.seals', seal);
-        });
-    });
-</script>
