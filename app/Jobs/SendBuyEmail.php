@@ -36,8 +36,7 @@ class SendBuyEmail implements ShouldQueue
      */
     public function handle()
     {
-        $email=new BuyEmail($this->ordenes);
-        Mail::to($this->email)->send($email);
+        Mail::to($this->email)->queue(new BuyEmail($this->ordenes));
         $this->ordenes->state=1;
         $this->ordenes->save();
     }
