@@ -329,7 +329,6 @@ class PurchasingSheet extends Component
             'purchasings.*.10.required'=>'Debe rellenar el campo proveedor, packaging y cantidad para los materiales ',
     
         ]);
- 
         $this->date=Carbon::now();
         $this->plantilla= new PucharsingSheet;
         $this->plantilla->date=$this->date;
