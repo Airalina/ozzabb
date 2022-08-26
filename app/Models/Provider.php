@@ -14,14 +14,22 @@ class Provider extends Model
 
     protected $fillable = ['name', 'address', 'phone', 'email', 'contact_name', 'point_contact', 'site_url', 'status', 'cuit'];
 
-    public function providers()
+    public function materials()
     {
-        return $this->belongsToMany(Material::class, 'provider_prices', 'provider_id', 'material_id')->withTimestamps();
+        return $this->belongsToMany(Material::class, 'provider_prices', 'provider_id', 'material_id')
+            ->whereNull('provider_prices.deleted_at')
+            ->withTimestamps()
+            ->withPivot(['id', 'deleted_at']);
     }
 
     public function provider_prices()
     {
         return $this->hasMany(ProviderPrice::class);
+    }
+
+    public function prices()
+    {
+        return $this->hasMany(Price::class);
     }
 
     public function buyorders()

@@ -1,34 +1,32 @@
 <div>
-  
-  @switch($funcion)
-    @case("")
-        @if (auth()->user()->can('seeproviders', auth()->user()))
-          @include("provider.listado")
-        @endif
+
+    @switch($view)
+        @case('')
+            @if (auth()->user()->can('seeproviders', auth()->user()))
+                @include('provider.listado')
+            @endif
         @break
 
-    @case("crear")
-        @include("provider.registro")
+        @case('crear')
+            @include('provider.registro')
         @break
 
-    @case("crearmat")
-        @include("provider.registromat")      
+        @case('actualizar')
+            @include('provider.actualizar')
         @break
 
-    @case("actualizar")
-        @include("provider.registro")
-        @break
-    
-    @case("actualizarmat")
-        @include("provider.registromat")      
+        @case('crearPrecio')
+            @include('provider.registromat')
         @break
 
-  @endswitch
+        @case('actualizarPrecio')
+            @include('provider.registromat')
+        @break
 
-  @switch($explora)
-      @case("activo")
-          @include("provider.explorar")
-          @break
-  @endswitch
-  
+        @case('explorar')
+            @include('provider.explorar')
+        @break
+
+    @endswitch
+
 </div>

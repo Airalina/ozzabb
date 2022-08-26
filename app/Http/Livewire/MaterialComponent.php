@@ -17,13 +17,13 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use App\Http\Traits\ValidationTrait;
+use App\Http\Traits\MaterialTrait;
 use App\Http\Traits\ProviderTrait;
 use App\services\StoreImagesService;
 
 class MaterialComponent extends Component
 {
-    use ProviderTrait, ValidationTrait, WithPagination, WithFileUploads;
+    use ProviderTrait, MaterialTrait, WithPagination, WithFileUploads;
 
     protected $paginationTheme = 'bootstrap';
     protected $materials;
@@ -124,65 +124,8 @@ class MaterialComponent extends Component
      */
     public function updatedMaterialFamily($family, $key, $addFields = false, $materialId = '')
     {
-        $this->familySelected = $family;
-
-        switch ($this->familySelected) {
-            case 'Conectores':
-                $this->materialContent[$this->familySelected] = [
-                    'connectors' => Connector::selection(),
-                    'terminals' => [],
-                    'seals' => [],
-                ];
-                break;
-            case 'Cables':
-                $this->materialContent[$this->familySelected] = [
-                    'colors' => Material::COLORS,
-                    'configurations' => Cable::CONFIGURATIONS,
-                    'norms' => Cable::NORMS,
-                ];
-                break;
-            case 'Terminales':
-                $this->materialContent[$this->familySelected] = [
-                    'materials' => Terminal::MATERIALS,
-                    'types' => Terminal::TYPES
-                ];
-                break;
-            case 'Tubos':
-                $this->materialContent[$this->familySelected] = [
-                    'types' => Tube::TYPES,
-                    'addFields' => $addFields
-                ];
-                break;
-            case 'Accesorios':
-                $this->materialContent[$this->familySelected]['types'] = Accessory::TYPES;
-                break;
-            case 'Clips':
-                $this->materialContent[$this->familySelected]['types'] = Clip::TYPES;
-                break;
-        }
-        $this->fillInformation($this->familySelected, $materialId);
-        //Inicializar el array de las validaciones segun el tipo de familia
-        $type = $this->information['families'][$this->familySelected];
-        $this->validation[$type] = [];
-
+        $this->familyMaterial($family, $addFields, $materialId);
         return;
-    }
-
-    /**
-     * Rellena un array para mostrar campos dependiendo de la familia de materiales escogida
-     * 
-     * @param string $family, int $materialId
-     * @return array $information
-     */
-    public function fillInformation($family, $materialId = '')
-    {
-        $this->information['showColors'] = ($family == 'Cables' || $family == 'Terminales') ? false : true;
-        $this->information['showLines'] = ($family == 'Cables' || $family == 'Tubos' || $family == 'Accesorios') ? false : true;
-        $this->information['showReplace'] = ($family == 'Cables' || $family == 'Tubos') ? false : true;
-        $materialReplaces = Material::familyMaterials($family)->whereNotIn('id', [$materialId]);
-        $this->information['replaces'] = $materialReplaces ? $materialReplaces->get()->toArray() : [];
-
-        return $this->information;
     }
 
     /**
@@ -275,7 +218,6 @@ class MaterialComponent extends Component
     /**
      * Registro de un material
      * 
-     * @param $type, $id
      * @return Material $material|null
      */
     public function store()
@@ -408,7 +350,6 @@ class MaterialComponent extends Component
             DB::commit();
             $this->resetValidation();
             $this->reset();
-
             return $material;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -700,7 +641,6 @@ class MaterialComponent extends Component
             ];
             $this->providerSelected = $this->providerPrice->provider;
         }
-
 
         return $this->price;
     }
