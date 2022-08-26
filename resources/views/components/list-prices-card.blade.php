@@ -28,8 +28,8 @@
             <tbody>
                 @forelse($providerPrices as $providerPrice)
                     <tr>
-                        <td>{{ $providerPrice->provider_code }}</td>
-                        <td>{{ $providerPrice->provider->name }}</td>
+                        <td>{{ $type == 'material' ?  $providerPrice->provider_code : $providerPrice->material->code  }}</td>
+                        <td>{{ $type == 'material' ? $providerPrice->provider->name : $providerPrice->material->name  }}</td>
                         <td>{{ $providerPrice->unit }} {{ $providerPrice->presentation }}</td>
                         <td>{{ $providerPrice->amount }}</td>
                         <td>{{ $providerPrice->created_at->format('d/m/Y') }}</td>

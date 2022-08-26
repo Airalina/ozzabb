@@ -2,7 +2,15 @@
 
 namespace App\Http\Traits;
 
-trait ValidationTrait
+use App\Models\Accessory;
+use App\Models\Cable;
+use App\Models\Clip;
+use App\Models\Connector;
+use App\Models\Material;
+use App\Models\Terminal;
+use App\Models\Tube;
+
+trait MaterialTrait
 {
     /**
      * Validaciones para crear materiales y sus familias
@@ -10,12 +18,12 @@ trait ValidationTrait
      * @return array $validation
      */
     public function validationMaterials($family, $showPrice)
-    { 
+    {
         $regex = "/^[\d]{0,4}(\.[\d]{1,2})?$/";
         $materialId = $this->material['id'] ?? '';
-      
-        $validation['rules'] =  [ 
-            'material.code' => 'required|max:20|unique:materials,code,'. $materialId,
+
+        $validation['rules'] =  [
+            'material.code' => 'required|max:20|unique:materials,code,' . $materialId,
             'material.name' => 'nullable',
             'material.family' => 'required',
             'material.description' => 'nullable|max:500',
@@ -142,7 +150,7 @@ trait ValidationTrait
             'tube.maximum_temperature.required_if' => 'El campo Temperatura máxima de Servicio es requerido si la familia es ' . $family,
             'tube.maximum_temperature.min' => 'El campo Temperatura máxima de Servicio es como mínimo 0°C',
             'tube.maximum_temperature.max' => 'El campo Temperatura máxima de Servicio es un número de máximo 4 cifras con 2 posiciones decimal',
-            'tube.type.required_if' => 'Seleccione una opción del campo Tipo de Tubo',                
+            'tube.type.required_if' => 'Seleccione una opción del campo Tipo de Tubo',
             'clip.long.numeric' => 'El campo Largo es numérico (decimales separados por punto)',
             'clip.long.required_if' => 'El campo Largo es requerido si la familia es ' . $family,
             'clip.long.regex' => 'El campo Largo es un número de máximo 4 cifras con 2 posiciones decimales',
@@ -166,7 +174,7 @@ trait ValidationTrait
             $validation['rules'] = array_merge($validation['rules'], $validationImages['rules']);
             $validation['messages'] = array_merge($validation['messages'], $validationImages['messages']);
         }
-           
+
         return $validation;
     }
 
@@ -174,8 +182,9 @@ trait ValidationTrait
      * Validaciones para crear precio del material
      * @return array $validation
      */
-    public function validationPrice()
+    public function validationPrice($module = 'material')
     {
+
         $validation['rules'] = [
             'price.amount' => 'required_if:showPrice,yes|nullable|numeric|min:0',
             'price.unit' => 'required_if:showPrice,yes|nullable|numeric|min:0',
@@ -183,7 +192,6 @@ trait ValidationTrait
             'price.provider_code' => 'required_if:showPrice,yes|nullable|string|min:0|max:50',
             'price.usd_price' => 'required_if:showPrice,yes|nullable|numeric|min:0',
             'price.ars_price' => 'required_if:showPrice,yes|nullable|numeric|min:0',
-            'providerSelected' => 'required_if:showPrice,yes',
         ];
 
         $validation['messages'] = [
@@ -204,13 +212,19 @@ trait ValidationTrait
             'price.ars_price.required_if' => 'El campo precio AR$ es requerido',
             'price.ars_price.numeric' => 'El campo precio AR$ es numérico (decimales separados por punto)',
             'price.ars_price.min' => 'El campo  AR$  debe ser mayor a cero (0)',
-            'providerSelected.required_if' => 'Seleccione una opción para el campo Proveedor',
         ];
-       
+        if ($module == 'material') {
+            $validation['rules']['providerSelected'] = 'required_if:showPrice,yes';
+            $validation['messages']['providerSelected.required_if'] = 'Seleccione una opción para el campo Proveedor';
+        } else {
+            $validation['rules']['materialSelected'] = 'required';
+            $validation['messages']['materialSelected.required'] = 'Seleccione una opción para el campo Material';
+        }
+
         return $validation;
     }
 
-        /**
+    /**
      * Validaciones para subir imagenes al material
      * @return array $validation
      */
@@ -225,8 +239,69 @@ trait ValidationTrait
             'upload.images.*.mimes' => 'El campo Imagen debe contener archivos con la extension png o jpg',
             'upload.images.*.max' => 'El campo Imagen no debe ser un archivo mayor a 20MB',
         ];
-       
+
         return $validation;
     }
-    
+
+    public function familyMaterial($family, $addFields = false, $materialId = '')
+    {
+        $this->familySelected = $family;
+
+        switch ($this->familySelected) {
+            case 'Conectores':
+                $this->materialContent[$this->familySelected] = [
+                    'connectors' => Connector::selection(),
+                    'terminals' => [],
+                    'seals' => [],
+                ];
+                break;
+            case 'Cables':
+                $this->materialContent[$this->familySelected] = [
+                    'colors' => Material::COLORS,
+                    'configurations' => Cable::CONFIGURATIONS,
+                    'norms' => Cable::NORMS,
+                ];
+                break;
+            case 'Terminales':
+                $this->materialContent[$this->familySelected] = [
+                    'materials' => Terminal::MATERIALS,
+                    'types' => Terminal::TYPES
+                ];
+                break;
+            case 'Tubos':
+                $this->materialContent[$this->familySelected] = [
+                    'types' => Tube::TYPES,
+                    'addFields' => $addFields
+                ];
+                break;
+            case 'Accesorios':
+                $this->materialContent[$this->familySelected]['types'] = Accessory::TYPES;
+                break;
+            case 'Clips':
+                $this->materialContent[$this->familySelected]['types'] = Clip::TYPES;
+                break;
+        }
+        $this->fillInformation($this->familySelected, $materialId);
+        //Inicializar el array de las validaciones segun el tipo de familia
+        $type = $this->information['families'][$this->familySelected];
+        $this->validation[$type] = [];
+        return $this->familySelected;
+    }
+
+    /**
+     * Rellena un array para mostrar campos dependiendo de la familia de materiales escogida
+     * 
+     * @param string $family, int $materialId
+     * @return array $information
+     */
+    public function fillInformation($family, $materialId = '')
+    {
+        $this->information['showColors'] = ($family == 'Cables' || $family == 'Terminales') ? false : true;
+        $this->information['showLines'] = ($family == 'Cables' || $family == 'Tubos' || $family == 'Accesorios') ? false : true;
+        $this->information['showReplace'] = ($family == 'Cables' || $family == 'Tubos') ? false : true;
+        $materialReplaces = Material::familyMaterials($family)->whereNotIn('id', [$materialId]);
+        $this->information['replaces'] = $materialReplaces ? $materialReplaces->get()->toArray() : [];
+
+        return $this->information;
+    }
 }
