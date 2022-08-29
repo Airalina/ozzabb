@@ -16,7 +16,7 @@
                     <th></th>
                 </tr>
             </thead>
-            @foreach ($content['listTerminals'] as $material)
+            @forelse ($content['listTerminals'] as $material)
                 <tbody>
                     <td style="text-align: center">{{ $material->code }}</td>
                     <td style="text-align: center">{{ $material->terminal->size }}</td>
@@ -25,7 +25,11 @@
                     <td style="text-align: center"><button wire:click="addTerminalsToConnector({{ $material->id }})"
                             type="button" class="btn btn-primary btn-sm">+</button></td>
                 </tbody>
-            @endforeach
+            @empty
+                <tr class="text-center">
+                   <td colspan="100%" class="py-3 italic">No se encuentran terminales registrados</td>
+                </tr>
+            @endforelse
         </table>
     @endif
     @if (count($content['terminals']) > 0)
@@ -76,7 +80,7 @@
                     <th></th>
                 </tr>
             </thead>
-            @foreach ($content['listSeals'] as $material)
+            @forelse ($content['listSeals'] as $material)
                 <tbody>
                     <td style="text-align: center">{{ $material->code }}</td>
                     <td style="text-align: center">{{ $material->seal->type }}</td>
@@ -85,7 +89,11 @@
                     <td style="text-align: center"><button wire:click="addSealsToConnector({{ $material->id }})"
                             type="button" class="btn btn-primary btn-sm">+</button></td>
                 </tbody>
-            @endforeach
+            @empty
+                <tr class="text-center">
+                   <td colspan="100%" class="py-3 italic">No se encuentran sellos registrados</td>
+                </tr>
+            @endforelse
         </table>
     @endif
     @if (count($content['seals']) > 0)
@@ -171,21 +179,3 @@
     </select>
 </div>
 
-<script>
-    $(document).ready(function() {
-        $('#selectionTerminals').select2({
-            placeholder: "Seleccione terminales a asociar"
-        });
-        $('#selectionTerminals').on('change', function(e) {
-            var terminal = $('#selectionTerminals').select2("val");
-            @this.set('connector.terminals', terminal);
-        });
-        $('#selectionSeals').select2({
-            placeholder: "Seleccione sellos a asociar"
-        });
-        $('#selectionSeals').on('change', function(e) {
-            var seal = $('#selectionSeals').select2("val");
-            @this.set('connector.seals', seal);
-        });
-    });
-</script>

@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             DomicileDeliverySeeder::class,
             PermissionSeeder::class,
+            DollarSeeder::class,
        ]);
        Provider::factory(10)->create();
       # Material::factory(6)->create();
