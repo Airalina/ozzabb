@@ -39,6 +39,7 @@
                     <tr>
                       <th style="text-align: center">Codigo</th>
                       <th style="text-align: center">Descripcion</th>
+                      <th style="text-align: center">Cliente</th>
                       <th style="text-align: center">Precio U$D</th>
                       <th style="text-align: center">Fecha de Ingreso</th>
                       <th></th>
@@ -49,6 +50,7 @@
                     <tr>
                       <td style="text-align: center">{{ $instalacion->code }}</td>
                       <td style="text-align: center">{{ $instalacion->description }}</td>
+                      <td style="text-align: center">{{ $instalacion->customer->name }}</td>
                       <td style="text-align: center">{{ $instalacion->usd_price }}</td>
                       <td style="text-align: center">{{ date('d-m-Y', strtotime($instalacion->date_admission)) }}</td>
                       <td style="text-align: center">
