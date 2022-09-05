@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use  App\Models\Revisiondetail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Revision extends Model
 {
     use SoftDeletes, HasFactory;
+    
     protected $fillable = [
         'id',
         'number_version',

@@ -32,4 +32,8 @@ class Customer extends Model
     {
         return $this->hasMany(Clientorder::class, 'customer_id');
     }
+    public function installations()
+    {
+        return $this->hasMany(Installation::class, 'customer_id');
+    }
 }

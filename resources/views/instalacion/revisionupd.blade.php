@@ -101,28 +101,30 @@
                       <!-- /.card -->
                       <div class="card">
                         <div class="card-header">
-                          <h3 class="card-title">Materiales agregadas:</h3>
+                          <h3 class="card-title">Materiales agregados:</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
                           <table class="table table-hover table-sm">
                             <thead>
                             <tr>
-                                <th style="text-align: center">Codigo</th>
+                                <th style="text-align: center">Código</th>
                                 <th style="text-align: center">Descripción</th>
                                 <th style="text-align: center">Cantidad</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                              @foreach($details as $detail)  
-                              <tr>
-                                <td style="text-align: center">{{ $detail[0] }}</td>
-                                <td style="text-align: center">{{ $detail[1] }}</td>
-                                <td style="text-align: center">{{ $detail[2] }}</td>
-                                <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-sm">Quitar</button></td>
-                              </tr>
-                              @endforeach
+                              @if(!empty($details))
+                                @foreach($details as $detail)  
+                                <tr>
+                                  <td style="text-align: center">{{ $detail[0]}}</td>
+                                  <td style="text-align: center">{{ $detail[1] }}</td>
+                                  <td style="text-align: center">{{ $detail[2]}}</td>
+                                  <td style="text-align: center"><button type="button"  wire:click="downmaterial({{ $detail[3] }})" class="btn btn-danger btn-sm">Quitar</button></td>
+                                </tr>
+                                @endforeach
+                              @endif
                             </tbody>
                           </table>
                         </div>
