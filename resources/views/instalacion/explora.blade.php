@@ -7,7 +7,7 @@
         <div class="card-header">
           <h6 class="card-title">Usted a seleccionado la instalacion con código: {{ $code }} </h6><br>
           <h6 class="card-title">Descripción: {{ $description }} </h6><br>
-          <h6 class="card-title">Cliente: {{ $this->instalacion->customer->name }} </h6><br>    
+          <h6 class="card-title">Cliente: @if(!empty($this->instalacion->customer->name)){{ $this->instalacion->customer->name }}@else No se ha encontrado cliente asociado @endif </h6><br>    
           <h6 class="card-title">Precio Unitario: {{ $usd_price }} </h6><br>
           <h6 class="card-title">Fecha de creación: {{ date('d-m-Y', strtotime($date_admission)) }} </h6><br>
         <div class="card-tools">
