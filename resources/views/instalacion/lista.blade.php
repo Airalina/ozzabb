@@ -50,7 +50,11 @@
                     <tr>
                       <td style="text-align: center">{{ $instalacion->code }}</td>
                       <td style="text-align: center">{{ $instalacion->description }}</td>
-                      <td style="text-align: center">{{ $instalacion->customer->name }}</td>
+                      @if(empty($instalacion->customer->name))
+                        <td style="text-align: center"> No se ha encontrado cliente asociado</td>
+                      @else
+                        <td style="text-align: center">{{ $instalacion->customer->name }}</td>                       
+                      @endif
                       <td style="text-align: center">{{ $instalacion->usd_price }}</td>
                       <td style="text-align: center">{{ date('d-m-Y', strtotime($instalacion->date_admission)) }}</td>
                       <td style="text-align: center">

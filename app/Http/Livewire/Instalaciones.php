@@ -171,8 +171,10 @@ class Instalaciones extends Component
         $this->instalacion=Installation::find($instalacion->id);
         $this->installation_id=$instalacion->id;
         $this->code=$instalacion->code;
-        $this->cliente_name=$this->instalacion->customer->name;
-        $this->cliente_id=$this->instalacion->customer->id;
+        if(!empty($this->instalacion->customer)){
+            $this->cliente_name=$this->instalacion->customer->name;
+            $this->cliente_id=$this->instalacion->customer->id;
+        }
         $this->description=$instalacion->description;
         $this->date_admission=$instalacion->date_admission;
         $this->usd_price=$instalacion->usd_price;
