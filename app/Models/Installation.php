@@ -17,6 +17,9 @@ class Installation extends Model
         'usd_price',
         'hours_man',
     ];
+    public function customer(){
+        return $this->belongsTo(Customer::class,'customer_id');
+    }
     public function revisions()
     {
         return $this->hasMany(Revision::class);

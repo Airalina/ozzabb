@@ -297,7 +297,7 @@ trait MaterialTrait
     public function fillInformation($family, $materialId = '')
     {
         $this->information['showColors'] = ($family == 'Cables' || $family == 'Terminales') ? false : true;
-        $this->information['showLines'] = ($family == 'Cables' || $family == 'Tubos' || $family == 'Accesorios') ? false : true;
+        $this->information['showLines'] = true;
         $this->information['showReplace'] = ($family == 'Cables' || $family == 'Tubos') ? false : true;
         $materialReplaces = Material::familyMaterials($family)->whereNotIn('id', [$materialId]);
         $this->information['replaces'] = $materialReplaces ? $materialReplaces->get()->toArray() : [];

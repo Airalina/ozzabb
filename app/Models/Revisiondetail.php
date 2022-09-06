@@ -11,6 +11,12 @@ class Revisiondetail extends Model
 {
     use SoftDeletes, HasFactory;
 
+    protected $fillable = [
+        'id',
+        'number_version',
+        'installation_id'
+    ];
+    
     public function materials()
     {
         return $this->belongsTo(Material::class,'material_id');

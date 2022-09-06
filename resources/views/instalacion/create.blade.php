@@ -25,6 +25,44 @@
                             <input class="form-control form-control-sm" type="text" wire:model="code" placeholder="Ingrese código de instalación">
                         </div>
                         <div class="form-group">
+                            <label>Seleccione Cliente:</label>
+                            <br>
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                              <input wire:model="searchcustomer" type="text" class="form-control form-control-xs float-right" placeholder="Buscar cliente...">
+                            </div>
+                            @if($searchcustomer!="")
+                              @if(!empty($clientes))
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-hover table-sm">
+                                    <thead>
+                                      <tr>
+                                        <th style="text-align: center">Nombre</th>
+                                        <th></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      @forelse($clientes as $customer)
+                                        <tr>
+                                          <td style="text-align: center">{{ $customer->name }}</td>
+                                          <td><button type="button"  wire:click.prevent="selectcustomer({{ $customer->id }})" class="btn btn-success btn-sm">Seleccionar</button></td>
+                                        </tr>
+                                        @empty
+                                          <tr class="text-center">
+                                            <td colspan="4" class="py-3 italic">No hay información</td>
+                                          </tr>
+                                      @endforelse
+                                    </tbody>
+                                  </table>
+                                </div>
+                              @endif
+                            @endif
+                            @if(!empty($cliente_name))
+                              <br>
+                              <label>Cliente seleccionado:</label>
+                              <p>{{$cliente_name}}</p>
+                            @endif
+                        </div>
+                        <div class="form-group">
                             <label>Descripción</label>
                             <textarea class="form-control form-control-sm" rows="3" wire:model="description" placeholder="Descripción ..."></textarea>
                         </div>
