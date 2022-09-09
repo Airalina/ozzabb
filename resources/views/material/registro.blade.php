@@ -27,6 +27,9 @@
                         <x-img-create-card :files="$files" :funcion="$funcion" />
                     </div>
                 </div>
+                @error('showPrice')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <div class="form-group">
                     <label for="name">¿Desea agregar precio al material?</label>
                     <div class="form-check">

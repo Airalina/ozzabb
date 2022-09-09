@@ -1,36 +1,54 @@
 <div>
-@switch($funcion)
-    @case("")
-        @if (auth()->user()->can('seedepo', auth()->user()))
-            @include("deposito.lista")
-        @endif
+    @switch($view)
+        @case('')
+            @if (auth()->user()->can('seedepo', auth()->user()))
+                @include('deposito.lista')
+            @endif
         @break
-    @case("create")
-        @include("deposito.create")
+
+        @case('create')
+            @include('deposito.create')
         @break
-    @case("explora")
-        @include("deposito.explora")
+
+        @case('explorar')
+            @include('deposito.explora')
         @break
-    @case("ingreso")
-        @include("deposito.ingreso")
+
+        @case('ingreso')
+            @include('deposito.ingreso')
         @break
-    @case("egreso")
-        @include("deposito.egreso")
+
+        @case('egreso')
+            @include('deposito.egreso')
         @break
-    @case("retiros")
-        @include("deposito.retiros")
+
+        @case('retiros')
+            @include('deposito.retiros')
         @break
-    @case("retiro_detail")
-        @include("deposito.retiro_detail")
+
+        @case('retiroDetail')
+            @include('deposito.retiro_detail')
         @break
-    @case("createassembled")
-        @include("deposito.createassembled")
+
+        @case('createMaterial')
+            @include('deposito.createMaterial')
         @break
-    @case("createbo")
-        @include("deposito.createbo")
+ 
+        @case('createAssembled')
+            @include('deposito.createassembled')
         @break
-    @case("update")
-        @include("deposito.update")
+
+        @case('createInstallation')
+            @include('deposito.createInstallation')
         @break
-@endswitch
+
+        @case('createbo')
+            @include('deposito.createbo')
+        @break
+
+        @case('actualizar')
+            @include('deposito.update')
+        @break
+
+    @endswitch
 </div>

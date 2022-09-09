@@ -2,1006 +2,846 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use App\Models\Warehouse;
+use App\Http\Traits\WarehouseTrait;
+use App\Models\Assembled;
 use App\Models\Material;
 use App\Models\DepositMaterial;
-use App\Models\DepositInstallation;
-use App\Models\Deposit;
-use App\Models\AssembledDetail;
-use App\Models\Assembled;
 use App\Models\Installation;
-use App\Models\MaterialEntryOrderDetail;
-use App\Models\MaterialEntryOrder;
-use App\Models\ExpendOrder;
-use App\Models\ExpendOrderDetail;
-use App\Models\Revision;
-use App\Models\BuyOrder;
-use App\Models\BuyOrderDetail;
-use App\Models\BuyOrderMaterialEntryOrder;
-use App\Models\Workorder;
+use App\Models\Warehouse;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 use Livewire\WithPagination;
-use DB;
 
 class Depositos extends Component
 {
-    use WithPagination;
+    use WithPagination, WarehouseTrait;
     protected $paginationTheme = 'bootstrap';
-    public $deposito, $origen,$paginas=25, $paginasinternas=10, $causa, $modo, $deposito_id, $name, $location, $state, $create_date, $amount, $searchensamblados="", $searchdeposito="", $searchmateriales="", $searchinstallation="", $searchorderbuy, $funcion="", $selector;
-    protected $depositos, $materialesdepo, $ensambladosdepo, $instalacionesdepo, $deposit_material;
-    public $seleccion, $ingreso, $codem, $descriptionm, $presentationm=[], $material_id, $type, $materiales, $name_receive, $name_entry, $code, $descriptionw, $description, $select=false, $revi=false, $ensamblados, $instalaciones, $revisiones, $number_version, $serial_number, $client_order_id;
-    public $searchmaterialsdepo="", $entry_order_id, $buy_order_id, $order="type", $follow_number, $ordenesdepo, $date, $egreso, $details=array(), $detail=array(), $id_depomaterial;
-    public $material_description,$deposito_delete,$amount_requested,$nombre_deposito,$amount_follow,$amount_undelivered,$set, $buyorders, $ingresa=false, $buyorderdetails, $follow, $material_code, $temporary,$permanent, $count=0, $ordenegreso, $hour, $ordenegresodatail, $ordenegresodetail, $user, $sta, $destination, $presentation, $deposits, $depo, $materials_deposit, $materials_deposits, $materials_presentation, $materials_amount, $depo_destino, $name_egress, $explora_depo, $presentations, $amounts, $total, $totals, $retiros, $ingresos, $retiro, $ensamblados_deposits, $searchensambladodepo="", $descriptiona, $assembled_id, $assembled_amount, $selection = '', $materials_assembleds, $depo_id=0, $disabled='', $reservations = array();
-    public function updatingSearch()
+    protected $listeners = ['newMaterial', 'newAssembled', 'newInstallation', 'backToEntry'];
+    //Variables paginadas
+    protected $deposited, $deposits, $withdrawsList;
+    //Variables definidas 
+    public $paginas = 25, $paginasinternas = 10, $paginasInternasRetiros = 10, $search = "", $searchAssembleds = "",
+        $searchMaterials = "", $searchInstallations = "", $searchDeposit = "", $view = "", $selection = '', $order = "type";
+    //Arrays
+    public $amounts = [], $presentations = [], $amount = [], $totals = [], $warehouse = [], $movements = [], $withdraw = [], $withdraws = [],
+        $productSelected = [], $productsSelected = [], $product, $productDeposited = [], $installationSelected = [];
+    //Variables no definidas
+    public $warehouses, $materials, $installations, $assembleds, $productsDeposited, $productDepositedCollect, $types, $validation, $states,
+        $dataProduct, $warehouseDestination, $withdrawsCollect, $warehouseWithdraws, $warehouseSelected, $type, $material;
+
+    public function __construct()
     {
-        $this->resetPage();
+        //Inicializa variables con informacion de depositos
+        $this->types = Warehouse::TYPES;
+        $this->states = Warehouse::STATES;
+        $this->warehouse['id'] = '';
+        $this->productsSelected['material'] = [];
+        $this->amount['avaiable'] = [];
     }
+
     public function render()
     {
-        $this->buyorders=BuyOrder::where('id','LIKE','%'.$this->searchorderbuy.'%')
-            ->orWhere('provider_id','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('pucharsing_sheet_id','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('order_number','LIKE','%',$this->searchorderbuy.'%')
-            ->orWhere('state','LIKE','%',$this->searchorderbuy.'%')->orderByDesc('state')->get();
-        $this->ensamblados=Assembled::where('id','like','%'.$this->searchensamblados.'%')
-            ->orWhere('description','LIKE','%'.$this->searchensamblados.'%')->get();
-        $this->instalaciones=Installation::where('id','LIKE','%' .$this->searchinstallation. '%')
-            ->orWhere('code','LIKE','%'.$this->searchinstallation.'%')
-            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->get();
-        $this->materiales=Material::where('code','like','%'.$this->searchmateriales.'%')
-            ->orWhere('name','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('family','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('color','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
-        $this->depositos=Warehouse::where('id','LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('name','LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('location','LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('description','Like','%'.$this->searchdeposito.'%')
-            ->orWhere('create_date', 'LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('temporary','LIKE','%'.$this->searchdeposito.'%')->orderBy($this->order)->paginate($this->paginas);
-        $this->deposits = Warehouse::where('id','!=', $this->deposito_id)->where(function ($query) {
-            $query->where('id','LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('name','LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('location','LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('description','Like','%'.$this->searchdeposito.'%')
-            ->orWhere('create_date', 'LIKE','%'.$this->searchdeposito.'%')
-            ->orWhere('temporary','LIKE','%'.$this->searchdeposito.'%');
-        })->get();
-      
-        if (!empty($this->depo)) {
-            if ($this->depo_id != 0) {
-                $this->materials_deposits = $this->depo->materials()->groupBy('material_id')->where(function ($query) {
-                    $query->where('code','like','%'.$this->searchmaterialsdepo.'%')
-                    ->orWhere('name','LIKE','%'.$this->searchmaterialsdepo.'%')
-                    ->orWhere('family','LIKE','%'.$this->searchmaterialsdepo.'%')
-                    ->orWhere('color','LIKE','%'.$this->searchmaterialsdepo.'%')
-                    ->orWhere('description','LIKE','%'.$this->searchmaterialsdepo.'%')
-                    ->orWhere('stock_min','LIKE','%'.$this->searchmaterialsdepo.'%')
-                    ->orWhere('stock_max','LIKE','%'.$this->searchmaterialsdepo.'%')
-                    ->orWhere('stock','LIKE','%'.$this->searchmaterialsdepo.'%');
-                })->get();
-                
-                $this->ensamblados_deposits = $this->depo->assembleds()->where('is_material',0)->groupBy('id')->where(function ($query) {
-                    $query->where('assembleds.id','LIKE','%'.$this->searchensambladodepo.'%')
-                    ->orWhere('assembleds.description','LIKE','%'.$this->searchensambladodepo.'%');
-                })->get();
-              #  dd($this->ensamblados_deposits);
-                $this->instalaciones = $this->depo->installations()->groupBy('id')->where(function ($query) {
-                    $query->where('installations.id','LIKE','%' .$this->searchinstallation. '%')
-                    ->orWhere('installations.code','LIKE','%'.$this->searchinstallation.'%')
-                    ->orWhere('installations.description','LIKE','%'.$this->searchinstallation.'%');
-                })->get();
+        //Si el ingreso / egreso es sin origen / destino, se buscan todos los materiales que posean una presentacion (relacion providerprices)
+        //Si el ingreso / egreso es desde un deposito origen / destino, se buscan todos los materiales almacenados en ese deposito
+        $this->materials = (isset($this->warehouseSelected)) ?
+            $this->warehouseSelected->searchMaterialsDeposit($this->searchMaterials)->groupBy('id')->get() :
+            Material::searchByProviderPrices($this->searchMaterials)->get();
+        //Si el ingreso / egreso es sin origen / destino, se buscan todos los ensamblados
+        //Si el ingreso / egreso es desde un deposito origen / destino, se buscan todos los ensamblados almacenados en ese deposito
+        $this->assembleds = (isset($this->warehouseSelected)) ?
+            $this->warehouseSelected->searchAssembledsDeposit($this->searchAssembleds)->get() :
+            Assembled::search($this->searchAssembleds)->get();
+        //Si el ingreso / egreso es sin origen / destino, se buscan todas las instalaciones
+        //Si el ingreso / egreso es desde un deposito origen / destino, se buscan todas las instalaciones almacenados en ese deposito
+        $this->installations = (isset($this->warehouseSelected)) ?
+            $this->warehouseSelected->searchInstallationsDeposit($this->searchInstallations)->get() :
+            Installation::search($this->searchInstallations)->get();
+        if (!empty($this->warehouse['id'])) {
+            //Almacen - ingreso / egreso con depositos tipo produccion, almacen o ingresar sin deposito
+            //Produccion - ingreso / egreso con depositos tipo produccion o ingresar sin deposito 
+            //Ensamblados - ingreso / egreso con depositos tipo produccion, ensamblados o ingresar sin deposito 
+            //Expedicion - ingreso / egreso con depositos tipo expedicion o sin deposito
+            switch ($this->warehouse['type']) {
+                case 1:
+                    $types = ($this->view == 'ingreso') ? [1] : [1, 2];
+                    break;
+                case 2:
+                    $types = ($this->view == 'ingreso') ? [1, 2, 3] : [2];
+                    break;
+                case 3:
+                    $types = ($this->view == 'ingreso') ? [3] : [2, 3];
+                    break;
+                case 4:
+                    $types = [4];
+                    break;
             }
-
-        #dd($this->instalaciones);
-        }else{
-            $this->materials_deposits = Material::where('code','like','%'.$this->searchmaterialsdepo.'%')
-            ->orWhere('name','LIKE','%'.$this->searchmaterialsdepo.'%')
-            ->orWhere('family','LIKE','%'.$this->searchmaterialsdepo.'%')
-            ->orWhere('color','LIKE','%'.$this->searchmaterialsdepo.'%')
-            ->orWhere('description','LIKE','%'.$this->searchmaterialsdepo.'%')
-            ->orWhere('stock_min','LIKE','%'.$this->searchmaterialsdepo.'%')
-            ->orWhere('stock_max','LIKE','%'.$this->searchmaterialsdepo.'%')
-            ->orWhere('stock','LIKE','%'.$this->searchmaterialsdepo.'%')->get();
-            
-            $this->ensamblados_deposits = Assembled::where('id','like','%'.$this->searchensamblados.'%')
-            ->orWhere('description','LIKE','%'.$this->searchensamblados.'%')->get();
-            
+            //Busqueda de depositos elegibles para ingresos / egresos
+            $this->warehouses = Warehouse::searchWarehouses($this->searchDeposit, $this->warehouse['id'], $types)->get();
         }
-      #  dd($this->instalaciones);
-        if (!empty($this->explora_depo)) {
-            $this->materialesdepo=$this->explora_depo->materials()->groupBy('material_id')->paginate($this->paginasinternas);
-            $this->materials_assembleds=$this->explora_depo->depositmaterials()->groupBy('is_material','material_id')->get();
-            $this->instalacionesdepo=$this->explora_depo->depositinstallations()->paginate($this->paginasinternas);
-           
-            #dd($this->materials_assembleds);
-            foreach ($this->materialesdepo as $material) {
-                $this->presentations[$material->id] = $material->depositmaterials()->where('warehouse_id',
-                $this->deposito_id)->where('is_material',1)->groupBy('presentation')->get();
+        //Busqueda de depositos en el listado
+        $this->deposits = Warehouse::search($this->search, $this->order)->paginate($this->paginas);
 
-                $this->amounts[$material->id] = $material->depositmaterials()->where('warehouse_id',
-                $this->deposito_id)->where('is_material',1)->select('presentation','material_id', DB::raw('SUM(amount) as
-                total'))->groupBy('presentation')->get(); 
+        //Paginador de array con los productos almacenados en un deposito  
+        $this->deposited = !empty($this->productsDeposited) ? $this->fillPaginator($this->productDepositedCollect, $this->paginasinternas, 'productsDeposited') : collect([]);
+        //Paginador de array con los retiros realizados desde el deposito
+        $this->withdrawsList = !empty($this->warehouseWithdraws) ? $this->fillPaginator($this->withdrawsCollect, $this->paginasInternasRetiros, 'warehouseWithdraws') : collect([]);
 
-                $workorder = Workorder::where('state', 'Actual')->orWhere('state', 'Actual con pedidos cancelados')->first();
-                
-               
-                    foreach ($this->presentations[$material->id] as $key => $presentation) {
-                        $this->reservations[$material->id][$key] = (!empty($workorder)) ? $material->reservationmaterials()->select('id', 'amount' ,'material_id', 'presentation' ,DB::raw('SUM(amount) as
-                    total'))->where('workorder_id', $workorder->id)->where('presentation',$presentation->presentation)->first() : '-';
-                    }
-
-                foreach ($this->amounts[$material->id] as $index => $amount) {
-                    $this->totals[$amount->material_id][$index] = $amount->presentation * $amount->total;
-                }
-                
-            }
-
-            $this->ensambladosdepo=$this->explora_depo->assembleds()->groupBy('id')->paginate($this->paginasinternas);
-           foreach ($this->ensambladosdepo as $ensamblado) {
-               $this->total[$ensamblado->id] = $ensamblado->depositmaterials()->where('warehouse_id',
-               $this->deposito_id)->where('is_material',0)->select('material_id', DB::raw('SUM(amount) as
-               total'))->groupBy('material_id')->get();
-              
-           }
-        }    
-        #$this->ensambladosdepo=DepositMaterial::where('is_material', false)->where('warehouse_id', $this->deposito_id)->paginate($this->paginasinternas);
-        return view('livewire.depositos',[
-            #$this->instalacionesdepo=DepositInstallation::where('warehouse_id', $this->deposito_id)->paginate($this->paginasinternas);
-            'depositos' => $this->depositos,
-            'materialesdepo' => $this->materialesdepo,
-            'ensambladosdepo' => $this->ensambladosdepo,
-            'instalacionesdepo' => $this->instalacionesdepo,
+        return view('livewire.depositos', [
+            'deposits' => $this->deposits,
+            'deposited' => $this->deposited,
+            'withdrawsList' => $this->withdrawsList,
         ]);
-        
     }
+
+    /**
+     * Accion de cambiar la vista a crear en "Agregar Deposito"
+     * 
+     * @return string $view
+     */
     public function create()
     {
-        $this->funcion="create";
+        $this->view = "create";
     }
 
+    /**
+     * Registro de un deposito
+     * 
+     * @return Warehouse $warehouse|null
+     */
     public function store()
     {
-        # code...
-        if($this->funcion=="create"){
-            $this->validate([
-                'type'=>'required|min:4',
-                'name' => 'required|string|min:4|max:100',
-                'location' => 'required|string|min:4|max:300',
-                'descriptionw' => 'required|string|min:4|max:300',
-                'create_date'=>'required',
-            ],
-            [
-                'type.required'=>'El campo Tipo de depósito es requerido',
-                'type.min'=>'El campo Tipo de depósito es requerido',
-                'name.required' => 'El campo Nombre es requerido',
-                'name.min' => 'El campo Nombre tiene por lo menos 4 caracteres',
-                'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-                'location.required' => 'El campo Ubicación es requerido',
-                'location.min' => 'El campo Ubicación tiene como minimo 4 caracteres',
-                'location.max' => 'El campo Ubicación tiene como maximo 300 caracteres',
-                'descriptionw.required'=>"El campo Descripción es requerido",
-                'descriptionw.min' => 'El campo Descripción tiene como minimo 4 caracteres',
-                'descriptionw.max' => 'El campo Descripción tiene como maximo 300 caracteres',
-                'create_date.required'=>'El campo Fecha es requerido',
-            ]);
-            $this->deposito=new Warehouse;
-            $this->deposito->name=$this->name;
-            $this->deposito->location=$this->location;
-            $this->deposito->state=1;
-            switch($this->type){
-                case "Almacén":
-                    $this->deposito->type=1;
-                    break;
-                case "Producción":
-                    $this->deposito->type=2;
-                    break;
-                case "Ensamblados":
-                    $this->deposito->type=3;
-                    break;
-                case "Expedición":
-                    $this->deposito->type=4;
-                    break;    
-            }
-            $this->deposito->create_date=$this->create_date;
-            $this->deposito->description=$this->descriptionw;
-            if($this->temporary==null && $this->permanent==null){
-                $this->deposito->temporary=0;
-            }elseif($this->temporary){
-                $this->deposito->temporary=1;
-            }elseif($this->permanent){
-                $this->deposito->temporary=0;
-            }
-            $this->deposito->save();
-            $this->volver();
-        }elseif($this->funcion=="update"){
-            $this->deposito=Warehouse::find($this->deposito_id);
-            $this->deposito->name=$this->name;
-            $this->deposito->location=$this->location;
-            $this->deposito->state=1;
-            $this->deposito->description=$this->descriptionw;
-            if($this->temporary==null){
-                $this->temporary=false;
-            }
-            $this->deposito->temporary=$this->temporary;
-            $this->deposito->save();
-            $this->explora($this->deposito);
-        }
-        elseif($this->funcion=="createbo"){
-            {
-                $this->validate([
-                    'date' => 'required',
-                    'hour' => 'required',
-                    'follow' => 'string|min:4|max:300',
-                ],
-                [
-                    'date.required' => 'El campo Fecha es requerido',
-                    'hour.required' => 'El campo Hora es requerido',
-                    'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-                    'follow.required' => 'El campo N° de remito es requerido',
-                    'follow.min' => 'El campo N° de remito tiene como minimo 4 caracteres',
-                    'follow.max' => 'El campo N° de remito tiene como maximo 300 caracteres',
-                ]);
-                $this->orden=new MaterialEntryOrder;
-                $this->orden->date=$this->date;
-                $this->orden->hour=$this->hour;
-                $this->orden->buy_order_id=$this->buy_order_id;
-                $this->orden->follow_number=$this->follow;
-                $this->orden->save();
-                $this->entry_orderbuy=new BuyOrderMaterialEntryOrder;
-                $this->entry_orderbuy->buy_order_id=$this->buy_order_id;
-                $this->entry_orderbuy->entry_order_id=$this->orden->id;
-                $this->entry_orderbuy->save();
-                foreach($this->details as $detail){
-                    $this->ingreso=DepositMaterial::where('material_id',$detail[4])->where('is_material',true)->where('presentation',$detail[5])->where('warehouse_id',$this->deposito_id)->get();
-                    if($this->ingreso->count()==0){
-                        $this->depositm=new DepositMaterial;
-                        $this->depositm->material_id=$detail[4];
-                        $this->depositm->warehouse_id=$this->deposito_id;
-                        $this->depositm->presentation=$detail[5];
-                        $this->depositm->amount=$detail[2];
-                        $this->depositm->date_change=$this->date;
-                        $this->depositm->is_material=1;
-                        $this->depositm->save();
-                    }else{
-                        foreach($this->ingreso as $ing){
-                            $ing->amount=($ing->amount+$detail[2]);
-                            $ing->date_change=$this->date;
-                            $ing->save();
-                        }
-                    }
-                    $this->detailem=new MaterialEntryOrderDetail;
-                    $this->detailem->entry_order_id=$this->orden->id;
-                    $this->detailem->material_code=$detail[0];
-                    $this->detailem->material_description=$detail[1];
-                    $this->detailem->warehouse_id=$this->deposito_id;
-                    $this->detailem->presentation=$detail[5];
-                    $this->detailem->amount_received=$detail[2];
-                    $this->detailem->amount_follow=$detail[8];
-                    $this->detailem->amount_requested=$detail[7];
-                    $this->detailem->amount_undelivered=$detail[9];
-                    $this->detailem->difference=$detail[10];
-                    $this->detailem->set=$detail[11];
-                    $this->detailem->save();
-                }
-            }
-            $this->amount=0;
-            $this->select=false;
-            $this->follow=null;
-            $this->date=null;
-            $this->hour=null;
-            $this->date=null;
-            $this->hour=null;
-            $this->code=null;
-            $this->description=null;
-            $this->material_id=null;
-            $this->count=null;
-            $this->presentation=null;
-            $this->amount_requested=null;
-            $this->amount_follow=null;
-            $this->amount_undelivered=null;
-            $this->details=null;
-            $this->set=null;
+        //validacion para depositos
+        $validationProperties = $this->validationWarehouses();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+        $this->validation['warehouse']['state'] = 1;
+
+        try {
+            DB::beginTransaction();
+            //creando el deposito
+            $warehouse = Warehouse::updateOrCreate($this->validation['warehouse']);
+
+            DB::commit();
             $this->resetValidation();
-            $this->funcion="explora";
-            $this->seleccion="";
-            $this->modo="";
-        }  
-        elseif($this->funcion=="ingreso"){
-            if (empty($this->depo)) {
-                $this->depo = new Warehouse;
-                $this->depo->id = 0;
-    
+            $this->reset();
+            return $warehouse;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            if (isset($warehouse)) {
+                // en caso de error, borra deposito
+                $warehouse->delete();
             }
-            if($this->type==1||$this->type==2){
-                $this->validate([
-                    'date' => 'required',
-                    'hour' => 'required',
-                    'depo' => 'required',
-                    'name_receive' => 'required',
-                    'name_entry' => 'required',
-                    'selection' => 'required'
-                ],
-                [
-                    'date.required' => 'El campo Fecha es requerido',
-                    'hour.required' => 'El campo Hora es requerido',
-                    'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-                    'depo.required' => 'Debe seleccionar un depósito origen',
-                    'name_receive.required' => 'El campo "Responsable de recibir" es requerido',
-                    'name_entry.required' => 'El campo "Responsable de ingresar" es requerido',
-                    'selection.required' => 'Debe seleccionar una opción del tipo de producto a ingresar'
-                ]);
-                if ($this->explora_depo->type == 2 && ($this->depo->type != 2 && $this->depo->id != 0)) {
-                    $this->addError('depo', 'El depósito origen debe ser tipo producción');
-                }elseif(($this->explora_depo->type == 1) && ($this->depo->type !=2 && $this->depo->type !=1 && $this->depo->id != 0)){
-                    $this->addError('depo', 'El depósito origen debe ser tipo producción o almacen');
-                }
-                else{            
-                        foreach($this->details as $detail){
-                            $this->depositm=new DepositMaterial;
-                            $this->depositm->material_id= ($this->selection == 'Materiales') ? $detail[4] : $this->material_id; 
-                            $this->depositm->warehouse_id=($this->selection == 'Materiales') ? $detail[6] : $this->deposito_id; 
-                            $this->depositm->warehouse2_id=($this->selection == 'Materiales') ? $detail[7] : $this->depo->id; 
-                            $this->depositm->presentation=($this->selection == 'Materiales') ? $detail[5] : 1; 
-                            $this->depositm->amount=($this->selection == 'Materiales') ? $detail[2] : $this->amount; 
-                            $this->depositm->date_change=$this->date;
-                            $this->depositm->hour=$this->hour;
-                            $this->depositm->name_receive=$this->name_receive;
-                            $this->depositm->name_entry=$this->name_entry;
-                            $this->depositm->is_material=($this->selection == 'Materiales') ? 1 : 0;
-                            $this->depositm->type=1;
-                            $this->depositm->save();
-                              
-                    }
-                
-                    $this->amount=null;
-                    $this->select=false;
-                    $this->origen=null;
-                    $this->name_receive=null;
-                     $this->depo_id=0;
-                    $this->name_entry=null;
-                    $this->causa=null;
-                    $this->selection='';
-                    unset($this->details);
-                    unset($this->depo);
-                    $this->resetValidation();
-                    $this->funcion="explora";
-                    $this->modo="";
-                }
-                    
-            }elseif($this->type==3){
-                $this->validate([
-                    'date' => 'required',
-                    'hour' => 'required',
-                    'depo' => 'required',
-                    'name_receive' => 'required',
-                    'name_entry' => 'required',
-                    'amount' => 'required|integer|min:1|max:1000000',
-                ],
-                [
-                    'date.required' => 'El campo Fecha es requerido',
-                    'hour.required' => 'El campo Hora es requerido',
-                    'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-                    'depo.required' => 'Debe seleccionar un depósito origen',
-                    'name_receive.required' => 'El campo "Responsable de recibir" es requerido',
-                    'name_entry.required' => 'El campo "Responsable de ingresar" es requerido',
-                    'amount.required' => 'El campo Cantidad es requerido',
-                    'amount.integer' => 'El campo Cantidad es entero',
-                    'amount.min' => 'El campo Cantidad tiene como mínimo 1(uno)',
-                    'amount.max' => 'El campo Cantidad tiene como maximo 1000000(un millon)',
-                ]);
-                if (($this->depo->type != 2 && $this->depo->type != 3  && $this->depo->id != 0) && ($this->explora_depo->type == 3)) {
-                    $this->addError('depo', 'El depósito origen debe ser tipo producción o expedición');
-                }else{
-               
-                    $this->ingreso=new DepositMaterial;
-                    $this->ingreso->warehouse_id=$this->deposito_id;
-                    $this->ingreso->material_id=$this->material_id;
-                    $this->ingreso->amount=$this->amount;
-                    $this->ingreso->date_change=$this->date;
-                    $this->ingreso->hour=$this->hour;
-                    $this->ingreso->is_material=false;
-                    $this->ingreso->presentation=1;
-                    $this->ingreso->warehouse2_id=$this->depo->id;
-                    $this->ingreso->name_receive=$this->name_receive;
-                    $this->ingreso->name_entry=$this->name_entry;
-                    $this->ingreso->type=1;
-                    $this->ingreso->save();
-                   
-                    $this->funcion="explora";    
-                    $this->selection='';
-                    $this->amount=0;
-                    $this->select=false;
-                    $this->amount=null;
-                    $this->select=false;
-                    $this->origen=null;
-                    $this->name_receive=null;
-                     $this->depo_id=0;
-                    $this->name_entry=null;
-                    $this->causa=null;
-                    unset($this->details);
-                    unset($this->depo);
-                    $this->resetValidation();
+            // Respuesta en consola del error
+            $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+
+            return null;
+        }
+    }
+
+    /**
+     * accion de cambiar la vista a editar en "Actualizar"
+     * 
+     * @param int $warehouseId
+     * @return string $view
+     */
+    public function edit($warehouseId)
+    {
+        $this->view = "actualizar";
+        $this->warehouse = $this->fillWarehouse($warehouseId);
+        return $this->view;
+    }
+
+    /**
+     * Rellena un array con la informacion de un deposito
+     * 
+     * @param int $warehouseId
+     * @return array $warehouseArray|null
+     */
+    public function fillWarehouse($warehouseId)
+    {
+        $warehouse = Warehouse::findOrFail($warehouseId);
+        if ($warehouse) {
+            $warehouseArray = [
+                'id' => $warehouse->id,
+                'name' => $warehouse->name,
+                'description' => $warehouse->description,
+                'location' => $warehouse->location,
+                'create_date' => $warehouse->create_date,
+                'create_date' => $warehouse->create_date,
+                'state' => $warehouse->state,
+                'type' => $warehouse->type,
+                'temporary' => $warehouse->temporary,
+            ];
+
+            if ($warehouse->type == 1 || $warehouse->type == 2) {
+                //Listado con los productos su la cantidad almacenada en el deposito
+                $products = $warehouse->findAmountInWarehouse()->get();
+
+                //Rellena arrays correspondiente con presentaciones, cantidades y totales para el material correspondiente
+                $products->each(function ($product) {
+                    $this->presentations[$product->is_material][$product->material_id][$product->presentation] = !$product->presentation ? ' ' : $product->presentation;
+                    $this->amounts[$product->is_material][$product->material_id][$product->presentation] = $product->total_amount;
+                    $this->totals[$product->is_material][$product->material_id][$product->presentation] =  ($product->is_material) ?
+                        $product->presentation * $product->total_amount :
+                        $product->total_amount;
+                });
+
+                $presentations = $this->presentations;
+                $amounts = $this->amounts;
+                $totals = $this->totals;
+                //Rellena array correspondiente con cada producto (material / ensamblado)
+                $products->each(function ($product) use ($presentations, $amounts, $totals) {
+                    $dataProduct =  $product->is_material ? $product->material :  $product->assembled;
+
+                    $this->productDeposited[$product->is_material][$dataProduct->id] = [
+                        'id' => $dataProduct->id,
+                        'code' => $dataProduct->code ?? 'Ensamblado - ' . $dataProduct->id,
+                        'description' => $dataProduct->description,
+                        'packaging' => $presentations[$product->is_material][$product->material_id],
+                        'amount' => $amounts[$product->is_material][$product->material_id],
+                        'total' =>  $totals[$product->is_material][$product->material_id]
+                    ];
+                });
+                $productCollection = collect($this->productDeposited);
+                $this->productDepositedCollect = $productCollection->flatten(1);
+            } elseif ($warehouse->type == 3) {
+                //Listado con los ensamblados y su cantidad almacenada en el deposito
+                $assembleds = $warehouse->assembleds()->get();
+                //Rellena array correspondiente con cada ensamblado
+                $assembleds->each(function ($assembled) {
+                    $assembledDeposited = [
+                        'id' => $assembled->id,
+                        'description' => $assembled->description,
+                        'amount' => $assembled->total_amount,
+                    ];
+                    $this->productDeposited[$assembled->id] = $assembledDeposited;
+                    $this->amounts[$assembled->pivot->is_material][$assembled->pivot->material_id][0] = $assembled->total_amount;
+                });
+                $this->productDepositedCollect = collect($this->productDeposited);
+            } else {
+                //Listado con las instalaciones y su cantidad almacenada en el deposito
+                $installations = $warehouse->installations()->get();
+                //Rellena array correspondiente con cada instalacion
+                $installations->each(function ($installation) {
+                    $installationDeposited = [
+                        'number_version' => $installation->pivot->number_version,
+                        'client_order_id' => $installation->pivot->client_order_id,
+                        'amount' => $installation->total_amount,
+                        'description' => $installation->description,
+                        'code' => $installation->code,
+                        'serial_number' => $installation->pivot->serial_number
+                    ];
+                    $this->productDeposited[$installation->id] = $installationDeposited;
+                });
+                $this->productDepositedCollect = collect($this->productDeposited);
             }
-        }elseif($this->type==4){
-             $this->validate([
-                    'serial_number' => 'required|string|min:4|max:100',
-                    'client_order_id' => 'required|numeric|min:0|max:1000000',
-                    'number_version' => 'required|numeric|min:0|max:1000000',
-                    'date' => 'required|date',
-                    'hour' => 'required',
-                    'name_receive' => 'required',
-                    'name_entry' => 'required',
-                    'depo' => 'required',
-                ],[
-                    'serial_number.required' => 'El campo Número de serie es requerido',
-                    'serial_number.min' => 'El campo Número de serie tiene como minimo 4 caracteres',
-                    'serial_number.max' => 'El campo Número de serie tiene como maximo 100 caracteres',
-                    'number_version.required' => 'El campo N° de version es requerido',
-                    'number_version.numeric' => 'El campo N° de version es numerico',
-                    'number_version.min' => 'El campo N° de version tiene como mínimo 0(cero)',
-                    'number_version.max' => 'El campo N° de version tiene como maximo 10000000(diez millon)',
-                    'client_order_id.required' => 'El campo Id orden de cliente es requerido',
-                    'client_order_id.numeric' => 'El campo Id orden de cliente es numerico',
-                    'client_order_id.min' => 'El campo Id orden de cliente tiene como mínimo 0(cero)',
-                    'client_order_id.max' => 'El campo Id orden de cliente tiene como maximo 10000000(diez millon)',
-                    'date.required' => 'El campo Fecha es requerido',
-                    'date.date' => 'El campo Fecha debe ser una fecha con formato "dd/mm/AAAA"',
-                    'depo.required' => 'Debe seleccionar un depósito origen',
-                    'date.required' => 'El campo Fecha es requerido',
-                    'hour.required' => 'El campo Hora es requerido',
-                    'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-                    'name_receive.required' => 'El campo "Responsable de recibir" es requerido',
-                    'name_entry.required' => 'El campo "Responsable de ingresar" es requerido',
-                   
-                ]);
-            if (($this->depo->type != 4 && $this->depo->id != 0) && ($this->explora_depo->type == 4)) {
-                $this->addError('depo', 'El depósito origen debe ser tipo expedición');
-            }else{
-               
-                    $this->ingreso=new DepositInstallation;
-                    $this->ingreso->warehouse_id=$this->deposito_id;
-                    $this->ingreso->installation_id=$this->material_id;
-                    $this->ingreso->serial_number=$this->serial_number;
-                    $this->ingreso->number_version=$this->number_version;
-                    $this->ingreso->client_order_id=$this->client_order_id;
-                    $this->ingreso->date_admission=$this->date;
-                    $this->ingreso->hour=$this->hour;
-                    $this->ingreso->name_receive=$this->name_receive;
-                    $this->ingreso->name_entry=$this->name_entry;
-                    $this->ingreso->warehouse2_id=$this->depo->id;
-                    $this->ingreso->amount+=1;
-                    $this->ingreso->save();
+            //Paginador de array con los productos almacenados en un deposito  
+            $this->deposited = $this->fillPaginator($this->productDepositedCollect, $this->paginasinternas, 'productsDeposited');
 
-                    $this->description=null;
-                    $this->funcion="explora";
-                    $this->selection='';
-                    $this->resetValidation(); 
-                    unset($this->details);
-                    unset($this->depo);
-                    $this->searchinstallation = '';
-                    $this->serial_number=null;
-                    $this->client_order_id=null;
-                    $this->name_receive=null;
-                    $this->depo_id=0;
-                    $this->revi=false;
-                    $this->name_entry=null;
-            }
+            return $warehouseArray;
         }
-        }elseif($this->funcion=="egreso"){
-            $this->validate([
-                'date' => 'required',
-                'hour' => 'required',
-                'depo_destino' => 'required',
-                'name_receive' => 'required',
-                'name_egress' => 'required',
-                'selection' => 'required',
-            ],
-            [
-                'date.required' => 'El campo Fecha es requerido',
-                'hour.required' => 'El campo Hora es requerido',
-                'name.max' => 'El campo Nombre tiene como maximo 100 caracteres',
-                'name_receive.required' => 'El campo "Responsable de recibir" es requerido',
-                'depo_destino.required' => 'Debe seleccionar un depósito destino',
-                'name_egress.required' => 'El campo "Responsable de ingresar" es requerido',
-                'selection.required' => 'Debe seleccionar una opción del tipo de producto a retirar'
-            ]);
-            
-            if ($this->type == 1 || $this->type == 2 || $this->type == 3) {
-                if ($this->explora_depo->type == 2 && ($this->depo_destino->type != 2)) {
-                    $this->addError('depo_destino', 'El deposito destino debe ser tipo producción');
-                }elseif($this->explora_depo->type == 3 && ($this->depo_destino->type == 1 || $this->depo_destino->type == 4)){
-                    $this->addError('depo_destino', 'El deposito destino debe ser tipo producción o ensamblado');
-                }elseif($this->explora_depo->type == 1 && ($this->depo_destino->type == 3 || $this->depo_destino->type == 4)){
-                    $this->addError('depo_destino', 'El deposito destino debe ser tipo producción o almacen');
-                }else{ 
-    /*  
-                $this->ordenegreso=new ExpendOrder;
-                $this->ordenegreso->date_time=Carbon::now();
-                $this->ordenegreso->state="Nuevo";
-                $this->ordenegreso->user=$this->user;
-                $this->ordenegreso->save();*/
-
-                foreach($this->details as $detail){
-                    $this->depositm=new DepositMaterial;
-                    $this->depositm->material_id=$detail[4];
-                    $this->depositm->warehouse_id=$detail[6];
-                    $this->depositm->warehouse2_id=$detail[7];
-                    $this->depositm->presentation=$detail[5];
-                    $this->depositm->amount=-($detail[2]);
-                    $this->depositm->date_change=$this->date;
-                    $this->depositm->hour=$this->hour;
-                    $this->depositm->name_receive=$this->name_receive;
-                    $this->depositm->name_entry=$this->name_egress;
-                    $this->depositm->is_material= ($this->type == 3 || $this->selection == 'Ensamblados') ? 0 : 1;
-                    $this->depositm->type=0;
-                    $this->depositm->save();
-                }
-                $this->amount=null;
-                $this->presentation=null;
-                $this->sta=null;
-                $this->name_receive=null;
-                $this->name_egress=null;
-                $this->egreso=0;
-                $this->destination=null;
-                unset($this->depo_destino);
-                unset($this->depo);
-                unset($this->details);
-                $this->funcion="explora";
-                $this->resetValidation(); 
-                $this->selection='';
-            }
-            }         
-        }elseif($this->funcion=="createassembled"){
-            $this->validate([
-                'description' => 'required|string|min:5|max:200'
-            ],[
-                'description.required' => 'El campo Descripción es requerido',
-                'description.min' => 'El campo Descripción tiene como mínimo 5 caracteres',
-                'description.max' => 'El campo Descripción tiene como máximo 200 caracteres'
-            ]);
-            $this->assembled=new Assembled;
-            $this->assembled->description=$this->description;
-            $this->assembled->create_date=$this->date;
-            $this->assembled->save();
-            foreach($this->details as $detail){
-                $this->assembleddetail=new AssembledDetail;
-                $this->assembleddetail->assembled_id=$this->assembled->id;
-                $this->assembleddetail->material_id=$detail[0];
-                $this->assembleddetail->amount=$detail[2];
-                $this->assembleddetail->save();
-                }
-                $this->toingreso();
-            }
-        $this->select=false;
-    }
-    public function update(Warehouse $deposito)
-    {
-        $this->funcion="update";
-        $this->deposito_id=$deposito->id;
-        $this->name=$deposito->name;
-        $this->location=$deposito->location;
-        $this->state=$deposito->state;
-        $this->create_date=$deposito->create_date;
-        $this->descriptionw=$deposito->description;
-        $this->temporary=$deposito->temporary;
+        return null;
     }
 
-    public function explora(Warehouse $deposito)
+    /**
+     * Paginador para arrays
+     * 
+     * @param Collection $collect
+     * @param int $pages
+     * @param string $property
+     * @return Illuminate\Pagination\LengthAwarePaginator $pagination
+     */
+    public function fillPaginator($collect, $pages, $property)
     {
-        $this->funcion="explora";
-        $this->deposito_id=$deposito->id;
-        $this->type=$deposito->type;
-        $this->name=$deposito->name;
-        $this->location=$deposito->location;
-        $this->state=$deposito->state;
-        $this->create_date=$deposito->create_date;
-        $this->descriptionw=$deposito->description;
-        $this->temporary = $deposito->temporary;
-        $this->explora_depo = $deposito;
-        if ($deposito->type == 3) {
-            $this->selection = 'Ensamblados';
-            $this->disabled = 'disabled';
+        $options = ['pageName' => $property];
+        $this->$property = $collect->forPage($this->page, $pages);
+        $pagination = new LengthAwarePaginator($this->$property, $collect->count(), $pages, $this->page, $options);
+        return $pagination;
+    }
+
+    /**
+     * Actualizar un deposito
+     * 
+     * @param Warehouse $warehouse
+     * @return Warehouse $warehouse|null
+     */
+    public function update(Warehouse $warehouse)
+    {
+        //validacion para depositos
+        $validationProperties = $this->validationWarehouses();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        try {
+            DB::beginTransaction();
+
+            //actualizar el deposito
+            $warehouse->update($this->validation['warehouse']);
+
+            DB::commit();
+            $this->resetValidation();
+            $this->reset();
+            return $warehouse;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Respuesta en consola del error
+            $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+            return null;
         }
-       
     }
 
-    public function addmaterial(Material $material)
-    {
-        $this->searchmateriales="";
-        $this->select=true;
-        $this->material_id=$material->id;
-        $this->code=$material->code;
-        $this->description=$material->description;
-        
-    }
-
-    public function downmaterial()
-    {
-        $this->searchmateriales="";
-        $this->searchensamblados="";
-        $this->select=false;
-        $this->material_id=null;
-        $this->code=null;
-        $this->description=null;
-        $this->amount=null;
-    }
-    public function selectmaterial(Material $material)
-    {
-        $this->material_id=$material->id;
-        $this->descriptionm=$material->description;;
-        $this->codem=$material->code;
-        if ($this->funcion != 'createassembled' && $this->depo_id!=0) {
-            $this->presentationm = $material->depositmaterials()->select('presentation', 'id')->where('warehouse_id', $this->depo->id)->groupBy('presentation')->get();
-        }
-      #  dd($this->presentationm);
-        $this->dispatchBrowserEvent('show-form');
-    }
-    public function addmateriald()
-    {
-            $this->validate([
-                'amount'=>'required|integer|min:1|max:1000000',
-                'presentation'=> 'required',
-            ], [
-                'amount.required'=>'El campo Cantidad es requerido',
-                'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
-                'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
-                'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
-                'presentation.required'=>'El campo Packaging es requerido',
-            ]);
-        foreach($this->details as $detail){
-            if($detail[0]==$this->codem && $detail[5]==$this->presentation && $detail[6]==$this->deposito_id){
-                $this->downmateriald($detail[3]);
-            }        
-        }  
-        $this->detail[0]=$this->codem;
-        $this->detail[1]=$this->descriptionm;
-        $this->detail[2]=$this->amount;
-        $this->detail[3]=$this->count;
-        $this->detail[4]=$this->material_id;
-        $this->detail[5]=$this->presentation;
-        $this->detail[6]=$this->deposito_id;
-        $this->detail[7]=(!empty($this->depo)) ? $this->depo->id : 0;
-
-        $this->details[]=$this->detail;
-        $this->count=$this->count+1;
-        $this->amount=0;
-        $this->presentation=0;
-        $this->ingresa=false;
-        $this->searchmateriales="";
-        $this->dispatchBrowserEvent('hide-form');
-    }
-    public function downmateriald($orden)
-    {
-        unset($this->details[$orden]);
-    }
-    public function retiromaterial(Material $material)
-    {
-        $this->select=true;
-        $this->codem=$material->code;
-        $this->descriptionm=$material->description;
-        $this->material_id=$material->id;
-        $this->materials_presentation = $material->depositmaterials()->where('warehouse_id', $this->deposito_id)->where('is_material', 1)->groupBy('presentation')->get();
-        
-        $this->dispatchBrowserEvent('show-form');
-        
-    }
-
-    public function egresomaterial()
-    {
-       
-            foreach($this->details as $detail){
-                if($detail[0]==$this->material_id && $detail[9]==$this->presentation){
-                    $this->downegreso($detail[4]);
-                }
-            } 
-            $this->validate([
-                'egreso' => 'required|integer|min:1|max:'.$this->materials_amount["total"].'',
-                'depo_destino' => 'required',
-            ],[
-                'egreso.required' => 'El campo Egreso es requerido',
-                'egreso.integer' => 'El campo Egreso es entero',
-                'egreso.min' => 'El campo Egreso tiene como mínimo 1(uno)',
-                'egreso.max' => 'El campo Egreso excede la cantidad disponible',
-                'depo_destino.required' => 'Debe seleccionar un depósito destino',
-            ]);
-         
-            $this->detail[0]=$this->codem;
-            $this->detail[1]=$this->descriptionm; 
-            $this->detail[2]=$this->egreso;
-            $this->detail[3]=$this->count;
-            $this->detail[4]=$this->material_id;
-            $this->detail[5]=$this->presentation;
-            $this->detail[6]=$this->deposito_id;
-            $this->detail[7]=$this->depo_destino->id;
-            $this->detail[8]=$this->destination;
-            $this->detail[9]=$this->materials_amount["total"];
-            $this->details[]=$this->detail;
-            $this->egreso=0;
-            $this->count=$this->count+1;
-            $this->select=false;
-            unset($this->materials_amount);
-            unset($this->presentation);
-            $this->dispatchBrowserEvent('hide-form');
-        
-    }
-    
-
-    public function downegreso(int $algo)
-    {
-        unset($this->details[$algo]);
-    }
-
-    public function addassembled(Assembled $material)
-    {
-        $this->searchensamblados="";
-        $this->material_id=$material->id;
-        $this->description=$material->description;
-        $this->dispatchBrowserEvent('show-form');
-    }
-
-    public function addassembledd()
-    {
-        $this->select=true;
-        $this->dispatchBrowserEvent('hide-form');
-    }
-
-    public function addinstallation(Installation $material)
-    {
-        $this->searchmateriales="";
-        $this->searchmensamblados="";
-        $this->select=true;
-        $this->material_id=$material->id;
-        $this->code=$material->code;
-        $this->description=$material->description;
-        $this->revisiones=Revision::where('installation_id', $material->id)->get();
-    }
-
-    public function downinstallation()
-    {
-        $this->searchinstalaciones="";
-        $this->select=false;
-        $this->material_id=null;
-        $this->code=null;
-        $this->description=null;
-        $this->amount=null;
-    }
-
-    public function selectrevision(Revision $revision)
-    {
-       # dd($revision);
-        $this->revisiones=Revision::where('installation_id', $revision->installation_id)->where('number_version', $revision->number_version)->get();
-        $this->number_version=$revision->number_version;
-        $this->revi=true;
-      
-    }
-
-    public function downrevision()
-    {
-       # dd($this->revisiones);
-        $this->revisiones=Revision::where('installation_id', $this->material_id)->get();
-        $this->revi=false;
-        $this->number_version=null;
-    }
-
-    public function ingreso()
-    {   
-        $this->date=Carbon::now()->format('Y-m-d');
-        $this->hour=Carbon::now()->format('H:m');
-        $this->funcion="ingreso";
-    }
-    public function selectdeposit(Warehouse $deposit)
-    {
-        $this->searchdeposito = '';
-        $this->depo_id = $deposit->id;
-
-        if ($this->funcion=='ingreso') {
-            $this->depo=$deposit; 
-        }else{
-            $this->depo_destino=$deposit;
-        }
-        if ($deposit->type == 3) {
-            $this->selection = 'Ensamblados';
-            $this->disabled = 'disabled';
-        }
-      #  $this->materials_deposits = $this->depo->materials;
-    }
-    public function downdeposit(){
-        unset($this->depo);
-        unset($this->depo_destino);
-        unset($this->depo_destino);
-        $this->selection='';
-        $this->materials_deposits = array();
-        $this->ensamblados_deposits = array();
-        $this->searchmaterialsdepo='';
-        $this->details = array();
-        $this->material_id=null;
-        $this->description='';
-        $this->amount=null;
-        $this->depo_id=0;
-        $this->disabled='';
-    }
-    
-    public function egreso()
-    {
-        $this->date=Carbon::now()->format('Y-m-d');
-        $this->hour=Carbon::now()->format('H:m');
-        $this->depo=Warehouse::find($this->deposito_id); 
-       $this->depo_id=$this->depo->id;
-       # dd($this->materials_amount);
-        $this->funcion="egreso";
-    }
-
-    public function retiros()
-    {
-        $this->funcion="retiros";
-
-        $this->ordenegresodatail=DepositMaterial::where('warehouse_id',$this->deposito_id)->where('type',0)->get();
-        #dd($this->ordenegresodatail[0]->warehouse2->name);
-    }
-    public function retiro_detail(DepositMaterial $retiro)
-    {
-        $this->funcion="retiro_detail";
-        $this->retiro = $retiro;
-        $this->ingresos = DepositMaterial::where('warehouse_id',$retiro->warehouse2_id)->where('warehouse2_id',$retiro->warehouse_id)->where('type',1)->where('material_id',$retiro->material_id)->where('presentation', $retiro->presentation)->where('amount',abs($retiro->amount))->get();
-      #  dd($this->ingreso);
-        #$this->retiros=DepositMaterial::find($oregreso->id);
-     
-    }
-    public function toexplora()
-    {
-        $this->resetValidation();
-        unset($this->depo_destino);
-        unset($this->depo);
-        unset($this->presentationm);
-        $this->selection='';
-        $this->searchmaterialsdepo='';
-        $this->searchinstallation = '';
-        $this->serial_number=null;
-        $this->client_order_id=null;
-        $this->sta=null;        
-        $this->user=null;
-        $this->revi=false;
-        $this->seleccion="";
-        $this->select=false;
-        $this->amount=null;
-        $this->presentation=null;
-        $this->name_receive=null;
-        $this->name_entry=null;
-        $this->name_egress=null;
-        $this->egreso=0;
-        $this->destination=null;
-        $this->funcion="explora";
-        $this->modo=null;
-        $this->details=null;
-        $this->depo_id=0;
-    }
-    public function toingreso()
-    {
-        $this->resetValidation();
-        $this->funcion="ingreso";
-    }
-    public function toretiros()
-    {
-        $this->funcion="retiros";
-    }
-    public function destruirdepo(Warehouse $deposito)
-    {
-        $this->dispatchBrowserEvent('show-borrar'); 
-        $this->deposito_delete=$deposito;
-    }
-    public function delete()
-    {
-        $this->deposito_delete->delete();
-        $this->dispatchBrowserEvent('hide-borrar');
-        $this->dispatchBrowserEvent('deleted');
-    }
-
-    public function createassembled()
-    {
-        $this->funcion="createassembled";
-    }
-
-    public function addmateriall()
-    {
-        foreach($this->details as $detail){
-            if($detail[0]==$this->codem){
-                $this->downmaterial($detail[3]);
-            }        
-        }
-        $this->detail[0]=$this->codem;
-        $this->detail[1]=$this->descriptionm;
-        $this->detail[2]=$this->amount;
-        $this->detail[3]=$this->count;
-        $this->detail[4]=$this->material_id;
-        $this->details[]=$this->detail;
-        $this->count=$this->count+1;
-        $this->amount=0;
-        $this->dispatchBrowserEvent('hide-form');
-    }
-
-    public function downmateriall($orden)
-    {
-        unset($this->details[$orden]);
-    }
-
-    public function explorabuyorder(BuyOrder $order)
-    {   
-        $this->buy_order_id=$order->id;
-        $this->buyorderdetails=BuyOrderDetail::where('buy_order_id',$this->buy_order_id)->get();
-        $this->modo="Con orden de compra";
-        $this->funcion="createbo";
-    }
-    public function ingresomaterial(BuyOrderDetail $buy)
-    {
-        $this->ingresa=true;
-        $this->code=$buy->materials->code;
-        $this->description=$buy->materials->description;
-        $this->material_id=$buy->materials->id;
-        $this->presentation=$buy->presentation;
-        $this->amount_requested=$buy->amount;
-    }
+    /**
+     * Accion que genera la vista del listado de depositos
+     * 
+     * @return funcion resetValidation()
+     */
     public function volver()
     {
-        $this->resetValidation();
         $this->reset();
+        return $this->resetValidation();
     }
-    public function amount(Material $material){
-        $this->materials_amount = json_decode($material->depositmaterials()->where('warehouse_id', $this->deposito_id)->where('is_material',1)->where('presentation', $this->presentation)->select('presentation','material_id', DB::raw('SUM(amount) as total'))->groupBy('presentation')->first(), true);
-      
-    }
-    public function retiroensamblado(Assembled $assembled)
+
+    /**
+     * Detalle de un deposito
+     * 
+     * @param int $warehouseId
+     * @return string $view
+     */
+    public function explorar($warehouseId)
     {
-        $this->select=true;
-        $this->descriptiona=$assembled->description;
-        $this->assembled_id=$assembled->id;
-        $this->assembled_amount =$assembled->depositmaterials()->where('warehouse_id',$this->deposito_id)->where('is_material',0)->select('material_id', DB::raw('SUM(amount) as total'))->groupBy('material_id')->first()->total;
-        
+        $this->view = "explorar";
+        $this->warehouse = $this->fillWarehouse($warehouseId);
+
+        return $this->view;
+    }
+
+    /**
+     * Seleccionar un producto (material, ensamblado, instalacion) a depositar
+     * 
+     * @param int $id, string $type
+     * @return array $productSelected
+     */
+    public function selectProduct($id, $type = '')
+    {
+        $this->productSelected = [];
+
+        switch ($type) {
+            case 'material':
+                $this->dataProduct = Material::findOrFail($id);
+                $this->productSelected['is_material'] = 1;
+                break;
+            case 'ensamblado':
+                $this->dataProduct = Assembled::findOrFail($id);
+                $this->productSelected['is_material'] = 0;
+                break;
+            case 'instalacion':
+                $this->dataProduct = Installation::findOrFail($id);
+                $this->productSelected['revisions'] = $this->dataProduct->revisions->toArray();
+                break;
+        }
+        $this->productSelected['id'] = $this->dataProduct->id;
+        $this->productSelected['code'] = $this->dataProduct->code ?? 'Ensamblado - ' . $this->dataProduct->id;
+        $this->productSelected['description'] = $this->dataProduct->description;
+        $this->productSelected['typeProduct'] = $type;
+
+        //Busqueda de materiales, si existe el warehouse id entonces que posean relacion deposit materials, sino providerprices
+        $warehouses =  ($type == 'material') ?  (!empty($this->warehouseSelected->id) ?
+            $this->dataProduct->findMaterialsWarehouse($this->warehouseSelected->id)->get()  :
+            $this->dataProduct->providers()->get())  : [];
+
+        //Guardado de presentaciones del material    
+        foreach ($warehouses as $warehouse) {
+            $presentation =  $warehouse->pivot ? (empty($this->warehouseSelected) ?
+                $warehouse->pivot->unit :
+                $warehouse->pivot->presentation) :
+                null;
+            $this->productSelected['presentation'][$presentation] = $presentation;
+        }
+
+        if ($this->view == 'egreso' && $type == 'ensamblado') {
+            $this->product['packaging'] = 0;
+            //Calculo de cantidad disponible en ensamblados
+            $this->calculateAmountAvaiable();
+        }
+        $this->resetValidation();
         $this->dispatchBrowserEvent('show-form');
+
+        return $this->productSelected;
     }
 
-    public function egresoensamblado()
+    /**
+     * Adicionar al array un producto (material, ensamblado, instalacion) a depositar
+     * 
+     * @return array $productsSelected
+     */
+    public function addProduct()
     {
-       
-            foreach($this->details as $detail){
-                if($detail[0]==$this->material_id && $detail[9]==$this->presentation){
-                    $this->downegreso($detail[4]);
-                }
-            } 
-            $this->validate([
-                'egreso' => 'required|integer|min:1|max:'.$this->assembled_amount,
-                'depo_destino' => 'required',
-            ],[
-                'egreso.required' => 'El campo Egreso es requerido',
-                'egreso.integer' => 'El campo Egreso es entero',
-                'egreso.min' => 'El campo Egreso tiene como mínimo 1(uno)',
-                'egreso.max' => 'El campo Egreso excede la cantidad disponible',
-                'depo_destino.required' => 'Debe seleccionar un depósito destino',
-            ]);
-    
+        $validationProperties = $this->validationProducts();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
 
-            $this->detail[0]=$this->descriptiona;
-            $this->detail[1]=$this->descriptiona;
-            $this->detail[2]=$this->egreso;
-            $this->detail[3]=$this->count;
-            $this->detail[4]=$this->assembled_id; 
-            $this->detail[5]=1; 
-            $this->detail[6]=$this->deposito_id;
-            $this->detail[7]=$this->depo_destino->id;
-            $this->detail[8]=$this->destination;
-            $this->detail[9]=$this->assembled_amount;
-            $this->details[]=$this->detail;
-            $this->egreso=0;
-            $this->count=$this->count+1;
-            $this->select=false;
-            unset($this->assembled_amount);
-            $this->egreso=null;
-            $this->dispatchBrowserEvent('hide-form');
-        
+        $packaging = $this->validation['product']['packaging'] ?? 0;
+        //Verifica si el producto seleccionado es un material y ya se encuentra guardado 
+        $selectedMaterial = array_key_exists($this->productSelected['id'], $this->productsSelected['material']);
+        //Verifica si la presentacion escogida del material es diferente a la presentacion guardada
+        $selectedMaterialPresentation = isset($this->productsSelected['material'][$this->productSelected['id']]['packaging']) ?
+            (!array_key_exists(
+                $packaging,
+                $this->productsSelected['material'][$this->productSelected['id']]['packaging']
+            )) : false;
+
+        if ($selectedMaterial && $selectedMaterialPresentation) {
+            //Guarda presentaciones y cantidad para materiales 
+            $this->productsSelected['material'][$this->productSelected['id']]['packaging'][$packaging] = $packaging;
+            $this->productsSelected['material'][$this->productSelected['id']]['amount'][$packaging] = ($this->view === "ingreso") ?
+                $this->validation['product']['amount']  :
+                -$this->validation['product']['amount'];
+        } else {
+            //Guarda informacion de materiales, ensamblados e instalaciones
+            $this->productSelected['amount'][$packaging] = ($this->view === "ingreso") ?  $this->validation['product']['amount'] : -$this->validation['product']['amount'];
+            $this->productSelected['packaging'][$packaging] = $packaging;
+            $this->productSelected['warehouse_id'] = $this->warehouse['id'];
+            $this->productSelected['warehouse2_id'] = ($this->view === "ingreso") ? ($this->warehouseSelected->id ?? '') : $this->warehouseDestination->id ?? '';
+            $this->productSelected['type'] = ($this->view === "ingreso") ?: 0;
+            if ($this->productSelected['typeProduct'] == 'instalacion') {
+                $this->productSelected['serial_number'] = $this->validation['product']['serial_number'] ?? '';
+                $this->productSelected['client_order_id'] = $this->validation['product']['client_order_id'] ?? '';
+                $this->productSelected['number_version'] = $this->validation['product']['number_version'] ?? '';
+            }
+            $this->productsSelected[$this->productSelected['typeProduct']][$this->productSelected['id']] = $this->productSelected;
+        }
+        $this->reset([
+            'productSelected', 'product', 'searchMaterials',
+            'searchAssembleds', 'searchInstallations', 'amount'
+        ]);
+        $this->resetValidation();
+        $this->dispatchBrowserEvent('hide-form');
+        return $this->productsSelected;
+    }
+
+    /**
+     * Elimina un producto del array de productos seleccionados
+     * 
+     * @param int $id, string $type
+     * @return array $productsSelected
+     */
+    public function downProduct($id, $type = '')
+    {
+        unset($this->productsSelected[$type][$id]);
+        if (!count($this->productsSelected[$type])) {
+            $this->productsSelected[$type] = [];
+        }
+        $this->reset(['productSelected', 'product', 'amount']);
+        return $this->productsSelected;
+    }
+
+    /**
+     * Salir del modal de seleccion de productos
+     * 
+     * @return funcion reset(['productSelected', 'product', 'amount'])
+     */
+    public function backModal()
+    {
+        return $this->reset(['productSelected', 'product', 'amount']);
+    }
+
+    /**
+     * Guardado de movimientos (ingresos o egresos) 
+     * 
+     * @return function backToExplorar()
+     */
+    public function storeMovements()
+    {
+        $validationProperties = $this->validationMovements();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        foreach ($this->productsSelected as $type => $products) {
+            foreach ($products as $product) {
+                //En caso de que sea un ingreso, el deposito origen puede ser seleccionado o cero
+                $warehouse2_id = $this->view == 'ingreso' ?
+                    ($this->warehouseSelected->id ?? 0) :
+                    $this->validation['warehouseDestination']['id'];
+
+                switch ($type) {
+                    case 'material':
+                        $entryProduct = Material::findOrFail($product['id']);
+                        foreach ($product['packaging'] as $packaging) {
+                            $entryData[] =  [
+                                $product['warehouse_id'] => [
+                                    'presentation' => $packaging,
+                                    'amount' => $product['amount'][$packaging],
+                                    'warehouse2_id' => $warehouse2_id,
+                                    'type' => $product['type'],
+                                    'is_material' => $product['is_material'],
+                                    'date_change' => $this->validation['movements']['date'],
+                                    'name_receive' => $this->validation['movements']['name_receive'],
+                                    'name_entry' => $this->validation['movements']['name_entry'],
+                                    'hour' => $this->validation['movements']['hour'],
+                                ]
+                            ];
+                        }
+                        break;
+                    case 'ensamblado':
+                        $entryProduct = Assembled::findOrFail($product['id']);
+                        $entryData[] = [
+                            $product['warehouse_id'] => [
+                                'presentation' => $product['packaging'][0],
+                                'amount' => $product['amount'][0],
+                                'warehouse2_id' => $warehouse2_id,
+                                'type' => $product['type'],
+                                'is_material' => $product['is_material'],
+                                'date_change' => $this->validation['movements']['date'],
+                                'name_receive' => $this->validation['movements']['name_receive'],
+                                'name_entry' => $this->validation['movements']['name_entry'],
+                                'hour' => $this->validation['movements']['hour'],
+                            ]
+                        ];
+                        break;
+                    case 'instalacion':
+                        $entryProduct = Installation::findOrFail($product['id']);
+                        $entryData[] = [
+                            $product['warehouse_id'] =>
+                            [
+                                'serial_number' => $product['serial_number'],
+                                'number_version' => $product['number_version'],
+                                'client_order_id' => $product['client_order_id'],
+                                'amount' => $product['amount'][0],
+                                'warehouse2_id' => $warehouse2_id,
+                                'date_admission' => $this->validation['movements']['date'],
+                                'name_receive' => $this->validation['movements']['name_receive'],
+                                'name_entry' => $this->validation['movements']['name_entry'],
+                                'hour' => $this->validation['movements']['hour'],
+                            ]
+                        ];
+                        break;
+                }
+
+                if ($entryProduct) {
+                    try {
+                        DB::beginTransaction();
+                        foreach ($entryData as $data) {
+                            //Almacena la relacion de productos (materiales, ensamblados e instalaciones) con depositos
+                            $entryProduct->warehouses()->attach($data);
+                        }
+                        $entryData = [];
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        // Respuesta en consola del error
+                        $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+                        return null;
+                    }
+                }
+            }
+        }
+        return $this->backToExplorar();
+    }
+
+    /**
+     * Seleccion de revisiones en caso de instalaciones 
+     * 
+     * @param int $revisionId
+     * @return array $product|null
+     */
+    public function selectRevision($revisionId)
+    {
+        $revision = $this->dataProduct->revisions()->whereId($revisionId)->first();
+        if ($revision) {
+            $this->product['number_version'] = $revision->number_version;
+            return $this->product;
+        }
+        return null;
+    }
+
+    /**
+     * Elimina la revision seleccionada
+     * 
+     * @param int $revisionId
+     * @return void
+     */
+    public function downRevision()
+    {
+        unset($this->product['number_version']);
+        return;
+    }
+
+    /**
+     *  Accion de cambiar la vista a "Nuevo Ingreso"
+     * 
+     * @return string $view
+     */
+    public function ingreso()
+    {
+        $this->movements['date'] = Carbon::now()->format('Y-m-d');
+        $this->movements['hour'] = Carbon::now()->format('H:m');
+        $this->view = "ingreso";
+
+        return $this->view;
+    }
+
+    /**
+     * Seleccionar un deposito
+     * 
+     * @param int $warehouseId
+     * @return Warehouse $warehouse|null
+     */
+    public function selectDeposit($warehouseId)
+    {
+        $this->reset('searchDeposit');
+        $warehouse = Warehouse::findOrFail($warehouseId);
+
+        if ($warehouse) {
+            if ($this->view == 'ingreso') {
+                $this->warehouseSelected = $warehouse;
+                $this->reset('productsSelected');
+            } else {
+                $this->warehouseDestination = $warehouse;
+            }
+            return $warehouse;
+        }
+        return null;
+    }
+
+    /**
+     * Deselecciona el deposito seleccionado
+     * 
+     * @return function resetExcept(['warehouse', 'warehouses', 'view', 'movements'])
+     */
+    public function downDeposit()
+    {
+        unset($this->warehouseSelected);
+        return $this->resetExcept(['warehouse', 'warehouses', 'view', 'movements']);
+    }
+
+    /**
+     *  Accion de cambiar la vista a "Nuevo Egreso"
+     * 
+     * @return string $view
+     */
+    public function egreso()
+    {
+        $this->movements['date'] = Carbon::now()->format('Y-m-d');
+        $this->movements['hour'] = Carbon::now()->format('H:m');
+        $this->warehouseSelected = Warehouse::findOrFail($this->warehouse['id']);
+        $this->view = "egreso";
+
+        return $this->view;
+    }
+
+    /**
+     *  Accion de cambiar la vista a "Ver retiros de este depósito"
+     * 
+     * @return string $view
+     */
+    public function retiros()
+    {
+        $this->view = "retiros";
+        $warehouse = Warehouse::findOrFail($this->warehouse['id']);
+        $withdraws = $warehouse->depositmaterials()->whereType(0)->get();
+
+        foreach ($withdraws as $withdraw) {
+            $withdrawArray = $this->fillWithdraw($withdraw);
+
+            $this->withdraws[$withdraw->id] = $withdrawArray;
+        }
+        $this->withdrawsCollect = collect($this->withdraws);
+        $this->withdrawsList = $this->fillPaginator($this->withdrawsCollect, $this->paginasInternasRetiros, 'warehouseWithdraws');
+
+        return $this->view;
+    }
+
+    /**
+     * Guarda informacion del movimiento (ingreso / egreso) 
+     * 
+     * @param DepositMaterial $withdraw
+     * @return array $withdrawArray
+     */
+    public function fillWithdraw($withdraw)
+    {
+        $withdrawArray = [
+            'id' => $withdraw->id,
+            'material_id' => $withdraw->material_id,
+            'code' => ($withdraw->is_material) ? $withdraw->material->code : 'Ensamblado - ' . $withdraw->assembled->id,
+            'description' => ($withdraw->is_material) ? $withdraw->material->description : $withdraw->assembled->description,
+            'packaging' => !$withdraw->presentation ? ' '  : $withdraw->presentation,
+            'amount' => abs($withdraw->amount),
+            'total' => ($withdraw->is_material) ? abs($withdraw->presentation * $withdraw->amount) : abs($withdraw->amount),
+            'warehouse_id' => $withdraw->warehouse_id ?? ' ',
+            'warehouse2_id' => $withdraw->warehouse2_id ?? ' ',
+            'warehouse_name' => $withdraw->warehouse2->name ?? ' ',
+            'warehouse_type' => $withdraw->warehouse2 ? $this->types[$withdraw->warehouse2->type] : ' ',
+            'date' => date('d-m-Y', strtotime($withdraw->date_change)) . ' - ' .  $withdraw->hour,
+            'is_material' => $withdraw->is_material,
+        ];
+
+        return $withdrawArray;
+    }
+
+    /**
+     * Guarda informacion del movimiento (ingreso / egreso) 
+     * 
+     * @param int depositMaterialId
+     * @return string $view
+     */
+    public function retiroDetail($depositMaterialId)
+    {
+        $retiro = $this->withdraws[$depositMaterialId];
+        $this->withdraw['details']['retiro'] = $retiro;
+        $this->withdraw['entry'] = [];
+        $warehouseOrigin = Warehouse::findOrFail($this->withdraws[$depositMaterialId]['warehouse2_id']);
+        $entry = $warehouseOrigin->searchEntry($retiro['warehouse_id'], $retiro['material_id'], $retiro['packaging'], $retiro['amount']);
+        $this->view = "retiroDetail";
+
+        if ($entry) {
+            $this->withdraw['entry']['retiro'] = $this->fillWithdraw($entry);
+        }
+        return $this->view;
+    }
+
+    /**
+     * Genera el modal para eliminar un depósito
+     * 
+     * @param Warehouse $warehouse
+     * @return
+     */
+    public function destroy(Warehouse $warehouse)
+    {
+        $this->warehouse = $warehouse->toArray();
+        return $this->dispatchBrowserEvent('show-borrar');
+    }
+
+    /**
+     * Accion de eliminar logicamente un depósito
+     * 
+     * @return funcion volver()|null
+     */
+    public function delete()
+    {
+        if (auth()->user()->cannot('delete', auth()->user())) {
+            abort(403);
+        } else {
+            try {
+                DB::beginTransaction();
+                $warehouse = Warehouse::findOrFail($this->warehouse['id']);
+                $warehouse->delete();
+                DB::commit();
+
+                $this->dispatchBrowserEvent('hide-borrar');
+                $this->dispatchBrowserEvent('deleted');
+                return $this->volver();
+            } catch (\Exception $e) {
+                DB::rollBack();
+
+                // Respuesta en consola del error
+                $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Accion de eliminar logicamente un depósito
+     * 
+     * @param string $type
+     * @return string $view
+     */
+    public function createProduct($type)
+    {
+        switch ($type) {
+            case 'material':
+                $view = 'createMaterial';
+                break;
+            case 'ensamblado':
+                $view = 'createAssembled';
+                break;
+            case 'instalacion':
+                $view = 'createInstallation';
+                break;
+        }
+        $this->resetValidation();
+        $this->view = $view;
+        return $this->view;
+    }
+
+    /**
+     * Accion para regresar al detalle del deposito
+     * 
+     * @return function explorar
+     */
+    public function backToExplorar()
+    {
+        $this->resetValidation();
+        $this->reset([
+            'productsSelected', 'warehouseSelected', 'warehouseDestination', 'productSelected', 'product', 'selection',
+            'searchMaterials', 'searchAssembleds', 'searchInstallations', 'movements', 'validation', 'amount'
+        ]);
+        return $this->explorar($this->warehouse['id']);
+    }
+
+    /**
+     * Accion para calcular la cantidad disponible del producto a egresar
+     * 
+     * @return int $amount['avaiable']
+     */
+    public function calculateAmountAvaiable()
+    {
+        $this->amount['avaiable'] = $this->amounts[$this->productSelected['is_material']][$this->productSelected['id']][$this->product['packaging']];
+        return $this->amount['avaiable'];
+    }
+
+    /**
+     * Accion para seleccionar un material recien creado
+     * 
+     * @return funcion selectProduct($id, 'material')
+     */
+    public function newMaterial($id = null)
+    {
+        $this->view = $this->ingreso();
+        return $this->selectProduct($id, 'material');
+    }
+
+    /**
+     * Accion para seleccionar un ensamblado recien creado
+     * 
+     * @return funcion selectProduct($id, 'ensamblado')
+     */
+    public function newAssembled($id = null)
+    {
+        $this->view = $this->ingreso();
+        return $this->selectProduct($id, 'ensamblado');
+    }
+
+    /**
+     * Accion para seleccionar una instalacion recien creada
+     * 
+     * @return funcion selectProduct($id, 'instalacion')
+     */
+    public function newInstallation($id = null)
+    {
+        $this->view = $this->ingreso();
+        return $this->selectProduct($id, 'instalacion');
+    }
+
+    /**
+     * Accion para volver a la vista de 'Nuevo Ingreso'
+     * 
+     * @return string $view
+     */
+    public function backToEntry()
+    {
+        $this->view = $this->ingreso();
+        return $this->view;
+    }
+
+    /**
+     * Accion para volver a la vista de 'Ver retiros de este depósito'
+     * 
+     * @return string $view
+     */
+    public function backToRetiros()
+    {
+        $this->view = $this->retiros();
+        return $this->view;
     }
 }

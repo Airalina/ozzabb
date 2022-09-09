@@ -28,9 +28,11 @@ class MaterialComponent extends Component
     protected $paginationTheme = 'bootstrap';
     protected $materials;
     //Constantes 
-    public $funcion = "", $paginas = 25,  $search = "", $searchSeal = "", $searchTerminal = "", $searchproviders = "", $order = "code";
+    public $funcion = "", $paginas = 25,  $search = "", $searchSeal = "", $searchTerminal = "",
+        $searchproviders = "", $order = "code", $component = 'material';
     //Variables
-    public $dolar, $ar_price, $showPrice, $addProvider, $providerSelected, $provider, $familySelected, $providerPrice;
+    public $dolar, $ar_price, $showPrice, $addProvider, $providerSelected, $provider, $familySelected,
+        $providerPrice;
     //Arrays
     public $price = [], $material = [], $terminal = [], $connector = [], $cable = [], $seal = [], $tube = [], $clip = [], $accessory = [],
         $files = [], $validation = [], $explorar = [], $providerPrices = [], $upload  = [], $providers = [], $materialContent = [],
@@ -221,11 +223,11 @@ class MaterialComponent extends Component
      * @return Material $material|null
      */
     public function store()
-    {
+    {  
         //validacion para materiales
         $validationProperties = $this->validationMaterials($this->familySelected, $this->showPrice);
         $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
-
+       
         try {
             DB::beginTransaction();
             //creando el material
@@ -261,8 +263,11 @@ class MaterialComponent extends Component
 
             DB::commit();
             $this->resetValidation();
-            $this->reset();
 
+            if ($this->component == 'depositos') {
+                return $this->emit('newMaterial', $material->id);
+            }
+            $this->reset();
             return $material;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -746,6 +751,9 @@ class MaterialComponent extends Component
      */
     public function back()
     {
+        if ($this->component == 'depositos') {
+            return $this->emit('backToEntry');
+        }
         $this->funcion = "";
         $this->reset();
         $this->resetValidation();

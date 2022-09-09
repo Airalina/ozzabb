@@ -10,12 +10,12 @@ class DepositMaterial extends Model
 {
     use SoftDeletes, HasFactory;
 
-    public function materials()
+    public function material()
     {
         return $this->belongsTo(Material::class,'material_id');
     }
 
-    public function assembleds()
+    public function assembled()
     {
         return $this->belongsTo(Assembled::class,'material_id');
     }

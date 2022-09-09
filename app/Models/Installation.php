@@ -24,16 +24,28 @@ class Installation extends Model
     {
         return $this->hasMany(Revision::class);
     }
+
     public function revisiondetails()
     {
         return $this->hasMany(Revisiondetail::class);
     }
+
     public function warehouses()
     {
-        return $this->belongsToMany(Warehouse::class, 'deposit_installations', 'installation_id', 'warehouse_id');
+        return $this->belongsToMany(Warehouse::class, 'deposit_installations', 'installation_id', 'warehouse_id')->withTimestamps();
     }
+
     public function depositinstallations()
     {
-        return $this->hasMany(DepositInstallation::class); 
+        return $this->hasMany(DepositInstallation::class);
+    }
+
+    public static function search($search = '')
+    {
+        $querySearch = self::where('id', 'LIKE', '%' . $search . '%')
+            ->orWhere('code', 'LIKE', '%' . $search . '%')
+            ->orWhere('description', 'LIKE', '%' . $search . '%');
+
+        return $querySearch;
     }
 }
