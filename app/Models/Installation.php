@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+
 
 class Installation extends Model
 {
@@ -14,8 +16,10 @@ class Installation extends Model
         'code',
         'date',
         'date_admission',
+        'description',
         'usd_price',
         'hours_man',
+        'customer_id'
     ];
     public function customer(){
         return $this->belongsTo(Customer::class,'customer_id');
@@ -40,12 +44,24 @@ class Installation extends Model
         return $this->hasMany(DepositInstallation::class);
     }
 
-    public static function search($search = '')
+    public static function search($search = '', $orderBy = 'code')
     {
         $querySearch = self::where('id', 'LIKE', '%' . $search . '%')
             ->orWhere('code', 'LIKE', '%' . $search . '%')
-            ->orWhere('description', 'LIKE', '%' . $search . '%');
+            ->orWhere('description', 'LIKE', '%' . $search . '%')
+            ->orderBy($orderBy);
 
         return $querySearch;
+    }
+
+    public function getShortDescriptionAttribute()
+    {
+        return Str::limit($this->description, 40);
+    }
+
+    public function findRevisionsDetail(int $number_version)
+    {
+        $revisionsDetails = $this->revisiondetails()->where('number_version', $number_version)->get();
+        return $revisionsDetails;
     }
 }

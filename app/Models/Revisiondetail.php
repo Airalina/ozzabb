@@ -9,15 +9,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Revisiondetail extends Model
 {
-    use SoftDeletes, HasFactory;
-
+    use SoftDeletes, HasFactory;    
+    
     protected $fillable = [
         'id',
         'number_version',
-        'installation_id'
+        'installation_id',
+        'material_id',
+        'amount',
     ];
-    
-    public function materials()
+
+    public function material()
     {
         return $this->belongsTo(Material::class,'material_id');
     }

@@ -83,7 +83,6 @@ class Ordenesclientes extends Component
                     $this->estado = $this->search;
                 break;                 
         }
-
         $this->orders=Clientorder::where('id','LIKE','%' . $this->search . '%')
         ->orWhere('customer_id','LIKE','%'.$this->search.'%')
         ->orWhere('customer_name','LIKE','%'.$this->search.'%')

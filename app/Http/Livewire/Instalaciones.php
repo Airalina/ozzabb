@@ -2,417 +2,594 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Traits\InstallationTrait;
+use App\Models\Customer;
 use Livewire\Component;
 use App\Models\Installation;
 use App\Models\Material;
 use App\Models\Revision;
-use App\Models\Customer;
 use App\Models\Revisiondetail;
+use App\services\StoreImagesService;
+use Carbon\Carbon;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class Instalaciones extends Component
 {
-    use WithFileUploads;
-    use WithPagination;
-    protected $instalaciones;
+    use WithFileUploads, WithPagination, InstallationTrait;
+    protected $installations;
     protected $paginationTheme = 'bootstrap';
-    public $instalacion, $installation_id, $code, $codem, $paginas=25, $description, $descriptionm, $descripcion, $date_admission, $usd_price, $searchinstallation="", $revisiones, $revision, $revisiond, $material, $materiall, $materiales, $mat=array(), $searchrevision="", $searchmateriales="", $funcion="";
-    public $details=array(), $detail=array(), $nombrefile, $clientes, $cliente_id, $cliente_name, $searchcustomer="", $seeimg=false, $detailslist, $order="code", $photo=null, $count=0, $reason, $date, $amount, $newdetail, $number_version, $material_id, $detail_id, $upca=false, $hours_man, $man;
- 
+    //Variables no definidas
+    public $materials, $revisions, $validation, $customer, $number_version;
+    //Variables definidas 
+    public $searchMaterials = '', $searchInstallations = '', $pages = 25, $component = '', $searchCustomers = '',  $view = '',
+        $order = "code";
+    //Arrays
+    public $files = [], $installation = [], $materialsSelected = [], $material = [], $revisionDetails = [], $revision = [],
+        $customersData = [];
+
+    public function __construct()
+    {
+        //Inicializa array para almacenar imagenes 
+        $this->files = [
+            'images' => [],
+        ];
+        //Inicializa array para relacionar con clientes
+        $this->customersData = [
+            'customers' => [],
+            'searchCustomers' => '',
+            'customerSelected' => [],
+        ];
+    }
+
     public function render()
     {
-        $this->materiales = Material::where('code', 'like', '%' . $this->searchmateriales . '%')
-            ->orWhere('name', 'LIKE', '%' . $this->searchmateriales . '%')
-            ->orWhere('family', 'LIKE', '%' . $this->searchmateriales . '%')
-            ->orWhere('color', 'LIKE', '%' . $this->searchmateriales . '%')
-            ->orWhere('description', 'LIKE', '%' . $this->searchmateriales . '%')
-            ->orWhere('stock_min', 'LIKE', '%' . $this->searchmateriales . '%')
-            ->orWhere('stock_max', 'LIKE', '%' . $this->searchmateriales . '%')
-            ->orWhere('stock', 'LIKE', '%' . $this->searchmateriales . '%')->get();
-        $this->instalaciones = Installation::where('id', 'LIKE', '%' . $this->searchinstallation . '%')
-            ->orWhere('code', 'LIKE', '%' . $this->searchinstallation . '%')
-            ->orWhere('usd_price', '%' . $this->searchinstallation . '%')
-            ->orWhere('description', 'LIKE', '%' . $this->searchinstallation . '%')->orderBy($this->order)->paginate($this->paginas);
-        $this->revisiones = Revision::where('installation_id', $this->installation_id)->get();
+        $this->materials = Material::search($this->searchMaterials)->get();
+        $this->installations = Installation::search($this->searchInstallations, $this->order)->paginate($this->pages);
+        //Busqueda de clientes
+        $this->customersData['customers'] = Customer::search($this->customersData['searchCustomers'])->get()->toArray();
+
         return view('livewire.instalaciones', [
-            'instalaciones' => $this->instalaciones,
+            'installations' => $this->installations,
         ]);
     }
 
+    /**
+     * Accion de cambiar la vista a crear en "Agregar Instalacion"
+     * 
+     * @return string $view
+     */
     public function create()
     {
-        $this->funcion = "create";
+        $this->view = "create";
+        return $this->view;
     }
 
+    /**
+     * Accion de seleccionar un cliente
+     * 
+     * @return string $customersData['searchCustomers']|null
+     */
+    public function selectCustomer($customerId)
+    {
+        $this->customer = Customer::find($customerId);
+        if ($this->customer) {
+            $this->customersData['customerSelected'] = [
+                'name' => $this->customer->name
+            ];
+            return $this->customersData['searchCustomers'] = '';
+        }
+        return null;
+    }
+
+    /**
+     * Rellena un array para almacenar imagenes
+     * 
+     * @return array $files
+     */
+    public function updatedInstallationImage()
+    {
+        $validationProperties = $this->validationImages();
+        $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        $this->files['images'][0] = $this->installation['image']->temporaryUrl();
+        $this->files['paths'][0] = $this->installation['image'];
+
+        return $this->files['images'];
+    }
+
+    /**
+     * Elimina una imagen y su path
+     * 
+     * @param int $index
+     * @return array $files
+     */
+    public function deleteImg(int $index)
+    {
+        unset($this->files['images'][$index]);
+        unset($this->files['paths'][$index]);
+        unset($this->installation['image']);
+
+        return $this->files;
+    }
+    /**
+     * Seleccionar material para la instalacion
+     * 
+     * @param int $materialId
+     * @return array $material|null
+     */
+    public function selectMaterial($materialId)
+    {
+        $material = Material::findOrfail($materialId);
+
+        if ($material) {
+            $this->material  = [
+                'id' => $material->id,
+                'code' => $material->code,
+                'description' => $material->description
+            ];
+            $this->dispatchBrowserEvent('show-form-material');
+            $this->resetValidation();
+            return $this->material;
+        }
+        return null;
+    }
+
+    /**
+     * Agrega al array de materiales un material seleccionado
+     * 
+     * @return function backModal()
+     */
+    public function addMaterial()
+    {
+        $validationProperties = $this->validationSelectMaterials();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        $this->material['amount'] =  $this->validation['material']['amount'];
+        $this->materialsSelected[$this->material['id']] = $this->material;
+
+        $this->dispatchBrowserEvent('hide-form-material');
+        return $this->backModal();
+    }
+
+    /**
+     * Elimina del array de materiales un material seleccionado
+     * 
+     * @return null
+     */
+    public function downMaterial($materialId)
+    {
+        unset($this->materialsSelected[$materialId]);
+        return null;
+    }
+
+    /**
+     * Accion al cancelar el modal
+     * 
+     * @return null
+     */
+    public function backModal()
+    {
+        $this->resetValidation();
+        $this->reset('material');
+        return null;
+    }
+
+    /**
+     * Registro de una instalacion
+     * 
+     * @return Installation $installation|null
+     */
     public function store()
     {
-        if ($this->funcion == "create") {
-            $this->validate([
-                'cliente_id'=>'required',
-                'code'=>'required|integer|min:1|max:100000000',
-                'description'=>'required|string|min:5|max:300',
-                'date_admission'=>'required|date',
-                'usd_price'=>'required|numeric|min:0|max:1000000',
-                'hours_man'=>'required|numeric|min:0|max:1000000',
-            ],[
-                'cliente_id.required'=>'Es necesario seleccionar un cliente',
-                'date_admission.required' => 'El campo Fecha es requerido',
-                'code.required' => 'El campo Código es requerido',
-                'code.integer' => 'El camppo Código debe ser un número entero',
-                'code.min' => 'El campo Código debe ser igual o mayor a 1(uno)',
-                'code.max' => 'El campo Código debe ser menor o igual a 10000000(diez millones)',
-                'description.required' => 'El campo Descripción es requerido',
-                'description.min' => 'El campo Descripción tiene al menos 5 caracteres',
-                'description.max' => 'El campo Descripción tiene como máximo 300 caracteres',
-                'date_admission.requred' => 'El campo Fecha es requerido',
-                'usd_price.required' => 'El campo Precio U$D es requerido',
-                'usd_price.numeric' => 'El campo Precio U$D es numérico',
-                'usd_price.min' => 'El campo precio U$D debe ser un número mayor a 0(cero)',
-                'usd_price.max' => 'El campo precio U$D tiene como maximo 1000000(un millon)',
-                'hours_man.required' => 'El campo Horas/Hombre es requerido',
-                'hours_man.numeric' => 'El campo Horas/Hombre es numérico',
-                'hours_man.max' => 'El campo Horas/Hombre tiene como maximo 1000000(un millon)',
-                'hours_man.min' => 'El campo Horas/Hombre debe ser un número mayor a 0(cero)',
-           ]);
-            $this->instalacion= new Installation;
-            $this->instalacion->code=$this->code;
-            $this->instalacion->customer_id=$this->cliente_id;
-            $this->instalacion->description=$this->description;
-            $this->instalacion->date_admission=$this->date_admission;
-            $this->instalacion->usd_price=$this->usd_price;
-            $this->instalacion->hours_man=$this->hours_man;
-            $this->instalacion->save();
-            $this->revision = new Revision;
-            $this->revision->installation_id = $this->instalacion->id;
-            $this->revision->number_version = 0;
-            $this->revision->create_date = $this->date_admission;
-            if ($this->photo != null) {
-                $this->nombrefile = $this->photo->getClientOriginalName();
-                $this->photo->storeAs('images', $this->nombrefile);
-                $this->revision->image = $this->nombrefile;
+        $validationProperties = $this->validationInstallations();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        try {
+            DB::beginTransaction();
+            //creando la instalacion
+            $installation = $this->customer->installations()->updateOrCreate($this->validation['installation']);
+            //asociando la revision base
+            $revisionBase = [
+                'number_version' => 0,
+                'create_date' => $this->validation['installation']['date_admission'],
+                'reason' => 'Modelo base'
+            ];
+            if (!empty($this->installation['image'])) {
+                $storeImages = new StoreImagesService;
+                //almacenar imagenes
+                $revisionBase['image'] = $storeImages->uploadFile($this->installation['image'], 'installations/' . $installation->id);
             }
-            $this->revision->reason = "Modelo base";
-            $this->revision->save();
-            foreach ($this->details as $detail) {
-                $this->newdetail = new Revisiondetail;
-                $this->newdetail->installation_id = $this->instalacion->id;
-                $this->newdetail->number_version = $this->revision->number_version;
-                $this->newdetail->material_id = $detail[4];
-                $this->newdetail->amount = $detail[2];
-                $this->newdetail->save();
+            $revision = $installation->revisions()->firstOrCreate($revisionBase);
+
+            //asociando instalaciones con revisiones y materiales
+            foreach ($this->materialsSelected as $material) {
+                $revisionDetail = [
+                    'number_version' => $revision->number_version,
+                    'material_id' => $material['id'],
+                    'amount' => $material['amount'],
+                ];
+                $installation->revisiondetails()->firstOrCreate($revisionDetail);
             }
 
+            DB::commit();
             if ($this->component == 'depositos') {
                 return $this->emit('newInstallation', $this->instalacion->id);
             }
-
-            $this->volver();
-        }
-        if ($this->funcion == "newrevision") {
-            $this->validate([
-                'date' => 'required|date',
-                'reason' => 'required|string|min:5|max:300'
-            ], [
-                'date.required' => 'El campo Fecha es requerido',
-                'reason.required' => 'El campo Razón es requerido',
-                'reason.min' => 'El campo Razón tiene como mínimo 5 caracteres',
-                'reason.max' => 'El campo Razón tiene como maximo 300 caracteres',
-            ]);
-            $this->number_version = count(Revision::where('installation_id', $this->installation_id)->get());
-            $this->revision = new Revision;
-            $this->revision->installation_id = $this->installation_id;
-            $this->revision->number_version = $this->number_version;
-            $this->revision->create_date = $this->date;
-            $this->revision->reason = $this->reason;
-            $this->revision->image = $this->photo;
-            $this->revision->save();
-            foreach($this->details as $detail)
-            {
-                if(count(Revisiondetail::where('installation_id',$this->instalacion->id)->where('number_version',$this->revision->number_version)->where('material_id',$detail[4])->get())==0){
-                    $this->newdetail=new Revisiondetail;
-                    $this->newdetail->installation_id=$this->instalacion->id;
-                    $this->newdetail->number_version=$this->revision->number_version;
-                    $this->newdetail->material_id=$detail[4];
-                    $this->newdetail->amount=$detail[2];
-                    $this->newdetail->save();
-                }else{
-                    $this->newdetail=Revisiondetail::where('installation_id',$this->instalacion->id)->where('number_version',$this->revision->number_version)->where('material_id',$detail[4])->first();
-                    $this->newdetail->amount=$detail[2];
-                    $this->newdetail->save();
-                } 
-            }
-            $this->searchmateriales = "";
-            $this->explora($this->revision->installations->find($this->revision->installation_id));
-        }
-        if($this->funcion=="exploradetail"){
-            if(!empty($this->details)){
-                foreach($this->details as $detail)
-                {
-                    if(count(Revisiondetail::where('installation_id',$this->installation_id)->where('number_version',$this->number_version)->where('material_id',$detail[4])->get())==0){
-                        $this->newdetail=new Revisiondetail;
-                        $this->newdetail->installation_id=$this->installation_id;
-                        $this->newdetail->number_version=$this->number_version;
-                        $this->newdetail->material_id=$detail[4];
-                        $this->newdetail->amount=$detail[2];
-                        $this->newdetail->save();
-                    }else{
-                        $this->newdetail=Revisiondetail::where('installation_id',$this->installation_id)->where('number_version',$this->number_version)->where('material_id',$detail[4])->first();
-                        $this->newdetail->amount=$detail[2];
-                        $this->newdetail->save();
-                    } 
+            $this->resetValidation();
+            $this->reset();
+            return $installation;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            if (isset($installation->revisiondetails)) {
+                // en caso de error, borra detalles de revision base de la instalacion 
+                foreach ($installation->revisiondetails as $revisiondetail) {
+                    $revisiondetail->delete();
                 }
             }
-            $this->cancelar();
-        }
-    }
-
-    public function selectcustomer(Customer $customer){
-        $this->cliente_id=$customer->id;
-        $this->cliente_name=$customer->name;
-        $this->searchcustomer="";
-    }
-
-    public function updateinstallation(Installation $instalacion)
-    {   
-        $this->funcion="update";
-        $this->instalacion=Installation::find($instalacion->id);
-        $this->installation_id=$instalacion->id;
-        $this->code=$instalacion->code;
-        if(!empty($this->instalacion->customer)){
-            $this->cliente_name=$this->instalacion->customer->name;
-            $this->cliente_id=$this->instalacion->customer->id;
-        }
-        $this->description=$instalacion->description;
-        $this->date_admission=$instalacion->date_admission;
-        $this->usd_price=$instalacion->usd_price;
-        $this->hours_man=$instalacion->hours_man;
-    }
-    public function update(Installation $instalacion)
-    {
-        $this->instalacion = Installation::find($instalacion->id);
-        $this->installation_id = $instalacion->id;
-        $this->code = $instalacion->code;
-        $this->description = $instalacion->description;
-        $this->date_admission = $instalacion->date_admission;
-        $this->usd_price = $instalacion->usd_price;
-        $this->hours_man = $instalacion->hours_man;
-    }
-
-    public function edit()
-    {
-        $this->validate([
-            'cliente_id'=>'required',
-            'code'=>'required|integer|min:1|max:100000000',
-            'description'=>'required|string|min:5|max:300',
-            'date_admission'=>'required|date',
-            'usd_price'=>'required|numeric|min:0|max:1000000',
-            'hours_man'=>'required|numeric|min:0|max:1000000',
-        ],[
-            'cliente_id.required'=>'Es necesario seleccionar un cliente',
-            'date_admission.required' => 'El campo Fecha es requerido',
-            'code.required' => 'El campo Código es requerido',
-            'code.integer' => 'El camppo Código debe ser un número entero',
-            'code.min' => 'El campo Código debe ser igual o mayor a 1(uno)',
-            'code.max' => 'El campo Código debe ser menor o igual a 10000000(diez millones)',
-            'description.required' => 'El campo Descripción es requerido',
-            'description.min' => 'El campo Descripción tiene al menos 5 caracteres',
-            'description.max' => 'El campo Descripción tiene como máximo 300 caracteres',
-            'date_admission.requred' => 'El campo Fecha es requerido',
-            'usd_price.required' => 'El campo Precio U$D es requerido',
-            'usd_price.numeric' => 'El campo Precio U$D es numérico',
-            'usd_price.min' => 'El campo precio U$D debe ser un número mayor a 0(cero)',
-            'usd_price.max' => 'El campo precio U$D tiene como maximo 1000000(un millon)',
-            'hours_man.required' => 'El campo Horas/Hombre es requerido',
-            'hours_man.numeric' => 'El campo Horas/Hombre es numérico',
-            'hours_man.max' => 'El campo Horas/Hombre tiene como maximo 1000000(un millon)',
-            'hours_man.min' => 'El campo Horas/Hombre debe ser un número mayor a 0(cero)',
-       ]);
-        $this->instalacion=Installation::find($this->installation_id);
-        $this->instalacion->code=$this->code;
-        $this->instalacion->description=$this->description;
-        $this->instalacion->customer_id=$this->cliente_id;
-        $this->instalacion->usd_price=$this->usd_price;
-        $this->instalacion->hours_man=$this->hours_man;
-        $this->instalacion->save();
-        $this->volver();
-    }
-
-    public function updatecantidad(Revisiondetail $det)
-    {
-
-        $this->detail = Revisiondetail::find($det->id);
-        $this->material = $this->mat[$this->detail->material_id];
-        $this->code = $this->material['code'];
-        $this->descripcion = $this->material['description'];
-        $this->amount = $this->detail->amount;
-        $this->upca = true;
-    }
-
-    public function editdetail()
-    {
-        $this->validate([
-            'amount' => 'required|integer|min:1|max:1000000'
-        ], [
-            'amount.required' => 'El campo Cantidad es requerido',
-            'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
-            'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
-            'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
-        ]);
-        $this->detail->amount = $this->amount;
-        $this->detail->save();
-        $this->exploradetail($this->detail->number_version);
-        $this->upca = false;
-    }
-
-    public function destruir(Installation $instalacion)
-    {
-        $this->dispatchBrowserEvent('show-borrar');
-        $this->instalacion = $instalacion;
-    }
-    public function delete()
-    {
-        $this->instalacion->delete();
-        $this->dispatchBrowserEvent('hide-borrar');
-        $this->dispatchBrowserEvent('deleted');
-    }
-
-    public function borrarevision(Revision $revi)
-    {
-        if ($revi->number_version != 0) {
-            $details = Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
-            foreach ($details as $det) {
-                $det->delete();
+            if (isset($revision)) {
+                // en caso de error, borra revision de la instalacion 
+                $revision->delete();
             }
-            $revi->delete();
-        } else {
-            $this->dispatchBrowserEvent('show-revision');
-        }
-        $install = Installation::find($revi->installation_id);
-        $this->funcion = "";
-        $this->explora($install);
-    }
-
-    public function borradetail(Revisiondetail $detail)
-    {
-        $detail->delete();
-        $this->exploradetail($this->number_version);
-    }
-
-    public function addmaterial()
-    {
-        $this->validate([
-            'amount' => 'required|integer|min:1|max:1000000'
-        ], [
-            'amount.required' => 'El campo Cantidad es requerido',
-            'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
-            'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
-            'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
-        ]);
-        if(!empty($this->details)){
-            foreach($this->details as $detail){
-                if($detail[0]==$this->codem){
-                    $this->downmaterial($detail[3]);
-                }        
+            if (isset($installation)) {
+                // en caso de error, borra instalacion
+                $installation->delete();
             }
-        }
-        $this->detail[0]=$this->codem;
-        $this->detail[1]=$this->descriptionm;
-        $this->detail[2]=$this->amount;
-        $this->detail[3]=$this->count;
-        $this->detail[4]=$this->material_id;
-        $this->details[$this->count]=$this->detail;
-        $this->count=$this->count+1;
-        $this->amount=0;
-        $this->dispatchBrowserEvent('hide-form');
-        $this->resetValidation();
-    }
-    public function downmaterial($orden)
-    {
-        unset($this->details[$orden]);
-    }
-    public function selectmaterial(Material $material)
-    {
-        $this->material_id = $material->id;
-        $this->descriptionm = $material->description;;
-        $this->codem = $material->code;
-        $this->dispatchBrowserEvent('show-form');
-        $this->searchmateriales = "";
-    }
-    public function newrevision()
-    {
-        $this->count=0;
-        $this->funcion="newrevision";
-        $this->number_version=(count(Revision::where('installation_id', $this->installation_id)->get())-1);
-        $this->revision=Revision::where('installation_id', $this->installation_id)->get()->last();
-        $this->photo=$this->revision->image;
-        $this->revisiond=Revisiondetail::where('installation_id', $this->installation_id)->where('number_version', $this->number_version)->get();
-        foreach($this->revisiond as $revisiondetail){
-            $this->amount=$revisiondetail->amount;
-            $this->material_id=$revisiondetail->material_id;
-            $this->codem=$revisiondetail->materials->find( $revisiondetail->material_id)->code;
-            $this->descriptionm=$revisiondetail->materials->find( $revisiondetail->material_id)->description;
-            $this->addmaterial();
+            // Respuesta en consola del error
+            $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+
+            return null;
         }
     }
 
-    public function explora(Installation $instalacion)
-    {
-        $this->details = null;
-        $this->funcion = "explora";
-        $this->update($instalacion);
-        $this->resetValidation();
-    }
-
-    public function exploradetail(int $revision)
-    {
-        $this->number_version=$revision;
-        $this->detailslist=Revisiondetail::where('number_version', $this->number_version)->where('installation_id', $this->installation_id)->get();
-       
-        foreach($this->detailslist as $det){
-            $this->mat[$det->material_id]=Material::find($det->material_id);
-        }
-        $this->funcion = "exploradetail";
-    }
-
-    public function seedetail(int $revision){
-        $this->seeimg=false;
-        $this->number_version=$revision;
-        $this->detailslist=Revisiondetail::where('number_version', $this->number_version)->where('installation_id', $this->installation_id)->get();
-        foreach($this->detailslist as $det){
-            $this->mat[$det->materials->id]=Material::find($det->materials->id);
-        }
-        $this->funcion = "listadodetail";
-    }
-
-    public function volver()
+    /**
+     * Accion para ir al inicio
+     * 
+     * @return function emit(backToEntry')|null
+     */
+    public function back()
     {
         if ($this->component == 'depositos') {
+            //En caso de estar en el modulo Depositos, volver al ingreso
             return $this->emit('backToEntry');
         }
-        return redirect()->to('instalaciones');
+        $this->reset();
+        $this->resetValidation();
+        return null;
     }
 
-    public function cancelarupdetail()
+    /**
+     * Accion de cambiar la vista a editar en "Actualizar"
+     * 
+     * @param int $installationId
+     * @return string $view
+     */
+    public function edit($installationId)
     {
-        $this->upca = false;
+        $this->view = "update";
+        $this->installation = $this->fillInstallation($installationId);
+        return $this->view;
     }
 
-    public function verimagen()
+    /**
+     * Actualizar una instalacion
+     * 
+     * @param Installation $installation
+     * @return Installation $installation|null
+     */
+    public function update(Installation $installation)
     {
-        $this->seeimg = true;
+        //validacion para instalaciones
+        $validationProperties = $this->validationInstallations();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        try {
+            DB::beginTransaction();
+            //actualizar la instalacion 
+            $this->validation['installation']['customer_id'] = $this->customer->id;
+            $installation->update($this->validation['installation']);
+
+            DB::commit();
+            $this->resetValidation();
+            $this->reset();
+            return $installation;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Respuesta en consola del error
+            $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+            return null;
+        }
     }
 
-    public function noverimagen()
+    /**
+     * Genera el modal para eliminar una instalacion
+     * 
+     * @param Installation $installation
+     * @return array $installation
+     */
+    public function destroy(Installation $installation)
     {
-        $this->seeimg = false;
+        $this->dispatchBrowserEvent('show-borrar');
+        $this->installation = $installation->toArray();
+        return $this->installation;
     }
 
-    public function cancelar()
+    /**
+     * Accion de eliminar logicamente una instalacion
+     * 
+     * @return function back()|null
+     */
+    public function delete()
     {
-        $this->details = null;
-        $this->amount = null;
-        $this->searchmateriales = "";
-        $this->funcion = "explora";
+        if (auth()->user()->cannot('delete', auth()->user())) {
+            abort(403);
+        } else {
+            try {
+                DB::beginTransaction();
+
+                $installation = Installation::findOrFail($this->installation['id']);
+                //Accion para borrar logicamente solo revisiones
+                $revisions = $this->view == 'explora' ?  $installation->revisions()->whereId($this->revision['id'])->get()
+                    : $installation->revisions;
+
+                $revisions->each(function ($revision, $key) use ($installation) {
+                    $revisionsDetail = $installation->revisiondetails()->where('number_version', $revision->number_version)->get();
+                    if ($revisionsDetail) {
+                        //Elimina logicamente el detalle de las revisiones
+                        foreach ($revisionsDetail as $detail) {
+                            $detail->delete();
+                        }
+                    }
+                    $revision->delete();
+                    return $revisionsDetail;
+                });
+
+                $this->dispatchBrowserEvent('deleted');
+                //Elimina logicamente la instalacion
+                if ($this->view === 'explora') {
+                    $this->dispatchBrowserEvent('hide-borrar-revision');
+                    return $this->backToExplorar();
+                }
+
+                $installation->delete();
+                $this->dispatchBrowserEvent('hide-borrar');
+                DB::commit();
+                return $this->back();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                // Respuesta en consola del error
+                $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Detalle de una instalacion
+     * 
+     * @param int $installationId
+     * @return string $view
+     */
+    public function explorar($installationId)
+    {
+        $this->view = "explora";
+        $this->installation = $this->fillInstallation($installationId);
+        return $this->view;
+    }
+
+    /**
+     * Rellena un array con la informacion de una instalacion
+     * 
+     * @param int $installationId
+     * @return array $installationArray|null
+     */
+    public function fillInstallation($installationId)
+    {
+        $installation = Installation::findOrFail($installationId);
+        if ($installation) {
+            $date_admission = Carbon::parse($installation->date_admission);
+            $installationArray = [
+                'id' => $installation->id,
+                'code' => $installation->code,
+                'description' => $installation->description,
+                'date_admission' => $date_admission->format('Y-m-d'),
+                'usd_price' => $installation->usd_price,
+                'revisions' => $installation->revisions()->get()->toArray(),
+            ];
+            $this->selectCustomer($installation->customer_id);
+            return $installationArray;
+        }
+        return null;
+    }
+
+    /**
+     * Vista para agregar una nueva revision
+     * 
+     * @return array $materialsSelected
+     */
+    public function newRevision()
+    {
+        $this->view = "newrevision";
+        $installation = Installation::findOrFail($this->installation['id']);
+        $this->number_version = $installation->revisions->last()->number_version;
+        $revisionDetails = $installation->revisiondetails()->where('number_version', $this->number_version)->get();
+        $this->revision['number_version'] = $this->number_version + 1;
+
+        $this->materialsSelected = $this->fillMaterial($revisionDetails);
+        return $this->materialsSelected;
+    }
+
+    /**
+     * Rellenar materiales seleccionados para las instalaciones
+     * 
+     * @param array $details
+     * @return array $materials|array []
+     */
+    public function fillMaterial($details)
+    {
+        foreach ($details as $detail) {
+            $material = [
+                'id' => $detail->material->id,
+                'code' => $detail->material->code,
+                'description' => $detail->material->description,
+                'amount' => $detail->amount
+            ];
+            $materials[$material['id']] = $material;
+        }
+        return $materials ?? [];
+    }
+
+    /**
+     * Almacenar nuevas revisiones para instalaciones
+     * 
+     * @param Installation $installation
+     * @return Installation $installation|null
+     */
+    public function storeRevision(Installation $installation)
+    {
+        $validationProperties = $this->validationRevisions();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        try {
+            DB::beginTransaction();
+
+            $this->validation['revision']['number_version'] = $this->revision['number_version'];
+            $revision = $installation->revisions()->firstOrCreate($this->validation['revision']);
+
+            //asociando instalaciones con revisiones y materiales
+            foreach ($this->materialsSelected as $material) {
+                $revisionDetail = [
+                    'number_version' => $revision->number_version,
+                    'material_id' => $material['id'],
+                    'amount' => $material['amount'],
+                ];
+                $installation->revisiondetails()->firstOrCreate($revisionDetail);
+            }
+            DB::commit();
+            $this->backToExplorar();
+            return $installation;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            if (isset($installation->revisiondetails)) {
+                $revisionDetails = $installation->revisiondetails()->where('number_version', $this->number_version)->get();
+                // en caso de error, borra detalles de revision de la instalacion 
+                foreach ($revisionDetails as $revisiondetail) {
+                    $revisiondetail->delete();
+                }
+            }
+            if (isset($revision)) {
+                // en caso de error, borra revision de la instalacion 
+                $revision->delete();
+            }
+            // Respuesta en consola del error
+            $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+            return null;
+        }
+    }
+
+    /**
+     * Vista para actualizar una revision
+     * 
+     * @param int $revisionId
+     * @return array $revision
+     */
+    public function editRevision($revisionId)
+    {
+        $this->view = 'updateRevision';
+        $installation = Installation::findOrFail($this->installation['id']);
+        $this->revision = $installation->revisions()->whereId($revisionId)->first()->toArray();
+        $revisionDetails = $installation->findRevisionsDetail($this->revision['number_version']);
+        $this->materialsSelected = $this->fillMaterial($revisionDetails);
+        return $this->revision;
+    }
+
+    /**
+     * Actualizar una revision
+     * 
+     * @param Installation $installation, Revision $revision
+     * @return Revision $revision|null
+     */
+    public function updateRevision(Installation $installation, Revision $revision)
+    {
+        //validacion para revisiones
+        $validationProperties = $this->validationRevisions();
+        $this->validation = $this->validate($validationProperties['rules'], $validationProperties['messages']);
+
+        try {
+            DB::beginTransaction();
+            //actualizar la revision 
+            $revision->update($this->validation['revision']);
+
+            $revisionsDetails = $installation->findRevisionsDetail($revision->number_version);
+            //si el material en base de datos no existe en el array de materiales seleccionados, lo elimina
+            $revisionsDetails->each(function ($revisionsDetail, $key) {
+                if (!isset($this->materialsSelected[$revisionsDetail->material_id])) {
+                    return $revisionsDetail->delete();
+                }
+            });
+            //actualizar el detalle de la revision si existe el material para el numero de version, sino, la crea
+            foreach ($this->materialsSelected as $material) {
+                $installation->revisiondetails()->updateOrCreate(
+                    ['material_id' => $material['id'], 'number_version' => $revision->number_version],
+                    ['amount' => $material['amount']]
+                );
+            }
+            DB::commit();
+            $this->backToExplorar();
+            return $revision;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Respuesta en consola del error
+            $this->dispatchBrowserEvent('errorResponse', ['error' => $e->getMessage()]);
+            return null;
+        }
+    }
+
+    /**
+     * Accion para ejecutar el modal y eliminar una revision
+     * 
+     * @param Revision $revision
+     * @return array $revision
+     */
+    public function destroyRevision(Revision $revision)
+    {
+        $this->dispatchBrowserEvent('show-borrar-revision');
+        $this->revision = $revision->toArray();
+        return $this->revision;
+    }
+
+    /**
+     * Rellena un array con la informacion de una revision
+     * 
+     * @param int $revisionId
+     * @return array $revision|null
+     */
+    public function explorarRevision($revisionId)
+    {
+        $installation = Installation::findOrFail($this->installation['id']);
+
+        if ($installation) {
+            $this->view = "listadoDetail";
+            $revision = $installation->revisions()->whereId($revisionId)->first();
+            $this->files['images'][0] = $revision->image ? $revision->getUrl() : false;
+            $revisionDetails = $installation->findRevisionsDetail($revision->number_version);
+            $this->revisionDetails['materials'] = $this->fillMaterial($revisionDetails);
+            $this->revision = $revision->toArray();
+            return $this->revision;
+        }
+        return null;
+    }
+
+    /**
+     * Accion para regresar al detalle de la instalacion seleccionada
+     * @return function explorar
+     */
+    public function backToExplorar()
+    {
+        $this->resetValidation();
+        $this->reset(['validation', 'revision', 'searchMaterials', 'materialsSelected']);
+        return $this->explorar($this->installation['id']);
     }
 }

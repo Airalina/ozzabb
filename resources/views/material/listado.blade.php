@@ -8,7 +8,7 @@
                         placeholder="Buscar Material...">
                 </div>
             </div>
-
+    
         </div>
         <div class="card-header">
             <div>
@@ -91,7 +91,7 @@
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="11" class="py-3 italic">
+                            <td colspan="100%" class="py-3 italic">
                                 {{ !empty($search) ? 'No hay materiales que coincidan con el código buscado' : 'No hay información' }}
                             </td>
                         </tr>
