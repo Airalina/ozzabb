@@ -22,28 +22,32 @@ class Instalaciones extends Component
  
     public function render()
     {
-        $this->clientes=Customer::where('name','like','%'.$this->searchcustomer.'%')->get();
-        $this->materiales = Material::where('code','like','%'.$this->searchmateriales.'%')
-            ->orWhere('name','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('family','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('color','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('description','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_min','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock_max','LIKE','%'.$this->searchmateriales.'%')
-            ->orWhere('stock','LIKE','%'.$this->searchmateriales.'%')->get();
-        $this->instalaciones=Installation::where('id','LIKE','%' .$this->searchinstallation. '%')
-            ->orWhere('code','LIKE','%'.$this->searchinstallation.'%')
-            ->orWhere('usd_price','%'.$this->searchinstallation.'%')
-            ->orWhere('description','LIKE','%'.$this->searchinstallation.'%')->orderBy($this->order)->paginate($this->paginas);
-        $this->revisiones=Revision::where('installation_id', $this->installation_id)->get();
-        return view('livewire.instalaciones',[
+        $this->materiales = Material::where('code', 'like', '%' . $this->searchmateriales . '%')
+            ->orWhere('name', 'LIKE', '%' . $this->searchmateriales . '%')
+            ->orWhere('family', 'LIKE', '%' . $this->searchmateriales . '%')
+            ->orWhere('color', 'LIKE', '%' . $this->searchmateriales . '%')
+            ->orWhere('description', 'LIKE', '%' . $this->searchmateriales . '%')
+            ->orWhere('stock_min', 'LIKE', '%' . $this->searchmateriales . '%')
+            ->orWhere('stock_max', 'LIKE', '%' . $this->searchmateriales . '%')
+            ->orWhere('stock', 'LIKE', '%' . $this->searchmateriales . '%')->get();
+        $this->instalaciones = Installation::where('id', 'LIKE', '%' . $this->searchinstallation . '%')
+            ->orWhere('code', 'LIKE', '%' . $this->searchinstallation . '%')
+            ->orWhere('usd_price', '%' . $this->searchinstallation . '%')
+            ->orWhere('description', 'LIKE', '%' . $this->searchinstallation . '%')->orderBy($this->order)->paginate($this->paginas);
+        $this->revisiones = Revision::where('installation_id', $this->installation_id)->get();
+        return view('livewire.instalaciones', [
             'instalaciones' => $this->instalaciones,
         ]);
     }
 
+    public function create()
+    {
+        $this->funcion = "create";
+    }
+
     public function store()
     {
-        if($this->funcion=="create"){
+        if ($this->funcion == "create") {
             $this->validate([
                 'cliente_id'=>'required',
                 'code'=>'required|integer|min:1|max:100000000',
@@ -79,45 +83,49 @@ class Instalaciones extends Component
             $this->instalacion->usd_price=$this->usd_price;
             $this->instalacion->hours_man=$this->hours_man;
             $this->instalacion->save();
-            $this->revision=new Revision;
-            $this->revision->installation_id=$this->instalacion->id;
-            $this->revision->number_version=0;
-            $this->revision->create_date=$this->date_admission;
-            if($this->photo!=null){
-                $this->nombrefile=$this->photo->getClientOriginalName();
-                $this->photo->storeAs('images',$this->nombrefile);
-                $this->revision->image=$this->nombrefile;
+            $this->revision = new Revision;
+            $this->revision->installation_id = $this->instalacion->id;
+            $this->revision->number_version = 0;
+            $this->revision->create_date = $this->date_admission;
+            if ($this->photo != null) {
+                $this->nombrefile = $this->photo->getClientOriginalName();
+                $this->photo->storeAs('images', $this->nombrefile);
+                $this->revision->image = $this->nombrefile;
             }
-            $this->revision->reason="Modelo base";
+            $this->revision->reason = "Modelo base";
             $this->revision->save();
-            foreach($this->details as $detail)
-            {
-                $this->newdetail=new Revisiondetail;
-                $this->newdetail->installation_id=$this->instalacion->id;
-                $this->newdetail->number_version=$this->revision->number_version;
-                $this->newdetail->material_id=$detail[4];
-                $this->newdetail->amount=$detail[2];
-                $this->newdetail->save(); 
+            foreach ($this->details as $detail) {
+                $this->newdetail = new Revisiondetail;
+                $this->newdetail->installation_id = $this->instalacion->id;
+                $this->newdetail->number_version = $this->revision->number_version;
+                $this->newdetail->material_id = $detail[4];
+                $this->newdetail->amount = $detail[2];
+                $this->newdetail->save();
             }
+
+            if ($this->component == 'depositos') {
+                return $this->emit('newInstallation', $this->instalacion->id);
+            }
+
             $this->volver();
         }
-        if($this->funcion=="newrevision"){
+        if ($this->funcion == "newrevision") {
             $this->validate([
-                'date'=>'required|date',
-                'reason'=>'required|string|min:5|max:300'
-            ],[
+                'date' => 'required|date',
+                'reason' => 'required|string|min:5|max:300'
+            ], [
                 'date.required' => 'El campo Fecha es requerido',
                 'reason.required' => 'El campo Razón es requerido',
                 'reason.min' => 'El campo Razón tiene como mínimo 5 caracteres',
                 'reason.max' => 'El campo Razón tiene como maximo 300 caracteres',
             ]);
-            $this->number_version=count(Revision::where('installation_id', $this->installation_id)->get());
-            $this->revision=new Revision;
-            $this->revision->installation_id=$this->installation_id;
-            $this->revision->number_version=$this->number_version;
-            $this->revision->create_date=$this->date;
-            $this->revision->reason=$this->reason;
-            $this->revision->image=$this->photo;
+            $this->number_version = count(Revision::where('installation_id', $this->installation_id)->get());
+            $this->revision = new Revision;
+            $this->revision->installation_id = $this->installation_id;
+            $this->revision->number_version = $this->number_version;
+            $this->revision->create_date = $this->date;
+            $this->revision->reason = $this->reason;
+            $this->revision->image = $this->photo;
             $this->revision->save();
             foreach($this->details as $detail)
             {
@@ -134,7 +142,7 @@ class Instalaciones extends Component
                     $this->newdetail->save();
                 } 
             }
-            $this->searchmateriales="";
+            $this->searchmateriales = "";
             $this->explora($this->revision->installations->find($this->revision->installation_id));
         }
         if($this->funcion=="exploradetail"){
@@ -181,17 +189,18 @@ class Instalaciones extends Component
         $this->hours_man=$instalacion->hours_man;
     }
     public function update(Installation $instalacion)
-    {   
-        $this->instalacion=Installation::find($instalacion->id);
-        $this->installation_id=$instalacion->id;
-        $this->code=$instalacion->code;
-        $this->description=$instalacion->description;
-        $this->date_admission=$instalacion->date_admission;
-        $this->usd_price=$instalacion->usd_price;
-        $this->hours_man=$instalacion->hours_man;
+    {
+        $this->instalacion = Installation::find($instalacion->id);
+        $this->installation_id = $instalacion->id;
+        $this->code = $instalacion->code;
+        $this->description = $instalacion->description;
+        $this->date_admission = $instalacion->date_admission;
+        $this->usd_price = $instalacion->usd_price;
+        $this->hours_man = $instalacion->hours_man;
     }
-    
-    public function edit(){
+
+    public function edit()
+    {
         $this->validate([
             'cliente_id'=>'required',
             'code'=>'required|integer|min:1|max:100000000',
@@ -229,34 +238,37 @@ class Instalaciones extends Component
         $this->volver();
     }
 
-    public function updatecantidad(Revisiondetail $det){
+    public function updatecantidad(Revisiondetail $det)
+    {
 
-        $this->detail=Revisiondetail::find($det->id);
-        $this->material=$this->mat[$this->detail->material_id];
-        $this->code=$this->material['code'];
-        $this->descripcion=$this->material['description'];
-        $this->amount=$this->detail->amount;
-        $this->upca=true;
+        $this->detail = Revisiondetail::find($det->id);
+        $this->material = $this->mat[$this->detail->material_id];
+        $this->code = $this->material['code'];
+        $this->descripcion = $this->material['description'];
+        $this->amount = $this->detail->amount;
+        $this->upca = true;
     }
 
-    public function editdetail(){
+    public function editdetail()
+    {
         $this->validate([
-            'amount'=>'required|integer|min:1|max:1000000'
+            'amount' => 'required|integer|min:1|max:1000000'
         ], [
-            'amount.required'=>'El campo Cantidad es requerido',
+            'amount.required' => 'El campo Cantidad es requerido',
             'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
             'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
             'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
         ]);
-        $this->detail->amount=$this->amount;
+        $this->detail->amount = $this->amount;
         $this->detail->save();
         $this->exploradetail($this->detail->number_version);
-        $this->upca=false;
+        $this->upca = false;
     }
 
-    public function destruir(Installation $instalacion){
+    public function destruir(Installation $instalacion)
+    {
         $this->dispatchBrowserEvent('show-borrar');
-        $this->instalacion=$instalacion;
+        $this->instalacion = $instalacion;
     }
     public function delete()
     {
@@ -267,18 +279,17 @@ class Instalaciones extends Component
 
     public function borrarevision(Revision $revi)
     {
-        if($revi->number_version!=0){
-            $details=Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
-            foreach($details as $det)
-            {
+        if ($revi->number_version != 0) {
+            $details = Revisiondetail::where('number_version', $revi->number_version)->where('installation_id', $revi->installation_id)->get();
+            foreach ($details as $det) {
                 $det->delete();
             }
-            $revi->delete(); 
-        }else{
+            $revi->delete();
+        } else {
             $this->dispatchBrowserEvent('show-revision');
         }
-        $install=Installation::find($revi->installation_id);
-        $this->funcion="";
+        $install = Installation::find($revi->installation_id);
+        $this->funcion = "";
         $this->explora($install);
     }
 
@@ -291,9 +302,9 @@ class Instalaciones extends Component
     public function addmaterial()
     {
         $this->validate([
-           'amount'=>'required|integer|min:1|max:1000000'
+            'amount' => 'required|integer|min:1|max:1000000'
         ], [
-            'amount.required'=>'El campo Cantidad es requerido',
+            'amount.required' => 'El campo Cantidad es requerido',
             'amount.integer' => 'El campo Cantidad tiene que ser un número entero',
             'amount.min' => 'El campo Cantidad es como mínimo 1(uno)',
             'amount.max' => 'El campo Cantidad es como máximo 1000000(un millon)',
@@ -322,11 +333,11 @@ class Instalaciones extends Component
     }
     public function selectmaterial(Material $material)
     {
-        $this->material_id=$material->id;
-        $this->descriptionm=$material->description;;
-        $this->codem=$material->code;
+        $this->material_id = $material->id;
+        $this->descriptionm = $material->description;;
+        $this->codem = $material->code;
         $this->dispatchBrowserEvent('show-form');
-        $this->searchmateriales="";
+        $this->searchmateriales = "";
     }
     public function newrevision()
     {
@@ -342,17 +353,13 @@ class Instalaciones extends Component
             $this->codem=$revisiondetail->materials->find( $revisiondetail->material_id)->code;
             $this->descriptionm=$revisiondetail->materials->find( $revisiondetail->material_id)->description;
             $this->addmaterial();
-                }
-    }
-    public function create()
-    {
-        $this->funcion="create";
+        }
     }
 
     public function explora(Installation $instalacion)
     {
-        $this->details=null;
-        $this->funcion="explora";
+        $this->details = null;
+        $this->funcion = "explora";
         $this->update($instalacion);
         $this->resetValidation();
     }
@@ -365,7 +372,7 @@ class Instalaciones extends Component
         foreach($this->detailslist as $det){
             $this->mat[$det->material_id]=Material::find($det->material_id);
         }
-        $this->funcion="exploradetail";
+        $this->funcion = "exploradetail";
     }
 
     public function seedetail(int $revision){
@@ -375,31 +382,37 @@ class Instalaciones extends Component
         foreach($this->detailslist as $det){
             $this->mat[$det->materials->id]=Material::find($det->materials->id);
         }
-        $this->funcion="listadodetail";
+        $this->funcion = "listadodetail";
     }
 
     public function volver()
     {
+        if ($this->component == 'depositos') {
+            return $this->emit('backToEntry');
+        }
         return redirect()->to('instalaciones');
     }
 
-    public function cancelarupdetail(){
-        $this->upca=false;
+    public function cancelarupdetail()
+    {
+        $this->upca = false;
     }
 
-    public function verimagen(){
-        $this->seeimg=true;
-    }
-    
-    public function noverimagen(){
-        $this->seeimg=false;
+    public function verimagen()
+    {
+        $this->seeimg = true;
     }
 
-    public function cancelar(){
-        $this->details=null;
-        $this->amount=null;
-        $this->searchmateriales="";
-        $this->funcion="explora";
+    public function noverimagen()
+    {
+        $this->seeimg = false;
     }
 
+    public function cancelar()
+    {
+        $this->details = null;
+        $this->amount = null;
+        $this->searchmateriales = "";
+        $this->funcion = "explora";
+    }
 }

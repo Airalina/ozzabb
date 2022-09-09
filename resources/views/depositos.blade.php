@@ -8,12 +8,15 @@
 
 @section('content')
     @livewireStyles
+    <div>
         @livewire('depositos')
+    </div>
     @livewireScripts
 @stop
 
 @section('footer')
-    <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/" target="_blank">www.codigitar.com</a></strong>
+    <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/"
+            target="_blank">www.codigitar.com</a></strong>
 @stop
 
 @section('css')
@@ -22,13 +25,21 @@
 
 @section('js')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>|
-    <script> console.log('Hi!'); </script>
+    <script>
+        console.log('Hi!');
+    </script>
     <script>
         window.addEventListener('show-form', event => {
             $('#form').modal('show');
         })
         window.addEventListener('hide-form', event => {
             $('#form').modal('hide');
+        })
+        window.addEventListener('show-form-material', event => {
+            $('#form-material').modal('show');
+        })
+        window.addEventListener('hide-form-material', event => {
+            $('#form-material').modal('hide');
         })
     </script>
     <script>
@@ -49,6 +60,10 @@
                 timer: 1300
             })
         })
-
+    </script>
+    <script>
+        window.addEventListener('errorResponse', message => {
+            console.log(message.detail.error);
+        })
     </script>
 @stop

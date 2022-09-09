@@ -128,7 +128,11 @@ class Material extends Model
 
     public function warehouses()
     {
-        return $this->belongsToMany(Warehouse::class, 'deposit_materials', 'material_id', 'warehouse_id');
+        return $this->belongsToMany(Warehouse::class, 'deposit_materials', 'material_id', 'warehouse_id')
+            ->wherePivot('is_material', 1)
+            ->withPivot('presentation')
+            ->groupBy('presentation')
+            ->withTimestamps();
     }
 
     public function reservationmaterials()
@@ -187,7 +191,8 @@ class Material extends Model
         return $this->belongsToMany(Provider::class, 'provider_prices', 'material_id', 'provider_id')
             ->whereNull('provider_prices.deleted_at')
             ->withTimestamps()
-            ->withPivot(['id', 'deleted_at']);
+            ->withPivot(['id', 'unit', 'presentation' ,'deleted_at'])
+            ->groupBy(['unit', 'presentation']);
     }
 
     public static function search($search = '', $orderBy  = 'code')
@@ -211,5 +216,20 @@ class Material extends Model
             ->get();
 
         return $queryWhere;
+    }
+
+    public static function searchByProviderPrices($search = '', $orderBy = 'code')
+    {
+        $query = self::has('providerprices')
+            ->groupBy('id')
+            ->where('code', 'LIKE', '%' . $search . '%')
+            ->orderBy($orderBy, 'asc');
+
+        return $query;
+    }
+
+    public  function findMaterialsWarehouse($id)
+    {
+        return $this->warehouses()->where('warehouses.id', $id);
     }
 }

@@ -163,7 +163,7 @@ trait MaterialTrait
             'clip.type.required_if' => 'Seleccione una opción del campo tipo de Clip',
             'accessory.type.required_if' => 'Seleccione una opción del campo tipo de Accesorio',
         ];
-        if ($showPrice === 'yes') {
+        if ($showPrice === 'yes' || $this->component == 'depositos') {
             $validationPrice = $this->validationPrice();
             $validation['rules'] = array_merge($validation['rules'], $validationPrice['rules']);
             $validation['messages'] = array_merge($validation['messages'], $validationPrice['messages']);
@@ -184,7 +184,7 @@ trait MaterialTrait
      */
     public function validationPrice($module = 'material')
     {
-
+        
         $validation['rules'] = [
             'price.amount' => 'required_if:showPrice,yes|nullable|numeric|min:0',
             'price.unit' => 'required_if:showPrice,yes|nullable|numeric|min:0',
@@ -213,6 +213,10 @@ trait MaterialTrait
             'price.ars_price.numeric' => 'El campo precio AR$ es numérico (decimales separados por punto)',
             'price.ars_price.min' => 'El campo  AR$  debe ser mayor a cero (0)',
         ];
+        if ($this->component == 'depositos') {
+            $validation['rules']['showPrice'] = 'in:yes';
+            $validation['messages']['showPrice.in'] = 'Debe ingresar una presentación para el material';
+        }
         if ($module == 'material') {
             $validation['rules']['providerSelected'] = 'required_if:showPrice,yes';
             $validation['messages']['providerSelected.required_if'] = 'Seleccione una opción para el campo Proveedor';
@@ -301,6 +305,9 @@ trait MaterialTrait
         $this->information['showReplace'] = ($family == 'Cables' || $family == 'Tubos') ? false : true;
         $materialReplaces = Material::familyMaterials($family)->whereNotIn('id', [$materialId]);
         $this->information['replaces'] = $materialReplaces ? $materialReplaces->get()->toArray() : [];
+        $color = $this->material['color'] ?? null;
+        $this->material['color'] = $this->information['showColors'] ? $color : null;
+        $this->material['replace_id'] = null;
 
         return $this->information;
     }
