@@ -1,27 +1,33 @@
 <div>
-@switch($funcion)
-    @case("")
-        @if (auth()->user()->can('seeinstall', auth()->user()))
-            @include("instalacion.lista")
-        @endif
+    @switch($view)
+        @case('')
+            @if (auth()->user()->can('seeinstall', auth()->user()))
+                @include('instalacion.lista')
+            @endif
         @break
-    @case("create")
-        @include("instalacion.create")
+
+        @case('create')
+            @include('instalacion.create')
         @break
-    @case("explora")
-        @include("instalacion.explora")
+
+        @case('explora')
+            @include('instalacion.explora')
         @break
-    @case("newrevision")
-        @include("instalacion.revision")
+
+        @case('newrevision')
+            @include('instalacion.revision')
         @break
-    @case("exploradetail")
-        @include("instalacion.revisionupd")
+
+        @case('updateRevision')
+            @include('instalacion.revisionupd')
         @break
-    @case("listadodetail")
-        @include("instalacion.revisioneslista")
+
+        @case('listadoDetail')
+            @include('instalacion.revisioneslista')
         @break
-    @case("update")
-        @include("instalacion.update")
+
+        @case('update')
+            @include('instalacion.update')
         @break
-@endswitch
+    @endswitch
 </div>

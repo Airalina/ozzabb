@@ -14,7 +14,10 @@ class Revision extends Model
     protected $fillable = [
         'id',
         'number_version',
-        'installation_id'
+        'installation_id',
+        'create_date',
+        'reason',
+        'image'
     ];
 
     public function installations()
@@ -25,5 +28,10 @@ class Revision extends Model
     public function revisiondetails()
     {
         return $this->hasMany(Revisiondetail::class,'installation_id','installation_id');
+    }
+
+    public function getUrl()
+    {
+        return url("storage/$this->image");
     }
 }

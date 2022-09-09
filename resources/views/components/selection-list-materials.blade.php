@@ -42,13 +42,16 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Materiales agregados:</h3>
+            @if ($viewRevisions)
+                <h6 class="card-title">(Los materiales ya agregados, son aquellos presentes en su ultima revisión)</h6>
+            @endif
         </div>
         <!-- /.card-header -->
         <div class="card-body table-responsive p-0">
             <table class="table table-hover table-sm">
                 <thead>
                     <tr>
-                        <th style="text-align: center">Codigo</th>
+                        <th style="text-align: center">Código</th>
                         <th style="text-align: center">Descripción</th>
                         <th style="text-align: center">Cantidad</th>
                         <th></th>

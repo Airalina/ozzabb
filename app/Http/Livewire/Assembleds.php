@@ -31,14 +31,10 @@ class Assembleds extends Component
                 'code' => $material->code,
                 'description' => $material->description
             ];
-
-            //$this->materialsSelected[$material->id] = $this->material;
-
             $this->dispatchBrowserEvent('show-form-material');
             $this->resetValidation();
             return $this->material;
         }
-
         return null;
     }
 

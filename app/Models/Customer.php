@@ -20,20 +20,29 @@ class Customer extends Model
         'post_contact',
         'email',
         'estado',
-        'cuit'        
+        'cuit'
     ];
 
     public function domiciledeliveries()
     {
-        return $this->hasMany(DomicileDelivery::class ,'cliente_id');
+        return $this->hasMany(DomicileDelivery::class, 'cliente_id');
     }
 
     public function clientorders()
     {
         return $this->hasMany(Clientorder::class, 'customer_id');
     }
+
     public function installations()
     {
         return $this->hasMany(Installation::class, 'customer_id');
+    }
+
+    public static function search($search = '', $orderBy  = 'name')
+    {
+        $querySearch = self::where('name', 'LIKE', '%' . $search . '%')
+            ->orderBy($orderBy);
+
+        return $querySearch;
     }
 }
