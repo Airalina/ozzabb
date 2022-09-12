@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,7 +26,7 @@ class Customer extends Model
 
     public function domiciledeliveries()
     {
-        return $this->hasMany(DomicileDelivery::class, 'cliente_id');
+        return $this->hasMany(DomicileDelivery::class, 'client_id');
     }
 
     public function clientorders()
@@ -44,5 +45,36 @@ class Customer extends Model
             ->orderBy($orderBy);
 
         return $querySearch;
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(DomicileDelivery::class, 'clientorders', 'customer_id', 'deliverydomicile_id')
+            ->withTimestamps();
+    }
+
+    public static function searchList($search = '', $orderBy  = 'name')
+    {
+        $querySearch = self::where('name', 'LIKE', '%' . $search . '%')
+            ->orWhere('domicile_admin', 'LIKE', '%' . $search . '%')
+            ->orWhere('id', 'LIKE', '%' . $search . '%')
+            ->orWhere('phone', 'LIKE', '%' . $search . '%')
+            ->orWhere('contact', 'LIKE', '%' . $search . '%')
+            ->orWhere('post_contact', 'LIKE', '%' . $search . '%')
+            ->orWhere('email', 'LIKE', '%' . $search . '%')
+            ->orderBy($orderBy);
+
+        return $querySearch;
+    }
+
+    public function searchInstallations($search = '')
+    {
+        $installations = $this->installations()
+            ->where(function (Builder $query) use ($search) {
+                return $query->where('code', 'LIKE', '%' . $search . '%')
+                    ->orWhere('description', 'LIKE', '%' . $search . '%');
+            });
+
+        return $installations;
     }
 }

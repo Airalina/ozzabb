@@ -15,6 +15,10 @@
                     <thead>
                         <tr>
                             <th style="text-align: center">Nombre</th>
+                            <th style="text-align: center">Teléfono</th>
+                            <th style="text-align: center">Email</th>
+                            <th style="text-align: center">Domicilio Administración</th>
+                            <th style="text-align: center">Estado</th>
                             <th style="text-align: center"></th>
                         </tr>
                     </thead>
@@ -22,6 +26,10 @@
                         @forelse($customers as $customer)
                             <tr>
                                 <td style="text-align: center">{{ $customer['name'] }}</td>
+                                <td style="text-align: center">{{ $customer['phone'] }}</td>
+                                <td style="text-align: center">{{ $customer['email'] }}</td>
+                                <td style="text-align: center">{{ $customer['domicile_admin'] }}</td>
+                                <td style="text-align: center">{{ $customer['estado'] ? 'Activo' : 'Inactivo' }}</td>
                                 <td style="text-align: center"><button type="button"
                                         wire:click="selectCustomer({{ $customer['id'] }})"
                                         class="btn btn-success btn-sm">Seleccionar</button></td>
@@ -50,12 +58,20 @@
                 <thead>
                     <tr>
                         <th style="text-align: center">Nombre</th>
+                        <th style="text-align: center">Teléfono</th>
+                        <th style="text-align: center">Email</th>
+                        <th style="text-align: center">Domicilio Administración</th>
+                        <th style="text-align: center">Estado</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td style="text-align: center">{{ $customerSelected['name'] }}</td>
+                        <td style="text-align: center">{{ $customerSelected['phone'] }}</td>
+                        <td style="text-align: center">{{ $customerSelected['email'] }}</td>
+                        <td style="text-align: center">{{ $customerSelected['domicile_admin'] }}</td>
+                        <td style="text-align: center">{{ $customerSelected['estado'] ? 'Activo' : 'Inactivo' }}</td>
                     </tr>
                 </tbody>
             </table>
