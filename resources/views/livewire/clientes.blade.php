@@ -31,7 +31,10 @@
     @case("exploraorder")
         @include('cliente.orderdetail')
         @break
-  
+
+    @case("createAddress")
+        @include('cliente.createAddress')
+        @break
   @endswitch
 
   @switch($explora)

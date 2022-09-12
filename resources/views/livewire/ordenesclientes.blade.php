@@ -1,23 +1,23 @@
 <div>
-@switch($funcion)
-    @case("list")
-        @if (auth()->user()->can('seepedidos', auth()->user()))
-            @include("pedidos.listado")
-        @endif
+    @switch($view)
+        @case('')
+            @if (auth()->user()->can('seepedidos', auth()->user()))
+                @include('pedidos.listado')
+            @endif
         @break
-    @case("ordernew")
-            @include("pedidos.order")
+
+        @case('create')
+            @include('pedidos.create')
         @break
-    @case("orderfromorder")
-        @include("pedidos.orderfromorder")
+
+        @case('update')
+            @include('pedidos.update')
         @break
-    @case("addinstallationtoorder")
-        @include("pedidos.addinstallation")
+
+        @case('explorar')
+            @include('pedidos.order')
         @break
-@endswitch
-@switch($explora)
-      @case("activo")
-        @include("pedidos.listadodetail")
-        @break         
-@endswitch
+
+    @endswitch
+
 </div>

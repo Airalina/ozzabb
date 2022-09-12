@@ -19,6 +19,5 @@ class DomicileDelivery extends Model
         'country',
         'postcode',
         'client_id',
-        
     ];
 }

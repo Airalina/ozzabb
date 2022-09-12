@@ -77,7 +77,11 @@ class Instalaciones extends Component
         $this->customer = Customer::find($customerId);
         if ($this->customer) {
             $this->customersData['customerSelected'] = [
-                'name' => $this->customer->name
+                'name' => $this->customer->name,
+                'phone' => $this->customer->phone,
+                'email' => $this->customer->email,
+                'domicile_admin' => $this->customer->domicile_admin,
+                'estado' => $this->customer->estado,
             ];
             return $this->customersData['searchCustomers'] = '';
         }

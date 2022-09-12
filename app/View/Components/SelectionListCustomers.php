@@ -17,7 +17,7 @@ class SelectionListCustomers extends Component
         $this->searchCustomers = $searchCustomers;
         $this->customers = $customers;
         $this->customerSelected = $customerSelected;
-        $this->showSelection = empty($showSelection) ?: false;
+        $this->showSelection = empty($showSelection) ?: false; 
     }
 
     /**

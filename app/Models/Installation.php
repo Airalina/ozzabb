@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,9 +22,11 @@ class Installation extends Model
         'hours_man',
         'customer_id'
     ];
-    public function customer(){
-        return $this->belongsTo(Customer::class,'customer_id');
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
+
     public function revisions()
     {
         return $this->hasMany(Revision::class);
@@ -63,5 +66,16 @@ class Installation extends Model
     {
         $revisionsDetails = $this->revisiondetails()->where('number_version', $number_version)->get();
         return $revisionsDetails;
+    }
+
+    public function searchRevisions($search = '', $orderBy = 'number_version')
+    {
+        $query = $this->revisions()->where(function (Builder $query) use ($search) {
+            return $query->whereId($search)
+                ->orWhere('number_version', $search)
+                ->orWhere('reason', $search);
+        })->orderBy($orderBy, 'asc');
+
+        return $query;
     }
 }
