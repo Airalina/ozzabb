@@ -8,12 +8,15 @@
 
 @section('content')
     @livewireStyles
-      @livewire('clientes')
+    <div>
+        @livewire('clientes')
+    </div>
     @livewireScripts
 @stop
 
 @section('footer')
-    <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/" target="_blank">www.codigitar.com</a></strong>
+    <strong>Setecel s.r.l V1.0 - &#169 Codigitar {{ date('Y') }} - <a href="https://codigitar.com/"
+            target="_blank">www.codigitar.com</a></strong>
 @stop
 
 @section('css')
@@ -22,13 +25,29 @@
 
 @section('js')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>|
-    <script> console.log('Hi!'); </script>
+    <script>
+        console.log('Hi!');
+    </script>
     <script>
         window.addEventListener('show-form', event => {
             $('#form').modal('show');
         })
         window.addEventListener('hide-form', event => {
             $('#form').modal('hide');
+        })
+    </script>
+    <script>
+        window.addEventListener('show-form-installation', event => {
+            $('#form-installation').modal('show');
+        })
+        window.addEventListener('hide-form-installation', event => {
+            $('#form-installation').modal('hide');
+        })
+        window.addEventListener('show-form-address', event => {
+            $('#form-address').modal('show');
+        })
+        window.addEventListener('hide-form-address', event => {
+            $('#form-address').modal('hide');
         })
     </script>
     <script>
@@ -49,6 +68,5 @@
                 timer: 1300
             })
         })
-
     </script>
 @stop

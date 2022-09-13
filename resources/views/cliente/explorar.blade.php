@@ -33,7 +33,7 @@
                       <td>{{ $cliente->domicile_admin}}</td>
                       <td>{{ $cliente->contact}}</td>
                       <td>{{ $cliente->post_contact}}</td>
-                      @if($cliente==true)
+                      @if($cliente->estado)
                         <td>Activo</td>
                       @else
                         <td>Inactivo</td>

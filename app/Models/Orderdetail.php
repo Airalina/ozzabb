@@ -9,14 +9,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Orderdetail extends Model
 {
     use SoftDeletes, HasFactory;
+    protected $fillable = [
+        'clientorder_id',
+        'installation_id',
+        'revision_id',
+        'cantidad',
+        'unit_price_usd'
+    ];
 
-    public function installations()
+    public function installation()
     {
-        return $this->hasOne(Installation::class,'code','installation_id');
+        return $this->belongsTo(Installation::class, 'installation_id');
     }
-
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
     public function instalaciones()
     {
-        return $this->hasMany(Installation::class,'code','installation_id');
+        return $this->hasMany(Installation::class, 'installation_id', 'code');
     }
 }

@@ -29,19 +29,9 @@ class Ordenesclientes extends Component
         $installation = [], $revisions = [];
 
     protected $listeners = [
-        'newOrder',
         'newAddress',
         'backModal'
     ];
-
-    public function newOrder(Customer $client)
-    {
-        $this->customer = $client;
-        $this->view = "ordernew";
-        $this->namecust = $client->name;
-        $this->customer_id = $client->id;
-        $this->selectaddress($client);
-    }
 
     public function __construct()
     {
@@ -378,6 +368,9 @@ class Ordenesclientes extends Component
 
             DB::commit();
             $this->resetValidation();
+            if ($this->component == 'clientes') {
+                return $this->emit('newOrder', $this->customer->id);
+            }
 
             $this->reset();
             return $clientOrder;
@@ -403,13 +396,13 @@ class Ordenesclientes extends Component
     /**
      * Accion para ir al inicio
      * 
-     * @return function emit(backToEntry')|null
+     * @return function emit(backToExplora')|null
      */
     public function back()
     {
-        if ($this->component == 'depositos') {
-            //En caso de estar en el modulo Depositos, volver al ingreso
-            return $this->emit('backToEntry');
+        if ($this->component == 'clientes') {
+            //En caso de estar en el modulo Clientes, volver al explorar
+            return $this->emit('backToExplora');
         }
         $this->reset();
         $this->resetValidation();

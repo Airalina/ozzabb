@@ -37,7 +37,7 @@
                                 @forelse($orders as $orderr)
                                     @if($orderr->buys==1)
                                     <tr>
-                                        <td style="text-align: center">{{ $orderr->id }}/2021</td>
+                                        <td style="text-align: center">{{ $orderr->id }}/{{ date('Y', strtotime($orderr['date']))}}</td>
                                         <td style="text-align: center">
                                             {{ $orderr->customer_name }}
                                         </td>
