@@ -14,9 +14,11 @@ class Clientes extends Component
     protected $paginationTheme = 'bootstrap';
     protected $clientes;
     public $funcion = "", $component = "", $idcli, $cliente, $paginas = 25, $search, $name, $phone, $email, $domicile_admin, $contact, $post_contact, $estado = true;
-    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora = 'inactivo', $domicilios, $cuit, $order = "name";
+    public $street, $location, $number, $province, $country, $postcode, $client_id, $historial, $explora = 'inactivo', $domicilios, $cuit, $order = "name", $customer, $customersData;
     protected $listeners = [
-        'explorar'
+        'explorar',
+        'newOrder',
+        'backToExplora'
     ];
     protected $dates = ['deadline', 'date', 'start_date'];
     public function updatingSearch()
@@ -135,7 +137,7 @@ class Clientes extends Component
             'domicile_admin' => $this->domicile_admin,
             'contact' => $this->contact,
             'post_contact' => $this->post_contact,
-            'estado' => $this->estado,
+            'estado' => $this->estado ?? 0,
             'cuit' => $this->cuit,
         ]);
         $this->cliente = Customer::where('domicile_admin', '' . $this->domicile_admin . '')->get();
@@ -308,7 +310,19 @@ class Clientes extends Component
 
     public function goOrder(Customer $client)
     {
-        $this->emit('newOrder', $client->id);
+        $this->customer = $client;
+        $this->customersData = [
+            'customers' => [],
+            'searchCustomers' => '',
+            'customerSelected' => [
+                'name' => $client->name,
+                'phone' => $client->phone,
+                'email' => $client->email,
+                'domicile_admin' => $client->domicile_admin,
+                'estado' => $client->estado,
+                'addresses' => $client->domiciledeliveries->toArray()
+            ]
+        ];
         $this->funcion = "neworder";
         $this->explora = "inactivo";
     }
@@ -317,5 +331,19 @@ class Clientes extends Component
     {
         $this->explora = 'activo';
         $this->funcion = "0";
+    }
+    public function newOrder($id = null)
+    {
+        $customer = Customer::find($id);
+        return $this->explorar($customer);
+    }
+    /**
+     * Accion para volver a la vista de ver cliente
+     * 
+     * @return string $view
+     */
+    public function backToExplora()
+    {
+        return $this->explorar($this->cliente);
     }
 }

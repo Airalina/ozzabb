@@ -17,7 +17,7 @@
                   @forelse($historial as $historia)
                 <tr class="registros">
                       <td>{{ $historia->installation_id }}</td>
-                      <td>{{ $historia->installations->description }}</td>
+                      <td>{{ $historia->installation->description }}</td>
                       <td>{{ $historia->cantidad}}</td>
                       <td>{{ $historia->unit_price_usd}}</td>
                       <td>{{ $historia->unit_price_usd*$historia->cantidad }}</td>

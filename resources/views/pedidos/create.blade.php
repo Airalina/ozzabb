@@ -1,6 +1,8 @@
-<div>
-    <button wire:click="back()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
-</div>
+@if ($component != 'clientes')
+    <div>
+        <button wire:click="back()" type="button" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+@endif
 <br>
 <div class="col-md-8">
     <div class="card card-primary">
