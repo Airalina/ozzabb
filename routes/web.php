@@ -14,59 +14,55 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    //return view('welcome');
     return redirect('/login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/roles-users', function () {
+    return view('roles-users');
+})->middleware(['auth'])->name('roles-users');
 
-Route::get('/admin', function () {
-    return view('adminlterol');
-})->middleware(['auth'])->name('adminlterol');
+Route::get('/customers', function () {
+    return view('customers');
+})->middleware(['auth'])->name('customers');
 
-Route::get('/clientes', function () {
-    return view('clients');
-})->middleware(['auth'])->name('clients');
+Route::get('/orders', function () {
+    return view('orders');
+})->middleware(['auth'])->name('orders');
 
-Route::get('/pedidos', function () {
-    return view('pedidos');
-})->middleware(['auth'])->name('pedidos');
-
-Route::get('/materiales', function () {
-    return view('materiales');
-})->middleware(['auth'])->name('livewire-material');
+Route::get('/products', function () {
+    return view('products');
+})->middleware(['auth'])->name('products');
 
 
-Route::get('/proveedores', function () {
+Route::get('/providers', function () {
     return view('providers');
 })->middleware(['auth'])->name('providers');
 
-Route::get('/instalaciones', function () {
-    return view('instalaciones');
-})->middleware(['auth'])->name('instalaciones');
+Route::get('/equipments', function () {
+    return view('equipments');
+})->middleware(['auth'])->name('equipments');
 
-Route::get('/depositos', function () {
-    return view('depositos');
-})->middleware(['auth'])->name('depositos');
+Route::get('/warehouses', function () {
+    return view('warehouses');
+})->middleware(['auth'])->name('warehouses');
 
-Route::get('/planilla-de-compras', function () {
-    return view('pucharsing-sheets');
-})->middleware(['auth'])->name('pucharsing-sheets');
+Route::get('/purchase-forms', function () {
+    return view('purchase-forms');
+})->middleware(['auth'])->name('purchase-forms');
 
-Route::get('/ordenes-de-ingreso-de-materiales', function () {
-    return view('ordenes-de-entrada-de-materiales');
-})->middleware(['auth'])->name('ordenes-de-entrada-de-materiales');
+Route::get('/entry-orders', function () {
+    return view('entry-orders');
+})->middleware(['auth'])->name('entry-orders');
 
-Route::get('/ordenes-de-trabajo', function () {
+Route::get('/work-orders', function () {
     return view('workorders');
 })->middleware(['auth'])->name('workorders');
 
-Route::get('/ordenes-de-egreso-de-materiales', function () {
-    return view('ordenes-de-egreso-de-materiales');
-})->middleware(['auth'])->name('ordenes-de-egreso-de-materiales');
-Route::get('/cotizacion', function () {
+Route::get('/release-orders', function () {
+    return view('release-orders');
+})->middleware(['auth'])->name('release-orders');
+
+Route::get('/dollar', function () {
     return view('dollar');
 })->middleware(['auth'])->name('dollar');
 

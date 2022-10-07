@@ -1,1 +1,1 @@
-<img src="vendor/adminlte/dist/img/setecel.png" class="brand-image img-circle elevation-3">
+<img src="vendor/adminlte/dist/img/ozzabbLogo.png" class="brand-image img-circle elevation-3 w-20"><p>OZZABB</p>

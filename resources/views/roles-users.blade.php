@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Usuarios y Roles')
+@section('title', 'Roles - users')
 
 @section('content_header')
     <h1>Administración de Usuarios y Roles</h1>
@@ -8,9 +8,6 @@
 
 @section('content')
     @livewireStyles
-        
-    
-
     <div class="card card-primary card-tabs">
               <div class="card-header p-0 pt-1">
                 <ul class="nav nav-tabs" id="custom-tabs-five-tab" role="tablist">
